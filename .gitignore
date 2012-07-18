@@ -1,0 +1,12 @@
+/tmp
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/
+.sass-cache/
+.DS_Store
+*.sw[onp]
+public/ckeditor_assets/*
+*.tmproj
+public/assets
+.rvmrc
