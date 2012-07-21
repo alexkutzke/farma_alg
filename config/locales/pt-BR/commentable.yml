@@ -1,0 +1,6 @@
+"pt-br":
+  commentable:
+    actions:
+      create: "Comentário criado com sucesso"
+      destroy: "Comentário removido com sucesso"
+      update: "Comentário atualizado"

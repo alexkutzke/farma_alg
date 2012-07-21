@@ -1,0 +1,206 @@
+"pt-br":
+  views:
+    pagination:
+      first: "&laquo; Primeiro"
+      last: "Último &raquo;"
+      previous: "&lsaquo; Anterior"
+      next: "Próximo &rsaquo;"
+      truncate: "..."
+
+  attributes:
+    created_at: Criado em
+    updated_at: Atualizado em
+    name: Nome
+    title: Título
+    image: Imagem
+    description: Descrição
+    enunciation: Enunciado
+    body: Conteúdo
+
+  helpers:
+    select:
+      prompt: "Selecione"
+
+  autho:
+    student: "Estudante"
+    professor: "Professor"
+
+  date:
+    formats:
+      day_of_week: "%a"
+      default: "%d/%m/%Y"
+      literal: "%B/%Y"
+      long: "%d de %B de %Y"
+      only_day: "%d"
+      short: "%d/%m/%y"
+      short_literal: "%b/%y"
+      short_with_literal: "%d/%m/%y – %a"
+      month: "%m/%Y"
+    day_names: [Domingo, Segunda, Terça, Quarta, Quinta, Sexta, Sábado]
+    abbr_day_names: [Dom, Seg, Ter, Qua, Qui, Sex, Sáb]
+    month_names: [~, Janeiro, Fevereiro, Março, Abril, Maio, Junho, Julho, Agosto, Setembro, Outubro, Novembro, Dezembro]
+    abbr_month_names: [~, Jan, Fev, Mar, Abr, Mai, Jun, Jul, Ago, Set, Out, Nov, Dez]
+    order:
+      - :day
+      - :month
+      - :year
+  time:
+    formats:
+      default: "%d/%m/%Y %Hh%M"
+      time: "%Hh%M"
+      short: "%d/%m/%y às %Hh%M"
+      short_date: "%d de %B de %Y"
+      long: "%A, %d de %B de %Y – %Hh%M"
+      only_second: "%S"
+      date: "%d/%m/%Y"
+      month: "%m/%Y"
+    am: "AM"
+    pm: "PM"
+  datetime:
+    distance_in_words:
+      half_a_minute: "meio minuto"
+      less_than_x_seconds:
+        one: "menos de 1 segundo"
+        other: "menos de %{count} segundos"
+      x_seconds:
+        one: "1 segundo"
+        other: "%{count} segundos"
+      less_than_x_minutes:
+        one: "menos de um minuto"
+        other: "menos de %{count} minutos"
+      x_minutes:
+        one: "1 minuto"
+        other: "%{count} minutos"
+      about_x_hours:
+        one: "aproximadamente 1 hora"
+        other: "aproximadamente %{count} horas"
+      x_days:
+        one: "1 dia"
+        other: "%{count} dias"
+      about_x_months:
+        one: "aproximadamente 1 mês"
+        other: "aproximadamente %{count} meses"
+      x_months:
+        one: "1 mês"
+        other: "%{count} meses"
+      about_x_years:
+        one: "aproximadamente 1 ano"
+        other: "aproximadamente %{count} anos"
+      over_x_years:
+        one: "mais de 1 ano"
+        other: "mais de %{count} anos"
+  number:
+    format:
+      precision: 3
+      separator: ','
+      delimiter: '.'
+    currency:
+      format:
+        unit: 'R$'
+        precision: 2
+        format: "%u %n"
+        separator: ','
+        delimiter: '.'
+    percentage:
+      format:
+        delimiter: '.'
+    precision:
+      format:
+        delimiter: '.'
+    human:
+      format:
+        precision: 2
+        delimiter: '.'
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: "Byte"
+            other: "Bytes"
+          kb: "KB"
+          mb: "MB"
+          gb: "GB"
+          tb: "TB"
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " e "
+      last_word_connector: " e "
+      skip_last_comma: true
+    select:
+      prompt: "Por favor selecione"
+
+  mongoid:
+    models:
+      learning_object:
+        one: "Objeto de Aprendizagem"
+        other: "Objetos de Aprendizagem"
+      exercise:
+        one: "Exercício"
+        other: "Exercícios"
+      question:
+        one: "Questão"
+        other: "Questões"
+      fractal_exercise: "Exercício do fractal"
+      introduction:
+        one: "Introdução"
+        other: "Introduções"
+      user:
+        one: "Usuário"
+        other: "Usuários"
+      comment:
+        one: "Comentário"
+        other: "Comentários"
+
+    attributes:
+      fractal_exercise:
+        width: Largura
+        height: Altura
+        constant:  Constante
+        rules: Regras
+        angle: Ângulo
+        axiom: Axioma
+        iterations: Iterações
+      user:
+        password_confirmation: "Confirmação de senha"
+        type: "Sou"
+        school: "Escola"
+        unknown: "Não definido"
+        user_type: "Tipo de usuário"
+      question:
+        answer: "Resposta"
+      learning_group:
+        code: 'Código de acesso'
+        learning_object_tokens: 'Objetos de aprendizagem'
+      introduction:
+        content: "Conteúdo"
+
+    errors:
+      template:
+        header:
+          one: "Não foi possível gravar %{model}: 1 erro"
+          other: "Não foi possível gravar %{model}: %{count} erros"
+        body: "Por favor, verifique os campos marcados abaixo antes de prosseguir."
+      format: "%{attribute} %{message}"
+      messages:
+        inclusion: "não está incluído na lista"
+        exclusion: "não está disponível"
+        invalid: "não é válido"
+        confirmation: "não está de acordo com a confirmação"
+        accepted: "precisa de ser aceite"
+        empty: "precisa ser preenchido"
+        blank: "precisa ser preenchido"
+        too_long: "é muito longo (não pode ter mais que %{count} caracteres)"
+        too_short: "é muito curto (não pode ter menos que %{count} caracteres)"
+        wrong_length: "não é do tamanho correto (precisa ter %{count} caracteres)"
+        taken: "não está disponível"
+        not_a_number: "não é um número"
+        greater_than: "precisa ser maior do que %{count}"
+        greater_than_or_equal_to: "precisa ser maior ou igual a %{count}"
+        equal_to: "precisa ser igual a %{count}"
+        less_than: "precisa ser menor do que %{count}"
+        less_than_or_equal_to: "precisa ser menor ou igual a %{count}"
+        odd: "precisa ser ímpar"
+        even: "precisa ser par"
+        record_invalid: "possui erros: %{errors}"
+

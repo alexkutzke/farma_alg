@@ -12,15 +12,19 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap
-//= require_tree .
 //= require underscore
+//= require underscore.string
 //= require backbone
-//
-//= require .//carrie
-//
-//= require_tree ../templates/
-//= require_tree .//models
-//= require_tree .//collections
-//= require_tree .//views
-//= require_tree .//routers
+//= require backbone.sync.rails
+//= require Backbone.ModelBinder
+//= require backbone.marionette
+//= require bootstrap
+//= require handlebars
+//= require monkeys
+//= require carrie
+//= require_tree ./templates
+//= require_tree ./models
+//= require_tree ./collections
+//= require_tree ./views
+//= require_tree ./routers
+//= require_tree .

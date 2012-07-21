@@ -1,0 +1,44 @@
+pt-br:
+  devise:
+    sessions:
+      signed_in: 'Você está logado agora'
+      signed_out: 'Você encerrou sua sessão'
+    failure:
+      already_authenticated: 'Você já está logado'
+    registrations:
+      user:
+        signed_up: 'Bem vindo ao Carrie'
+  simple_form:
+    "yes": "Sim"
+    "no": "Não"
+    required:
+      text: "obrigatório"
+      mark: "*"
+    error_notification:
+      default_message: "Alguns errors foram encontrados:"
+    labels:
+      password: "Sua senha"
+      username: "Usuário"
+      email: "E-mail"
+    hints:
+      user:
+        password: "Quanto mais difícil, melhor!"
+      question:
+        answer: "Deve ser uma formúla"
+    placeholders:
+      learning_object:
+        name: "Nome do OA"
+        description: "Descreva seu OA"
+      question:
+        answer: "X / 2 ^ It"
+    options:
+      question:
+        "yes": "Simmm"
+        "no": "Nãooo"
+
+  helpers:
+    submit:
+      create: "Salvar %{model}"
+      update: "Salvar Alterações"
+    select:
+      prompt: "Selecione"

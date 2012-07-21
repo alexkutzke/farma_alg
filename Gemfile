@@ -9,6 +9,7 @@ gem 'backbone-on-rails'
 gem 'rabl'
 gem 'yajl-ruby'
 
+gem 'devise'
 gem 'simple_form'
 
 group :assets do
@@ -17,6 +18,8 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
   gem 'anjlab-bootstrap-rails', '>= 2.0', :require => 'bootstrap-rails' #, :git => 'git://github.com/anjlab/bootstrap-rails.git'
   gem 'font-awesome-sass-rails'
+  gem 'handlebars_assets'
+  gem 'marionette-rails'
 end
 
 group :development, :test do
