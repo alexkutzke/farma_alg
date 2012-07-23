@@ -10,7 +10,7 @@ class Carrie.Views.Layouts.Unauthenticated extends Backbone.Marionette.Layout
 
   onShow: ->
     this.views.login = Carrie.Views.Unauthenticated.Login
-    #this.views.signup = Carrie.Views.Unauthenticated.Signup;
+    this.views.signup = Carrie.Views.Unauthenticated.Signup
     #this.views.retrievePassword = Carrie.Views.Unauthenticated.RetrievePassword;
     this.tabContent.show new this.views.login
 
