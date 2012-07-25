@@ -25,8 +25,8 @@ class Carrie.Views.Unauthenticated.Login extends Backbone.Marionette.ItemView
       success: (userSession, response) ->
         console.log('success')
         el.find('input.btn-primary').button('reset')
-        #BD.currentUser = new BD.Models.User(response);
-        #BD.vent.trigger("authentication:logged_in")
+        Carrie.currentUser = new Carrie.Models.User(response)
+        Carrie.vent.trigger("authentication:logged_in")
 
       error: (userSession, response) ->
         result = $.parseJSON(response.responseText)
