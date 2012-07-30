@@ -22,14 +22,17 @@ Carrie.bind 'initialize:after', ->
   else
     Carrie.vent.trigger 'authentication:logged_out'
 
+  new Carrie.Routers.App controller: new Carrie.Routers.Controller()
+  Backbone.history.start pushState: true
+
+
 Carrie.vent.on 'authentication:logged_out', ->
   Carrie.main.show Carrie.layouts.unauthenticated
 
 Carrie.vent.on 'authentication:logged_in', ->
   Carrie.main.show Carrie.layouts.main
-  Carrie.welcome.show Carrie.layouts.welcome
+  Carrie.welcome.show new Carrie.Views.Welcome model: Carrie.currentUser
 
 $ ->
   Carrie.start()
   # BootStrap Tooltip
-  $('a[rel=tooltip]').tooltip()

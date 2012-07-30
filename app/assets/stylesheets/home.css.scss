@@ -1,3 +1,32 @@
 // Place all the styles related to the home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+div#welcome {
+  float: right;
+}
+
+.logged-in {
+  margin-top: 2px;
+
+  span {
+    display: inline-block;
+    margin-top: 6px;
+    vertical-align: top;
+  }
+  img {
+    border: solid 1px black;
+    border-radius: 2px;
+    margin: 3px 5px 3px 3px;
+    height: 23px;
+    width: 23px;
+  }
+
+  .btn-sign-out{
+    font-size: 25px;
+    color:#999;
+    &:hover{
+      color: red;
+    }
+  }
+}

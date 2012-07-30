@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.6'
 
-gem 'mongoid', '~> 3.0.0'
+gem 'mongoid', '~> 3.0.2'
 
 gem 'jquery-rails'
 gem 'backbone-on-rails'

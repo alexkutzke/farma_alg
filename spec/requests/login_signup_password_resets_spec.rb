@@ -40,7 +40,6 @@ describe "LoginSignupPasswordResets" do
     end
   end
 
-
   describe 'Signing up' do
       it 'show logged in home page when signup succeeds' do
         visit root_path
@@ -69,6 +68,34 @@ describe "LoginSignupPasswordResets" do
         end
         click_button 'sign_up_btn'
         assert page.has_selector?('form#signup-form div.alert-error')
+    end
+  end
+
+  # Password reset
+  describe 'Resetting your password' do
+    should 'show success message when reset submission succeeds' do
+      user = FactoryGirl.create(:user)
+      visit root_path
+      click_link 'Retrieve password'
+      wait_until { page.has_selector?('#retrieve-password-form', :visible => true) }
+      within('#retrieve-password-form') do
+        fill_in 'email', :with => user.email
+      end
+      click_button 'Send me password reset instructions'
+      assert_equal '/', page.current_path, "Current path not correct"
+      assert page.has_selector?('form#retrieve-password-form div.alert-success'), "No success message found"
+    end
+
+    should 'show an error message when reset fails' do
+      visit root_path
+      click_link 'Retrieve password'
+      wait_until { page.has_selector?('#retrieve-password-form', :visible => true) }
+      within('#retrieve-password-form') do
+        fill_in 'email', :with => 'someone@else.com'
+      end
+      click_button 'Send me password reset instructions'
+      assert_equal '/', page.current_path
+      assert page.has_selector?('form#retrieve-password-form div.alert-error')
     end
   end
 end

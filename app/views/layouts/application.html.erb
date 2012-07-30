@@ -3,8 +3,8 @@
 <head>
   <title>Carrie</title>
   <%= stylesheet_link_tag    'application', :media => 'all' %>
-  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
+  <%= javascript_include_tag 'application' %>
 </head>
 <body data-logged='<%= current_user.to_json %>'>
   <section>
@@ -18,11 +18,10 @@
               <span class="icon-bar"></span>
             </button>
             <a class="brand" href="#">CARRIE</a>
+            <div class='logged-in' id="welcome"></div>
             <div class="nav-collapse collapse">
               <ul class="nav" id="top_menu">
               </ul>
-            </div>
-            <div id="welcome">
             </div>
           </div>
         </div>

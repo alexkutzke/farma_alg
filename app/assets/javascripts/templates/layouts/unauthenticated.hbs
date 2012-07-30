@@ -10,14 +10,15 @@
     <ul class="nav nav-tabs">
       <li class="active"><a href="#login" rel="tooltip"
         data-original-title="Faça o Login para acessar o sistema"
-        data-toggle="tab" data-content="login">Login</a>
+        data-toggle="tab" data-content="login" data-url='/users/sign-in'>Login</a>
       </li>
       <li>
         <a id="sign_up_link" href="#signup" data-toggle="tab" data-content="signup" rel="tooltip"
-           data-original-title="Registre para ter acesso ao sistema" >Registre-se</a>
+           data-original-title="Registre para ter acesso ao sistema" data-url='/users/sign-up' >Registre-se</a>
       </li>
       <li>
-        <a href="#retrieve-password" data-toggle="tab" data-content="retrievePassword">Esqueceu sua Senha</a>
+        <a href="#retrieve-password" data-toggle="tab" data-content="retrievePassword"
+          data-url='/users/passwords' >Esqueceu sua Senha</a>
       </li>
     </ul>
     <div class="tab-content" id="tab-content"></div>
