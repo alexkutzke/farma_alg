@@ -9,6 +9,8 @@ gem 'backbone-on-rails'
 gem 'rabl'
 gem 'yajl-ruby'
 
+gem 'delayed_job_mongoid'
+gem 'bson_ext'
 gem 'devise'
 gem 'simple_form'
 

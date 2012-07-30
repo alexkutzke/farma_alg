@@ -10,6 +10,11 @@ require 'spork'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 Spork.prefork do
+
+  Capybara.register_driver :rack_test do |app|
+    Capybara::RackTest::Driver.new(app, :browser => :chrome)
+  end
+
   RSpec.configure do |config|
     # ## Mock Framework
     #

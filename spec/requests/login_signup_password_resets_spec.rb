@@ -10,7 +10,7 @@ describe "LoginSignupPasswordResets" do
 
     it "render the login, registration, and password reset form when request is to the root path" do
       visit root_path
-      assert_equal '/', page.current_path
+      assert_equal '/users/sign-in', page.current_path
       assert page.has_selector?('form#login-form')
     end
 
@@ -34,14 +34,14 @@ describe "LoginSignupPasswordResets" do
           fill_in 'password', :with => user.password
         end
         click_button 'Login'
-        assert_equal '/', page.current_path
+        assert_equal root_path, page.current_path
         assert page.has_selector?('a[href="'+  destroy_user_session_path + '"]')
       end
     end
   end
 
   describe 'Signing up' do
-      it 'show logged in home page when signup succeeds' do
+      it 'show logged in home page when signup succeeds'  do
         visit root_path
         click_link 'sign_up_link'
         wait_until { page.has_selector?('#signup-form', :visible => true) }
@@ -53,11 +53,11 @@ describe "LoginSignupPasswordResets" do
           fill_in 'password_confirmation', :with => attrs[:password_confirmation]
         end
         click_button 'sign_up_btn'
-        assert_equal '/', page.current_path
+        assert_equal root_path, page.current_path
         assert page.has_selector?('a[href="'+  destroy_user_session_path + '"]')
      end
 
-     it 'show an error message when signup fails', focus: true do
+     it 'show an error message when signup fails' do
         visit root_path
         click_link 'sign_up_link'
         wait_until { page.has_selector?('#signup-form', :visible => true) }
@@ -73,28 +73,26 @@ describe "LoginSignupPasswordResets" do
 
   # Password reset
   describe 'Resetting your password' do
-    should 'show success message when reset submission succeeds' do
+    it 'show success message when reset submission succeeds' do
       user = FactoryGirl.create(:user)
       visit root_path
-      click_link 'Retrieve password'
+      click_link 'retrieve_password'
       wait_until { page.has_selector?('#retrieve-password-form', :visible => true) }
       within('#retrieve-password-form') do
         fill_in 'email', :with => user.email
       end
-      click_button 'Send me password reset instructions'
-      assert_equal '/', page.current_path, "Current path not correct"
-      assert page.has_selector?('form#retrieve-password-form div.alert-success'), "No success message found"
+      click_button 'reset_password'
+      assert page.has_selector?('form#retrieve-password-form div.alert-success')
     end
 
-    should 'show an error message when reset fails' do
+    it 'show an error message when reset fails' do
       visit root_path
-      click_link 'Retrieve password'
+      click_link 'retrieve_password'
       wait_until { page.has_selector?('#retrieve-password-form', :visible => true) }
       within('#retrieve-password-form') do
         fill_in 'email', :with => 'someone@else.com'
       end
-      click_button 'Send me password reset instructions'
-      assert_equal '/', page.current_path
+      click_button 'reset_password'
       assert page.has_selector?('form#retrieve-password-form div.alert-error')
     end
   end
