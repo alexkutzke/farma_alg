@@ -1,4 +1,3 @@
-# lib/devise_backgrounder.rb
 
 # Mailer proxy to send devise emails in the background
 class DeviseBackgrounder

@@ -17,3 +17,12 @@ class Carrie.Routers.Controller
     Carrie.Helpers.Session.notExists
       func: ->
         Carrie.layouts.unauthenticated.showView('retrievePassword')
+
+  #The `*options` catchall route is a well known value in Backbone's Routing
+  #internals that represents any route that's not listed before it. It should to
+  #be defined last if desired. We'll just have the presenter render a 404-style
+  #error view.
+  urlNotFound: ->
+      $('#main').find('.alert-alert').remove()
+      $('#main').prepend Carrie.Helpers.Notifications.error('Página não encontrada')
+      Backbone.history.navigate('', true)
