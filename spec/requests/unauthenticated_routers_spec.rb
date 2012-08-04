@@ -47,29 +47,28 @@ describe "Unauthenticated routers" do
       click_button 'Login'
     end
 
-    it "visit root path should see login form" do
+    it "visit root path should see user info" do
       visit root_path
       page.current_path.should == '/'
       page.has_content?(@user.name)
     end
 
-    it "visit /users/sigin-in should see login form" do
+    it "visit /users/sigin-in should see error message" do
       visit '/users/sign-in'
       page.has_selector?('div.alert').should be_true
     end
 
-
-    it "visit /users/sigin-up should see sing-up form" do
+    it "visit /users/sigin-up should see error message" do
       visit '/users/sign-up'
       page.has_selector?('div.alert').should be_true
     end
 
-    it "visit /users/sign-up should see retrive passwords form" do
+    it "visit /users/sign-up should see error message" do
       visit '/users/passwords'
       page.has_selector?('div.alert').should be_true
     end
 
-    it "visit a url that not exists I should see a error message and redirect to home page", focus: true do
+    it "visit a url that not exists I should see a error message and redirect to home page" do
       visit '/usasdf/asdf'
       page.current_path.should == "/"
       page.has_selector?('div.alert-error').should be_true
