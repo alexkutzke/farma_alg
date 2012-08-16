@@ -22,7 +22,7 @@ Carrie.bind 'initialize:after', ->
   else
     Carrie.vent.trigger 'authentication:logged_out'
 
-  new Carrie.Routers.App controller: new Carrie.Routers.Controller()
+  new Carrie.Routers.UserRouters controller: new Carrie.Routers.UserController()
   Backbone.history.start pushState: true
 
 

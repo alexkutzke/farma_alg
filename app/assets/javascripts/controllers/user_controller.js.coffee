@@ -1,14 +1,14 @@
-class Carrie.Routers.Controller
+class Carrie.Routers.UserController
   index: ->
     if not Carrie.currentUser
       Backbone.history.navigate('/users/sign-in', true)
 
-  sign_in: ->
+  signIn: ->
     Carrie.Helpers.Session.notExists
       func: ->
         Carrie.layouts.unauthenticated.showView('login')
 
-  sign_up: ->
+  signUp: ->
     Carrie.Helpers.Session.notExists
       func: ->
         Carrie.layouts.unauthenticated.showView('signup')
@@ -17,6 +17,13 @@ class Carrie.Routers.Controller
     Carrie.Helpers.Session.notExists
       func: ->
         Carrie.layouts.unauthenticated.showView('retrievePassword')
+
+  editPassword: (token) ->
+    Carrie.Helpers.Session.notExists
+      func: =>
+        Carrie.layouts.unauthenticated.resetPassword(token)
+
+
 
   #The `*options` catchall route is a well known value in Backbone's Routing
   #internals that represents any route that's not listed before it. It should to

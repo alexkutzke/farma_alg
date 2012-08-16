@@ -29,7 +29,7 @@ class Carrie.Views.Unauthenticated.RetrievePassword extends Backbone.Marionette.
                Por favor, verifique seu e-mail para obtê-las."
         el.find('form').prepend Carrie.Helpers.Notifications.success(msg)
         el.find('input.btn-primary').button('reset')
-        Backbone.history.navigate '', false
+        #Backbone.history.navigate '', false
 
       error: (userSession, response) ->
         msg = "Email não encontrado."

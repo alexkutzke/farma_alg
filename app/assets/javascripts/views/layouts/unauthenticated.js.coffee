@@ -16,7 +16,6 @@ class Carrie.Views.Layouts.Unauthenticated extends Backbone.Marionette.Layout
 
   switchViews: (e) ->
     e.preventDefault()
-    console.log($(e.target).data('content'))
     this.tabContent.show(new this.views[$(e.target).data('content')])
     Backbone.history.navigate $(e.target).data('url'), false
 
@@ -24,6 +23,9 @@ class Carrie.Views.Layouts.Unauthenticated extends Backbone.Marionette.Layout
     $(this.el).find('ul.nav-tabs li').removeClass('active')
     $(this.el).find("ul.nav-tabs li a[data-content='#{view}']").parent().addClass('active')
     this.tabContent.show(new this.views[view])
+
+  resetPassword: (token) ->
+    this.tabContent.show new Carrie.Views.Unauthenticated.ResetPassword model: {reset_password_token: token}
 
 
 Carrie.addInitializer ->
