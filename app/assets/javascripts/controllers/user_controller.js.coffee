@@ -23,6 +23,11 @@ class Carrie.Routers.UserController
       func: =>
         Carrie.layouts.unauthenticated.resetPassword(token)
 
+  perfil: ->
+    Carrie.Helpers.Session.Exists
+      func: =>
+        Carrie.layouts.main.content.show new Carrie.Views.UserPerfil()
+
 
 
   #The `*options` catchall route is a well known value in Backbone's Routing

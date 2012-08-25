@@ -2,6 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.center{ text-align: center;}
+.separator{padding: 10px;}
+
 div#welcome {
   float: right;
 }
@@ -25,8 +28,23 @@ div#welcome {
   .btn-sign-out{
     font-size: 25px;
     color:#999;
+    line-height: 1px;
     &:hover{
       color: red;
     }
   }
+
+  .btn-clean {
+    padding: 0px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    moz-box-shadow: none;
+
+    color: #999;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
 }

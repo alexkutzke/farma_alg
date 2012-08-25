@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.md5
 //= require underscore
 //= require underscore.string
 //= require backbone

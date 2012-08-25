@@ -30,7 +30,7 @@ class User
   field :gravatar
 
   validates_presence_of :name
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :created_at, :updated_at
+  attr_accessible :id, :name, :email, :password, :password_confirmation, :remember_me
 
   before_save :do_gravatar_hash
 

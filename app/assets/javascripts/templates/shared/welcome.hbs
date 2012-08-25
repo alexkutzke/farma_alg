@@ -1,6 +1,15 @@
-<span name="name"> Olá {{name}} </span>
-  <img src="http://www.gravatar.com/avatar/{{gravatar}}?s=25" />
-<span>
-  <a id='link-sign-out' class='btn-sign-out' href="/users/sign_out" data-method='DELETE'
-     rel="tooltip" data-original-title="Sair do sistema."><i class="icon-signin"></i></a>
-</span>
+<div class="btn-group ">
+  <a class="dropdown-toggle btn-clean" data-toggle="dropdown" href="#">
+    <span name="name"> Olá {{name}} </span>
+      <img src="http://www.gravatar.com/avatar/{{gravatar}}?s=25" />
+    <span>
+    <a id='link-sign-out' class='btn-sign-out' href="/users/sign_out" data-method='DELETE'
+       rel="tooltip" data-original-title="Sair do sistema."><i class="icon-signin"></i></a>
+    </span>
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+    <!-- dropdown menu links -->
+    <a id='perfil-link' href="#">Meu Perfil</a>
+  </ul>
+</div>
