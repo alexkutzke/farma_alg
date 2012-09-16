@@ -9,7 +9,7 @@ class Exercise
 
   before_create :set_position
 
-  attr_accessible :id, :title, :content, :available
+  attr_accessible :id, :title, :content, :available, :questions_attributes
 
   validates_presence_of :title, :content
   validates :available, :inclusion => {:in => [true, false]}

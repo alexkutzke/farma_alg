@@ -12,6 +12,7 @@ class Carrie.Models.Question extends Backbone.RelationalModel
     id: @get('id')
     title: @get('title')
     content: @get('content')
+    correct_answer: @get('correct_answer')
     available: @get('available')
     lo_id: @get('exercise').get('lo').get('id')
     exercise_id: @get('exercise').get('id')

@@ -17,6 +17,7 @@ class Question
 
   belongs_to :exercise
 
+  default_scope order_by([:position, :desc])
 private
   def set_position
     self.position = Time.now.to_i

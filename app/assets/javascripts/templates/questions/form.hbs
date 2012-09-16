@@ -1,0 +1,49 @@
+<header class='page-header' >
+  {{#if id }}
+    <h4>Editar questão</h4>
+  {{else}}
+    <h4>Nova questão</h4>
+  {{/if}}
+</header>
+<form class="form-vertical" novalidate>
+  <input name="id" type="hidden" />
+
+  <fieldset>
+
+    <div id="title_group" class="control-group">
+      <label class="control-label" for="title">Título</label>
+      <div class="controls">
+        <input id="title" name="title" type="text" required="required" />
+      </div>
+    </div>
+
+    <div id="content_group" class="control-group">
+      <label class="control-label" for="content">Conteúdo</label>
+      <div class="controls">
+        <textarea name="content" required="required"></textarea>
+      </div>
+    </div>
+
+    <div id="correct_answer_group" class="control-group">
+      <label class="control-label" for="correct_answer">Resposta correta</label>
+      <div class="controls">
+        <input id="correct_answer" name="correct_answer" type="text" required="required" />
+        <span class="help-inline">A resposta correta deve ser um expressão matemática.</span>
+      </div>
+    </div>
+
+    <div id="available_group" class="control-group">
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" name='available'> Publicar
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" value="Salvar" class="btn btn-primary" />
+      <input type="button" value="Cancelar" class="btn btn-primary btn-cancel" />
+    </div>
+
+  </fieldset>
+</form>

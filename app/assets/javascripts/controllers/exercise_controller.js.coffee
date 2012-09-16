@@ -76,6 +76,10 @@ class Carrie.Routers.ExerciseController
         async: false
         error: (model, response)->
           Carrie.Utils.Alert.error('Exercício não encontrada')
+    else
+      exer.fetch
+        async: false
+
 
     return exer
 

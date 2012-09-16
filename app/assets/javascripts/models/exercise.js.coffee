@@ -26,5 +26,7 @@ class Carrie.Models.Exercise extends Backbone.RelationalModel
     lo_id: @get('lo').get('id')
     updated_at: @get('updated_at')
     created_at: @get('created_at')
+    questions: @get('questions').toJSON()
+    questions_attributes: @get('questions_attributes')
 
 Carrie.Models.Exercise.setup()

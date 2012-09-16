@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   respond_to :json
-  before_filter :find_exercise
+  before_filter :find_exercise, except: :sort
 
   def index
     @questions = @exercise.questions.order_by(:position => :desc)

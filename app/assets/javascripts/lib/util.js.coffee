@@ -17,12 +17,13 @@ Carrie.Utils.Alert =
     else
       $('#alert-msg').append(msg_el)
 
-  clear: ->
+  clear: (el) ->
+    el = 'form' unless el
     $('.alert').remove()
-    $('form').find('input.btn-primary').button('loading')
-    $('form').find('.alert-error').remove()
-    $('form').find('.help-block').remove()
-    $('form').find('.control-group.error').removeClass('error')
+    $(el).find('input.btn-primary').button('loading')
+    $(el).find('.alert-error').remove()
+    $(el).find('.help-block').remove()
+    $(el).find('.control-group.error').removeClass('error')
 
   showFormErrors: (form_errors) ->
     _(form_errors).each (errors, field) ->

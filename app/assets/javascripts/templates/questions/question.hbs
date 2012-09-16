@@ -1,0 +1,32 @@
+<hr />
+<header>
+  <div class='clearfix '>
+    <span class='left move'>
+      <i rel="tooltip" data-original-title="Clique e arraste para ordernar" class="icon-move"></i>
+    </span>
+    <span class='icon'>
+      {{#if available }}
+        <i rel="tooltip" data-original-title="Questão Publicada" class='left icon-certificate icon-green'></i>
+      {{else}}
+        <i rel="tooltip" data-original-title="Questão não Publicado" class='left icon-certificate icon-red'></i>
+      {{/if}}
+    </span>
+    <h4 class='left'>{{title}}</h4>
+    <div class='right'>
+      <a href='' data-id='{{id}}' id='edit-question-link'><i class="icon-edit"></i> Editar </a>
+      <a href='' data-id='{{id}}' id='destroy-question-link' ><i class="icon-remove-circle"></i> Remover </a>
+    </div>
+  </div>
+</header>
+
+
+<p> {{content}} </p>
+
+<form class="well form-horizontal" id="{{id}}">
+
+  <label for="answer">Resposta:</label>
+  <input name="id" type="hidden" value='{{id}}' />
+  <input name="answer" type="text" placeholder="Digite sua resposta." />
+
+  <button type="submit" class="btn btn-primary">Enviar</button>
+</form>

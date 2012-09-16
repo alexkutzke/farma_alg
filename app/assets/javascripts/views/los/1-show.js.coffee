@@ -11,6 +11,11 @@ class Carrie.Views.Lo extends Backbone.Marionette.ItemView
     'click .destroy-lo' : 'destroy_lo'
     'click .introductions-btn' : 'viewIntroductions'
     'click .exercises-btn' : 'viewExercises'
+    'click .view-lo-btn' : 'viewLo'
+
+  viewLo: (ev) ->
+    ev.preventDefault()
+    alert ('Em desenvolvimento')
 
   viewIntroductions: (ev) ->
     ev.preventDefault()
