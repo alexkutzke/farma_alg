@@ -1,0 +1,25 @@
+<header>
+  <div class='center'>
+    <span class='icon'>
+      {{#if available }}
+        <i rel="tooltip" data-original-title="Exercício Publicada" class='left icon-certificate icon-green'></i>
+      {{else}}
+        <i rel="tooltip" data-original-title="Exercício não Publicado" class='left icon-certificate icon-red'></i>
+      {{/if}}
+    </span>
+    <div>
+      <h4>Exercício {{title}}</h4>
+    </div>
+  </div>
+    <p class='date-info text-right'>
+      Criado em {{created_at}}
+      Atualizado em {{updated_at}}
+    </p>
+</header>
+<hr>
+
+<div>{{content}}</div>
+
+<div class='separator-top'>
+  <h4>Questões:</h4>
+</div>

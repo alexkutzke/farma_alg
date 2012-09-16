@@ -29,10 +29,13 @@ class User
   field :name, :type => String
   field :gravatar
 
-  validates_presence_of :name
   attr_accessible :id, :name, :email, :password, :password_confirmation, :remember_me
 
+  validates_presence_of :name
+
   before_save :do_gravatar_hash
+
+  has_many :los
 
   def do_gravatar_hash
     self.gravatar= Digest::MD5.hexdigest(self.email)

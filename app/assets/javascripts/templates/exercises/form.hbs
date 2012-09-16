@@ -1,0 +1,40 @@
+<header class='page-header' >
+  {{#if id }}
+    <h4>Editar exercício do OA {{lo.name}}</h4>
+  {{else}}
+    <h4>Nova exercício para o OA {{lo.name}}</h4>
+  {{/if}}
+</header>
+<form id="exercise-form" class="form-vertical" novalidate>
+  <input name="id" type="hidden" />
+
+  <fieldset>
+
+    <div id="title_group" class="control-group">
+      <label class="control-label" for="title">Título</label>
+      <div class="controls">
+        <input id="title" name="title" type="text" required="required" />
+      </div>
+    </div>
+
+    <div id="content_group" class="control-group">
+      <label class="control-label" for="content">Conteúdo</label>
+      <div class="controls">
+        <textarea name="content" required="required"></textarea>
+      </div>
+    </div>
+
+    <div id="available_group" class="control-group">
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" name='available'> Publicar
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" value="Salvar" class="btn btn-primary" />
+    </div>
+
+  </fieldset>
+</form>

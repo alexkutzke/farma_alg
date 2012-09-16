@@ -1,0 +1,25 @@
+// Place all the styles related to the los controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#los {
+  header{
+    margin-bottom: 30px;
+  }
+  p {
+    font-size: 12px;
+  }
+}
+
+.options-links {
+  margin-left: 10px;
+
+  a {
+    visibility: hidden;
+    margin-left: 5px;
+  }
+
+  &:hover a {
+    visibility: visible;
+  }
+}

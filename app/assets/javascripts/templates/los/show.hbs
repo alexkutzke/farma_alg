@@ -1,0 +1,27 @@
+<header class='clearfix'>
+  <span class='icon'>
+    {{#if available }}
+      <i rel="tooltip" data-original-title="OA Publicado" class='left icon-certificate icon-green'></i>
+    {{else}}
+      <i rel="tooltip" data-original-title="OA não Publicado" class='left icon-certificate icon-red'></i>
+    {{/if}}
+  </span>
+  <div class='left'>
+    <h4>{{name}}</h4>
+  </div>
+  <span class='options-links'>
+    <a href='#' data-id='{{id}}' class='edit-lo'><i class="icon-edit"></i> Editar </a>
+    <a href='#' data-id='{{id}}' class='destroy-lo' ><i class="icon-remove-circle"></i> Remover </a>
+  </span>
+  <div class='right date-info'>
+    Criado em {{created_at}}
+    Atualizado em {{updated_at}}
+  </div>
+</header>
+<p>{{description}}</p>
+<p>
+  <a class='btn btn-small introductions-btn' data-id='{{id}}'>Introduções</a>
+  <a class='btn btn-small exercises-btn' data-id='{{id}}'>Exercícios</a>
+  <a class="btn btn-small">Visualizar OA</a>
+</p>
+<hr>

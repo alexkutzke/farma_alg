@@ -6,12 +6,33 @@
 // $gridGutterWidth: 10px;
 
 // import original bootstrap
-@import "bootstrap";
-@import "responsive";
+@import "twitter/bootstrap";
+@import "twitter/bootstrap-responsive";
 @import 'font-awesome';
 
 @media(min-width: 979px) {
   body {
-    padding-top: 60px;
+    padding-top: 40px;
   }
 }
+
+@media (max-width: 767px) {
+  .modal.fade.in {
+    top: 50%;
+  }
+}
+
+#update-user-form input[type='text'],
+#update-user-form input[type='email'],
+#update-user-form input[type='password'] {
+  @extend .input-xlarge;
+}
+#lo-form {
+  input[type='text'], textarea {
+    @extend .input-xlarge;
+  }
+}
+
+.icon-red { color: red; }
+.icon-green { color: green; }
+span.icon i {margin-right: 5px;}

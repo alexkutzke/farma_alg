@@ -2,6 +2,9 @@ class Carrie.Routers.UserController
   index: ->
     if not Carrie.currentUser
       Backbone.history.navigate('/users/sign-in', true)
+    else
+      Carrie.layouts.main = new Carrie.Views.Layouts.Main()
+      Carrie.main.show Carrie.layouts.main
 
   signIn: ->
     Carrie.Helpers.Session.notExists

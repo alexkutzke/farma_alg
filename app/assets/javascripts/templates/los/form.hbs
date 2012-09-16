@@ -1,0 +1,40 @@
+<header class='page-header' >
+    {{#if id }}
+      <h4>Editar objeto de aprendizagem do OA {{lo.name}}</h4>
+    {{else}}
+      <h4>Novo objeto de aprendizagem para o OA {{lo.name}}</h4>
+    {{/if}}
+</header>
+<form id="lo-form" class="form-horizontal" novalidate>
+  <input name="id" type="hidden" />
+
+  <fieldset>
+
+    <div id="name_group" class="control-group">
+      <label class="control-label" for="name">Nome</label>
+      <div class="controls">
+        <input id="name" name="name" type="text" required="required" />
+      </div>
+    </div>
+
+    <div id="description_group" class="control-group">
+      <label class="control-label" for="description">Descrição</label>
+      <div class="controls">
+        <textarea id="description" name="description" required="required"></textarea>
+      </div>
+    </div>
+
+    <div id="available_group" class="control-group">
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" name='available'> Publicar
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" value="Salvar" class="btn btn-primary" />
+    </div>
+
+  </fieldset>
+</form>

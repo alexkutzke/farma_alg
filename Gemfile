@@ -14,11 +14,16 @@ gem 'bson_ext'
 gem 'devise'
 gem 'simple_form'
 
+gem "ckeditor", "3.7.1"
+gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
-  gem 'anjlab-bootstrap-rails', '>= 2.0', :require => 'bootstrap-rails' #, :git => 'git://github.com/anjlab/bootstrap-rails.git'
+  #gem 'anjlab-bootstrap-rails', '>= 2.0', :require => 'bootstrap-rails' #, :git => 'git://github.com/anjlab/bootstrap-rails.git'
+  gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
+                              :git => 'git://github.com/anjlab/bootstrap-rails.git'
   gem 'font-awesome-sass-rails'
   gem 'handlebars_assets'
   gem 'marionette-rails'
@@ -33,6 +38,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'thin'
   gem 'growl'
+  gem 'faker'
 end
 
 group :test do

@@ -11,15 +11,20 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require jquery-ui
 //= require jquery_ujs
 //= require jquery.md5
+//= require bootbox.min
+//= require ckeditor/init
+//= require ckeditor/adapters/jquery
 //= require underscore
 //= require underscore.string
 //= require backbone
+//= require backbone-relational
 //= require backbone.sync.rails
 //= require Backbone.ModelBinder
 //= require backbone.marionette
-//= require bootstrap
+//= require twitter/bootstrap
 //= require handlebars
 //= require monkeys
 //= require carrie
@@ -29,3 +34,12 @@
 //= require_tree ./views
 //= require_tree ./routers
 //= require_tree .
+
+
+$(this).scroll(function() {
+   if ($(this).scrollTop() > 120){
+      $('.sidebar-nav').addClass('sidebar-nav-fixed');
+   } else {
+      $('.sidebar-nav').removeClass('sidebar-nav-fixed');
+   }
+});

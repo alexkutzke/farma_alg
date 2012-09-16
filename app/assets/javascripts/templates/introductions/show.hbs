@@ -1,0 +1,28 @@
+<header>
+  <div class='clearfix'>
+    <span class='left move'>
+      <i rel="tooltip" data-original-title="Clique e arraste para ordernar" class="icon-move"></i>
+    </span>
+    <span class='icon'>
+      {{#if available }}
+        <i rel="tooltip" data-original-title="Introdução Publicada" class='left icon-certificate icon-green'></i>
+      {{else}}
+        <i rel="tooltip" data-original-title="Introdução não Publicado" class='left icon-certificate icon-red'></i>
+      {{/if}}
+    </span>
+    <div class='left'>
+      <h4>{{title}}</h4>
+    </div>
+    <span class='options-links'>
+      <a href='#' data-id='{{id}}' id='show_intro'><i class="icon-plus"></i> Detalhes </a>
+      <a href='#' data-id='{{id}}' id='edit_intro'><i class="icon-edit"></i> Editar </a>
+      <a href='#' data-id='{{id}}' id='destroy_intro' ><i class="icon-remove-circle"></i> Remover </a>
+    </span>
+  </div>
+    <span class='date-info'>
+      Criado em {{created_at}}
+      Atualizado em {{updated_at}}
+    </span>
+</header>
+<div class='intro-content hide'>{{content}}</div>
+<hr>
