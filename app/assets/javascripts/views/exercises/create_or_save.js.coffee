@@ -21,6 +21,8 @@ class Carrie.Views.CreateOrSaveExercise extends Backbone.Marionette.ItemView
     @model.save @model.attributes,
       wait: true
       success: (model, response) =>
+        @model.set('id', response._id) if response
+
         $(@el).find('input.btn-primary').button('reset')
         Backbone.history.navigate '/los/'+@options.lo.get('id')+'/exercises/'+@model.get('id'), true
         Carrie.Utils.Alert.success('Exercício salvo com sucesso!', 3000)

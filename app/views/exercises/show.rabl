@@ -4,6 +4,6 @@ glue @exercise do
   node(:updated_at) { |exer| l exer.updated_at }
 
   child(:questions) do
-    attributes :id, :title, :content, :available
+    attributes :id, :title, :content, :available, :correct_answer
   end
 end

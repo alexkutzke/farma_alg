@@ -69,6 +69,10 @@ test:
 
 # set these environment variables on your prod server
 production:
-  host: localhost
-  #port: 28017
-  database: farma_production
+  sessions:
+    default:
+      database: farma_production
+      hosts:
+        - localhost:27017
+      options:
+        consistency: :strong

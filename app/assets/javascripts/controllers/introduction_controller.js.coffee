@@ -1,49 +1,55 @@
 class Carrie.Routers.IntroductionController
 
   index: (lo_id) ->
-    lo = @find_model(lo_id)
+    Carrie.Helpers.Session.Exists
+      func: =>
+        lo = @find_model(lo_id)
 
-    @setBreadcrumb(lo)
-    Carrie.layouts.main.addBreadcrumb('Introduções do OA ' + lo.get('name'), '', true)
+        @setBreadcrumb(lo)
+        Carrie.layouts.main.addBreadcrumb('Introduções do OA ' + lo.get('name'), '', true)
 
-    lo.get('introductions').fetch
-      wait: true
-      success: (collection, response) =>
-        index = new Carrie.CompositeViews.IntroductionIndex
-          collection: lo.get('introductions')
-          model: lo
-        Carrie.layouts.main.content.show index
+        lo.get('introductions').fetch
+          wait: true
+          success: (collection, response) =>
+            index = new Carrie.CompositeViews.IntroductionIndex
+              collection: lo.get('introductions')
+              model: lo
+            Carrie.layouts.main.content.show index
 
-      error: (model, response)->
-        console.log(response)
-        Carrie.Utils.Alert.error('Problema para carregar introduções')
+          error: (model, response)->
+            console.log(response)
+            Carrie.Utils.Alert.error('Problema para carregar introduções')
 
 
   new: (lo_id) ->
-    lo = @find_model(lo_id)
+    Carrie.Helpers.Session.Exists
+      func: =>
+        lo = @find_model(lo_id)
 
-    @setBreadcrumb(lo)
-    Carrie.layouts.main.addBreadcrumb('Introduções do OA ' + lo.get('name'), '/los/' + lo.get('id') + '/introductions')
-    Carrie.layouts.main.addBreadcrumb('nova', '', true)
+        @setBreadcrumb(lo)
+        Carrie.layouts.main.addBreadcrumb('Introduções do OA ' + lo.get('name'), '/los/' + lo.get('id') + '/introductions')
+        Carrie.layouts.main.addBreadcrumb('nova', '', true)
 
-    Carrie.layouts.main.content.show new Carrie.Views.CreateOrSaveIntroduction(lo: lo)
+        Carrie.layouts.main.content.show new Carrie.Views.CreateOrSaveIntroduction(lo: lo)
 
   edit: (lo_id, id) ->
-    lo = @find_model(lo_id)
+    Carrie.Helpers.Session.Exists
+      func: =>
+        lo = @find_model(lo_id)
 
-    introduction = new @find_intro(lo, id)
+        introduction = new @find_intro(lo, id)
 
-    introduction.fetch
-      success: (model, response) =>
-        console.log(model)
-        @setBreadcrumb(lo)
-        bread = 'Introduções do OA ' + lo.get('name')
-        Carrie.layouts.main.addBreadcrumb(bread, '/los/' + lo.get('id') + '/introductions')
-        Carrie.layouts.main.addBreadcrumb('Editar introducão ' + model.get('title') , '', true)
+        introduction.fetch
+          success: (model, response) =>
+            console.log(model)
+            @setBreadcrumb(lo)
+            bread = 'Introduções do OA ' + lo.get('name')
+            Carrie.layouts.main.addBreadcrumb(bread, '/los/' + lo.get('id') + '/introductions')
+            Carrie.layouts.main.addBreadcrumb('Editar introducão ' + model.get('title') , '', true)
 
-        Carrie.layouts.main.content.show new Carrie.Views.CreateOrSaveIntroduction(lo: lo, model: model)
-      error: (model, response)->
-        Carrie.Utils.Alert.error('Introdução não encontroda')
+            Carrie.layouts.main.content.show new Carrie.Views.CreateOrSaveIntroduction(lo: lo, model: model)
+          error: (model, response)->
+            Carrie.Utils.Alert.error('Introdução não encontroda')
 
   find_model: (id) ->
     lo = Carrie.Models.Lo.findOrCreate(id)

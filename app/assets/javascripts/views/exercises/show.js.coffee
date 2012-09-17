@@ -24,3 +24,6 @@ class Carrie.CompositeViews.ExerciseShow extends Backbone.Marionette.CompositeVi
     ev.preventDefault()
     form = new Carrie.Views.CreateOrSaveQuestion(exercise: @model)
     $(@el).find('#new_question').html form.render().el
+
+  appendHtml: (collectionView, itemView, index) ->
+    $(@el).append(itemView.el) if itemView.model.get('id')

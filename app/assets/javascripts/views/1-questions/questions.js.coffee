@@ -5,7 +5,7 @@ class Carrie.Views.Question extends Backbone.Marionette.ItemView
   events:
     'click #destroy-question-link' : 'destroy'
     'click #edit-question-link' : 'edit'
-    'submit form': 'verify_answer'
+    'click .btn-verify': 'verify_answer'
 
   onRender: ->
     @el.id = @model.get('id')
