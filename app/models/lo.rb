@@ -9,6 +9,7 @@ class Lo
   attr_accessible :id, :name, :description, :available
 
   validates_presence_of :name, :description
+  validates :name, uniqueness: true
   validates :available, :inclusion => {:in => [true, false]}
 
   belongs_to :user

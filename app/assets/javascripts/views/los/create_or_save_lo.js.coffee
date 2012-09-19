@@ -20,7 +20,7 @@ class Carrie.Views.CreateOrSaveLo extends Backbone.Marionette.ItemView
     @model.save @model.attributes,
       wait: true
       success: (lo, response) =>
-        @model.set('id', response._id) if response
+        #@model.set('id', response.id) if response # verificar necessidade
         $(@el).find('input.btn-primary').button('reset')
         Backbone.history.navigate '/los', true
 
@@ -29,7 +29,8 @@ class Carrie.Views.CreateOrSaveLo extends Backbone.Marionette.ItemView
       error: (lo, response) =>
         result = $.parseJSON(response.responseText)
 
-        Carrie.Utils.Alert.error('Existe erros no seu formulário')
-        Carrie.Utils.Alert.showFormErrors(result.errors)
+        msg = Carrie.Helpers.Notifications.error('Existe erros no seu formulário')
+        $(@el).find('form').before(msg)
+        Carrie.Utils.Alert.showFormErrors(result.errors, @el)
 
         $(@el).find('input.btn-primary').button 'reset'

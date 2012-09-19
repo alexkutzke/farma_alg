@@ -34,7 +34,11 @@ class TipsController < ApplicationController
 
 private
  def find_question
-   @lo = Lo.find(params[:lo_id])
+   if current_user.admin?
+     @lo = Lo.find(params[:lo_id])
+   else
+     @lo = current_user.los.find(params[:lo_id])
+   end
    @exercise = @lo.exercises.find(params[:exercise_id])
    @question = @exercise.questions.find(params[:question_id])
  end

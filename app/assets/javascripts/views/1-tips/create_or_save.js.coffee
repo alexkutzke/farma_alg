@@ -29,6 +29,7 @@ class Carrie.Views.CreateOrSaveTip extends Backbone.Marionette.ItemView
     Carrie.Utils.Alert.clear(@el)
 
     @model.save @model.attributes,
+      wait: true
       success: (model, response) =>
         $(@el).find('input.btn-primary').button('reset')
         Carrie.Utils.Alert.success('Diaca salva com sucesso!', 3000)
@@ -36,7 +37,6 @@ class Carrie.Views.CreateOrSaveTip extends Backbone.Marionette.ItemView
         if @editing
           @model.get('question').get('tips').sort()
         else
-          @model.set('id', response._id) if response
           @options.collection.sort()
           $(@el).parent().html('')
 

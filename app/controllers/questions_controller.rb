@@ -39,16 +39,20 @@ class QuestionsController < ApplicationController
   def sort
     size = params[:ids].size
     params[:ids].each_with_index do |id, index|
-      q = Question.find(id)
+      q = @exercise.questions.find(id)
       q.update_attribute(:position, size-index) if q
     end
     render nothing: true
   end
 
 private
- def find_exercise
-   @lo = Lo.find(params[:lo_id])
-   @exercise = Exercise.find(params[:exercise_id])
- end
+  def find_exercise
+    if current_user.admin?
+      @lo = Lo.find(params[:lo_id])
+    else
+      @lo = current_user.los.find(params[:lo_id])
+    end
+    @exercise = @lo.exercises.find(params[:exercise_id])
+  end
 
 end

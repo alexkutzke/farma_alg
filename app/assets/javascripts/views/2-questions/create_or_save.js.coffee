@@ -32,6 +32,7 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
     Carrie.Utils.Alert.clear(@el)
 
     @model.save @model.attributes,
+      wait: true
       success: (model, response) =>
         $(@el).find('input.btn-primary').button('reset')
         Carrie.Utils.Alert.success('Questão salva com sucesso!', 3000)
@@ -39,7 +40,6 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
         if @editing
           @options.view.render()
         else
-          @model.set('id', response._id) if response
           view = new Carrie.Views.Question({model: @model})
           $('#new_question').after view.render().el
           $('#new_question').html('')

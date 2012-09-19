@@ -28,6 +28,7 @@ class User
 
   field :name, :type => String
   field :gravatar
+  field :admin, :type => Boolean, default: false
 
   attr_accessible :id, :name, :email, :password, :password_confirmation, :remember_me
 

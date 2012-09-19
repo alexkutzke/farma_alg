@@ -39,7 +39,7 @@ class IntroductionsController < ApplicationController
   def sort
     size = params[:ids].size
     params[:ids].each_with_index do |id, index|
-      intro = Introduction.find(id)
+      intro = @lo.introductions.find(id)
       intro.update_attribute(:position, size-index) if intro
     end
     render nothing: true
@@ -47,7 +47,10 @@ class IntroductionsController < ApplicationController
 
 private
  def find_lo
-   @lo = Lo.find(params[:lo_id])
+    if current_user.admin?
+      @lo = Lo.find(params[:lo_id])
+    else
+      @lo = current_user.los.find(params[:lo_id])
+    end
  end
-
 end
