@@ -19,31 +19,27 @@ class Carrie.Views.Lo extends Backbone.Marionette.ItemView
 
   viewIntroductions: (ev) ->
     ev.preventDefault()
-    url = '/los/' + $(ev.target).data('id') + '/introductions'
+    url = '/los/' + @model.get('id') + '/introductions'
     Backbone.history.navigate(url, true)
 
   viewExercises: (ev) ->
     ev.preventDefault()
-    url = '/los/' + $(ev.target).data('id') + '/exercises'
+    url = '/los/' + @model.get('id') + '/exercises'
     Backbone.history.navigate(url, true)
 
   edit_lo: (ev) ->
-    id = $(ev.target).data('id')
     ev.preventDefault()
-    Backbone.history.navigate('/los/edit/'+id, true)
+    Backbone.history.navigate('/los/edit/'+@model.get('id'), true)
 
   destroy_lo: (ev) ->
     ev.preventDefault()
-    lo = Carrie.Models.Lo.findOrCreate
-      id: $(ev.target).data('id')
 
     msg = "Você tem certeza que deseja remover este Objeto de Aprendizagem?"
 
-    bootbox.confirm msg, (confirmed) ->
+    bootbox.confirm msg, (confirmed) =>
       if confirmed
-        lo.destroy
-          wait: true
+        @model.destroy
           success: (model, response) ->
-            $('#'+model.get('id')).fadeOut(800, 'linear')
-
+            $(@el).fadeOut(800, 'linear')
+            @remove
             Carrie.Utils.Alert.success('OA removido com sucesso!', 3000)

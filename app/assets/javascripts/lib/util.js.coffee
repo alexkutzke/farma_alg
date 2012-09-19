@@ -25,8 +25,8 @@ Carrie.Utils.Alert =
     $(el).find('.help-block').remove()
     $(el).find('.control-group.error').removeClass('error')
 
-  showFormErrors: (form_errors) ->
+  showFormErrors: (form_errors, el) ->
     _(form_errors).each (errors, field) ->
-      $("\##{field}_group").addClass 'error'
+      $(".#{field}_group").addClass 'error'
       _(errors).each (error, i) ->
-        $("\##{field}_group .controls").append(Carrie.Helpers.FormHelpers.fieldHelp(error))
+        $(el).find(".#{field}_group .controls").append(Carrie.Helpers.FormHelpers.fieldHelp(error))

@@ -4,6 +4,16 @@ class Carrie.Models.Question extends Backbone.RelationalModel
 
   paramRoot: 'question'
 
+  relations: [{
+    type: Backbone.HasMany
+    key: 'tips'
+    relatedModel: 'Carrie.Models.Tip'
+    collectionType: 'Carrie.Collections.Tips'
+    reverseRelation: {
+      key: 'question'
+    }
+  }]
+
   defaults:
     'title': ''
     'content': ''

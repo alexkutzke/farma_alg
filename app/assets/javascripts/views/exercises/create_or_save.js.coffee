@@ -21,10 +21,11 @@ class Carrie.Views.CreateOrSaveExercise extends Backbone.Marionette.ItemView
     @model.save @model.attributes,
       wait: true
       success: (model, response) =>
-        @model.set('id', response._id) if response
-
+        @model.set('id', response.id) if response
+        console.log(response)
+        console.log(@model)
         $(@el).find('input.btn-primary').button('reset')
-        Backbone.history.navigate '/los/'+@options.lo.get('id')+'/exercises/'+@model.get('id'), true
+        Backbone.history.navigate '/los/' + @options.lo.get('id')+'/exercises/'+@model.get('id'), true
         Carrie.Utils.Alert.success('Exercício salvo com sucesso!', 3000)
 
       error: (model, response) =>
@@ -32,7 +33,9 @@ class Carrie.Views.CreateOrSaveExercise extends Backbone.Marionette.ItemView
         console.log(response)
         console.log(result)
 
-        Carrie.Utils.Alert.error('Existe erros no seu formulário')
-        Carrie.Utils.Alert.showFormErrors(result.errors)
+
+        msg = Carrie.Helpers.Notifications.error('Existe erros no seu formulário')
+        $(@el).find('form').before(msg)
+        Carrie.Utils.Alert.showFormErrors(result.errors, @el)
 
         $(@el).find('input.btn-primary').button 'reset'

@@ -13,8 +13,9 @@
     </span>
     <h4 class='left'>{{title}}</h4>
     <div class='right'>
-      <a href='' data-id='{{id}}' id='edit-question-link'><i class="icon-edit"></i> Editar </a>
-      <a href='' data-id='{{id}}' id='destroy-question-link' ><i class="icon-remove-circle"></i> Remover </a>
+      <a href='' class='edit-question-link' ><i class="icon-edit"></i> Editar </a>
+      <a href='' class='destroy-question-link' ><i class="icon-remove-circle"></i> Remover </a>
+      <a href='' class='show-tips-link'><i class="icon-eye-open"></i> Dicas </a>
     </div>
   </div>
 </header>
@@ -22,11 +23,31 @@
 
 <p> {{content}} </p>
 
-<form class="well form-horizontal" id="{{id}}">
+<div class='well' >
+  <p><strong>Resposta Correta:</strong> {{correct_answer}}</p>
+  <form class="form-horizontal" id="{{id}}">
 
-  <label for="answer">Resposta:</label>
-  <input name="id" type="hidden" value='{{id}}' />
-  <input name="answer" type="text" placeholder="Digite sua resposta." />
+    <label for="answer">Teste sua resposta:</label>
+    <input name="id" type="hidden" value='{{id}}' />
+    <input name="answer" type="text" placeholder="Digite sua resposta." />
 
-  <button type="submit" class="btn btn-primary btn-verify">Enviar</button>
-</form>
+    <button type="submit" class="btn btn-primary btn-verify">Enviar</button>
+  </form>
+
+  <section class='tips hide'>
+    <div class='clearfix separator-top'>
+      <div class='left'>
+        <h4>Dicas:</h4>
+      </div>
+      <div class='right'>
+        <a href='' class='new-tip-link' ><i class="icon-plus-sign"></i> Criar nova dica </a>
+      </div>
+    </div>
+    <section>
+      <div class='new-tip'>
+      </div>
+    </section>
+
+  </section>
+
+</div>

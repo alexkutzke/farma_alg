@@ -9,27 +9,22 @@ class Carrie.Views.IntroductionShow extends Backbone.Marionette.ItemView
 
   show: (ev) ->
     ev.preventDefault()
-    id = $(ev.target).data('id')
-    $('#'+id).find('.intro-content').toggle('blind', {}, 500)
+    $(@el).find('.intro-content').toggle('blind', {}, 500)
 
   edit: (ev) ->
     ev.preventDefault()
-    id = $(ev.target).data('id')
+    id = @model.get('id')
     Backbone.history.navigate('/los/'+@model.get('lo').get('id')+'/introductions/edit/'+id, true)
 
   destroy: (ev) ->
     ev.preventDefault()
-    intro = Carrie.Models.Introduction.findOrCreate
-      id: $(ev.target).data('id')
-
     msg = "Você tem certeza que deseja remover esta introdução?"
 
-    bootbox.confirm msg, (confirmed) ->
+    bootbox.confirm msg, (confirmed) =>
       if confirmed
-        intro.destroy
-          wait: true
-          success: (model, response) ->
-            $('#'+model.get('id')).fadeOut(800, 'linear')
+        @model.destroy
+          success: (model, response) =>
+            $(@el).fadeOut(800, 'linear')
 
             Carrie.Utils.Alert.success('Introducação removida com sucesso!', 2500)
 

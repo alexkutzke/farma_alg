@@ -9,6 +9,7 @@ Carrie::Application.routes.draw do
       end
       resources :exercises do
         resources :questions do
+          resources :tips
           collection {post :sort}
         end
         collection { post :sort }

@@ -21,16 +21,12 @@ class Carrie.Views.ExerciseItem extends Backbone.Marionette.ItemView
 
   destroy: (ev) ->
     ev.preventDefault()
-    intro = Carrie.Models.Exercise.findOrCreate
-      id: @el.id
-
     msg = "Você tem certeza que deseja remover esta introdução?"
 
-    bootbox.confirm msg, (confirmed) ->
+    bootbox.confirm msg, (confirmed) =>
       if confirmed
-        intro.destroy
-          wait: true
-          success: (model, response) ->
-            $('#'+model.get('id')).fadeOut(800, 'linear')
+        @model.destroy
+          success: (model, response) =>
+            $(@el).fadeOut(800, 'linear')
 
             Carrie.Utils.Alert.success('Exercício removido com sucesso!', 2500)

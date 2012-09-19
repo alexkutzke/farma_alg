@@ -8,6 +8,8 @@ class Question
   field :available, type: Boolean, default: false
   field :position, type: Integer
 
+  default_scope order_by([:position, :desc])
+
   before_create :set_position
 
   attr_accessible :id, :title, :content, :correct_answer, :available
@@ -16,8 +18,8 @@ class Question
   validates :available, :inclusion => {:in => [true, false]}
 
   belongs_to :exercise
+  has_many :tips, dependent: :delete
 
-  default_scope order_by([:position, :desc])
 private
   def set_position
     self.position = Time.now.to_i

@@ -19,8 +19,14 @@ namespace :db do
         3.times do
           exer = lo.exercises.create( title: Faker::Name.title, content: Faker::Lorem.paragraphs(3).join)
           3.times do |i|
-            exer.questions.create(title: Faker::Name.title, content: Faker::Lorem.paragraphs(1).join,
+            q = exer.questions.create(title: Faker::Name.title, content: Faker::Lorem.paragraphs(1).join,
                                   correct_answer: i)
+
+            3.times do
+              q.tips.create(content: Faker::Lorem.paragraphs(1).join,
+                            numbers_of_tries: (1..5).to_a.sample )
+            end
+
           end
         end
     end

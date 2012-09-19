@@ -12,7 +12,7 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
     else
       @editing = true
 
-    this.modelBinder = new Backbone.ModelBinder()
+    @modelBinder = new Backbone.ModelBinder()
 
   onRender: ->
     @modelBinder.bind(this.model, this.el)
@@ -22,8 +22,7 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
     if @editing
       @modelBinder.unbind()
       @model.fetch(async:false)
-      q = new Carrie.Views.Question model: @model
-      $(@el).parent().html(q.render().el)
+      @options.view.render()
     else
       $('#new_question').html('')
 
@@ -33,25 +32,23 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
     Carrie.Utils.Alert.clear(@el)
 
     @model.save @model.attributes,
-      wait: true
       success: (model, response) =>
         $(@el).find('input.btn-primary').button('reset')
         Carrie.Utils.Alert.success('Questão salva com sucesso!', 3000)
 
-        @model.set('id', response._id) if response
-
-        q = new Carrie.Views.Question({model: @model})
-
         if @editing
-          $(@el).parent().html(q.render().el)
+          @options.view.render()
         else
-          $('#new_question').after(q.render().el)
+          @model.set('id', response._id) if response
+          view = new Carrie.Views.Question({model: @model})
+          $('#new_question').after view.render().el
           $('#new_question').html('')
 
       error: (model, response) =>
         result = $.parseJSON(response.responseText)
 
-        Carrie.Utils.Alert.error('Existe erros no seu formulário')
-        Carrie.Utils.Alert.showFormErrors(result.errors)
+        msg = Carrie.Helpers.Notifications.error('Existe erros no seu formulário')
+        $(@el).find('form').before(msg)
+        Carrie.Utils.Alert.showFormErrors(result.errors, @el)
 
         $(@el).find('input.btn-primary').button 'reset'
