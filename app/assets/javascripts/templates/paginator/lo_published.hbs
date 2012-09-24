@@ -1,0 +1,21 @@
+<ul>
+  <li class="prev">
+    <a id='prev-page'  href="#" rel="prev"><i class='icon-step-backward'></i>Página anterior</a>
+  </li>
+  <li class="first">
+    <a id='first-page' href="#"><i class='icon-fast-backward'></i>Primeira página</a>
+  </li>
+  <li>
+     <a><select id="page-select" name="page" >
+        {{#each_with_index pages}}
+        <option value="{{index}}" data-page-collection='{{page_collection}}' data-type='{{type}}'>{{page_name}}</option>
+        {{/each_with_index}}
+     </select></a>
+  </li>
+  <li class='last'>
+    <a id='last-page' href="#">Último página <i class='icon-fast-forward'></i></a>
+  </li>
+  <li class="next">
+    <a id='next-page' href="#" rel="next">Próximo página <i class='icon-step-forward'></i></a>
+  </li>
+</ul>

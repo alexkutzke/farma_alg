@@ -3,6 +3,10 @@ Carrie::Application.routes.draw do
   mount Ckeditor::Engine => '/ckeditor'
 
   scope "api" do
+    namespace :published do
+      resources :los, only: :show
+    end
+
     resources :los do
       resources :introductions do
         collection {post :sort}

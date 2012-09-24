@@ -15,7 +15,8 @@ class Carrie.Views.Lo extends Backbone.Marionette.ItemView
 
   viewLo: (ev) ->
     ev.preventDefault()
-    alert ('Em desenvolvimento')
+    url = '/published/los/' + @model.get('id')
+    Backbone.history.navigate(url, true)
 
   viewIntroductions: (ev) ->
     ev.preventDefault()

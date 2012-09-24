@@ -1,13 +1,19 @@
 window.Carrie = new Backbone.Marionette.Application()
 
 Carrie.Views = {}
-Carrie.Views.Layouts = {}
 Carrie.Models = {}
+Carrie.Published = {}
 Carrie.Collections = {}
 Carrie.CompositeViews = {}
 Carrie.Routers = {}
 Carrie.Helpers = {}
 Carrie.Utils = {}
+
+Carrie.Views.Layouts = {}
+Carrie.Published.Models = {}
+Carrie.Published.Collections = {}
+Carrie.Published.Routers = {}
+Carrie.Published.Views = {}
 
 Carrie.layouts = {}
 
@@ -28,6 +34,9 @@ Carrie.bind 'initialize:after', ->
   new Carrie.Routers.LoRouters controller: new Carrie.Routers.LoController()
   new Carrie.Routers.IntroductionRouters controller: new Carrie.Routers.IntroductionController()
   new Carrie.Routers.ExerciseRouters controller: new Carrie.Routers.ExerciseController()
+
+  new Carrie.Published.Routers.Lo controller: new Carrie.Published.Routers.LoController()
+
   Backbone.history.start pushState: true
 
 

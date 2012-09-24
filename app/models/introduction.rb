@@ -7,6 +7,8 @@ class Introduction
   field :available, type: Boolean, default: false
   field :position, type: Integer
 
+  default_scope order_by([:position, :desc])
+
   before_create :set_position
 
   attr_accessible :id, :title, :content, :available
