@@ -21,7 +21,7 @@ class Carrie.Views.ExerciseItem extends Backbone.Marionette.ItemView
 
   destroy: (ev) ->
     ev.preventDefault()
-    msg = "Você tem certeza que deseja remover esta introdução?"
+    msg = "Você tem certeza que deseja remover este exercício?"
 
     bootbox.confirm msg, (confirmed) =>
       if confirmed

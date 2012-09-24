@@ -44,6 +44,18 @@ class Carrie.Routers.LoController
             $('#content').find('.alert-alert').remove()
             $('#content').prepend Carrie.Helpers.Notifications.error('OA não encontrada')
 
+
+  showHelp: ->
+     Carrie.Helpers.Session.Exists
+      func: =>
+        Carrie.layouts.main.reloadBreadcrumb()
+        Carrie.layouts.main.addBreadcrumb('Ajuda com a FARMA', '', true)
+        Carrie.layouts.main.content.show new Carrie.Views.Help()
+
+        $('#help-link').parent().siblings().removeClass('active')
+        $('#help-link').parent().addClass('active')
+
+
   find_model: (id) ->
     lo = Carrie.Models.Lo.findOrCreate(id)
 

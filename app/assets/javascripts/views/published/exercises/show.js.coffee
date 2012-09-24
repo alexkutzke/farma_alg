@@ -7,3 +7,6 @@ class Carrie.Published.Views.Exercise extends Backbone.Marionette.CompositeView
     @collection = @model.get('questions')
     console.log(@collection)
     this
+
+  onRender: ->
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])

@@ -20,7 +20,6 @@ class Carrie.Views.CreateOrSaveLo extends Backbone.Marionette.ItemView
     @model.save @model.attributes,
       wait: true
       success: (lo, response) =>
-        #@model.set('id', response.id) if response # verificar necessidade
         $(@el).find('input.btn-primary').button('reset')
         Backbone.history.navigate '/los', true
 

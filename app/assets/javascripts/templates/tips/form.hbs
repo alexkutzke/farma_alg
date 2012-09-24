@@ -13,7 +13,11 @@
     <div class="control-group content_group">
       <label class="control-label" for="content">Conteúdo</label>
       <div class="controls">
-        <textarea name="content" required="required"></textarea>
+        {{#if id}}
+          <textarea id='ckeditor-{{question_id}}-tip-{{id}}' name="content" required="required"></textarea>
+        {{else}}
+          <textarea id='ckeditor-{{question_id}}-tip-new' name="content" required="required"></textarea>
+        {{/if}}
       </div>
     </div>
 

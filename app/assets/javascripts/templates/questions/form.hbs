@@ -11,21 +11,25 @@
   <fieldset>
 
     <div class="control-group title_group">
-      <label class="control-label" for="title">Título</label>
+      <label class="control-label" for="title">Título *</label>
       <div class="controls">
         <input id="title" name="title" type="text" required="required" />
       </div>
     </div>
 
     <div class="control-group content_group">
-      <label class="control-label" for="content">Conteúdo</label>
+      <label class="control-label" for="content">Enunciado *</label>
       <div class="controls">
-        <textarea name="content" required="required"></textarea>
+        {{#if id}}
+          <textarea id='ckeditor-{{id}}' name="content" required="required"></textarea>
+        {{else}}
+          <textarea id='ckeditor-new' name="content" required="required"></textarea>
+        {{/if}}
       </div>
     </div>
 
     <div class="control-group correct_answer_group">
-      <label class="control-label" for="correct_answer">Resposta correta</label>
+      <label class="control-label" for="correct_answer">Resposta correta *</label>
       <div class="controls">
         <input name="correct_answer" type="text" required="required" />
         <span class="help-inline">A resposta correta deve ser um expressão matemática.</span>

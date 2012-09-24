@@ -3,3 +3,4 @@ class Carrie.Routers.LoRouters extends Backbone.Marionette.AppRouter
     'los': 'list'
     'los/new': 'new'
     'los/edit/:id': 'edit'
+    'help' : 'showHelp'

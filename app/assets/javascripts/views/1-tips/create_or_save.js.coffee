@@ -9,13 +9,24 @@ class Carrie.Views.CreateOrSaveTip extends Backbone.Marionette.ItemView
     if not @model
       @model = new Carrie.Models.Tip
         question: @options.question
+      @cked = "ckeditor-#{@model.get('question').get('id')}-tip-new"
     else
+      @cked = "ckeditor-#{@model.get('question').get('id')}-tip-#{@model.get('id')}"
       @editing = true
 
+    Carrie.CKEDITOR.clearWhoHas(@cked)
     @modelBinder = new Backbone.ModelBinder()
+
+    $('.new-tip-link').hide()
+    $('.edit-tip-link').hide()
+
+  beforeClose: ->
+    $(@el).find("\##{@cked}").ckeditorGet().destroy()
 
   cancel: (ev) ->
     ev.preventDefault()
+    $(@el).find("\##{@cked}").ckeditorGet().destroy()
+
     if @editing
       @modelBinder.unbind()
       @model.fetch(async:false)
@@ -23,15 +34,22 @@ class Carrie.Views.CreateOrSaveTip extends Backbone.Marionette.ItemView
     else
       $(@el).parent().html('')
 
+    $('.new-tip-link').show()
+    $('.edit-tip-link').show()
+
   create: (ev) ->
     ev.preventDefault()
 
     Carrie.Utils.Alert.clear(@el)
 
+    @model.set('content', CKEDITOR.instances[@cked].getData())
+
     @model.save @model.attributes,
       wait: true
       success: (model, response) =>
+        $(@el).find("\##{@cked}").ckeditorGet().destroy()
         $(@el).find('input.btn-primary').button('reset')
+
         Carrie.Utils.Alert.success('Diaca salva com sucesso!', 3000)
 
         if @editing
@@ -39,6 +57,9 @@ class Carrie.Views.CreateOrSaveTip extends Backbone.Marionette.ItemView
         else
           @options.collection.sort()
           $(@el).parent().html('')
+
+        $('.new-tip-link').show()
+        $('.edit-tip-link').show()
 
       error: (model, response) =>
         result = $.parseJSON(response.responseText)
@@ -51,3 +72,19 @@ class Carrie.Views.CreateOrSaveTip extends Backbone.Marionette.ItemView
 
   onRender: ->
     @modelBinder.bind(@model, @el)
+    config =
+      language: 'pt-br'
+      toolbar:[
+          { name: 'basicstyles', items : [ 'Bold','Italic' ] },
+          { name: 'paragraph', items : [ 'NumberedList','BulletedList' ] },
+          { name: 'tools', items : [ 'Maximize','-','About' ] },
+          { name: 'insert', items : [ 'Image'] },
+          { name: 'colors', items : [ 'TextColor','BGColor' ] }
+        ]
+
+    cked = "\##{@cked}"
+    setTimeout ( ->
+      $(cked).ckeditor(config)
+    ), 100
+
+

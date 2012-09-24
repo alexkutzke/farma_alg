@@ -26,3 +26,4 @@ class Carrie.Views.Tip extends Backbone.Marionette.ItemView
 
   onRender: ->
     @el.id = @model.get('id')
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])

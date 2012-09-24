@@ -8,7 +8,7 @@ class Carrie.CompositeViews.IntroductionIndex extends Backbone.Marionette.Compos
 
   new: (ev) ->
     ev.preventDefault()
-    Backbone.history.navigate('/los/'+@model.get('id')+'/introductions/new', true)
+    Backbone.history.navigate("/los/#{@model.get('id')}/introductions/new", true)
 
   onRender: ->
     $(@el).find('span i').tooltip()

@@ -6,7 +6,13 @@ class Carrie.CompositeViews.ExerciseShow extends Backbone.Marionette.CompositeVi
   initialize: ->
     @collection = @model.get('questions')
 
+  onClose: ->
+
+  beforeClose: ->
+    Carrie.CKEDITOR.clear()
+
   onRender: ->
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
     @el.id = @model.get('id')
     $(@el).find('span i').tooltip()
     url = @collection.url() + '/sort'

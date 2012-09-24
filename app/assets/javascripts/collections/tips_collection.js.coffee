@@ -5,4 +5,4 @@ class Carrie.Collections.Tips extends Backbone.Collection
     '/api/los/' + exer.get('lo').get('id') + '/exercises/' + exer.get('id') + '/questions/' + @.question.get('id') + '/tips'
 
   comparator: (item) ->
-    return -item.get('number_of_tries')
+    return item.get('number_of_tries')

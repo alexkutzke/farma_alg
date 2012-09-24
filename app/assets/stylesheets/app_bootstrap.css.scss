@@ -27,9 +27,13 @@
 #update-user-form input[type='password'] {
   @extend .input-xlarge;
 }
-#lo-form {
+
+#lo-form, #intro-form, #exercise-form {
   input[type='text'], textarea {
-    @extend .input-xlarge;
+    @extend .span6;
+  }
+  textarea {
+    height: 55px;
   }
 }
 

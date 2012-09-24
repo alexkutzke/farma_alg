@@ -7,18 +7,30 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
 
   initialize: ->
     if not @model
+      @cked = "ckeditor-new"
       @model = new Carrie.Models.Question
         exercise: @options.exercise
     else
+      @cked = "ckeditor-#{@model.get('id')}"
       @editing = true
 
+    Carrie.CKEDITOR.clearWhoHas("#{@cked}-tip")
     @modelBinder = new Backbone.ModelBinder()
+
+  beforeClose: ->
+    $(@el).find("\##{@cked}").ckeditorGet().destroy()
 
   onRender: ->
     @modelBinder.bind(this.model, this.el)
+    cked = "\##{@cked}"
+    setTimeout ( ->
+      $(cked).ckeditor({language: 'pt-br'})
+    ), 100
 
   cancel: (ev) ->
     ev.preventDefault()
+    $(@el).find("\##{@cked}").ckeditorGet().destroy()
+
     if @editing
       @modelBinder.unbind()
       @model.fetch(async:false)
@@ -31,9 +43,13 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
 
     Carrie.Utils.Alert.clear(@el)
 
+    @model.set('content', CKEDITOR.instances[@cked].getData())
+
     @model.save @model.attributes,
       wait: true
       success: (model, response) =>
+        $(@el).find("\##{@cked}").ckeditorGet().destroy()
+
         $(@el).find('input.btn-primary').button('reset')
         Carrie.Utils.Alert.success('Questão salva com sucesso!', 3000)
 

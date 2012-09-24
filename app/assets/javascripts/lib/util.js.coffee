@@ -30,3 +30,19 @@ Carrie.Utils.Alert =
       $(".#{field}_group").addClass 'error'
       _(errors).each (error, i) ->
         $(el).find(".#{field}_group .controls").append(Carrie.Helpers.FormHelpers.fieldHelp(error))
+
+Carrie.CKEDITOR =
+  clear: ->
+    $.each CKEDITOR.instances, (i, editor) ->
+      try
+        editor.destroy()
+      catch error
+        console.log error
+
+  clearWhoHas: (key) ->
+    $.each CKEDITOR.instances, (i, editor) ->
+      try
+        if editor.name.search(key) != -1
+          editor.destroy()
+      catch error
+        console.log error

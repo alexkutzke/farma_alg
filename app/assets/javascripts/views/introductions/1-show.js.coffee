@@ -14,7 +14,7 @@ class Carrie.Views.IntroductionShow extends Backbone.Marionette.ItemView
   edit: (ev) ->
     ev.preventDefault()
     id = @model.get('id')
-    Backbone.history.navigate('/los/'+@model.get('lo').get('id')+'/introductions/edit/'+id, true)
+    Backbone.history.navigate("/los/#{@model.get('lo').get('id')}/introductions/edit/#{id}", true)
 
   destroy: (ev) ->
     ev.preventDefault()
@@ -30,3 +30,4 @@ class Carrie.Views.IntroductionShow extends Backbone.Marionette.ItemView
 
   onRender: ->
     @el.id = @model.get('id')
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])

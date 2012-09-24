@@ -9,13 +9,14 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
   events:
     'click .destroy-question-link' : 'destroy'
     'click .edit-question-link' : 'edit'
-    'click .new-tip-link': 'addTip'
+    "click .new-tip-link": 'addTip'
     'click .show-tips-link': 'showTips'
     'click .btn-verify': 'verify_answer'
 
   onRender: ->
     @el.id = @model.get('id')
     $(@el).find('span i').tooltip()
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
 
   appendHtml: (collectionView, itemView, index) ->
     $(@el).find('.tips section').append(itemView.el) if itemView.model.get('id')
@@ -44,6 +45,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
     bootbox.confirm msg, (confirmed) =>
       if confirmed
+        Carrie.CKEDITOR.clearWhoHas(@model.get('id'))
         @model.destroy
           success: (model, response) =>
             @remove()
