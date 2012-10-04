@@ -1,0 +1,18 @@
+<div class="span3 answer">
+  <span class="text-in-border-{{classname}}">{{title}}</span>
+  <div class='{{classname}}-answer'>
+    $ {{response}} $
+  </div>
+</div>
+
+
+{{#if tip}}
+   <div class="span4 answer-tip">
+     <i class='icon-caret-left'></i>
+     <div class='title'>Resposta Incorreta, análise a dica e tente novamente</div>
+     <div class='content'>
+         <p><strong>Tentativa: {{try_number}}</strong></p>
+         {{safe tip}}
+     </div>
+   </div>
+{{/if}}

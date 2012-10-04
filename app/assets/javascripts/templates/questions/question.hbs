@@ -25,14 +25,12 @@
 
 <div class='well' >
   <p><strong>Resposta Correta:</strong> {{correct_answer}}</p>
-  <form class="form-horizontal" id="{{id}}">
 
-    <label for="answer">Teste sua resposta:</label>
-    <input name="id" type="hidden" value='{{id}}' />
-    <input name="answer" type="text" placeholder="Digite sua resposta." />
-
-    <button type="submit" class="btn btn-primary btn-verify">Enviar</button>
-  </form>
+   <div>
+     <label for="answer">Teste sua resposta:</label>
+     <div class="row-fluid show-grid answer-group">
+     </div>
+   </div>
 
   <section class='tips hide'>
     <div class='clearfix separator-top'>
@@ -44,8 +42,7 @@
       </div>
     </div>
     <section>
-      <div class='new-tip'>
-      </div>
+      <div class='new-tip'></div>
     </section>
 
   </section>

@@ -1,3 +1,92 @@
 // Place all the styles related to the questions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "functions";
+
+
+@media screen and (max-width: 767px) {
+  .question {
+    .answer-group i {
+       display: none;
+    }
+  }
+}
+
+.question {
+
+  .answer-group {
+
+    .answer, .answer-tip {
+      background: white;
+      min-height: 80px;
+      font-size: 12px;
+      margin-bottom: 15px;
+      @include box-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+    }
+
+    .answer {
+      border: 1px solid white;
+      text-align: center;
+      display: table;
+      padding: 5px;
+
+      div {
+        height: 80px;
+        display: table-cell;
+        vertical-align: middle;
+        width: 100%;
+      }
+
+      span.text-in-border-wrong, span.text-in-border-right,{
+        position: absolute;
+        background: white;
+        margin-left: 14px;
+        margin-top: -6px;
+        padding: 0px 6px;
+      }
+      span.text-in-border-wrong {
+        color: red;
+      }
+      span.text-in-border-right {
+        color: green;
+      }
+    }
+
+    .answer-tip {
+      border: 1px solid red;
+      @include border-radius(5px);
+
+      .content {
+        padding: 4px 10px;
+      }
+
+      .title {
+        padding: 4px 10px;
+        margin: 0;
+        font-weight: normal;
+        line-height: 18px;
+        background-color: #F7F7F7;
+        border-bottom: 1px solid #EBEBEB;
+        @include border-radius($top:5px);
+      }
+
+      i {
+        font-size: 30px;
+        color: red;
+        position: relative;
+        left: 14px;
+        top: 30px;
+        float: left;
+        margin-left: -25px;
+      }
+    }
+
+    .right-answer {
+      border: 2px solid green;
+    }
+    .wrong-answer {
+      border: 2px solid red;
+    }
+  }
+
+}

@@ -12,11 +12,22 @@ class Carrie.Models.Question extends Backbone.RelationalModel
     reverseRelation: {
       key: 'question'
     }
-  }]
+  },
+  {
+    type: Backbone.HasMany
+    key: 'answers'
+    relatedModel: 'Carrie.Models.Answer'
+    collectionType: 'Carrie.Collections.Answers'
+    reverseRelation: {
+      key: 'question'
+    }
+  }
+  ]
 
   defaults:
     'title': ''
     'content': ''
+    'comparation_type': 'expression'
 
   toJSON: ->
     id: @get('id')
@@ -24,6 +35,7 @@ class Carrie.Models.Question extends Backbone.RelationalModel
     content: @get('content')
     correct_answer: @get('correct_answer')
     available: @get('available')
+    comparation_type: @get('comparation_type')
     lo_id: @get('exercise').get('lo').get('id')
     exercise_id: @get('exercise').get('id')
 

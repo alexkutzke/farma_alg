@@ -7,11 +7,14 @@ Carrie::Application.routes.draw do
       resources :los, only: :show
     end
 
+    resources :answers
+
     resources :los do
       resources :introductions do
         collection {post :sort}
       end
       resources :exercises do
+        delete 'delete_last_answers', :on => :member
         resources :questions do
           resources :tips
           collection {post :sort}

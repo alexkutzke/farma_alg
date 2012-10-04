@@ -46,3 +46,11 @@ Carrie.CKEDITOR =
           editor.destroy()
       catch error
         console.log error
+
+Carrie.Bootstrap =
+  popoverPlacement: ->
+    width = $(window).width()
+    if width >= 500
+      return 'right'
+    else
+      return 'bottom'

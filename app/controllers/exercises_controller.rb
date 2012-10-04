@@ -17,6 +17,7 @@ class ExercisesController < ApplicationController
 
   def show
     @exercise = @lo.exercises.find(params[:id])
+    clear_test_answers
     respond_with(@lo, @exercise)
   end
 
@@ -36,6 +37,12 @@ class ExercisesController < ApplicationController
     respond_with(@lo, @exercise)
   end
 
+  def delete_last_answers
+    @exercise = @lo.exercises.find(params[:id])
+    @exercise.delete_last_answers_of(current_user.id)
+    respond_with(@lo, @exercise)
+  end
+
   def sort
     size = params[:ids].size
     params[:ids].each_with_index do |id, index|
@@ -46,6 +53,15 @@ class ExercisesController < ApplicationController
   end
 
 private
+ # Its necessary for clean the database and the tests
+ def clear_test_answers
+   current_user.answers.where(for_test: true).each do |answer|
+      tips_counts = answer.question.tips_counts.where(user_id: current_user.id)
+      tips_counts.delete
+      answer.delete
+   end
+ end
+
  def find_lo
     if current_user.admin?
       @lo = Lo.find(params[:lo_id])

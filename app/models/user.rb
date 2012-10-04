@@ -36,7 +36,9 @@ class User
 
   before_save :do_gravatar_hash
 
-  has_many :los
+  has_many :los, dependent: :delete
+  has_many :answers, dependent: :delete
+  has_many :last_answers, dependent: :delete
 
   def do_gravatar_hash
     self.gravatar= Digest::MD5.hexdigest(self.email)

@@ -2,6 +2,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
   template: 'questions/question'
   tagName: 'article'
   itemView: Carrie.Views.Tip
+  className: 'question'
 
   initialize: ->
     @collection = @model.get('tips')
@@ -11,10 +12,12 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
     'click .edit-question-link' : 'edit'
     "click .new-tip-link": 'addTip'
     'click .show-tips-link': 'showTips'
-    'click .btn-verify': 'verify_answer'
+    'click .answer': 'verify_answer'
 
   onRender: ->
     @el.id = @model.get('id')
+    $(@el).find('.answer-group').html new Carrie.Views.Answer().render().el
+
     $(@el).find('span i').tooltip()
     MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
 
@@ -32,7 +35,23 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
   verify_answer: (ev) ->
     ev.preventDefault()
-    alert ('Em desenvolvimento')
+    resp = prompt('Digite sua resposta')
+
+    answer = new Carrie.Models.Answer
+      question: @model
+      user_id: Carrie.currentUser.get('id')
+      response: resp
+      for_test: true
+
+    answer.save answer.attributes,
+      wait: true
+      success: (model, response) =>
+        view = new Carrie.Views.Answer model: new Carrie.Models.AnswerShow(model.attributes)
+        $(@el).find('.answer-group').html view.render().el
+
+      error: (model, resp) ->
+        console.log(model)
+        alert resp.responseText
 
   edit: (ev) ->
     ev.preventDefault()

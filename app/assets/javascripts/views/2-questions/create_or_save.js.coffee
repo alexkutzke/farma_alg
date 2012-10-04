@@ -7,6 +7,7 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
 
   initialize: ->
     if not @model
+      Carrie.CKEDITOR.clearWhoHas("ckeditor-new")
       @cked = "ckeditor-new"
       @model = new Carrie.Models.Question
         exercise: @options.exercise
