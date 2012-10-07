@@ -14,8 +14,8 @@ class Carrie.Published.Views.LoPaginator extends Backbone.Marionette.ItemView
     'change #page-select': 'changePage'
     'click #next-page': 'nextPage'
     'click #prev-page': 'prevPage'
-    'click #last-page': 'lastPage'
-    'click #first-page': 'firstPage'
+    #'click #last-page': 'lastPage'
+    #'click #first-page': 'firstPage'
 
   changePage: (ev) ->
     ev.preventDefault()

@@ -5,15 +5,17 @@ module MathEvaluate
   module Expression
     def self.eql?(exp_a, exp_b, options = {})
       begin
+        p options
         variables = options[:variables] ? options[:variables] : []
         variables_with_values = self.generate_values(options[:variables])
 
         a = self.evaluate(exp_a.to_s, variables_with_values)
         b = self.evaluate(exp_b.to_s, variables_with_values)
 
-        puts "vars #{variables}"
-        puts "a: #{b}"
-        puts "b: #{b}"
+        #puts "exp_a #{exp_a}"
+        #puts "exp_b #{exp_b}"
+        #puts "a: #{a}"
+        #puts "b: #{b}"
 
         #precission of 6 decimal digits precision
         diff = (a - b).abs
@@ -25,7 +27,7 @@ module MathEvaluate
     end
 
     def self.evaluate(exp, variables_with_values)
-      engine = MathEngine.new
+      engine = MathEngine::MathEngine.new
       variables_with_values.each do |key, value|
         engine.evaluate("#{key} = #{value}")
       end

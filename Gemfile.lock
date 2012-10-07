@@ -6,6 +6,13 @@ GIT
       railties (>= 3.0)
       sass (>= 3.2)
 
+GIT
+  remote: git://github.com/dmarczal/math_engine.git
+  revision: 900241468e5c339d4e20265bddd76527450e271e
+  specs:
+    math_engine (0.3.0)
+      lexr (>= 0.2.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -144,8 +151,6 @@ GEM
       treetop (~> 1.4.8)
     marionette-rails (0.9.11)
       rails (>= 3.1.0)
-    math_engine (0.2.0)
-      lexr (>= 0.2.2)
     method_source (0.8)
     mime-types (1.19)
     mongoid (3.0.5)
@@ -288,7 +293,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   marionette-rails
-  math_engine
+  math_engine!
   mongoid (~> 3.0.2)
   mongoid-paperclip
   pry-rails

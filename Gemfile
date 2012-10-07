@@ -17,7 +17,7 @@ gem 'simple_form'
 gem "ckeditor", "3.7.1"
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
 
-gem 'math_engine'
+gem 'math_engine', git: 'git://github.com/dmarczal/math_engine.git' #, branch: 'original'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.5'
@@ -25,8 +25,8 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
   #gem 'anjlab-bootstrap-rails', '>= 2.0', :require => 'bootstrap-rails' #, :git => 'git://github.com/anjlab/bootstrap-rails.git'
   gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
-                               :git => 'git://github.com/dmarczal/bootstrap-rails.git'
-                              #:git => 'git://github.com/anjlab/bootstrap-rails.git'
+                                :git => 'git://github.com/dmarczal/bootstrap-rails.git'
+                                #:git => 'git://github.com/anjlab/bootstrap-rails.git'
   gem 'font-awesome-sass-rails'
   gem 'handlebars_assets'
   gem 'marionette-rails'
