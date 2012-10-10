@@ -5,7 +5,6 @@ module MathEvaluate
   module Expression
     def self.eql?(exp_a, exp_b, options = {})
       begin
-        p options
         variables = options[:variables] ? options[:variables] : []
         variables_with_values = self.generate_values(options[:variables])
 

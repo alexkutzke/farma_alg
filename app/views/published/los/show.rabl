@@ -11,7 +11,7 @@ glue @lo do
   child(:exercises) do
     attributes :id , :title, :content
     child(:questions) do
-      attributes :id, :title, :content
+      attributes :id, :title, :content, :exp_variables
       node :last_answer, if: lambda {|question| question.last_answers.by_user(current_user).size > 0} do |question|
         la = question.last_answers.by_user(current_user).first
         {

@@ -16,5 +16,11 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
     else
       @template = 'answers/answer_empty'
 
+  resp: ->
+    if @model
+     return @model.get('response')
+    else
+      return ""
+
   onRender: ->
     MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])

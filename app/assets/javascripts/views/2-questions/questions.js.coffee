@@ -16,8 +16,8 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
   onRender: ->
     @el.id = @model.get('id')
-    $(@el).find('.answer-group').html new Carrie.Views.Answer().render().el
-
+    @view = new Carrie.Views.Answer().render()
+    $(@el).find('.answer-group').html @view.render().el
     $(@el).find('span i').tooltip()
     MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
 
@@ -35,8 +35,15 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
   verify_answer: (ev) ->
     ev.preventDefault()
-    resp = prompt('Digite sua resposta')
+    keyboard = new Carrie.Views.VirtualKeyBoard
+      currentResp: @view.resp()
+      variables: @model.get('exp_variables')
+      callback: (val) =>
+        @sendAnswer(val)
 
+    $(keyboard.render().el).modal('show')
+
+  sendAnswer: (resp) ->
     answer = new Carrie.Models.Answer
       question: @model
       user_id: Carrie.currentUser.get('id')
@@ -46,8 +53,8 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
     answer.save answer.attributes,
       wait: true
       success: (model, response) =>
-        view = new Carrie.Views.Answer model: new Carrie.Models.AnswerShow(model.attributes)
-        $(@el).find('.answer-group').html view.render().el
+        @view = new Carrie.Views.Answer model: new Carrie.Models.AnswerShow(model.attributes)
+        $(@el).find('.answer-group').html @view.render().el
 
       error: (model, resp) ->
         console.log(model)

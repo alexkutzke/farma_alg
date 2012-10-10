@@ -1,0 +1,76 @@
+@import "functions";
+
+@media (max-width: 767px) {
+  .virtual-keyboard {
+    top: 50%;
+    left: 50%;
+  }
+}
+
+.virtual-keyboard {
+  //padding: 10px;
+  border: 2px solid #EEE;
+  width: 315px;
+  margin: -205px 0 0 -160px;
+
+  hr {
+    margin: 5px 0px;
+    height: 2px;
+    background: white;
+  }
+
+  .well {
+    margin-bottom: 0px;
+  }
+
+  .virtual-keyboard-body {
+    overflow-y: hidden;
+    max-height: 100%;
+  }
+
+  .error, .error:focus {
+    color: rgba(188, 93, 50, 0.8);
+
+    border-color: rgba(188, 93, 50, 0.8);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(188, 93, 50, 0.6);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(188, 93, 50, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(188, 93, 50, 0.6);
+  }
+
+  span.error {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    display: none;
+    color: red;
+  }
+
+  .display {
+    padding: 10px;
+    text-align: center;
+    border: 2px solid #EEE;
+    background-color: white;
+    min-height: 60px;
+    border-radius: 5px;
+    overflow: auto;
+  }
+
+  .keyboard-input {
+    width: 94%;
+  }
+
+  .btns {
+    div {margin-top: 5px;}
+    .btn {
+      width: 15px;
+      text-align: center;
+    }
+    .send {
+      width: 125px;
+    }
+    .clean {
+      width: 55px;
+    }
+  }
+
+}
