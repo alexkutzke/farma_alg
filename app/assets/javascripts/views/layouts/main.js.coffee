@@ -9,7 +9,7 @@ class Carrie.Views.Layouts.Main extends Backbone.Marionette.Layout
     @bcb = new Carrie.Views.Breadcrumb()
 
   events:
-    'click ul.nav-fixed li a': 'showView'
+    'click ul.nav-fixed li a[data-url]': 'showView'
 
   onRender: ->
     this.breadcrumb.show @bcb

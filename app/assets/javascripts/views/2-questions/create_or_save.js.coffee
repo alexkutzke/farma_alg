@@ -49,6 +49,7 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
     @model.save @model.attributes,
       wait: true
       success: (model, response) =>
+        console.log(model)
         $(@el).find("\##{@cked}").ckeditorGet().destroy()
 
         $(@el).find('input.btn-primary').button('reset')

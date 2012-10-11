@@ -1,0 +1,40 @@
+/*Sub level menu items */
+ul.nav li > ul {
+  display: none;
+
+  li {
+    line-height: 20px;
+    list-style: none;
+    margin-left: -25px;
+    padding-left: 25px;
+    border-bottom: 1px solid #DDD;
+    border-left: 1px solid #DDD;
+    border-right: 1px solid #DDD;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+
+    a {
+      display: block;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      line-height: 20px;
+    }
+  }
+}
+
+ul.nav > li:hover {
+  ul {
+    display: block;
+    a {
+      text-decoration: none;
+      &:hover{
+        margin-left: -25px;
+        padding-left: 25px;
+        border-color: #DDD;
+        z-index: 2;
+        background-color: #EEE;
+      }
+    }
+  }
+}
