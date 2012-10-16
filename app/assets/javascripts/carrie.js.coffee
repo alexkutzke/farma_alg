@@ -37,6 +37,8 @@ Carrie.bind 'initialize:after', ->
 
   new Carrie.Published.Routers.Lo controller: new Carrie.Published.Routers.LoController()
 
+  new Carrie.Routers.Team controller: new Carrie.Routers.TeamController()
+
   Backbone.history.start pushState: true
 
 

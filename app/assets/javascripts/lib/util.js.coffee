@@ -1,3 +1,16 @@
+Carrie.Utils.Menu =
+  show: (link) ->
+    obj = $("\##{link}")
+
+    $('ul#side-menu li').removeClass('active')
+    $('ul#side-menu > li > ul.sub-menu').hide()
+
+    if obj.length != 0
+      obj.parent().addClass('active')
+
+    $('ul#side-menu > li > ul.sub-menu:has(li.active)').show()
+
+
 Carrie.Utils.Alert =
   success: (msg, time) ->
     msg_el = Carrie.Helpers.Notifications.success(msg)

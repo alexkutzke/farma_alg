@@ -7,6 +7,7 @@ class Carrie.Published.Views.Lo extends Backbone.Marionette.ItemView
       model: @model
       parentView: @
       page: @options.page-1 || 0
+      team_id: @options.team_id
 
   onRender: ->
     @el.id = @model.get('id')

@@ -1,7 +1,7 @@
 <div class="span3">
   <aside>
         <div class="sidebar-nav">
-          <ul class="nav nav-tabs nav-stacked nav-fixed">
+          <ul id='side-menu' class="nav nav-tabs nav-stacked nav-fixed">
             <li>
                 <a href="#los" data-url='/los' id='los-link'>
                   <i class="icon-chevron-right"></i> Objetos de Aprendizagem
@@ -11,9 +11,15 @@
             <li><a href="#"><i class="icon-chevron-right"></i> Logo </a></li>
             <li>
               <a href="#"><i class="icon-chevron-right"></i> Turmas </a>
-              <ul>
-                <li><a href="#"><i class="icon-chevron-right"></i> Criadas </a></li>
-                <li><a href="#"><i class="icon-chevron-right"></i> Matriculadas </a></li>
+              <ul class='sub-menu'>
+                <li>
+                  <a href="#" data-url='/teams/created' id='created-link'>
+                  <i class="icon-chevron-right"></i> Criadas </a>
+                </li>
+                <li>
+                  <a href="#" data-url='/teams/enrolled' id='enrolled-link'>
+                  <i class="icon-chevron-right"></i> Matriculadas </a>
+                </li>
               </ul>
             </li>
             <li><a href="#"><i class="icon-chevron-right"></i> Erros e Acertos </a></li>

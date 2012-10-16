@@ -5,9 +5,16 @@ Carrie::Application.routes.draw do
   scope "api" do
     namespace :published do
       resources :los, only: :show
+      match '/teams/:team_id/los/:id' => "los#show"
     end
 
     resources :answers
+
+    resources :teams do
+      get 'created', on: :collection
+      get 'enrolled', on: :collection
+      get 'enroll', on: :member
+    end
 
     resources :los do
       resources :introductions do

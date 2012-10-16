@@ -1,0 +1,26 @@
+<header>
+  <div class='clearfix'>
+    <div class='left'>
+      <h4>{{name}}</h4>
+    </div>
+
+    <div class='enroll right'>
+      {{#if enrolled}}
+        <div class="alert alert-info"> Matriculado</div>
+      {{else}}
+        <form>
+          <div class="input-append">
+            <input name="id" value="{{id}}" type="hidden" />
+            <input class="span5" name='code' type="text"><button class="btn btn-enroll" type="button">Matricular-se</button>
+          </div>
+          <span class='error'></span>
+        <form>
+      {{/if}}
+    </div>
+  </div>
+
+  <span class='date-info'>
+      Criado por {{created_by}} em {{created_at}}
+  </span>
+</header>
+<hr>

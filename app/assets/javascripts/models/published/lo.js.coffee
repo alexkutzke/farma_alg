@@ -1,5 +1,9 @@
 class Carrie.Published.Models.Lo extends Backbone.RelationalModel
-  urlRoot: '/api/published/los/'
+  urlRoot: ->
+    if @get('team_id')
+      "/api/published/teams/#{@get('team_id')}/los"
+    else
+      "/api/published/los"
 
   paramRoot: 'lo'
 

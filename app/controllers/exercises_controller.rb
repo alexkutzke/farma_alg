@@ -1,5 +1,7 @@
 class ExercisesController < ApplicationController
   respond_to :json
+
+  before_filter :authenticate_user!
   before_filter :find_lo
 
   def index

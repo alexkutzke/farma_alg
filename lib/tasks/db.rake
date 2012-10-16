@@ -4,7 +4,7 @@ namespace :db do
   task :populate => :environment do
     require 'faker'
 
-    [Lo, User].each(&:destroy_all)
+    [Lo, User, Team].each(&:destroy_all)
 
     professor = User.create!(name: 'Farma', email: 'farma.ufpr@gmail.com', password: 'farma123',
                 password_confirmation: 'farma123', admin: true)
@@ -29,6 +29,14 @@ namespace :db do
 
           end
         end
+    end
+
+    lo_ids = Lo.all.map {|l| l.id}
+    5.times do |i|
+      team = Team.create!(name: "Turma #{i}", code: "1234", owner_id: User.first.id)
+      team.user_ids << professor.id
+      team.lo_ids << lo_ids.sample
+      team.save
     end
   end
 

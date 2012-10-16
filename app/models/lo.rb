@@ -15,6 +15,7 @@ class Lo
   belongs_to :user
   has_many :introductions, dependent: :delete
   has_many :exercises, dependent: :delete
+  has_and_belongs_to_many :teams
 
   def pages
     self.introductions + self.exercises

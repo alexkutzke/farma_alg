@@ -65,7 +65,14 @@ class Carrie.Published.Views.LoPaginator extends Backbone.Marionette.ItemView
     $(@parentView.el).find('section.page').html(view.render().el)
 
   setBreadcrumb: ->
-    Backbone.history.navigate("/published/los/#{@model.get('id')}/pages/#{@page+1}", false)
+    if (@options.team_id)
+      url = "/published/teams/#{@options.team_id}/los/#{@model.get('id')}"
+    else
+      url = "/published/los/#{@model.get('id')}"
+    if @page != 0
+      url += "/pages/#{@page+1}"
+
+    Backbone.history.navigate(url, false)
 
     Carrie.layouts.main.reloadBreadcrumb()
     bread = "Objeto de aprendizagem #{@model.get('name')} / #{@model.get('pages')[@page].page_name}"

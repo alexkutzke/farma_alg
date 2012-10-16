@@ -1,0 +1,38 @@
+<header class='page-header' >
+      {{#if id }}
+        <h4>Editar turma {{name}}</h4>
+      {{else}}
+        <h4>Nova turma</h4>
+      {{/if}}
+</header>
+<form id="team-form" class="form-vertical" novalidate>
+  <input name="id" type="hidden" />
+  <fieldset>
+
+    <div class="control-group name_group">
+      <label class="control-label" for="name">Nome *</label>
+      <div class="controls">
+        <input id="name" name="name" type="text" required="required" />
+      </div>
+    </div>
+
+    <div class="control-group code_group">
+      <label class="control-label" for="code">Código de acesso *</label>
+      <div class="controls">
+        <input id="code" name="code" type="text" required="required" />
+      </div>
+    </div>
+
+    <div class="control-group los_group">
+      <label class="control-label" for="los">Selecione os objetos que deseja adicionar *</label>
+      <div class="controls checkbox-column">
+      <div class="checkboxes row"></div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" value="Salvar" class="btn btn-primary" />
+    </div>
+
+  </fieldset>
+</form>

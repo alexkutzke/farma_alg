@@ -6,13 +6,12 @@ class Carrie.Routers.LoController
         losView = new Carrie.CompositeViews.Los
           collection: los
 
+        Carrie.Utils.Menu.show 'los-link'
+
         obj = $('#los-link')
 
         Carrie.layouts.main.reloadBreadcrumb()
         Carrie.layouts.main.addBreadcrumb(obj.text(), obj.data('url'), true)
-
-        obj.parent().siblings().removeClass('active')
-        obj.parent().addClass('active')
 
         Carrie.layouts.main.content.show losView
 
@@ -52,8 +51,7 @@ class Carrie.Routers.LoController
         Carrie.layouts.main.addBreadcrumb('Ajuda com a FARMA', '', true)
         Carrie.layouts.main.content.show new Carrie.Views.Help()
 
-        $('#help-link').parent().siblings().removeClass('active')
-        $('#help-link').parent().addClass('active')
+        Carrie.Utils.Menu.show 'help-link'
 
 
   find_model: (id) ->
