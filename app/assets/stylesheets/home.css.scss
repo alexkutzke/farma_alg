@@ -151,3 +151,18 @@ div#welcome {
   left: 0;
   right: 0;
 }
+
+/* Toggle left menu
+------------------------- */
+.toggle-menu {
+  font-size: 25px;
+  position: fixed;
+  margin-left: -8px;
+}
+@media (max-width: 767px) {
+  .toggle-menu {
+    position: absolute;
+    top: 182px;
+  }
+}
+

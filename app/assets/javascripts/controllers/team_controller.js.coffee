@@ -4,14 +4,11 @@ class Carrie.Routers.TeamController
     Carrie.Helpers.Session.Exists
       func: ->
         Carrie.layouts.main.reloadBreadcrumb()
+        Carrie.layouts.main.addBreadcrumb('Turmas que estou matriculado', '/teams/enrolled')
         Carrie.layouts.main.addBreadcrumb('Todas turmas', '', true)
         Carrie.Utils.Menu.show 'enrolled-link'
 
-        teams = new Carrie.Collections.Teams()
-        view = new Carrie.CompositeViews.Teams
-          collection: teams
-
-        Carrie.layouts.main.content.show view
+        Carrie.layouts.main.content.show new Carrie.CompositeViews.Teams
 
   enrolled: ->
     Carrie.Helpers.Session.Exists
@@ -31,7 +28,7 @@ class Carrie.Routers.TeamController
     Carrie.Helpers.Session.Exists
       func: ->
         Carrie.layouts.main.reloadBreadcrumb()
-        Carrie.layouts.main.addBreadcrumb('Turmas que estou ministrando', '', true)
+        Carrie.layouts.main.addBreadcrumb('Turmas que criei', '', true)
 
         Carrie.Utils.Menu.show 'created-link'
 

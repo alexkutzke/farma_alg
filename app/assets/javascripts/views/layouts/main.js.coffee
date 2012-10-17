@@ -10,9 +10,48 @@ class Carrie.Views.Layouts.Main extends Backbone.Marionette.Layout
 
   events:
     'click ul.nav-fixed li a[data-url]': 'showView'
+    'click .toggle-menu': 'toggleMenu'
+
+  toggleMenu: (ev) ->
+    ev.preventDefault()
+    @menu.toggle()
+
+    if @container.hasClass('span9')
+      @container.removeClass('span9')
+    else
+      @container.addClass('span9')
+
+    if @icon.hasClass('icon-caret-left')
+      @icon.removeClass('icon-caret-left')
+      @icon.addClass('icon-caret-right')
+      title = 'Mostrar menu'
+    else
+      @icon.removeClass('icon-caret-right')
+      @icon.addClass('icon-caret-left')
+      title = 'Esconder menu'
+
+    @toggle.attr('data-original-title', title).tooltip('fixTitle').tooltip('show')
+
+  hideMenu: ->
+    @menu.hide()
+    if @container.hasClass('span9')
+      @container.removeClass('span9')
+
+    if @icon.hasClass('icon-caret-left')
+      @icon.removeClass('icon-caret-left')
+      @icon.addClass('icon-caret-right')
+
+    @toggle.attr('data-original-title', 'Mostrar menu').tooltip('fixTitle')
+
 
   onRender: ->
     this.breadcrumb.show @bcb
+
+    @menu = $(@el).find('#main-menu')
+    @container = $(@el).find('#main-container')
+    @icon = $(@el).find('.toggle-menu i')
+    @toggle = $(@el).find('.toggle-menu')
+    @toggle.tooltip()
 
   showView: (ev) ->
     ev.preventDefault()

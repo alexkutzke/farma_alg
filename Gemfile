@@ -16,6 +16,7 @@ gem 'simple_form'
 
 gem "ckeditor", "3.7.1"
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
+gem 'kaminari'
 
 gem 'math_engine', git: 'git://github.com/dmarczal/math_engine.git' #, branch: 'original'
 

@@ -12,6 +12,7 @@ class Carrie.Published.Routers.LoController
           success: (model) =>
             view = new Carrie.Published.Views.Lo(model: lo, page: page)
             Carrie.layouts.main.content.show view
+            Carrie.layouts.main.hideMenu()
           error: (response, status, error) ->
             Carrie.Utils.Alert.error('Objeto de aprendizagem não encontrado', 3000)
             Backbone.history.navigate('')
@@ -29,6 +30,7 @@ class Carrie.Published.Routers.LoController
           success: (model) =>
             view = new Carrie.Published.Views.Lo(model: lo, page: page, team_id: team_id)
             Carrie.layouts.main.content.show view
+            Carrie.layouts.main.hideMenu()
           error: (response, status, error) ->
             Carrie.Utils.Alert.error('Objeto de aprendizagem não encontrado', 3000)
             Backbone.history.navigate('')

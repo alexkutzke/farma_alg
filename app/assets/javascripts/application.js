@@ -30,7 +30,6 @@
 //= require carrie
 //= require parser
 //= require_tree ./lib
-//= require_tree ./lib
 //= require_tree ./templates
 //= require_tree ./models
 //= require_tree ./collections

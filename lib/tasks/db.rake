@@ -32,7 +32,7 @@ namespace :db do
     end
 
     lo_ids = Lo.all.map {|l| l.id}
-    5.times do |i|
+    35.times do |i|
       team = Team.create!(name: "Turma #{i}", code: "1234", owner_id: User.first.id)
       team.user_ids << professor.id
       team.lo_ids << lo_ids.sample

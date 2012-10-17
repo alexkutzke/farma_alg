@@ -4,7 +4,7 @@ class TeamsController < ApplicationController
   before_filter :teams, except: :enrolled
 
   def index
-    @teams = Team.all.desc(:created_at)
+    @teams = Team.all.desc(:created_at).page(params[:page]).per(10)
   end
 
   def enrolled

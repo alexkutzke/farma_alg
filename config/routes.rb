@@ -13,7 +13,8 @@ Carrie::Application.routes.draw do
     resources :teams do
       get 'created', on: :collection
       get 'enrolled', on: :collection
-      get 'enroll', on: :member
+      post 'enroll', on: :member
+      get 'page/:page', :action => :index, :on => :collection
     end
 
     resources :los do
