@@ -64,7 +64,7 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
 
       error: (model, response) =>
         result = $.parseJSON(response.responseText)
-
+        console.log response
         msg = Carrie.Helpers.Notifications.error('Existe erros no seu formulário')
         $(@el).find('form').before(msg)
         Carrie.Utils.Alert.showFormErrors(result.errors, @el)

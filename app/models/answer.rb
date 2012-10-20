@@ -56,7 +56,12 @@ private
     question = Question.find(self.question_id)
     options = {variables: question.exp_variables}
 
-   self.correct = MathEvaluate::Expression.eql?(question.correct_answer, self.response, options)
+    if question.many_answers?
+      self.correct = MathEvaluate::Expression.eql_with_many_answers?(question.correct_answer, self.response, options)
+    else
+      self.correct = MathEvaluate::Expression.eql?(question.correct_answer, self.response, options)
+    end
+
     if !self.correct
       set_tip
     else

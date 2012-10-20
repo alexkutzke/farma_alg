@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   respond_to :json
   before_filter :authenticate_user!
-  before_filter :find_exercise, except: :sort
+  before_filter :find_exercise
 
   def index
     @questions = @exercise.questions.order_by(:position => :desc)

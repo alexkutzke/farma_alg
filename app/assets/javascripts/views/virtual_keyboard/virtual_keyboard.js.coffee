@@ -86,6 +86,9 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     ), 100
 
   addVariables: ->
+    if @options.many_answers && @variables.indexOf(';') == -1
+      @variables.push ';'
+
     obj = $(@el).find('.variables')
     $.each @variables, (index, el) ->
       btn = "<a href='#display' class='btn' data-value='#{el}' title='variável #{el}'>$#{el}$</a>"
@@ -96,7 +99,13 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
   validateExpression: ->
     try
       vars = {}
-      exp = @input.val()
+      exp = @input.val().trim()
+
+      if exp.slice(-1) == ';'
+        return false
+
+      exp = @manyAnswers(exp)
+
       $.each @variables, (index, el) ->
         vars[el] = Math.random()
 
@@ -108,3 +117,12 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
       return true
     catch e
       return false
+
+  manyAnswers: (exp) ->
+    exps = exp.split(';')
+    _exp = exps.pop()
+    $.each exps, (index, el) ->
+      _exp = "(#{_exp}) + (#{el})"
+    return _exp
+
+

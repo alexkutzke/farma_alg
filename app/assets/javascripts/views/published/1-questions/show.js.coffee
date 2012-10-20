@@ -20,6 +20,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
     keyboard = new Carrie.Views.VirtualKeyBoard
       currentResp: @view.resp()
       variables: @model.get('exp_variables')
+      many_answers: @model.get('many_answers')
       callback: (val) =>
         @sendAnswer(val)
 

@@ -6,7 +6,7 @@ module MathEvaluate
     def self.eql?(exp_a, exp_b, options = {})
       begin
         variables = options[:variables] ? options[:variables] : []
-        variables_with_values = self.generate_values(options[:variables])
+        variables_with_values = self.generate_values(variables)
 
         a = self.evaluate(exp_a.to_s, variables_with_values)
         b = self.evaluate(exp_b.to_s, variables_with_values)
@@ -20,7 +20,24 @@ module MathEvaluate
         diff = (a - b).abs
         return  diff < 0.000001
       rescue => e
-        puts e
+        puts "Error: #{e}"
+        return false
+      end
+    end
+
+    def self.eql_with_many_answers?(exp_a, exp_b, options = {})
+      exps_a = exp_a.split(';')
+      exps_b = exp_b.split(';')
+
+      equal = true
+
+      begin
+        exps_a.each_with_index do |el, index|
+          equal = self.eql?(el, exps_b[index], options)
+        end
+        return equal
+      rescue => e
+        puts "Error: #{e}"
         return false
       end
     end
