@@ -5,4 +5,5 @@ class Carrie.Collections.TeamsEnrolled extends Backbone.Collection
     '/api/teams/enrolled'
 
   initialize: ->
+    Carrie.Utils.Loading(@)
     @fetch()

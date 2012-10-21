@@ -67,3 +67,14 @@ Carrie.Bootstrap =
       return 'right'
     else
       return 'bottom'
+
+Carrie.Utils.Loading = (obj) ->
+  obj.on 'fetch', ->
+    $('.loading').show()
+  , obj
+  obj.on 'reset', ->
+    $('.loading').hide()
+  , obj
+  obj.on 'change', ->
+    $('.loading').hide()
+  , obj

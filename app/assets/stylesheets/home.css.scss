@@ -2,6 +2,8 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@import 'functions';
+
 .center{ text-align: center;}
 .text-right{ text-align: right;}
 .text-red{ color: red;}
@@ -166,3 +168,17 @@ div#welcome {
   }
 }
 
+@media (max-width: 593px) {
+  .toggle-menu {
+    position: absolute;
+    top: 230px;
+  }
+}
+
+/* loading
+------------------------- */
+.loading {
+  display: none;
+  background: #000;
+  @include border-radius(10px)
+}

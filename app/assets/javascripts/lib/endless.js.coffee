@@ -4,6 +4,7 @@ class Carrie.Models.Endless extends Backbone.Model
     "#{@get('root_url')}/page/#{@currentPage}"
 
   initialize: ->
+    Carrie.Utils.Loading(@)
     @currentPage = 0
     @fetch
       async: false

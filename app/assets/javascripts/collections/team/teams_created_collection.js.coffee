@@ -5,4 +5,5 @@ class Carrie.Collections.TeamsCreated extends Backbone.Collection
     '/api/teams/created'
 
   initialize: ->
+    Carrie.Utils.Loading(@)
     @fetch()
