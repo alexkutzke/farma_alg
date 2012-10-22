@@ -25,14 +25,15 @@
 }
 
 .lo-paginator ul li > a > select {
-  height: 20px;
+  height: 25px;
   margin-top: 4px;
   margin-bottom: 3px;
+  padding: 0px;
 }
 
 .lo-paginator ul li > a {
   padding: 0 5px;
-  line-height: 25px;
+  line-height: 30px;
   font-size: 12px;
 }
 
