@@ -10,5 +10,6 @@
  *
  *= require app_bootstrap
  *= require_tree .
+ *= require visualsearch
  *= require_self
 */

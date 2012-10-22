@@ -34,6 +34,7 @@ Carrie.bind 'initialize:after', ->
   new Carrie.Routers.LoRouters controller: new Carrie.Routers.LoController()
   new Carrie.Routers.IntroductionRouters controller: new Carrie.Routers.IntroductionController()
   new Carrie.Routers.ExerciseRouters controller: new Carrie.Routers.ExerciseController()
+  new Carrie.Routers.AnswerRouters controller: new Carrie.Routers.AnswersController()
 
   new Carrie.Published.Routers.Lo controller: new Carrie.Published.Routers.LoController()
 

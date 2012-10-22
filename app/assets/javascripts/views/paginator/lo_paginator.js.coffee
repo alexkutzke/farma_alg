@@ -9,6 +9,8 @@ class Carrie.Published.Views.LoPaginator extends Backbone.Marionette.ItemView
     @page = 0
     @page = @options.page unless (@options.page < 0 || @options.page >= @length)
     @parentView = @options.parentView
+    @team = @options.team
+    @team_id = @team.get('id') if @team
 
   events:
     'change #page-select': 'changePage'
@@ -61,12 +63,15 @@ class Carrie.Published.Views.LoPaginator extends Backbone.Marionette.ItemView
     else
       view = new Carrie.Published.Views.Exercise
         model: @model.get('exercises').at(@pageCollection())
+        team_id: @team_id
 
     $(@parentView.el).find('section.page').html(view.render().el)
 
   setBreadcrumb: ->
-    if (@options.team_id)
-      url = "/published/teams/#{@options.team_id}/los/#{@model.get('id')}"
+    bread = ''
+    if (@team)
+      url = "/published/teams/#{@team_id}/los/#{@model.get('id')}"
+      bread = "#{@team.get('name')} /"
     else
       url = "/published/los/#{@model.get('id')}"
     if @page != 0
@@ -75,7 +80,8 @@ class Carrie.Published.Views.LoPaginator extends Backbone.Marionette.ItemView
     Backbone.history.navigate(url, false)
 
     Carrie.layouts.main.reloadBreadcrumb()
-    bread = "Objeto de aprendizagem #{@model.get('name')} / #{@model.get('pages')[@page].page_name}"
+    Carrie.layouts.main.addBreadcrumb('Turmas Matriculas', '/teams/enrolled') if @team
+    bread = "#{bread} Objeto de aprendizagem #{@model.get('name')} / #{@model.get('pages')[@page].page_name}"
     Carrie.layouts.main.addBreadcrumb(bread, '', true)
 
   onRender: ->

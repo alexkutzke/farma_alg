@@ -6,6 +6,9 @@ class Carrie.Published.Views.Exercise extends Backbone.Marionette.CompositeView
   events:
     'click a.reset-exercise' : 'clearLastAnswers'
 
+  itemViewOptions: ->
+    team_id: @options.team_id
+
   initialize: ->
     @collection = @model.get('questions')
     this

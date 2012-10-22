@@ -24,13 +24,22 @@ class Carrie.Published.Routers.LoController
         lo = Carrie.Published.Models.Lo.findOrCreate(id)
         lo = new Carrie.Published.Models.Lo(id: id) if not lo
 
-        lo.set('team_id', team_id)
-        lo.fetch
+        team = Carrie.Models.Team.findOrCreate(team_id)
+        team = new Carrie.Models.Team(id: team_id) if not team
+
+        team.fetch
           async: false
           success: (model) =>
-            view = new Carrie.Published.Views.Lo(model: lo, page: page, team_id: team_id)
-            Carrie.layouts.main.content.show view
-            Carrie.layouts.main.hideMenu()
+            lo.set('team', team)
+            lo.fetch
+              async: false
+              success: (model) =>
+                view = new Carrie.Published.Views.Lo(model: lo, page: page, team_id: team_id)
+                Carrie.layouts.main.content.show view
+                Carrie.layouts.main.hideMenu()
+              error: (response, status, error) ->
+                Carrie.Utils.Alert.error('Objeto de aprendizagem não encontrado', 3000)
+                Backbone.history.navigate('')
           error: (response, status, error) ->
-            Carrie.Utils.Alert.error('Objeto de aprendizagem não encontrado', 3000)
+            Carrie.Utils.Alert.error('Turma não encontrada', 3000)
             Backbone.history.navigate('')

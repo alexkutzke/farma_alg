@@ -44,4 +44,12 @@ class LosController < ApplicationController
     end
   end
 
+  def my_los
+    if params[:team_id]
+      @los = Team.find(params[:team_id]).los
+    else
+      @los = current_user.los
+    end
+  end
+
 end

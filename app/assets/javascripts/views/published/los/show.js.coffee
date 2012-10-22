@@ -7,7 +7,7 @@ class Carrie.Published.Views.Lo extends Backbone.Marionette.ItemView
       model: @model
       parentView: @
       page: @options.page-1 || 0
-      team_id: @options.team_id
+      team: @model.get('team')
 
   onRender: ->
     @el.id = @model.get('id')
@@ -15,7 +15,7 @@ class Carrie.Published.Views.Lo extends Backbone.Marionette.ItemView
       $(@el).find('.navigator').html(@paginator.render().el)
     else
       Carrie.layouts.main.reloadBreadcrumb()
-      bread = "Objeto de aprendizagem #{@model.get('name')}"
+      bread = "Turma #{@model.get('team').get('name')} / Objeto de aprendizagem #{@model.get('name')}"
       Carrie.layouts.main.addBreadcrumb(bread, '', true)
 
       $(@el).find('.page').html('Objeto de aprendizagem sem publicações')

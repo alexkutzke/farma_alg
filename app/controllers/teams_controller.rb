@@ -15,6 +15,10 @@ class TeamsController < ApplicationController
     @teams = @owner_teams.desc(:created_at)
   end
 
+  def my_teams
+    @teams = created | enrolled
+  end
+
   def enroll
     @team = Team.find(params[:id])
     if @team.enroll(current_user, params[:code])

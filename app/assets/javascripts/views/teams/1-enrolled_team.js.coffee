@@ -5,6 +5,9 @@ class Carrie.Views.EnrolledTeam extends Backbone.Marionette.ItemView
   events:
     'click article.lo' : 'openLo'
 
+  initialize: ->
+    @team_id = @model.get('team_id')
+
   openLo: ->
-    url = "/published/teams/#{@model.get('team_id')}/los/#{@model.get('id')}"
+    url = "/published/teams/#{@team_id}/los/#{@model.get('id')}"
     Backbone.history.navigate(url, true)

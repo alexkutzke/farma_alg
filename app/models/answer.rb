@@ -10,13 +10,18 @@ class Answer
   field :for_test, type: Boolean
   field :tip, type: String, default: ''
   field :try_number, type: Integer
+
   field :lo, type: Hash
   field :exercise, type: Hash
   field :question, type: Hash
+  field :team, type: Hash
 
-  attr_accessor :question_id
+  field :team_id, type: Moped::BSON::ObjectId
+  field :lo_id, type: Moped::BSON::ObjectId
+  field :exercise_id, type: Moped::BSON::ObjectId
+  field :question_id, type: Moped::BSON::ObjectId
 
-  attr_accessible :id, :response, :user_id, :question_id, :for_test
+  attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test
 
   belongs_to :user
   has_one :last_answer
@@ -44,12 +49,18 @@ class Answer
     Question.new(_question) rescue nil
   end
 
+  def team
+    _team = super
+    Team.new(_team) rescue nil
+  end
+
 private
   def store_datas
     question = Question.find(self.question_id)
-    self.exercise = question.exercise.as_json(include: :questions )
+    self.exercise = question.exercise.as_json(include: :questions)
     self.lo = question.exercise.lo.as_json
     self.question = question.as_json
+    self.team = Team.find(self.team_id).as_json if self.team_id
   end
 
   def verify_response

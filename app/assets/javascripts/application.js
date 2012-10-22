@@ -29,6 +29,7 @@
 //= require monkeys
 //= require carrie
 //= require parser
+//= require visualsearch
 //= require_tree ./lib
 //= require_tree ./templates
 //= require_tree ./models

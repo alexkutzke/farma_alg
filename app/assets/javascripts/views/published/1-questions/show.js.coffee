@@ -31,6 +31,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
       question: @model
       user_id: Carrie.currentUser.get('id')
       response: resp
+      team_id: @options.team_id
 
     answer.save answer.attributes,
       wait: true
