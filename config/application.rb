@@ -27,6 +27,6 @@ module Carrie
     config.filter_parameters += [:password]
 
     config.assets.enabled = true
-    config.assets.version = '1.0.8'
+    config.assets.version = '1.0.9'
   end
 end

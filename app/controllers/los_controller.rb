@@ -48,7 +48,11 @@ class LosController < ApplicationController
     if params[:team_id]
       @los = Team.find(params[:team_id]).los
     else
-      @los = current_user.los
+      teams_lo = []
+      Team.where(owner_id: current_user.id).each do |team|
+        teams_lo = teams_lo | team.los
+      end
+      @los = current_user.los | teams_lo
     end
   end
 

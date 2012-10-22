@@ -37,5 +37,6 @@ class Carrie.Models.Endless extends Backbone.Model
               self.appendElements()
 
   appendElements: ->
-    $.each @get(@get('fecth_array')), (index, el) =>
-      @get('collection').add el
+    if @get(@get('fecth_array'))
+      $.each @get(@get('fecth_array')), (index, el) =>
+        @get('collection').add el

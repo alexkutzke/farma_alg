@@ -20,8 +20,8 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
     , @
 
   onRender: ->
-    @endless.load()
-    @updatePageInfo()
+    # @endless.load()
+    #@updatePageInfo()
     unless @visualSearch
       @search()
 
@@ -47,10 +47,11 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
 
   searchContains: (data, name) ->
     contains = false
-    $.each  data, (index, el) =>
-      $.each el, (key, value) =>
-        if key == name
-          contains = true
+    if data
+      $.each  data, (index, el) =>
+        $.each el, (key, value) =>
+          if key == name
+            contains = true
 
     return contains
 
