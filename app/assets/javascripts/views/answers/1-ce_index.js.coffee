@@ -20,10 +20,11 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
     , @
 
   onRender: ->
-    # @endless.load()
-    #@updatePageInfo()
+    @endless.load()
+    @updatePageInfo()
     unless @visualSearch
       @search()
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
 
   updatePageInfo: ->
     info = "Total de encontrados: #{@endless.get('total')}"
@@ -34,8 +35,10 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
       respostas: 'correct'
       corretas: 'true'
       erradas: 'false'
-      turmas: 'team_id'
+      turma: 'team_id'
       oa: 'lo_id'
+      aprendiz: 'user_id'
+      exercicio: 'exercise_id'
 
   loadFilters: ->
     @params = {}
@@ -43,7 +46,8 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
     @teamsJSON = @teams.toJSON()
 
     @los = new Carrie.Collections.LoSearchAnswers()
-    @losJSON = @los.toJSON()
+    @learners = new Carrie.Collections.LearnerSearchAnswers()
+    @exercises = new Carrie.Collections.ExerciseSearchAnswers()
 
   searchContains: (data, name) ->
     contains = false
@@ -68,6 +72,9 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
           lo = @los.where({label: value})[0]
           value = lo.get('id') if lo
 
+        value =  @learners.where({label: value})[0].get('id') if key == 'user_id'
+        value =  @exercises.where({label: value})[0].get('id') if key == 'exercise_id'
+
         params[key] = value
 
     return params
@@ -83,6 +90,27 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
         async: false
 
     @losJSON = @los.toJSON()
+
+  updateLearners: ->
+    if @params['team_id']
+      params = {team_id: @params['team_id']}
+      @learners.fetch
+        async: false
+        data: params
+    else
+      @learners.fetch
+        async: false
+
+    @learnersJSON = @learners.toJSON()
+
+  updateExercises: ->
+    if @params['lo_id']
+      params = {id: @params['lo_id']}
+      @exercises.fetch
+        async: false
+        data: params
+
+    @exercisesJSON = @exercises.toJSON()
 
   search: ->
     @visualSearch = VS.init
@@ -104,11 +132,17 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
           if not @searchContains facets , 'respostas'
             filters.push { value: 'respostas', label: 'Respostas' }
 
-          if not @searchContains facets, 'turmas'
-            filters.push { value: 'turmas', label: 'Turmas' }
+          if not @searchContains facets, 'turma'
+            filters.push { value: 'turma', label: 'Turmas' }
 
           if not @searchContains facets, 'oa'
             filters.push { value: 'oa', label: 'OA' }
+
+          if not @searchContains facets, 'aprendiz'
+            filters.push { value: 'aprendiz', label: 'Aprendiz' }
+
+          if not(@searchContains(facets, 'exercicio')) &&  @params['lo_id']
+            filters.push { value: 'exercicio', label: 'Exercício' }
 
           callback(filters)
 
@@ -122,11 +156,17 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
                 { value: 'corretas', label: 'Corretas' }
                 { value: 'erradas', label: 'Erradas' }
               ])
-            when 'turmas'
+            when 'turma'
               callback(@teamsJSON)
             when 'oa'
               @updateLos()
               callback(@losJSON)
-            else
+            when 'aprendiz'
+              @updateLearners()
+              callback(@learnersJSON)
+            when 'exercicio'
+              @updateExercises()
+              callback(@exercisesJSON)
+             else
               console.log('nothing')
 

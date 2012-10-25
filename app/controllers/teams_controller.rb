@@ -19,6 +19,15 @@ class TeamsController < ApplicationController
     @teams = created | enrolled
   end
 
+  def learners
+    if params[:team_id]
+      @learners = Team.find(params[:team_id]).users
+    else
+      @learners = []
+      @owner_teams.each {|team| @learners = @learners | team.users}
+    end
+  end
+
   def enroll
     @team = Team.find(params[:id])
     if @team.enroll(current_user, params[:code])
@@ -29,7 +38,8 @@ class TeamsController < ApplicationController
   end
 
   def show
-    @team = @owner_teams.find(params[:id])
+    #@team = @owner_teams.find(params[:id])
+    @team = Team.find(params[:id])
     respond_with(@team)
   end
 

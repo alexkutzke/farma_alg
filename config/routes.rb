@@ -16,12 +16,14 @@ Carrie::Application.routes.draw do
       get 'created', on: :collection
       get 'enrolled', on: :collection
       get 'my_teams', on: :collection
+      get 'learners', on: :collection
       post 'enroll', on: :member
       get 'page/:page', :action => :index, :on => :collection
     end
 
     resources :los do
       get 'my_los', on: :collection
+      get 'exercises', on: :collection
       resources :introductions do
         collection {post :sort}
       end

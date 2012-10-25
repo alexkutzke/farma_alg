@@ -56,4 +56,7 @@ class LosController < ApplicationController
     end
   end
 
+  def exercises
+    @exercises = Lo.find(params[:id]).exercises
+  end
 end

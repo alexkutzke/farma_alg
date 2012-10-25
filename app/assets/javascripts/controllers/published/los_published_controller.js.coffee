@@ -21,11 +21,11 @@ class Carrie.Published.Routers.LoController
     Carrie.Helpers.Session.Exists
       func: =>
         Carrie.Utils.Menu.show ''
-        lo = Carrie.Published.Models.Lo.findOrCreate(id)
-        lo = new Carrie.Published.Models.Lo(id: id) if not lo
-
         team = Carrie.Models.Team.findOrCreate(team_id)
         team = new Carrie.Models.Team(id: team_id) if not team
+
+        lo = Carrie.Published.Models.Lo.findOrCreate(id)
+        lo = new Carrie.Published.Models.Lo(id: id, team_id: team_id) if not lo
 
         team.fetch
           async: false
