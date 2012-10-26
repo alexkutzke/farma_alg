@@ -15,6 +15,11 @@ Carrie.Published.Collections = {}
 Carrie.Published.Routers = {}
 Carrie.Published.Views = {}
 
+Carrie.Models.Retroaction = {}
+Carrie.Views.Retroaction = {}
+Carrie.CompositeViews.Retroaction = {}
+Carrie.Collections.Retroaction = {}
+
 Carrie.layouts = {}
 
 Carrie.addRegions

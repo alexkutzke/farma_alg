@@ -11,5 +11,6 @@
  *= require app_bootstrap
  *= require_tree .
  *= require visualsearch
+ *= require bootstrap-modal
  *= require_self
 */

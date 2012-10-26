@@ -1,0 +1,30 @@
+@import 'functions';
+
+.answers-link:hover {
+  background-color: rgba(221, 221, 221, 0.36);
+  cursor: pointer;
+}
+
+#retroaction-modal {
+  z-index: 1040;
+  width: 98%;
+  height: 98%;
+  top: 1%;
+  margin: 0px 10px;
+  left: 0;
+  .modal-body {
+    max-height: 75%;
+    overflow: auto;
+    position: relative;
+    .border-focus {
+      border-color: black;
+      @include box-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+    }
+  }
+  .modal-header {
+    padding: 0px 15px;
+  }
+  .modal-footer {
+    padding: 5px 15px 30px;
+  }
+}

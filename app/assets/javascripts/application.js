@@ -25,6 +25,8 @@
 //= require Backbone.ModelBinder
 //= require backbone.marionette
 //= require twitter/bootstrap
+//= require bootstrap-modalmanager
+//= require bootstrap-modal
 //= require handlebars
 //= require monkeys
 //= require carrie

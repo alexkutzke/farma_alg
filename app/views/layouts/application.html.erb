@@ -7,44 +7,50 @@
   <%= javascript_include_tag 'application' %>
 </head>
 <body data-logged='<%= current_user.to_json %>'>
-  <div id="alert-fixed">
-    <span><img  class='brand loading' src='/assets/spinner.gif'></span>
-  </div>
-  <section>
-    <header>
-      <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-          <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="brand" href="#">FARMA</a>
-            <div class='logged-in' id="welcome"></div>
-            <div class="nav-collapse collapse">
-              <ul class="nav" id="top_menu">
-              </ul>
+  <div class="page-container">
+    <div id="alert-fixed">
+      <span><img  class='brand loading' src='/assets/spinner.gif'></span>
+    </div>
+    <section>
+      <header>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+          <div class="navbar-inner">
+            <div class="container">
+              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="brand" href="#">FARMA</a>
+              <div class='logged-in' id="welcome"></div>
+              <div class="nav-collapse collapse">
+                <ul class="nav" id="top_menu">
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <!-- Subhead ================================================== -->
-    <header class="subhead">
-      <div class="container-fluid">
-        <h1>Ferramenta de Autoria FARMA</h1>
-        <p>Ferramenta de Autoria para a Remediação de erros com Mobilidade na Aprendizagem.</p>
-        <p>Construa Objetos de Aprendizagem para o ensino de matemática</p>
-      </div>
-    </header>
+      <!-- Subhead ================================================== -->
+      <header class="subhead">
+        <div class="container-fluid">
+          <h1>Ferramenta de Autoria FARMA</h1>
+          <p>Ferramenta de Autoria para a Remediação de erros com Mobilidade na Aprendizagem.</p>
+          <p>Construa Objetos de Aprendizagem para o ensino de matemática</p>
+        </div>
+      </header>
 
-    <section class="container-fluid" id="main">
-      <%= yield %>
+      <section class="container-fluid" id="main">
+        <%= yield %>
+      </section>
+
     </section>
+  </div>
 
-  </section>
+  <div class="modal-container">
+        <!-- You can put your modal definitions here but it is not required -->
+  </div>
   <script type="text/javascript"
 	    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full">
   </script>

@@ -9,19 +9,20 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     @variables = @options.variables || []
     @callback = @options.callback || ->
     @errorClass = 'error'
-    $(@el).on 'hide', =>
+    $(@el).on 'destroy', =>
       @remove()
     _.bindAll(@, 'keyUp')
-    $(document).bind('keyup', @keyUp)
 
 
   onRender: ->
+    $(@el).bind('keyup', @keyUp)
+    $(@el).attr('tabindex', -1)
     @input = $($(@el).find('.keyboard-input').first())
     @display = $($(@el).find('div.display').first())
     @addVariables()
-    @inputFocus()
     @input.attr('value', @options.currentResp)
     @updateDisplay()
+    @inputFocus()
     MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
     @el
 
@@ -57,6 +58,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
       when 'send'
         @send()
       else
+        console.log @input
         @input.insertAtCursor(value)
 
     @updateDisplay()
@@ -81,8 +83,9 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     MathJax.Hub.Queue(["Typeset",MathJax.Hub, @display[0]])
 
   inputFocus: ->
-    setTimeout ( =>
-      @input.focus()
+    self = @
+    setTimeout ( ->
+      self.input.focus()
     ), 100
 
   addVariables: ->

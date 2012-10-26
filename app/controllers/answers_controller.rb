@@ -21,6 +21,10 @@ class AnswersController < ApplicationController
     end
   end
 
+  def retroaction
+    @answer = Answer.find(params[:id])
+  end
+
   def team_ids
     owner_team_ids = Team.where(owner_id: current_user.id).map {|e| e.id}
     @team_ids ||= owner_team_ids | current_user.team_ids

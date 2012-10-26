@@ -21,6 +21,9 @@ class Answer
   field :exercise_id, type: Moped::BSON::ObjectId
   field :question_id, type: Moped::BSON::ObjectId
 
+  alias :super_exercise :exercise
+  alias :super_question :question
+
   attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test
 
   belongs_to :user
@@ -31,30 +34,54 @@ class Answer
   scope :wrong, where(correct: false)
   scope :corrects, where(correct: true)
 
-  before_save :store_datas, :verify_response
-  after_save :register_last_answer
+  before_create :verify_response, :store_datas
+  after_create :register_last_answer, :update_questions_with_last_answer
 
   def lo
-    _lo = super
-    Lo.new(_lo) rescue nil
+    @_lo ||= Lo.new(super) rescue nil
   end
 
   def exercise
-    _exercise = super
-    Exercise.new(_exercise) rescue nil
+    @_exercise ||= Exercise.new(super) rescue nil
+  end
+
+  def exercise_as_json
+    exercises = super_exercise
+    %w(position available lo_id updated_at created_at).each {|e| exercises.delete(e)}
+    exercises['questions'].each do |question|
+      question['answered'] = true if  question['_id'] == self.question.id
+      %w(position available lo_id updated_at correct_answer created_at).each {|e| question.delete(e)}
+    end
+    exercises
   end
 
   def question
-    _question = super
-    Question.new(_question) rescue nil
+    @_question ||= Question.new(super) rescue nil
+  end
+
+  def question_as_json
+    question = super_question
+    %w(position available lo_id updated_at exercise_id correct_answer).each {|e| question.delete(e)}
+    question
   end
 
   def team
-    _team = super
-    Team.new(_team) rescue nil
+    @_team ||= Team.new(super) rescue nil
   end
 
 private
+  def update_questions_with_last_answer
+   _exercise = super_exercise
+   _exercise['questions'].each do |question|
+      la = Question.find(question['_id']).last_answers.by_user_id(self.user_id)
+      if la && la.first
+        question['last_answer'] = la.first.as_json
+        question['last_answer']['response'] = la.first.answer.response
+      end
+    end
+    self.update_attribute('exercise', _exercise)
+  end
+
   def store_datas
     question = Question.find(self.question_id)
     self.exercise = question.exercise.as_json(include: :questions)
@@ -68,16 +95,16 @@ private
     options = {variables: question.exp_variables}
 
     if question.many_answers?
-      self.correct = MathEvaluate::Expression.eql_with_many_answers?(question.correct_answer, self.response, options)
+      self.correct= MathEvaluate::Expression.eql_with_many_answers?(question.correct_answer, self.response, options)
     else
-      self.correct = MathEvaluate::Expression.eql?(question.correct_answer, self.response, options)
+      self.correct= MathEvaluate::Expression.eql?(question.correct_answer, self.response, options)
     end
 
     if !self.correct
       set_tip
     else
       @tips_count = question.tips_counts.find_or_create_by(:user_id => self.user_id)
-      self.try_number = @tips_count.tries
+      self.try_number= @tips_count.tries
     end
   end
 

@@ -10,4 +10,7 @@ class LastAnswer
     where(:user_id => user.id)
   }
 
+  scope :by_user_id, lambda { |user_id|
+    where(:user_id => user_id)
+  }
 end
