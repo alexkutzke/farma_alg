@@ -24,6 +24,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     @updateDisplay()
     @inputFocus()
     MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+    @draggable()
     @el
 
   keyUp: (ev) ->
@@ -86,6 +87,11 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     self = @
     setTimeout ( ->
       self.input.focus()
+    ), 100
+
+  draggable: ->
+    setTimeout ( =>
+      $(@el).draggable()
     ), 100
 
   addVariables: ->

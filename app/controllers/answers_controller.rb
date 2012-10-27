@@ -22,12 +22,19 @@ class AnswersController < ApplicationController
   end
 
   def retroaction
+    delete_retroaction_answers
     @answer = Answer.find(params[:id])
   end
 
   def team_ids
     owner_team_ids = Team.where(owner_id: current_user.id).map {|e| e.id}
     @team_ids ||= owner_team_ids | current_user.team_ids
+  end
+
+private
+  def delete_retroaction_answers
+    retros = RetroactionAnswer.where(answer_id: params[:id], user_id: current_user.id)
+    retros.delete_all
   end
 
 end

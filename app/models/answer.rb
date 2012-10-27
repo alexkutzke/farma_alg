@@ -49,8 +49,8 @@ class Answer
     exercises = super_exercise
     %w(position available lo_id updated_at created_at).each {|e| exercises.delete(e)}
     exercises['questions'].each do |question|
-      question['answered'] = true if  question['_id'] == self.question.id
-      %w(position available lo_id updated_at correct_answer created_at).each {|e| question.delete(e)}
+      question['answered'] = question['id'] == self.question_id
+      %w(position available lo_id updated_at tips correct_answer created_at).each {|e| question.delete(e)}
     end
     exercises
   end
@@ -61,7 +61,7 @@ class Answer
 
   def question_as_json
     question = super_question
-    %w(position available lo_id updated_at exercise_id correct_answer).each {|e| question.delete(e)}
+    %w(position available lo_id updated_at tips exercise_id correct_answer).each {|e| question.delete(e)}
     question
   end
 
@@ -69,24 +69,38 @@ class Answer
     @_team ||= Team.new(super) rescue nil
   end
 
+# Need store all information for retroaction
 private
   def update_questions_with_last_answer
    _exercise = super_exercise
    _exercise['questions'].each do |question|
-      la = Question.find(question['_id']).last_answers.by_user_id(self.user_id)
+      question['id'] = question['_id']
+      question.delete('_id')
+
+      question_obj = Question.find(question['id'])
+
+      la = question_obj.last_answers.by_user_id(self.user_id)
       if la && la.first
         question['last_answer'] = la.first.as_json
+        question['last_answer']['id'] = la.first.id
+        question['last_answer'].delete('_id')
         question['last_answer']['response'] = la.first.answer.response
+        question['last_answer']['correct'] = la.first.answer.correct
+        question['last_answer']['tip'] = la.first.answer.tip
+        question['last_answer']['try_number'] = la.first.answer.try_number
       end
-    end
+
+      tries = question_obj.tips_counts.where(user_id: self.user_id).first.try(:tries) || 0
+      question['tries'] = tries
+      end
     self.update_attribute('exercise', _exercise)
   end
 
   def store_datas
     question = Question.find(self.question_id)
-    self.exercise = question.exercise.as_json(include: :questions)
+    self.exercise = question.exercise.as_json(include: {questions: {include: :tips }})
     self.lo = question.exercise.lo.as_json
-    self.question = question.as_json
+    self.question = question.as_json(include: :tips)
     self.team = Team.find(self.team_id).as_json if self.team_id
   end
 
@@ -115,8 +129,7 @@ private
     @tips_count.inc(:tries, 1)
     self.try_number = @tips_count.tries
 
-    tip = self.question.tips.where(:number_of_tries.lte => @tips_count.tries).desc(:number_of_tries).first
-
+    tip = question.tips.where(:number_of_tries.lte => @tips_count.tries).desc(:number_of_tries).first
     if tip
       self.tip = tip.content
     end

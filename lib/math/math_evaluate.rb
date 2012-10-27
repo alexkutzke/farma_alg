@@ -34,6 +34,7 @@ module MathEvaluate
       begin
         exps_a.each_with_index do |el, index|
           equal = self.eql?(el, exps_b[index], options)
+          return false unless equal
         end
         return equal
       rescue => e

@@ -17,14 +17,14 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
 
   verify_answer: (ev) ->
     ev.preventDefault()
-    keyboard = new Carrie.Views.VirtualKeyBoard
+    keyboard = new Carrie.Views.VirtualKeyBoard(
       currentResp: @view.resp()
       variables: @model.get('exp_variables')
       many_answers: @model.get('many_answers')
       callback: (val) =>
         @sendAnswer(val)
-
-    $(keyboard.render().el).modal('show')
+    ).render().el
+    $(keyboard).modal('show')
 
   sendAnswer: (resp) ->
     answer = new Carrie.Models.Answer

@@ -13,6 +13,8 @@ Carrie::Application.routes.draw do
       get 'page/:page', :action => :index, :on => :collection
     end
 
+    resources :retroaction_answers, only: :create
+
     resources :teams do
       get 'created', on: :collection
       get 'enrolled', on: :collection
