@@ -13,3 +13,9 @@ Handlebars.registerHelper 'safe', (text) ->
   #text = Handlebars.Utils.escapeExpression(text)
 
   return new Handlebars.SafeString(text)
+
+Handlebars.registerHelper 'ifCond', (e1, e2, options) ->
+  if e1 == e2
+    return options.fn(this)
+
+  return options.inverse(this)

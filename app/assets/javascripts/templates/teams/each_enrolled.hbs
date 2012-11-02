@@ -1,6 +1,13 @@
 <header class='clearfix'>
   <div class='left'>
     <h4>{{name}}</h4>
+    <span class='date-info'>
+      {{#ifCond numbers_of_enrolled 1}}
+         {{numbers_of_enrolled}} aprendiz matriculado
+      {{else}}
+         {{numbers_of_enrolled}} aprendizes matriculados
+      {{/ifCond}}
+    </span>
   </div>
   <div class='right'>
      <a href='' class='view-los'><i class='icon-eye-close'></i> Ver Objetos de Aprendizagem</a>

@@ -9,7 +9,30 @@
     </span>
   </div>
     <span class='date-info'>
-      Criado em {{created_at}}
+      Criado em {{created_at}} |
+
+      {{#ifCond numbers_of_enrolled 1}}
+         {{numbers_of_enrolled}} aprendiz matriculado
+      {{else}}
+         {{numbers_of_enrolled}} aprendizes matriculados
+      {{/ifCond}}
+      |
+      <a href='' class='view-learners'><i class='icon-eye-close'></i> Ver Aprendizes</a>
     </span>
 </header>
+
+<section class='show-learners hide'>
+  <table class="table table-condensed table-hover">
+     <thead>
+      <tr><th>Aprendiz</th></tr>
+     </thead>
+     <tbody>
+      {{#each users}}
+        <tr><td>{{name}}</td></tr>
+      {{/each}}
+     </tbody>
+  </table>
+</section>
+
+
 <hr>

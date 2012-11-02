@@ -7,9 +7,10 @@ class Carrie.CompositeViews.EachEnrolled extends Backbone.Marionette.CompositeVi
 
   initialize: ->
     los = []
-    $.each @model.get('los'), (index, el) =>
-      el.team_id = @model.get('id')
-      los.push el
+    if @model.get('los')
+      $.each @model.get('los'), (index, el) =>
+        el.team_id = @model.get('id')
+        los.push el
     @collection = new Carrie.Collections.TeamLo los
     @icon = 'icon-eye-close'
 
