@@ -4,24 +4,24 @@ glue @lo do
   node(:pages_count) { |lo| lo.pages_count }
   node(:pages) {|lo| lo.pages_with_name}
 
-  child(:introductions) do
-    attributes :id, :title, :content
+  node :introductions do |parent|
+    parent.introductions_avaiable.map do |introduction|
+      result = {}
+      result['id'] = introduction.id
+      result['title'] = introduction.title
+      result['content'] = introduction.content
+      result
+    end
   end
 
-  child(:exercises) do
-    attributes :id , :title, :content
-    child(:questions) do
-      attributes :id, :title, :content, :exp_variables, :many_answers
-      node :last_answer, if: lambda {|question| question.last_answers.by_user(current_user).size > 0} do |question|
-        la = question.last_answers.by_user(current_user).first
-        {
-          tip: la.answer.tip,
-          correct: la.answer.correct,
-          response: la.answer.response,
-          try_number: la.answer.try_number,
-          id: la.id,
-        }
-      end
+  node :exercises do |parent|
+    parent.exercises_avaiable.map do |exercise|
+      result = {}
+      result['id'] = exercise.id
+      result['title'] = exercise.title
+      result['content'] = exercise.content
+      result['questions'] = partial("published/los/questions", :object => exercise.questions_avaiable)
+      result
     end
   end
 end

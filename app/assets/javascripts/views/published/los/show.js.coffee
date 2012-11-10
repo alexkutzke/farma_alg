@@ -3,6 +3,7 @@ class Carrie.Published.Views.Lo extends Backbone.Marionette.ItemView
   tagName: 'section'
 
   initialize: ->
+    console.log @model
     @paginator = new Carrie.Published.Views.LoPaginator
       model: @model
       parentView: @
@@ -15,7 +16,12 @@ class Carrie.Published.Views.Lo extends Backbone.Marionette.ItemView
       $(@el).find('.navigator').html(@paginator.render().el)
     else
       Carrie.layouts.main.reloadBreadcrumb()
-      bread = "Turma #{@model.get('team').get('name')} / Objeto de aprendizagem #{@model.get('name')}"
+      if @model.get('team')
+        team =  "Turma #{@model.get('team').get('name')} / "
+      else
+        team = ""
+
+      bread = "#{team} Objeto de aprendizagem #{@model.get('name')}"
       Carrie.layouts.main.addBreadcrumb(bread, '', true)
 
       $(@el).find('.page').html('Objeto de aprendizagem sem publicações')

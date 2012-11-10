@@ -18,7 +18,7 @@ class Lo
   has_and_belongs_to_many :teams
 
   def pages
-    self.introductions + self.exercises
+    self.introductions_avaiable + self.exercises_avaiable
   end
 
   def pages_count
@@ -41,6 +41,14 @@ class Lo
         page_collection: page_count-1
       }
     end
+  end
+
+  def exercises_avaiable
+    self.exercises.where(available: true)
+  end
+
+  def introductions_avaiable
+    self.introductions.where(available: true)
   end
 
 end

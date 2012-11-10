@@ -7,8 +7,8 @@ class Exercise
   field :available, type: Boolean, default: false
   field :position, type: Integer
 
-
-  default_scope order_by([:position, :desc])
+  default_scope desc(:position)
+  #default_scope order_by([:position, :desc])
 
   before_create :set_position
 
@@ -26,6 +26,10 @@ class Exercise
       question.last_answers.where(user_id: user_id).try(:delete_all)
       question.tips_counts.where(user_id: user_id).try(:delete_all)
     end
+  end
+
+  def questions_avaiable
+    self.questions.where(available: true)
   end
 
 private

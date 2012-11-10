@@ -13,7 +13,7 @@ class Question
 
   has_many :tips_counts
 
-  default_scope order_by([:position, :desc])
+  default_scope desc(:position)
 
   before_create :set_position
   before_save :set_exp_variables
