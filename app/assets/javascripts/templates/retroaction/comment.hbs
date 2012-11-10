@@ -1,0 +1,18 @@
+<div class="comment">
+   <div class='avatar'>
+     <img class="gravatar" src="http://www.gravatar.com/avatar/{{user_gravatar}}?s=48" />
+   </div>
+   <div class='main clearfix'>
+     <div class='headline'>
+      Criado por {{user_name}} à <strong> {{created_at_in_words}} atrás </strong>
+      {{#if can_destroy}}
+        <div class='right'>
+          <a href='' class='destroy' ><i class='icon-remove'></i> Remover comentário</a>
+        </div>
+      {{/if}}
+     </div>
+     <div class="comment_content">
+       <p> {{safe text}} </p>
+     </div>
+   </div>
+</div> <!-- /.discussion-bubble -->

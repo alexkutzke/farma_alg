@@ -11,10 +11,15 @@ class Carrie.Views.CEAnswerItem extends Backbone.Marionette.ItemView
     'click' : 'retro'
 
   retro: (ev) ->
+    @clearModel()
     @answer.fetch
       async: false
       success: (model, response) =>
-        view = new Carrie.Views.Retroaction.Answer(model: model).render().el
+        view = new Carrie.Views.Retroaction.Answer(model: @answer).render().el
         $(view).modal('show')
       error: (model, response) ->
         Carrie.Utils.Alert.success('Não foi possível retroagir a essa resposta!', 3000)
+
+  clearModel: ->
+    @answer.clear()
+    @answer.set('id', @model.get('id'))

@@ -6,8 +6,15 @@
       Resposta <em>{{response}}</em> do aprendiz <em>{{answered_by}}</em> para questão <strong>{{question.title}}</strong>
       do exercício <em>{{exercise.title}}</em> ocorrida às <em>{{created_at}}</em> durante a tentativa <em>{{try_number}}</em>
     <p>
+    {{#ifCond comments.length 1}}
+      <p>Esta resposta possui <span data-number='{{comments.length}}' class='number_of_comments'>{{comments.length}} comentário </span></p>
+    {{else}}
+      <p>Esta resposta possui <span data-number='{{comments.length}}' class='number_of_comments'>{{comments.length}} comentários </span></p>
+    {{/ifCond}}
   </div>
   <div class="modal-body">
+    <div class='answers'></div>
+    <div class='comments'></div>
   </div>
   <div class="modal-footer">
     <button type="button" data-dismiss="modal" class="btn">Close</button>

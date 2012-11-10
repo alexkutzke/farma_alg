@@ -78,3 +78,11 @@ Carrie.Utils.Loading = (obj) ->
   obj.on 'change', ->
     $('.loading').hide()
   , obj
+
+Carrie.Utils.Pluralize = (amount, word_s, word_p) ->
+  s = amount
+  if amount == 1
+    s = "#{s} #{word_s}"
+  else
+    s = "#{s} #{word_p}"
+  s

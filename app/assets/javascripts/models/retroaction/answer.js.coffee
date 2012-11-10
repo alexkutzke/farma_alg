@@ -15,6 +15,14 @@ class Carrie.Models.Retroaction.Answer extends Backbone.RelationalModel
       key: 'answer'
       type: Backbone.HasOne
     }
+  },{
+    type: Backbone.HasMany
+    key: 'comments'
+    relatedModel: 'Carrie.Models.AnswerComment'
+    collectionType: 'Carrie.Collections.AnswerComments'
+    reverseRelation: {
+      key: 'answer'
+    }
   }]
 
 Carrie.Models.Exercise.setup()

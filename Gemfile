@@ -20,6 +20,8 @@ gem 'kaminari', "~> 0.14.1"
 
 gem 'math_engine', git: 'git://github.com/dmarczal/math_engine.git' #, branch: 'original'
 
+gem 'redcarpet'
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.5'
   gem 'coffee-rails', '~> 3.2.1'

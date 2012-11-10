@@ -28,6 +28,7 @@ class Answer
 
   belongs_to :user
   has_one :last_answer
+  embeds_many :comments, :as => :commentable
 
   default_scope order_by([:created_at, :desc])
 

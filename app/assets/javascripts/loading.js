@@ -14,6 +14,4 @@ _.each(["Model", "Collection"], function(name) {
     return fetch.apply(this, arguments);
   };
 
-
 });
-

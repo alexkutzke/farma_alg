@@ -11,6 +11,7 @@ Carrie::Application.routes.draw do
     resources :answers do
       get 'retroaction', on: :member
       get 'page/:page', :action => :index, :on => :collection
+      resources :comments
     end
 
     resources :retroaction_answers, only: :create
