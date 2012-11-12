@@ -59,4 +59,23 @@ describe "math evalute" do
     end
   end
 
+  describe 'show accept expression with = sinal' do
+    it "a + 2 = 2 + a" do
+      options = {variables: ['a']}
+      MathEvaluate::Expression.eql_with_eql_sinal?('a + 2 = 2 + a', '2 + a = a + 2', options).should be_true
+    end
+    it "a+2+b=2+b+a" do
+      options = {variables: ['a','b']}
+      MathEvaluate::Expression.eql_with_eql_sinal?('a+2+b=2+b+a', 'a+2+b=2+b+a', options).should be_true
+    end
+    it "a^2=b^2+c^2" do
+      options = {variables: ['a','b','c']}
+      MathEvaluate::Expression.eql_with_eql_sinal?('a^2=b^2+c^2', 'a^2=b^2+c^2', options).should be_true
+    end
+    it "a^(2) = 10^(2)+40^(2) should not be equal a^(2) = 10^(2)+40^(2)" do
+      options = {variables: ['a']}
+      MathEvaluate::Expression.eql_with_eql_sinal?('a^(2) = 10^(2)+40^(2)', 'a = 10^(2)+40^(2)', options).should be_false
+    end
+  end
+
 end

@@ -30,7 +30,7 @@ class Answer
   has_one :last_answer
   embeds_many :comments, :as => :commentable
 
-  default_scope order_by([:created_at, :desc])
+  default_scope desc(:created_at)
 
   scope :wrong, where(correct: false)
   scope :corrects, where(correct: true)
@@ -111,6 +111,8 @@ private
 
     if question.many_answers?
       self.correct= MathEvaluate::Expression.eql_with_many_answers?(question.correct_answer, self.response, options)
+    elsif question.eql_sinal?
+      self.correct= MathEvaluate::Expression.eql_with_eql_sinal?(question.correct_answer, self.response, options)
     else
       self.correct= MathEvaluate::Expression.eql?(question.correct_answer, self.response, options)
     end

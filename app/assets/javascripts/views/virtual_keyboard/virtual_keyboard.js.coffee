@@ -4,6 +4,8 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
 
   events:
     'click a' : 'setInput'
+    'keypress .keyboard-input' : 'keyboardInputEnter'
+    'keyup .keyboard-input' : 'updateDisplayFromInput'
 
   initialize: ->
     @variables = @options.variables || []
@@ -28,11 +30,10 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     @el
 
   keyUp: (ev) ->
+    # Enter pressed
     if (ev.which == 13 )
       ev.preventDefault()
       @send()
-
-    @updateDisplay()
 
   setInput: (ev) ->
     ev.preventDefault()
@@ -46,10 +47,10 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
         @input.setSelection(cursor, cursor)
       when 'clean'
         @input.val('')
-      when '^'
-        @input.insertAtCursor("^()")
-        cursor = @input.getCursorPosition() - 1
-        @input.setSelection(cursor, cursor)
+      #when '^'
+      #  @input.insertAtCursor("^()")
+      #  cursor = @input.getCursorPosition() - 1
+      #  @input.setSelection(cursor, cursor)
       when 'backspace'
         formula = @input.val().substring(0, @input.getCursorPosition()-1) + @input.val().substring(@input.getCursorPosition(), @input.val().length)
 
@@ -59,7 +60,6 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
       when 'send'
         @send()
       else
-        console.log @input
         @input.insertAtCursor(value)
 
     @updateDisplay()
@@ -67,8 +67,8 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
   send: ->
     val = @input.val()
     if (@validateExpression())
-       @callback val, @display.html()
-       $(@el).modal('hide')
+      @callback val, @display.html()
+      $(@el).modal('hide')
     else
        @input.next().show()
 
@@ -95,11 +95,15 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     ), 100
 
   addVariables: ->
+    btns = jQuery.deepclone(@variables)
     if @options.many_answers && @variables.indexOf(';') == -1
-      @variables.push ';'
+      btns.push ';'
+
+    if @options.eql_sinal && @variables.indexOf('=') == -1
+      btns.push '='
 
     obj = $(@el).find('.variables')
-    $.each @variables, (index, el) ->
+    $.each btns, (index, el) ->
       btn = "<a href='#display' class='btn' data-value='#{el}' title='variável #{el}'>$#{el}$</a>"
       obj.append(btn)
       if (index + 1) % 5 == 0
@@ -110,7 +114,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
       vars = {}
       exp = @input.val().trim()
 
-      if exp.slice(-1) == ';'
+      if exp.slice(-1) == ';' || exp.slice(-1) == '='
         return false
 
       exp = @manyAnswers(exp)
@@ -127,11 +131,52 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     catch e
       return false
 
+  # 1 ; a + 2 ; c * 3
   manyAnswers: (exp) ->
-    exps = exp.split(';')
-    _exp = exps.pop()
+    exps = exp.split(';').clean('')
+    exps.clean('')
+    _exp = @withEqlSinal(exps.pop())
     $.each exps, (index, el) ->
+      el = @withEqlSinal(el)
       _exp = "(#{_exp}) + (#{el})"
     return _exp
 
+  # a + 2 = 2 + a
+  withEqlSinal: (exp) ->
+    exps = exp.split('=')
+    exps.clean('')
 
+    if exps.length == 1
+      return exps[0]
+    else
+      if (exps.length == 2)
+        exp_l = exps[0]
+        exp_r = exps[1]
+        return "(#{exp_l}) + (#{exp_r})"
+      else
+        return 'false' # invalida a expressão.
+
+  validKey: (key) ->
+    # Default valid keys
+    # [0,1,2,3,4,5,6,7,8,9]
+    # backspace, + - * / ^ . () sqrt = space
+    validKeys = [8, 43,45,42,47,46, 40,41, 115,113,114,116, 61, 32]
+    if (key >= 48 && key <= 57) || (key in validKeys)
+      return true
+    else
+      if String.fromCharCode(key).toLowerCase() in @variables
+        return true
+      else
+        return false
+
+  keyboardInputEnter: (ev) ->
+    unless ( @validKey(ev.which) )
+      ev.preventDefault()
+      ev.returnValue = false
+      @update = false # flag to update display
+    else
+      @update = true # flag to update display
+
+  updateDisplayFromInput: ->
+    if @update
+      @updateDisplay()

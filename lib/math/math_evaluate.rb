@@ -8,11 +8,12 @@ module MathEvaluate
         variables = options[:variables] ? options[:variables] : []
         variables_with_values = self.generate_values(variables)
 
+        #puts "exp_a #{exp_a}"
+        #puts "exp_b #{exp_b}"
+
         a = self.evaluate(exp_a.to_s, variables_with_values)
         b = self.evaluate(exp_b.to_s, variables_with_values)
 
-        #puts "exp_a #{exp_a}"
-        #puts "exp_b #{exp_b}"
         #puts "a: #{a}"
         #puts "b: #{b}"
 
@@ -23,6 +24,14 @@ module MathEvaluate
         puts "Error: #{e}"
         return false
       end
+    end
+
+    def self.eql_with_eql_sinal?(exp_a, exp_b, options = {})
+      left_exp_a, right_exp_a = exp_a.split('=')
+      left_exp_b, right_exp_b = exp_b.split('=')
+
+      return self.eql?(left_exp_a, left_exp_b, options) &&
+             self.eql?(right_exp_a, right_exp_b, options)
     end
 
     def self.eql_with_many_answers?(exp_a, exp_b, options = {})
