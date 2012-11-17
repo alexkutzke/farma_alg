@@ -30,6 +30,10 @@ class Question
   has_many :tips_counts, dependent: :delete
   has_many :last_answers, dependent: :delete #one last answer for each user
 
+  def correct_answer=(correct_answer)
+    super(correct_answer.downcase)
+  end
+
 private
   def set_position
     self.position = Time.now.to_i
