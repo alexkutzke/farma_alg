@@ -50,5 +50,5 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
         $(@el).find('.answer-group').html @view.render().el
 
       error: (model, resp) ->
-        console.log(model)
+        #console.log(model)
         alert resp.responseText

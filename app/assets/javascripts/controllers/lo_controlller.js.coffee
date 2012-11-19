@@ -33,7 +33,7 @@ class Carrie.Routers.LoController
 
         lo.fetch
           success: (model, response) ->
-            console.log(model)
+            #console.log(model)
             Carrie.layouts.main.reloadBreadcrumb()
             Carrie.layouts.main.addBreadcrumb('Objetos de Aprendizagem', '/los')
             Carrie.layouts.main.addBreadcrumb('Editar OA '+ model.get('name'), '/los/edit', true)

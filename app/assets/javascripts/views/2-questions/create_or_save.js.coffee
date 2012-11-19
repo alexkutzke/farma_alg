@@ -49,7 +49,7 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
     @model.save @model.attributes,
       wait: true
       success: (model, response) =>
-        console.log(model)
+        #console.log(model)
         $(@el).find("\##{@cked}").ckeditorGet().destroy()
 
         $(@el).find('input.btn-primary').button('reset')
@@ -64,7 +64,7 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
 
       error: (model, response) =>
         result = $.parseJSON(response.responseText)
-        console.log response
+        #console.log response
         msg = Carrie.Helpers.Notifications.error('Existe erros no seu formulário')
         $(@el).find('form').before(msg)
         Carrie.Utils.Alert.showFormErrors(result.errors, @el)

@@ -3,7 +3,7 @@ class Carrie.Published.Views.Lo extends Backbone.Marionette.ItemView
   tagName: 'section'
 
   initialize: ->
-    console.log @model
+    #console.log @model
     @paginator = new Carrie.Published.Views.LoPaginator
       model: @model
       parentView: @

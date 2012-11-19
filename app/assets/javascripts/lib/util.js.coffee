@@ -50,7 +50,7 @@ Carrie.CKEDITOR =
       try
         editor.destroy()
       catch error
-        console.log error
+        #console.log error
 
   clearWhoHas: (key) ->
     $.each CKEDITOR.instances, (i, editor) ->
@@ -58,7 +58,7 @@ Carrie.CKEDITOR =
         if editor.name.search(key) != -1
           editor.destroy()
       catch error
-        console.log error
+        #console.log error
 
 Carrie.Bootstrap =
   popoverPlacement: ->

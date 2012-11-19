@@ -16,7 +16,7 @@ class Carrie.Routers.ExerciseController
             Carrie.layouts.main.content.show index
 
           error: (model, response)->
-            console.log(response)
+            #console.log(response)
             Carrie.Utils.Alert.error('Problema para carregar os exercícios')
 
   new: (lo_id) ->

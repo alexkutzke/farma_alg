@@ -48,7 +48,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
         @model.set('last_answer', last_answer)
 
       error: (model, resp) ->
-        console.log(model)
+        #console.log(model)
         alert resp.responseText
 
 

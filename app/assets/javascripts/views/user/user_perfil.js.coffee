@@ -43,8 +43,8 @@ class Carrie.Views.UserPerfil extends Backbone.Marionette.ItemView
 
 
         _(result.errors).each (errors, field) ->
-          console.log(errors)
-          console.log(field)
+          #console.log(errors)
+          #console.log(field)
           $("\##{field}_group").addClass 'error'
           _(errors).each (error, i) ->
             $("\##{field}_group .controls").append(Carrie.Helpers.FormHelpers.fieldHelp(error))

@@ -168,5 +168,5 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
               @updateExercises()
               callback(@exercisesJSON)
              else
-              console.log('nothing')
+               #console.log('nothing')
 

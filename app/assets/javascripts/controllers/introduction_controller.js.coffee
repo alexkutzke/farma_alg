@@ -17,7 +17,7 @@ class Carrie.Routers.IntroductionController
             Carrie.layouts.main.content.show index
 
           error: (model, response)->
-            console.log(response)
+            #console.log(response)
             Carrie.Utils.Alert.error('Problema para carregar introduções')
 
 
@@ -41,7 +41,7 @@ class Carrie.Routers.IntroductionController
 
         introduction.fetch
           success: (model, response) =>
-            console.log(model)
+            #console.log(model)
             @setBreadcrumb(lo)
             bread = 'Introduções do OA ' + lo.get('name')
             Carrie.layouts.main.addBreadcrumb(bread, '/los/' + lo.get('id') + '/introductions')
