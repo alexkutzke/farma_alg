@@ -15,6 +15,15 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
       @remove()
     _.bindAll(@, 'keyUp')
 
+    # valid keys
+    # Default valid keys
+    # [0,1,2,3,4,5,6,7,8,9]
+    # backspace, + - * / ^ . () sqrt space, ; directonal
+    @validKeys = [8, 43,45,42,47,46, 40,41, 115,113,114,116, 32, 0]
+    if @options.many_answers
+      @validKeys.push(59)
+    if @options.eql_sinal
+      @validKeys.push(61)
 
   onRender: ->
     $(@el).bind('keyup', @keyUp)
@@ -104,7 +113,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
 
     obj = $(@el).find('.variables')
     $.each btns, (index, el) ->
-      btn = "<a href='#display' class='btn' data-value='#{el}' title='variável #{el}'>$#{el}$</a>"
+      btn = "<a href='#display' class='btn' data-value='#{el}' title='variável #{el}'>#{el}</a>"
       obj.append(btn)
       if (index + 1) % 5 == 0
         obj.append('<div></div>')
@@ -129,6 +138,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
 
       return true
     catch e
+      #console.log e.message
       return false
 
   # 1 ; a + 2 ; c * 3
@@ -136,9 +146,10 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     exps = exp.split(';').clean('')
     exps.clean('')
     _exp = @withEqlSinal(exps.pop())
-    $.each exps, (index, el) ->
-      el = @withEqlSinal(el)
-      _exp = "(#{_exp}) + (#{el})"
+    $.each exps, (index, el) =>
+      _el = @withEqlSinal(el)
+      _exp = "(#{_exp}) + (#{_el})"
+
     return _exp
 
   # a + 2 = 2 + a
@@ -157,11 +168,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
         return 'false' # invalida a expressão.
 
   validKey: (key) ->
-    # Default valid keys
-    # [0,1,2,3,4,5,6,7,8,9]
-    # backspace, + - * / ^ . () sqrt = space
-    validKeys = [8, 43,45,42,47,46, 40,41, 115,113,114,116, 61, 32]
-    if (key >= 48 && key <= 57) || (key in validKeys)
+    if (key >= 48 && key <= 57) || (key in @validKeys)
       return true
     else
       if String.fromCharCode(key).toLowerCase() in @variables
