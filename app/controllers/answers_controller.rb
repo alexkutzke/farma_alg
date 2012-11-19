@@ -4,10 +4,10 @@ class AnswersController < ApplicationController
   before_filter :team_ids, only: :index
 
   def index
-    if params[:search]
-      @answers = Answer.where(params[:search]).in(team_id: @team_ids).page(params[:page]).per(20)
+    if current_user.admin?
+      @answers = Answer.search(params[:page], params[:search])
     else
-      @answers = Answer.where(:team_id.in => @team_ids).page(params[:page]).per(20)
+      @answers = Answer.search(params[:page], params[:search], @team_ids)
     end
   end
 

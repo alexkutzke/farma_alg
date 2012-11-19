@@ -70,6 +70,14 @@ class TeamsController < ApplicationController
     respond_with(@team)
   end
 
+  def teams_for_search
+    if current_user.admin?
+      @teams = Team.desc(:created_at)
+    else
+      my_teams
+    end
+  end
+
 private
   def teams
     if current_user.admin?

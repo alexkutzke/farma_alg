@@ -38,6 +38,22 @@ class Answer
   before_create :verify_response, :store_datas
   after_create :register_last_answer, :update_questions_with_last_answer
 
+  def self.search(page, params = nil, team_ids = nil)
+    if team_ids
+      if params
+        Answer.excludes(team_id: nil, for_test: true).where(params).in(team_id: team_ids).page(page).per(20)
+      else
+        Answer.excludes(team_id: nil, for_test: true).in(team_id: team_ids).page(page).per(20)
+      end
+    else
+      if params
+        Answer.excludes(team_id: nil, for_test: true).where(params).page(page).per(20)
+      else
+        Answer.excludes(team_id: nil, for_test: true).page(page).per(20)
+      end
+    end
+  end
+
   def lo
     @_lo ||= Lo.new(super) rescue nil
   end
