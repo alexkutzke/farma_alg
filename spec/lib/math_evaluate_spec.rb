@@ -71,6 +71,7 @@ describe "math evalute" do
     it "a^2=b^2+c^2" do
       options = {variables: ['a','b','c']}
       MathEvaluate::Expression.eql_with_eql_sinal?('a^2=b^2+c^2', 'a^2=b^2+c^2', options).should be_true
+      MathEvaluate::Expression.eql_with_eql_sinal?('a^2=b^2+c^2', 'b^2+c^2=a^2', options).should be_true
     end
     it "a^(2) = 10^(2)+40^(2) should not be equal a^(2) = 10^(2)+40^(2)" do
       options = {variables: ['a']}

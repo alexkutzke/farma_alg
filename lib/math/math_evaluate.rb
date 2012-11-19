@@ -30,8 +30,12 @@ module MathEvaluate
       left_exp_a, right_exp_a = exp_a.split('=')
       left_exp_b, right_exp_b = exp_b.split('=')
 
-      return self.eql?(left_exp_a, left_exp_b, options) &&
-             self.eql?(right_exp_a, right_exp_b, options)
+      return ( self.eql?(left_exp_a, left_exp_b, options) &&
+               self.eql?(right_exp_a, right_exp_b, options) ) ||
+             ( self.eql?(left_exp_a, right_exp_b, options) &&
+               self.eql?(right_exp_a, left_exp_b, options) )
+
+
     end
 
     def self.eql_with_many_answers?(exp_a, exp_b, options = {})

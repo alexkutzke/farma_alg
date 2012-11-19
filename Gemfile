@@ -30,7 +30,7 @@ group :assets do
   gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
                                 :git => 'git://github.com/dmarczal/bootstrap-rails.git'
                                 #:git => 'git://github.com/anjlab/bootstrap-rails.git'
-#  gem 'font-awesome-sass-rails'
+  gem 'font-awesome-sass-rails'
   gem 'handlebars_assets'
   gem 'marionette-rails'
 end
