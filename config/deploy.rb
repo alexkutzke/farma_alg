@@ -2,6 +2,9 @@ require "bundler/capistrano"
 set :rvm_ruby_string, 'ruby-1.9.3-p0@farma'
 require "rvm/capistrano"
 
+set :whenever_command, "bundle exec whenever"
+require "whenever/capistrano"
+
 server "173.246.40.9", :web, :app, :db, primary: true
 
 set :user, "apps"

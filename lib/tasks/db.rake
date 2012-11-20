@@ -1,5 +1,17 @@
 namespace :db do
 
+  desc "Clear temporary data of answers"
+  task :clear_tmp_data => :environment do
+     answers = Answer.or({team_id: nil}, {for_test: true})
+     answers.each do |answer|
+       question = answer.question
+       question.last_answers.where(user_id: answer.user_id).try(:delete_all)
+       question.tips_counts.where(user_id: answer.user_id).try(:delete_all)
+       answer.delete
+     end
+     RetroactionAnswer.delete_all
+  end
+
   desc "This populate database"
   task :populate => :environment do
     require 'faker'
