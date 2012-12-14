@@ -2,11 +2,6 @@ class Carrie.Models.Retroaction.Answer extends Backbone.RelationalModel
   url: ->
     "/api/answers/#{@get('id')}/retroaction"
 
-  initialize: ->
-    @fetch
-      async: false
-
-
   relations: [{
     type: Backbone.HasOne
     key: 'exercise'

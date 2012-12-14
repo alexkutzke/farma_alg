@@ -40,6 +40,7 @@ class ExercisesController < ApplicationController
   end
 
   def delete_last_answers
+    @lo = Lo.find(params[:lo_id])
     @exercise = @lo.exercises.find(params[:id])
     @exercise.delete_last_answers_of(current_user.id)
     respond_with(@lo, @exercise)
@@ -68,8 +69,18 @@ private
     if current_user.admin?
       @lo = Lo.find(params[:lo_id])
     else
-      @lo = current_user.los.find(params[:lo_id])
+      begin
+        @lo = current_user.los.find(params[:lo_id])
+      rescue Exception=>e
+        @lo = Lo.find(params[:lo_id]).in(lo_id: user_los_ids).try(:first)
+      end
     end
+ end
+
+ def user_los_ids
+   @lo_ids ||= []
+   current_user.teams.each {|team| @lo_ids = @lo_ids | team.lo_ids}
+   @lo_ids
  end
 
 end

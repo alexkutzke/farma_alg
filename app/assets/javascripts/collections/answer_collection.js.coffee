@@ -4,4 +4,4 @@ class Carrie.Collections.Answers extends Backbone.Collection
     '/api/answers'
 
   initialize: ->
-    Carrie.Utils.Loading @
+    Carrie.Utils.Loading(@)

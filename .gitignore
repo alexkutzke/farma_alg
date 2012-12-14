@@ -10,3 +10,4 @@ public/ckeditor_assets/*
 *.tmproj
 public/assets
 .rvmrc
+db/dump

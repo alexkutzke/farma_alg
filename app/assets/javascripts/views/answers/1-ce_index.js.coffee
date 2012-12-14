@@ -5,13 +5,13 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
   itemViewContainer: 'tbody'
 
   initialize: ->
-    @loadFilters()
     @mapFilters()
     @endless = new Carrie.Models.Endless
        root_url: '/api/answers'
        collection: @collection
        fecth_array: 'answers'
 
+    @loadFilters()
     @collection.on 'add', ->
       el = @el
       setTimeout ( ->

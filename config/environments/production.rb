@@ -21,7 +21,7 @@ Carrie::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
-  config.action_mailer.default_url_options = { :host => 'farma.marczal.com' }
+  config.action_mailer.default_url_options = { :host => 'farma.educacional.mat.br' }
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH

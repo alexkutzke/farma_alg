@@ -4,8 +4,8 @@ class Carrie.Models.Endless extends Backbone.Model
     "#{@get('root_url')}/page/#{@currentPage}"
 
   initialize: ->
-    @data = if @get('data') then @get('data') else {}
     Carrie.Utils.Loading(@)
+    @data = if @get('data') then @get('data') else {}
     @currentPage = 0
     @fetchData()
 
