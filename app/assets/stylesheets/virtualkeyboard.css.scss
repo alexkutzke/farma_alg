@@ -7,10 +7,15 @@
   }
 }
 
+@media (max-width: 979px) {
+  .virtual-keyboard.modal {
+      margin: 0 auto !important;
+  }
+}
 .virtual-keyboard.modal {
   //padding: 10px;
   border: 2px solid #EEE;
-  width: 315px;
+  width: 315px !important;
   margin: -205px 0 0 -160px;
   top: 15%;
 
@@ -67,10 +72,10 @@
       text-align: center;
     }
     .send {
-      width: 125px;
+      width: 45px;
     }
-    .clean {
-      width: 55px;
+    .clean, .calc {
+      width: 50px;
     }
   }
 

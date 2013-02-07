@@ -30,10 +30,11 @@ class Answer
   has_one :last_answer
   embeds_many :comments, :as => :commentable
 
-  default_scope desc(:created_at)
+  #default_scope desc(:created_at)
 
-  scope :wrong, where(correct: false)
-  scope :corrects, where(correct: true)
+  scope :wrong, where(correct: false, :team_id.ne => nil, :for_test.ne => true)
+  scope :corrects, where(correct: true, :team_id.ne => nil, :for_test.ne => true)
+  scope :every, excludes(team_id: nil, for_test: true)
 
   before_create :verify_response, :store_datas
   after_create :register_last_answer, :update_questions_with_last_answer

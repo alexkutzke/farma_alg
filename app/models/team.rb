@@ -15,8 +15,17 @@ class Team
   validates_presence_of :name, :code
   validates_uniqueness_of :name
 
+  # Return scope not the records
+  def self.search(search)
+    if search
+      any_of(:name => /.*#{search}.*/i).desc(:created_at)
+    else
+      all.desc(:created_at)
+    end
+  end
+
   def owner
-    User.find(self.owner_id)
+    @owner ||= User.find(self.owner_id)
   end
 
   def enroll(user, code)

@@ -68,10 +68,22 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
         @input.setSelection(cursor, cursor)
       when 'send'
         @send()
+      when 'calc' # Function calculate
+        @calculator()
       else
         @input.insertAtCursor(value)
 
     @updateDisplay()
+
+  calculator:
+    try
+      exp = @input.val()
+      rsult = Parser.evaluate(exp, {})
+      @display.html('$'+rsult+'$')
+      @input.val(rsult)
+    catch e
+      @input.next().show() if @input
+
 
   send: ->
     val = @input.val()
