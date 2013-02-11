@@ -75,7 +75,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
 
     @updateDisplay()
 
-  calculator:
+  calculator: ->
     try
       exp = @input.val()
       rsult = Parser.evaluate(exp, {})
@@ -94,14 +94,14 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
        @input.next().show()
 
   updateDisplay: ->
-    exp = @input.val()
+    expression = @input.val()
     if @validateExpression()
       @input.removeClass(@errorClass)
       @input.next().hide()
     else
       @input.addClass(@errorClass)
 
-    @display.html('$'+exp+'$')
+    @display.html('$'+expression+'$')
     MathJax.Hub.Queue(["Typeset",MathJax.Hub, @display[0]])
 
   inputFocus: ->
@@ -156,7 +156,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
   # 1 ; a + 2 ; c * 3
   manyAnswers: (exp) ->
     exps = exp.split(';').clean('')
-    exps.clean('')
+    #exps.clean('')
     _exp = @withEqlSinal(exps.pop())
     $.each exps, (index, el) =>
       _el = @withEqlSinal(el)
