@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.6'
+gem 'rails', '3.2.12'
 
-gem 'mongoid', '~> 3.0.2'
+gem 'mongoid', '~> 3.0.23'
 
 gem 'jquery-rails'
-gem 'backbone-on-rails'
+gem 'backbone-on-rails', '0.9.2.1'
 gem 'rabl'
 gem 'yajl-ruby'
 

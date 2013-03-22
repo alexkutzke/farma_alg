@@ -15,21 +15,21 @@ class Carrie.Views.Unauthenticated.Login extends Backbone.Marionette.ItemView
 
   login: (e) ->
     el = $(this.el)
-
     e.preventDefault()
 
     el.find('input.btn-primary').button('loading')
     el.find('.alert-error').remove()
 
     this.model.save this.model.attributes,
-      success: (userSession, response) ->
+      success: (model, response, options) ->
+
         el.find('input.btn-primary').button('reset')
         Carrie.currentUser = new Carrie.Models.User(response)
         $('#main').prepend(Carrie.Helpers.Notifications.success('Seja bem-vindo ao sistema.'))
         Carrie.vent.trigger("authentication:logged_in")
         Backbone.history.navigate '', false
 
-      error: (userSession, response) ->
+      error: (model, response, options) ->
         result = $.parseJSON(response.responseText)
         el.find('form').prepend(Carrie.Helpers.Notifications.error(result.error))
         el.find('input.btn-primary').button('reset')

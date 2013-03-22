@@ -83,7 +83,6 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
     if @params['team_id']
       params = {team_id: @params['team_id']}
       @los.fetch
-        async: false
         data: params
     else
       @los.fetch
@@ -138,7 +137,7 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
           if not @searchContains facets, 'oa'
             filters.push { value: 'oa', label: 'OA' }
 
-          if not @searchContains facets, 'aprendiz'
+          if not(@searchContains(facets, 'aprendiz')) && @searchContains(facets, 'turma')
             filters.push { value: 'aprendiz', label: 'Aprendiz' }
 
           if not(@searchContains(facets, 'exercicio')) &&  @params['lo_id']

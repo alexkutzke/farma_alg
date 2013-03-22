@@ -5,6 +5,7 @@ class TeamsController < ApplicationController
 
   def index
     @teams = Team.search(params[:search]).page(params[:page]).per(10)
+    p @teams
   end
 
   def enrolled

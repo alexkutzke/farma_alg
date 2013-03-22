@@ -1,35 +1,6 @@
-    <div id="questions_group" class="control-group">
-      <h3>Questões:</h3>
-      <div id='questions' class="controls">
-         {{#each_with_index questions}}
-            <hr />
-            <input name="questions_attributes.{{index}}.id" value="{{id}}" type="hidden" />
-
-            <div class="control-group">
-              <label class="control-label" for="title">Título da Questão</label>
-              <div class="controls">
-                  <input name="questions_attributes.{{index}}.title"
-                        value="{{title}}" type="text" required="required" />
-               </div>
-            </div>
-
-            <div class="control-group">
-              <label class="control-label" for="title">Descrição</label>
-              <div class="controls">
-                  <textarea name="questions_attributes.{{index}}.content" required="required">{{content}}</textarea>
-               </div>
-            </div>
-
-         {{/each_with_index}}
-      </div>
-    </div>
-
-    questions_attributes = new Object()
-
-    questions = $('input[name*="questions_attributes"]').serializeArray()
-    $(questions).each (index, el)->
-      params = el.name.split('.')
-      questions_attributes[params[1]] = new Object() unless questions_attributes[params[1]]
-      questions_attributes[params[1]][params[2]] = el.value
-
-    @model.set('questions_attributes', questions_attributes)
+# TODO
+  Página Inicial
+  Fale conosco
+  Sobre
+  Send Email When Receive a comment
+  CronTab

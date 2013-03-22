@@ -4,7 +4,6 @@ node(:total) {|m| @teams.total_count }
 node(:total_pages) {|m| @teams.num_pages }
 
 child @teams do
-  object false
 
   attributes :id, :name
   node(:enrolled) do |team|
