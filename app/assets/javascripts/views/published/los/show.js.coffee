@@ -3,7 +3,6 @@ class Carrie.Published.Views.Lo extends Backbone.Marionette.ItemView
   tagName: 'section'
 
   initialize: ->
-    #console.log @model
     @paginator = new Carrie.Published.Views.LoPaginator
       model: @model
       parentView: @
@@ -22,6 +21,6 @@ class Carrie.Published.Views.Lo extends Backbone.Marionette.ItemView
         team = ""
 
       bread = "#{team} Objeto de aprendizagem #{@model.get('name')}"
-      Carrie.layouts.main.addBreadcrumb(bread, '', true)
+      Carrie.layouts.main.addBreadcrumb(bread, '', false)
 
       $(@el).find('.page').html('Objeto de aprendizagem sem publicações')

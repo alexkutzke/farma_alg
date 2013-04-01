@@ -1,15 +1,11 @@
-class Carrie.Views.Welcome extends Backbone.Marionette.ItemView
-  template: 'shared/welcome'
-
-  events:
-    'submit form': 'signup'
+class Carrie.Views.AuthenticateHRM extends Backbone.Marionette.ItemView
+  template: 'shared/header_menu/authenticate_hrm'
 
   events:
     'click #perfil-link' : 'showPerfil'
 
   initialize: ->
     $(@el).html(HandlebarsTemplates[@template](@model.toJSON()))
-
 
   showPerfil: (e) ->
     e.preventDefault()

@@ -5,39 +5,34 @@ class Carrie.Views.CreateOrSaveExercise extends Backbone.Marionette.ItemView
     'submit form': 'create'
 
   initialize: ->
-    if not @model
-      @model = new Carrie.Models.Exercise({lo:@options.lo})
-
+    @model = new Carrie.Models.Exercise({lo:@options.lo}) if not @model
     this.modelBinder = new Backbone.ModelBinder()
 
   onRender: ->
     @modelBinder.bind(this.model, this.el)
-    setTimeout ( ->
-      $("#ckeditor").ckeditor({language: 'pt-br'})
-    ), 100
+    Carrie.CKEDITOR.show()
 
   beforeClose: ->
     $(@el).find("textarea").ckeditorGet().destroy()
 
   create: (ev) ->
     ev.preventDefault()
+    Carrie.Helpers.Notifications.Form.clear()
+    Carrie.Helpers.Notifications.Form.loadSubmit()
 
-    Carrie.Utils.Alert.clear()
-
+    # Get date from ckeditor and set in the model
     @model.set('content', CKEDITOR.instances.ckeditor.getData())
 
     @model.save @model.attributes,
       wait: true
-      success: (model, response) =>
-        $(@el).find('input.btn-primary').button('reset')
+      success: (model, response, options) =>
+        Carrie.Helpers.Notifications.Form.resetSubmit()
         Backbone.history.navigate "/los/#{@options.lo.get('id')}/exercises/#{@model.get('id')}", true
-        Carrie.Utils.Alert.success('Exercício salvo com sucesso!', 3000)
+        Carrie.Helpers.Notifications.Top.success 'Exercício salvo com sucesso!', 4000
 
-      error: (model, response) =>
+      error: (model, response, options) =>
         result = $.parseJSON(response.responseText)
 
-        msg = Carrie.Helpers.Notifications.error('Existe erros no seu formulário')
-        $(@el).find('form').before(msg)
-        Carrie.Utils.Alert.showFormErrors(result.errors, @el)
-
-        $(@el).find('input.btn-primary').button 'reset'
+        Carrie.Helpers.Notifications.Form.before 'Existe erros no seu formulário'
+        Carrie.Helpers.Notifications.Form.showErrors(result.errors, @el)
+        Carrie.Helpers.Notifications.Form.resetSubmit()

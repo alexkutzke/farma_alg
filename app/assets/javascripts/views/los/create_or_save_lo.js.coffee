@@ -5,8 +5,7 @@ class Carrie.Views.CreateOrSaveLo extends Backbone.Marionette.ItemView
     'submit form': 'create'
 
   initialize: ->
-    if not @model
-      this.model = new Carrie.Models.Lo()
+    this.model = new Carrie.Models.Lo() if not @model
     this.modelBinder = new Backbone.ModelBinder()
 
   onRender: ->
@@ -14,22 +13,20 @@ class Carrie.Views.CreateOrSaveLo extends Backbone.Marionette.ItemView
 
   create: (ev) ->
     ev.preventDefault()
-
-    Carrie.Utils.Alert.clear()
+    Carrie.Helpers.Notifications.Form.clear()
+    Carrie.Helpers.Notifications.Form.loadSubmit()
 
     @model.save @model.attributes,
       wait: true
-      success: (lo, response) =>
-        $(@el).find('input.btn-primary').button('reset')
+      success: (model, response, options) =>
+        Carrie.Helpers.Notifications.Form.resetSubmit()
+
         Backbone.history.navigate '/los', true
+        Carrie.Helpers.Notifications.Top.success 'OA salva com sucesso!', 4000
 
-        Carrie.Utils.Alert.success('OA salva com sucesso!', 3000)
-
-      error: (lo, response) =>
+      error: (model, response, options) =>
         result = $.parseJSON(response.responseText)
 
-        msg = Carrie.Helpers.Notifications.error('Existe erros no seu formulário')
-        $(@el).find('form').before(msg)
-        Carrie.Utils.Alert.showFormErrors(result.errors, @el)
-
-        $(@el).find('input.btn-primary').button 'reset'
+        Carrie.Helpers.Notifications.Form.before 'Existe erros no seu formulário'
+        Carrie.Helpers.Notifications.Form.showErrors(result.errors, @el)
+        Carrie.Helpers.Notifications.Form.resetSubmit()

@@ -11,9 +11,10 @@ class Carrie.CompositeViews.IntroductionIndex extends Backbone.Marionette.Compos
     Backbone.history.navigate("/los/#{@model.get('id')}/introductions/new", true)
 
   onRender: ->
-    $(@el).find('span i').tooltip()
     @el.id = 'introductions'
+    $(@el).find('span i').tooltip()
     url = @collection.url() + '/sort'
+
     $(@el).sortable
       handle: '.move'
       axis: 'y'

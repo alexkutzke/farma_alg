@@ -12,7 +12,6 @@ class Carrie.Views.TeamShow extends Backbone.Marionette.ItemView
 
   edit: (ev) ->
     ev.preventDefault()
-    id = @model.get('id')
     Backbone.history.navigate("/teams/edit/#{@model.get('id')}", true)
 
   destroy: (ev) ->
@@ -26,7 +25,7 @@ class Carrie.Views.TeamShow extends Backbone.Marionette.ItemView
           success: (model, response) =>
             $(@el).fadeOut(800, 'linear')
 
-            Carrie.Utils.Alert.success('Turma removida com sucesso!', 2500)
+            Carrie.Helpers.Notifications.Top.success 'Turma removida com sucesso!', 4000
 
   viewLearners: (ev) ->
     ev.preventDefault()

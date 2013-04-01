@@ -1,7 +1,7 @@
 class Carrie.CompositeViews.ExerciseIndex extends Backbone.Marionette.CompositeView
   tagName: 'section'
   template: 'exercises/index'
-  itemView: Carrie.Views.ExerciseItem
+  itemView: Carrie.Views.ExerciseIndexItem
 
   events:
     'click #new_exer' : 'new'

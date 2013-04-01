@@ -63,8 +63,15 @@ class Carrie.Views.Layouts.Main extends Backbone.Marionette.Layout
     @bcb = new Carrie.Views.Breadcrumb()
     this.breadcrumb.show @bcb
 
-  addBreadcrumb: (name, url, last_link) ->
-    @bcb.add(name, url, last_link)
+  addBreadcrumb: (name, url, active_link) ->
+    @bcb.add(name, url, active_link)
+
+  loadBreadcrumb: (breads) ->
+    @reloadBreadcrumb()
+    size = _.size(breads)
+    _.each breads, (bread, index) =>
+      @addBreadcrumb bread.name, bread.url, (size != parseInt(index))
+
 
 Carrie.addInitializer ->
   Carrie.layouts.main = new Carrie.Views.Layouts.Main()

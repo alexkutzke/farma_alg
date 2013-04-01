@@ -39,8 +39,8 @@ class Carrie.Views.CreateOrSaveTip extends Backbone.Marionette.ItemView
 
   create: (ev) ->
     ev.preventDefault()
-
-    Carrie.Utils.Alert.clear(@el)
+    Carrie.Helpers.Notifications.Form.clear(@el)
+    Carrie.Helpers.Notifications.Form.loadSubmit(@el)
 
     @model.set('content', CKEDITOR.instances[@cked].getData())
 
@@ -48,9 +48,9 @@ class Carrie.Views.CreateOrSaveTip extends Backbone.Marionette.ItemView
       wait: true
       success: (model, response) =>
         $(@el).find("\##{@cked}").ckeditorGet().destroy()
-        $(@el).find('input.btn-primary').button('reset')
 
-        Carrie.Utils.Alert.success('Diaca salva com sucesso!', 3000)
+        Carrie.Helpers.Notifications.Form.resetSubmit(@el)
+        Carrie.Helpers.Notifications.Top.success 'Dica salva com sucesso!', 4000
 
         if @editing
           @model.get('question').get('tips').sort()
@@ -61,14 +61,13 @@ class Carrie.Views.CreateOrSaveTip extends Backbone.Marionette.ItemView
         $('.new-tip-link').show()
         $('.edit-tip-link').show()
 
-      error: (model, response) =>
+
+      error: (model, response, options) =>
         result = $.parseJSON(response.responseText)
 
-        msg = Carrie.Helpers.Notifications.error('Existe erros no seu formulário')
-        $(@el).find('form').before(msg)
-        Carrie.Utils.Alert.showFormErrors(result.errors, @el)
-
-        $(@el).find('input.btn-primary').button 'reset'
+        Carrie.Helpers.Notifications.Form.before 'Existe erros no seu formulário', @l
+        Carrie.Helpers.Notifications.Form.showErrors(result.errors, @el)
+        Carrie.Helpers.Notifications.Form.resetSubmit(@el)
 
   onRender: ->
     @modelBinder.bind(@model, @el)
@@ -82,9 +81,4 @@ class Carrie.Views.CreateOrSaveTip extends Backbone.Marionette.ItemView
           { name: 'colors', items : [ 'TextColor','BGColor' ] }
         ]
 
-    cked = "\##{@cked}"
-    setTimeout ( ->
-      $(cked).ckeditor(config)
-    ), 100
-
-
+    Carrie.CKEDITOR.show "\##{@cked}"

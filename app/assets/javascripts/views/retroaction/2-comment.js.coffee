@@ -12,12 +12,12 @@ class Carrie.Views.Retroaction.AnswerComment extends Backbone.Marionette.ItemVie
       if confirmed
         @model.destroy
           wait: true
-          success: (model, response) =>
+          success: (model, response, options) =>
             $(@el).fadeOut(800, 'linear')
             @changeNumberOfComments()
-          error: (response, status) =>
+          error: (response, status, options) =>
             $(@el).find('.destroy').remove()
-            Carrie.Utils.Alert.error('Tempo de remoção expirado!', 3000)
+            Carrie.Helpers.Notifications.Top.success 'Tempo de remoção expirado!', 4000
 
   changeNumberOfComments: ->
     n = $('span.number_of_comments').data('number') - 1

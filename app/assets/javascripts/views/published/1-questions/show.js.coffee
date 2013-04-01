@@ -36,7 +36,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
 
     answer.save answer.attributes,
       wait: true
-      success: (model, response) =>
+      success: (model, response, options) =>
         @view = new Carrie.Views.Answer model: Carrie.Models.AnswerShow.findOrCreate(model.attributes)
         $(@el).find('.answer-group').html @view.render().el
 
@@ -47,8 +47,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
           try_number: model.get('try_number')
         @model.set('last_answer', last_answer)
 
-      error: (model, resp) ->
-        #console.log(model)
+      error: (model, response, options) ->
         alert resp.responseText
 
 

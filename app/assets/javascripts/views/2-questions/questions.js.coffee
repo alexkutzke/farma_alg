@@ -59,7 +59,6 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
         $(@el).find('.answer-group').html @view.render().el
 
       error: (model, resp) ->
-        console.log(model)
         alert resp.responseText
 
   edit: (ev) ->
@@ -77,4 +76,4 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
         @model.destroy
           success: (model, response) =>
             @remove()
-            Carrie.Utils.Alert.success('Questão removida com sucesso!', 2500)
+            Carrie.Helpers.Notifications.Top.success 'Questão removido com sucesso!', 4000

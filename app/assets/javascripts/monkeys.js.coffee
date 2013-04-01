@@ -6,12 +6,11 @@ Handlebars.registerHelper 'each_with_index', (array, fn) ->
   for i in array
     item = i
     item.index = _i
-    buffer += fn(item)
+    buffer += fn.fn(item)
   buffer
 
 Handlebars.registerHelper 'safe', (text) ->
   #text = Handlebars.Utils.escapeExpression(text)
-
   return new Handlebars.SafeString(text)
 
 Handlebars.registerHelper 'ifCond', (e1, e2, options) ->

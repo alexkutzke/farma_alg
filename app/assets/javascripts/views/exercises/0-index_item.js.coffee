@@ -1,5 +1,5 @@
-class Carrie.Views.ExerciseItem extends Backbone.Marionette.ItemView
-  template: 'exercises/exercise'
+class Carrie.Views.ExerciseIndexItem extends Backbone.Marionette.ItemView
+  template: 'exercises/index_item'
   tagName: 'article'
 
   onRender: ->
@@ -29,4 +29,4 @@ class Carrie.Views.ExerciseItem extends Backbone.Marionette.ItemView
           success: (model, response) =>
             $(@el).fadeOut(800, 'linear')
 
-            Carrie.Utils.Alert.success('Exercício removido com sucesso!', 2500)
+            Carrie.Helpers.Notifications.Top.success 'Exercício removido com sucesso!', 4000

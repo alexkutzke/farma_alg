@@ -12,6 +12,3 @@ class Carrie.CompositeViews.Los extends Backbone.Marionette.CompositeView
 
   onRender: ->
     @el.id = 'los'
-
-  #appendHtml: (collectionView, itemView, index) ->
-  #  $(@el).append(itemView.el)

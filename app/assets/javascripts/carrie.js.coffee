@@ -2,6 +2,7 @@ window.Carrie = new Backbone.Marionette.Application()
 
 Carrie.Views = {}
 Carrie.Models = {}
+Carrie.Controllers = {}
 Carrie.Published = {}
 Carrie.Collections = {}
 Carrie.CompositeViews = {}
@@ -13,6 +14,7 @@ Carrie.Views.Layouts = {}
 Carrie.Published.Models = {}
 Carrie.Published.Collections = {}
 Carrie.Published.Routers = {}
+Carrie.Published.Controllers = {}
 Carrie.Published.Views = {}
 
 Carrie.Models.Retroaction = {}
@@ -24,10 +26,23 @@ Carrie.layouts = {}
 
 Carrie.addRegions
   main: '#main'
-  top_menu: '#top_menu'
-  welcome: '#welcome'
+  header_left_menu: '#header_left_menu'
+  header_right_menu: '#header_right_menu'
+
+Carrie.Routers.load = ->
+  # Define Routers
+  new Carrie.Routers.Home          controller: new Carrie.Controllers.Home()
+  new Carrie.Routers.User          controller: new Carrie.Controllers.User()
+  new Carrie.Routers.Los           controller: new Carrie.Controllers.Los()
+  new Carrie.Routers.Introductions controller: new Carrie.Controllers.Introductions()
+  new Carrie.Routers.Exercises     controller: new Carrie.Controllers.Exercises()
+  new Carrie.Routers.Answers       controller: new Carrie.Controllers.Answers()
+  new Carrie.Routers.Fractais      controller: new Carrie.Controllers.Fractais()
+  new Carrie.Routers.Teams         controller: new Carrie.Controllers.Teams()
+  new Carrie.Published.Routers.Los controller: new Carrie.Published.Controllers.Los()
 
 Carrie.bind 'initialize:after', ->
+  Carrie.layouts.main = new Carrie.Views.Layouts.Main()
   user = $('body').data('logged')
   if user
     Carrie.currentUser = new Carrie.Models.User(user)
@@ -35,27 +50,20 @@ Carrie.bind 'initialize:after', ->
   else
     Carrie.vent.trigger 'authentication:logged_out'
 
-  new Carrie.Routers.UserRouters controller: new Carrie.Routers.UserController()
-  new Carrie.Routers.LoRouters controller: new Carrie.Routers.LoController()
-  new Carrie.Routers.IntroductionRouters controller: new Carrie.Routers.IntroductionController()
-  new Carrie.Routers.ExerciseRouters controller: new Carrie.Routers.ExerciseController()
-  new Carrie.Routers.AnswerRouters controller: new Carrie.Routers.AnswersController()
-  new Carrie.Routers.FractalRouters controller: new Carrie.Routers.FractalController()
-
-  new Carrie.Published.Routers.Lo controller: new Carrie.Published.Routers.LoController()
-
-  new Carrie.Routers.Team controller: new Carrie.Routers.TeamController()
-
+  Carrie.Routers.load()
   Backbone.history.start pushState: true
 
 
+#Configure Layout and header for non authenticate user
 Carrie.vent.on 'authentication:logged_out', ->
-  Carrie.main.show Carrie.layouts.unauthenticated
+  Carrie.header_left_menu.show new Carrie.Views.UnAuthenticateHLM
+  Carrie.header_right_menu.show new Carrie.Views.UnAuthenticateHRM
 
+#Configure Layout and header for non authenticate user
 Carrie.vent.on 'authentication:logged_in', ->
+  Carrie.header_left_menu.show new Carrie.Views.AuthenticateHLM
+  Carrie.header_right_menu.show new Carrie.Views.AuthenticateHRM model: Carrie.currentUser
   Carrie.main.show Carrie.layouts.main
-  Carrie.welcome.show new Carrie.Views.Welcome model: Carrie.currentUser
 
 $ ->
   Carrie.start()
-  # BootStrap Tooltip

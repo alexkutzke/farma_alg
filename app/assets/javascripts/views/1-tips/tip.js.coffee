@@ -22,7 +22,7 @@ class Carrie.Views.Tip extends Backbone.Marionette.ItemView
         @model.destroy
           success: (model, response) =>
             @remove()
-            Carrie.Utils.Alert.success('Dica removida com sucesso!', 2500)
+            Carrie.Helpers.Notifications.Top.success 'Dica removida com sucesso!', 4000
 
   onRender: ->
     @el.id = @model.get('id')

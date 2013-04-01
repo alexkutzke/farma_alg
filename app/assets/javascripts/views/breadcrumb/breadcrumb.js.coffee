@@ -10,12 +10,12 @@ class Carrie.Views.Breadcrumb extends Backbone.Marionette.ItemView
     ev.preventDefault()
     Backbone.history.navigate $(ev.target).data('url'), true
 
-  add: (name, url, last) ->
+  add: (name, url, active_link) ->
     current_url = (Backbone.history.options.root || "") + Backbone.history.fragment
 
-    if last
-      link = "<li class='active'>" + name + "</li>"
-    else
+    if active_link
       link = "<li><a href='#' data-url='"+url+"'>"+name+"</a> <span class='divider'>/</span></li>"
+    else
+      link = "<li class='active'>" + name + "</li>"
 
     $(@el).append(link)

@@ -18,10 +18,6 @@
   font-size: 11px;
 }
 
-div#welcome {
-  float: right;
-}
-
 .logged-in {
   margin-top: 0px;
   margin-right: 20px;
@@ -103,11 +99,19 @@ div#welcome {
   background-image: none;
 }
 
+.navbar .nav.pull-right {
+  float: right;
+  margin-right: 0;
+}
+
 @media (max-width: 979px) {
-    .sidebar-nav-fixed {
-      position:static;
-      width:auto;
-    }
+  .sidebar-nav-fixed {
+    position:static;
+    width:auto;
+  }
+  .navbar .brand {
+    margin-left: -20px;
+  }
 }
 
 /* Clear fixed
@@ -184,3 +188,11 @@ div#welcome {
   background: #000;
   @include border-radius(10px)
 }
+
+/* Carousel
+------------------------- */
+
+
+/* Footer
+------------------------- */
+

@@ -23,10 +23,7 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
 
   onRender: ->
     @modelBinder.bind(this.model, this.el)
-    cked = "\##{@cked}"
-    setTimeout ( ->
-      $(cked).ckeditor({language: 'pt-br'})
-    ), 100
+    Carrie.CKEDITOR.show "\##{@cked}"
 
   cancel: (ev) ->
     ev.preventDefault()
@@ -42,18 +39,18 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
   create: (ev) ->
     ev.preventDefault()
 
-    Carrie.Utils.Alert.clear(@el)
+    Carrie.Helpers.Notifications.Form.clear(@el)
+    Carrie.Helpers.Notifications.Form.loadSubmit(@el)
 
     @model.set('content', CKEDITOR.instances[@cked].getData())
 
     @model.save @model.attributes,
       wait: true
-      success: (model, response) =>
-        #console.log(model)
+      success: (model, response, options) =>
         $(@el).find("\##{@cked}").ckeditorGet().destroy()
 
-        $(@el).find('input.btn-primary').button('reset')
-        Carrie.Utils.Alert.success('Questão salva com sucesso!', 3000)
+        Carrie.Helpers.Notifications.Form.resetSubmit(@el)
+        Carrie.Helpers.Notifications.Top.success 'Questão salva com sucesso!', 4000
 
         if @editing
           @options.view.render()
@@ -62,11 +59,9 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
           $('#new_question').after view.render().el
           $('#new_question').html('')
 
-      error: (model, response) =>
+      error: (model, response, options) =>
         result = $.parseJSON(response.responseText)
-        #console.log response
-        msg = Carrie.Helpers.Notifications.error('Existe erros no seu formulário')
-        $(@el).find('form').before(msg)
-        Carrie.Utils.Alert.showFormErrors(result.errors, @el)
 
-        $(@el).find('input.btn-primary').button 'reset'
+        Carrie.Helpers.Notifications.Form.before 'Existe erros no seu formulário', @l
+        Carrie.Helpers.Notifications.Form.showErrors(result.errors, @el)
+        Carrie.Helpers.Notifications.Form.resetSubmit(@el)

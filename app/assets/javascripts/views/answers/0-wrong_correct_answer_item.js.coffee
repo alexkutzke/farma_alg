@@ -1,6 +1,6 @@
-class Carrie.Views.CEAnswerItem extends Backbone.Marionette.ItemView
+class Carrie.Views.WrongCorrectAnswerItem extends Backbone.Marionette.ItemView
   tagName: 'tr'
-  template: 'answers/ce_item'
+  template: 'answers/wrong_correct_answer_item'
   className: 'answers-link'
 
   initialize: ->
@@ -18,7 +18,7 @@ class Carrie.Views.CEAnswerItem extends Backbone.Marionette.ItemView
         view = new Carrie.Views.Retroaction.Answer(model: @answer).render().el
         $(view).modal('show')
       error: (model, response, options) ->
-        Carrie.Utils.Alert.success('Não foi possível retroagir a essa resposta!', 3000)
+        Carrie.Helpers.Notifications.Top.success 'Não foi possível retroagir a essa resposta!', 4000
 
   clearModel: ->
     @answer.clear()

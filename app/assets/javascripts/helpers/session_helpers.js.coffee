@@ -9,10 +9,9 @@ Carrie.Helpers.Session.notExists = (data) ->
     data.func.call()
 
 Carrie.Helpers.Session.Exists = (data) ->
-  data.message = 'Você Precisa estar logado' unless data.message
+  data.message = 'Você Precisa estar logado para acessar esta página' unless data.message
   unless Carrie.currentUser
-    $('#main').find('.alert-alert').remove()
-    $('#main').prepend Carrie.Helpers.Notifications.alert('alert', data.message)
     Backbone.history.navigate('/users/sign-in')
+    Carrie.Utils.Alert.error(data.message, 5000)
   else
     data.func.call()

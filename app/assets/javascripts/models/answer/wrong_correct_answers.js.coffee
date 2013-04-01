@@ -1,0 +1,1 @@
+class Carrie.Models.WrongCorrectAnswer extends Backbone.RelationalModel

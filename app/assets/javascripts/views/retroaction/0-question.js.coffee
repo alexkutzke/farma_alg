@@ -38,7 +38,7 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
 
     answer.save answer.attributes,
       wait: true
-      success: (model, response) =>
+      success: (model, response, options) =>
         answerShow = Carrie.Models.AnswerShow.findOrCreate(model.get('id'))
         if answerShow
           answerShow.set model.attributes
@@ -49,6 +49,5 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
         @view = new Carrie.Views.Answer model: answerShow
         $(@el).find('.answer-group').html @view.render().el
 
-      error: (model, resp) ->
-        #console.log(model)
+      error: (model, resp, options) ->
         alert resp.responseText

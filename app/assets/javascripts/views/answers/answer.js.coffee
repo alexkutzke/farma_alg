@@ -1,6 +1,6 @@
+# Answer for construct a exercise
 class Carrie.Views.Answer extends Backbone.Marionette.ItemView
   template: null
-
   tagName: 'div'
 
   initialize: ->

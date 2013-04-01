@@ -1,7 +1,7 @@
-class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeView
+class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette.CompositeView
   tagName: 'section'
-  template: 'answers/ce_index'
-  itemView: Carrie.Views.CEAnswerItem
+  template: 'answers/wrong_correct_answers_index'
+  itemView: Carrie.Views.WrongCorrectAnswerItem
   itemViewContainer: 'tbody'
 
   initialize: ->
@@ -83,6 +83,7 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
     if @params['team_id']
       params = {team_id: @params['team_id']}
       @los.fetch
+        async: false
         data: params
     else
       @los.fetch
@@ -137,7 +138,7 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
           if not @searchContains facets, 'oa'
             filters.push { value: 'oa', label: 'OA' }
 
-          if not(@searchContains(facets, 'aprendiz')) && @searchContains(facets, 'turma')
+          if not @searchContains facets, 'aprendiz'
             filters.push { value: 'aprendiz', label: 'Aprendiz' }
 
           if not(@searchContains(facets, 'exercicio')) &&  @params['lo_id']
@@ -168,4 +169,5 @@ class Carrie.CompositeViews.CEAnswerIndex extends Backbone.Marionette.CompositeV
               callback(@exercisesJSON)
              else
                #console.log('nothing')
+
 

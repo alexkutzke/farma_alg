@@ -26,7 +26,7 @@ class Carrie.Views.IntroductionShow extends Backbone.Marionette.ItemView
           success: (model, response) =>
             $(@el).fadeOut(800, 'linear')
 
-            Carrie.Utils.Alert.success('Introducação removida com sucesso!', 2500)
+            Carrie.Helpers.Notifications.Top.success 'Introdução removido com sucesso!', 4000
 
   onRender: ->
     @el.id = @model.get('id')

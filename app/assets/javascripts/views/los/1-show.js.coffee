@@ -34,7 +34,6 @@ class Carrie.Views.Lo extends Backbone.Marionette.ItemView
 
   destroy_lo: (ev) ->
     ev.preventDefault()
-
     msg = "Você tem certeza que deseja remover este Objeto de Aprendizagem?"
 
     bootbox.confirm msg, (confirmed) =>
@@ -43,4 +42,4 @@ class Carrie.Views.Lo extends Backbone.Marionette.ItemView
           success: (model, response) ->
             $(@el).fadeOut(800, 'linear')
             @remove
-            Carrie.Utils.Alert.success('OA removido com sucesso!', 3000)
+            Carrie.Helpers.Notifications.Top.success 'OA removido com sucesso!', 4000
