@@ -14,7 +14,9 @@ Carrie::Application.routes.draw do
       resources :comments
     end
 
+    match '/home/lo_example' => "home#lo_example"
     resources :retroaction_answers, only: :create
+    resources :contacts, only: :create
 
     resources :teams do
       get 'created', on: :collection

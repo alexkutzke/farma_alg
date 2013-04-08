@@ -1,8 +1,8 @@
 class ExercisesController < ApplicationController
   respond_to :json
 
-  before_filter :authenticate_user!
-  before_filter :find_lo
+  before_filter :authenticate_user!, except: :delete_last_answers
+  before_filter :find_lo, except: :delete_last_answers
 
   def index
     @exercises = @lo.exercises.order_by(:position => :desc)
@@ -42,7 +42,7 @@ class ExercisesController < ApplicationController
   def delete_last_answers
     @lo = Lo.find(params[:lo_id])
     @exercise = @lo.exercises.find(params[:id])
-    @exercise.delete_last_answers_of(current_user.id)
+    @exercise.delete_last_answers_of(current_or_guest_user.id)
     respond_with(@lo, @exercise)
   end
 

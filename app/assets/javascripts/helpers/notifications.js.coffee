@@ -29,6 +29,10 @@ Carrie.Helpers.Notifications.Flash =
     $('#content').find('.alert-alert').remove()
     $('#content').prepend Carrie.Helpers.Notifications.success(msg)
 
+  error: (msg) ->
+    $('#content').find('.alert-alert').remove()
+    $('#content').prepend Carrie.Helpers.Notifications.error(msg)
+
 Carrie.Helpers.Notifications.Top =
   success: (msg, time) ->
     msg_el = Carrie.Helpers.Notifications.success(msg)

@@ -10,6 +10,7 @@ namespace :db do
        answer.delete
      end
      RetroactionAnswer.delete_all
+     User.where(guest: true).delete_all
   end
 
   desc "This populate database"

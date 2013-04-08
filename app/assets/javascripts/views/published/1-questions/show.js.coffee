@@ -30,7 +30,6 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
   sendAnswer: (resp) ->
     answer = new Carrie.Models.Answer
       question: @model
-      user_id: Carrie.currentUser.get('id')
       response: resp
       team_id: @options.team_id
 

@@ -29,8 +29,9 @@ class User
   field :name, :type => String
   field :gravatar
   field :admin, :type => Boolean, default: false
+  field :guest, :type => Boolean, default: false
 
-  attr_accessible :id, :name, :email, :password, :password_confirmation, :remember_me
+  attr_accessible :id, :name, :email, :password, :password_confirmation, :remember_me, :guest
 
   validates_presence_of :name
 
@@ -46,4 +47,8 @@ class User
     self.gravatar= Digest::MD5.hexdigest(self.email)
   end
 
+  def self.guest
+    @user ||= User.where(email: 'guest@farma.mat.br').first
+    return @user
+  end
 end

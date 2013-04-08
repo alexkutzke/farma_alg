@@ -12,14 +12,15 @@
           <div class="carousel-inner">
             <div class="active item row-fluid">
               <div class="span3 offset1">
-                <h2>Heading</h2>
-                  <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo,
-                    tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem
-                    malesuada magna mollis euismod. Donec sed odio dui.</p>
+                <h2>FARMA</h2>
+                  <p>Crie os mais diverso objetos de aprendizagem que envolva conceitos matemáticos</p>
+                  <p>
+                    Com a FARMA é fácil criar objetos de aprendizagens fácil
+                  </p>
               </div>
 
               <div class="span8">
-                <img src="/assets/farma-carousel-header-01.jpg" alt="Matemática" />
+                <img src="/assets/headers/farma-carousel-header-01.jpg" alt="Matemática" class="img-rounded" />
               </div>
 
               <!--<div class="carousel-caption">
@@ -31,21 +32,32 @@
             </div>
 
             <div class="item">
-              <div class="span8">
-                <img src="/assets/farma-carousel-header-02.jpg" alt="Matemática" />
+              <div class="span3 offset1">
+                <h2>Fractais</h2>
+                  <p>Utilize os conceitos matemáticos intrísicos dos fracteis para criar objetos de aprendizagem que
+                    estimulem a abastração do aprendiz.
+                  </p>
               </div>
-              <div class="span3">
-                <h2>Heading</h2>
-                  <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo,
-                    tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem
-                    malesuada magna mollis euismod. Donec sed odio dui.</p>
+              <div class="span8">
+                <img src="/assets/headers/farma-carousel-header-02.jpg" alt="Matemática" />
               </div>
             </div>
 
             <div class="item">
-              <img src="/assets/farma-carousel-header-03.jpg" alt="Matemática" />
+              <div class="span3 offset1">
+                <h4>Construa OAs para:</h4>
+                <ul>
+                  <li>Matemática</li>
+                  <li>Física</li>
+                  <li>Química</li>
+                <ul>
+              </div>
+              <div class="span8">
+                <img src="/assets/headers/farma-carousel-header-03.jpg" alt="Matemática" />
+              </div>
             </div>
           </div>
+
           <!-- Carousel nav -->
           <a class="carousel-control left" href="#headerCarousel" data-slide="prev">&lsaquo;</a>
           <a class="carousel-control right" href="#headerCarousel" data-slide="next">&rsaquo;</a>
@@ -53,85 +65,32 @@
     </section>
 
     <hr>
-
-    <!-- row of columns -->
-    <div class="row-fluid">
-      <div class="span4">
-        <h2>Heading</h2>
-        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-        <p><a class="btn" href="#">View details &raquo;</a></p>
-      </div>
-      <div class="span4">
-        <h2>Heading</h2>
-        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-        <p><a class="btn" href="#">View details &raquo;</a></p>
-     </div>
-      <div class="span4">
-        <h2>Heading</h2>
-        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <p><a class="btn" href="#">View details &raquo;</a></p>
-      </div>
-    </div>
-
+    {{ include "home/_info" }}
+    <hr>
+    {{ include "home/_screen_shots" }}
     <hr>
 
-        <!-- starts footer -->
-    <div id="footer">
-        <div class="container">
-            <div class="row">
-                <div class="span8">
-                    <h3>Screenshoots</h3>
-                    <div class="blog_post">
-                        <div class="row">
-                            <div class="span2">
-                            </div>
-                            <div class="span4">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="span4 contact_us">
-                    <h3>Contact Us</h3>
-                    <form class="form-horizontal">
-                        <div class="field">
-                            <div class="label_field">
-                                <label for="inputName">Name</label>
-                            </div>
-                            <input type="text" id="inputName" />
-                        </div>
-
-                        <div class="field">
-                            <div class="label_field">
-                                <label for="inputEmail">Email</label>
-                            </div>
-                            <input type="text" id="inputEmail" />
-                        </div>
-
-                        <div class="field">
-                            <div class="label_field">
-                                <label for="inputCity">City</label>
-                            </div>
-                            <input type="text" id="inputCity" />
-                        </div>
-
-                        <div class="field">
-                            <div class="label_field">
-                                <label for="inputComment">Comments</label>
-                            </div>
-                            <textarea name="comments"></textarea>
-                        </div>
-                        <button type="submit" class="btn">Send</button>
-                    </form>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="row copyright">
-                <div class="span2 offset10 copy">
-                    <p>2013 - Diego Marczal</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <footer id="footer" class="row-fluid copyright">
+       <div class="span8">
+          <div>
+             <h3>Objetivos da FARMA</h3>
+             <ul>
+               <li>Permitir a construção de Objetos de Aprendizagem matemáticos</li>
+               <li>Enfatizar o uso do erro como uma forma de aprendizagem</li>
+               <li>Oferecer mecanismos que permitam a construção de exercécios que incentivem
+                   desenvolvimento gradual da capacidade de abstração do aprendiz</li>
+               <li>Oferecer mecanismos que permitam a construçãoo de exercícios com remediação de erros</li>
+               <li>Permitir mobilidade educacional</li>
+               <li>Fornecer mecanismo para retroação a erros</li>
+             </ul>
+           <div class='center footer'>
+             <p>Projeto desolvido no programa de Pós-graduação da Universidade Federal do Paraná.</p>
+             <a href="inf.ufpr.br">UFPR</a>
+           </div>
+          </div>
+       </div>
+       <div class="span4">
+         {{ include "home/_contact" }}
+       </div>
+    </footer>
 </section>

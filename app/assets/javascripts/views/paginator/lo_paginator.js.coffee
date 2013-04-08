@@ -69,11 +69,14 @@ class Carrie.Published.Views.LoPaginator extends Backbone.Marionette.ItemView
 
   setBreadcrumb: ->
     bread = ''
-    if (@team)
-      url = "/published/teams/#{@team_id}/los/#{@model.get('id')}"
-      bread = "#{@team.get('name')} /"
-    else
-      url = "/published/los/#{@model.get('id')}"
+    bread = "#{@team.get('name')} /" if @team
+    url = @model.get('url_page')
+
+    #if (@team)
+    #   url = "/published/teams/#{@team_id}/los/#{@model.get('id')}"
+    #   bread = "#{@team.get('name')} /"
+    #else
+    #   url = "/published/los/#{@model.get('id')}"
     if @page != 0
       url += "/pages/#{@page+1}"
 

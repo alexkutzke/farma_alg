@@ -8,6 +8,7 @@
 .text-right{ text-align: right;}
 .text-red{ color: red;}
 .text-green{ color: green;}
+.text-justify {text-align: justify;}
 .right {float:right;}
 .left { float: left; }
 .separator{padding: 10px 0px;}
@@ -188,6 +189,11 @@
   background: #000;
   @include border-radius(10px)
 }
+/* Info home
+------------------------- */
+.info-home p {
+  text-align: justify;
+}
 
 /* Carousel
 ------------------------- */
@@ -195,4 +201,14 @@
 
 /* Footer
 ------------------------- */
-
+#footer {
+  background-color: rgb(245, 245, 245);
+  @include border-radius(10px);
+  .span8 h3 {
+    border-bottom: 1px solid grey;
+  }
+  padding: 20px;
+  .footer {
+    margin-top: 100px;
+  }
+}

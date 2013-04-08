@@ -18,6 +18,8 @@ class Carrie.Published.Controllers.Los
         lo.fetch
           async: false
           success: (model, response, options) =>
+            lo.set('url_page', "/published/los/#{lo.get('id')}")
+
             view = new Carrie.Published.Views.Lo(model: lo, page: page)
             Carrie.layouts.main.content.show view
             Carrie.layouts.main.hideMenu()
@@ -42,6 +44,8 @@ class Carrie.Published.Controllers.Los
             lo.fetch
               async: false
               success: (model, response, options) =>
+                lo.set('url_page', "/published/teams/#{team_id}/los/#{model.get('id')}")
+
                 view = new Carrie.Published.Views.Lo(model: lo, page: page, team_id: team_id)
                 Carrie.layouts.main.content.show view
                 Carrie.layouts.main.hideMenu()
