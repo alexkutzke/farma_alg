@@ -16,6 +16,10 @@
 
   .answer-group {
 
+    .compile_errors {
+      clear:both;
+    }
+
     .answer, .answer-tip {
       background: white;
       min-height: 80px;
@@ -26,10 +30,11 @@
 
     .answer {
       border: 1px solid white;
-      text-align: center;
+      //text-align: center;
       display: table;
       padding: 5px;
       cursor: pointer;
+      width:70%;
 
       div {
         height: 80px;

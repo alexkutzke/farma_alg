@@ -13,6 +13,8 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
         @model.set('title', 'Correto')
 
       @template = 'answers/answer'
+
+      console.log @model
     else
       @template = 'answers/answer_empty'
 
@@ -21,6 +23,3 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
      return @model.get('response')
     else
       return ""
-
-  onRender: ->
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])

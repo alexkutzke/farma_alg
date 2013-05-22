@@ -14,6 +14,8 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require jquery.md5
+//= require prettify
+//= require lang-pascal
 //= require bootbox.min
 //= require ckeditor/init
 //= require ckeditor/adapters/jquery

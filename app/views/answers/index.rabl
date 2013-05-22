@@ -4,7 +4,7 @@ node(:total) {|m| @answers.total_count }
 node(:total_pages) {|m| @answers.num_pages }
 
 child @answers do
-  attributes :id, :tip, :response, :try_number, :correct, :many_answers
+  attributes :id, :tip, :response, :try_number, :correct
 
 
   node(:created_at) {|an| l an.created_at}
@@ -14,5 +14,4 @@ child @answers do
   node(:lo) {|an| an.lo.name}
   node(:exercise) {|an| an.exercise.title}
   node(:question) {|an| an.question.title}
-  node(:many_answers) {|an| an.question.many_answers}
 end

@@ -14,9 +14,9 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
     @loadFilters()
     @collection.on 'add', ->
       el = @el
-      setTimeout ( ->
-        MathJax.Hub.Queue(["Typeset",MathJax.Hub, el])
-      ), 100
+#      setTimeout ( ->
+#        MathJax.Hub.Queue(["Typeset",MathJax.Hub, el])
+#      ), 100
     , @
 
   onRender: ->
@@ -24,7 +24,8 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
     @updatePageInfo()
     unless @visualSearch
       @search()
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+ #   MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+    prettyPrint()
 
   updatePageInfo: ->
     info = "Total de encontrados: #{@endless.get('total')}"

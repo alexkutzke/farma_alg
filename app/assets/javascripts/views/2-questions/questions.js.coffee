@@ -57,6 +57,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
       success: (model, response) =>
         @view = new Carrie.Views.Answer model: new Carrie.Models.AnswerShow(model.attributes)
         $(@el).find('.answer-group').html @view.render().el
+        prettyPrint()
 
       error: (model, resp) ->
         alert resp.responseText

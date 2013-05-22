@@ -4,6 +4,8 @@ gem 'rails', '3.2.12'
 
 gem 'mongoid', '~> 3.0.23'
 
+gem 'albeano'
+
 gem 'jquery-rails'
 gem 'backbone-on-rails', '0.9.2.1'
 gem 'rabl'

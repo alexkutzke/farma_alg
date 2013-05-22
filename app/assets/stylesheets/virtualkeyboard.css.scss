@@ -15,7 +15,7 @@
 .virtual-keyboard.modal {
   //padding: 10px;
   border: 2px solid #EEE;
-  width: 315px !important;
+  width: 500px !important;
   margin: -205px 0 0 -160px;
   top: 15%;
 
@@ -63,6 +63,7 @@
 
   .keyboard-input {
     width: 94%;
+    height: 500px;
   }
 
   .btns {

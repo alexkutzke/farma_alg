@@ -1,6 +1,9 @@
 require 'math_evaluate'
 
+include ActionView::Helpers::TextHelper
+
 class Answer
+
   include Mongoid::Document
   include Mongoid::Timestamps
   include MathEvaluate
@@ -8,6 +11,7 @@ class Answer
   field :response
   field :correct, type: Boolean
   field :for_test, type: Boolean
+  field :compile_errors
   field :tip, type: String, default: ''
   field :try_number, type: Integer
 
@@ -124,14 +128,34 @@ private
 
   def verify_response
     question = Question.find(self.question_id)
-    options = {variables: question.exp_variables}
+    #options = {variables: question.exp_variables}
 
-    if question.many_answers?
-      self.correct= MathEvaluate::Expression.eql_with_many_answers?(question.correct_answer, self.response, options)
-    elsif question.eql_sinal?
-      self.correct= MathEvaluate::Expression.eql_with_eql_sinal?(question.correct_answer, self.response, options)
-    else
-      self.correct= MathEvaluate::Expression.eql?(question.correct_answer, self.response, options)
+    #if question.many_answers?
+    #  self.correct= MathEvaluate::Expression.eql_with_many_answers?(question.correct_answer, self.response, options)
+    #elsif question.eql_sinal?
+    #  self.correct= MathEvaluate::Expression.eql_with_eql_sinal?(question.correct_answer, self.response, options)
+    #else
+    #  self.correct= MathEvaluate::Expression.eql?(question.correct_answer, self.response, options)
+    #end
+
+    tmp = Time.now.to_i
+
+    File.open("/tmp/#{tmp}-input.dat", 'w') {|f| f.write(question.input) }
+    File.open("/tmp/#{tmp}-output.dat", 'w') {|f| f.write(question.output) }
+    File.open("/tmp/#{tmp}-response.pas", 'w') {|f| f.write(self.response) }
+    self.compile_errors = ""
+    result = `fpc /tmp/#{tmp}-response.pas -Fe/tmp/#{tmp}-compile_errors`
+
+
+    if $?.exitstatus == 1
+      self.compile_errors = simple_format `cat /tmp/#{tmp}-compile_errors`
+    end
+
+    result = `/tmp/#{tmp}-response < /tmp/#{tmp}-input.dat > /tmp/#{tmp}-output_response.dat`
+    result = `diff /tmp/#{tmp}-output_response.dat /tmp/#{tmp}-output.dat`
+
+    if $?.exitstatus == 0
+      self.correct = true
     end
 
     if !self.correct
