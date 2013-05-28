@@ -6,9 +6,9 @@ class Carrie.Models.Question extends Backbone.RelationalModel
 
   relations: [{
     type: Backbone.HasMany
-    key: 'tips'
-    relatedModel: 'Carrie.Models.Tip'
-    collectionType: 'Carrie.Collections.Tips'
+    key: 'test_cases'
+    relatedModel: 'Carrie.Models.TestCase'
+    collectionType: 'Carrie.Collections.TestCases'
     reverseRelation: {
       key: 'question'
     }
@@ -39,4 +39,4 @@ class Carrie.Models.Question extends Backbone.RelationalModel
     lo_id: @get('exercise').get('lo').get('id')
     exercise_id: @get('exercise').get('id')
 
-Carrie.Models.Exercise.setup()
+Carrie.Models.Question.setup()

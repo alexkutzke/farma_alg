@@ -90,8 +90,15 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.1)
+    columnize (0.3.6)
     daemons (1.1.9)
     database_cleaner (0.9.1)
+    debugger (1.6.0)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.1)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.2)
     delayed_job (3.0.5)
       activesupport (~> 3.0)
     delayed_job_mongoid (2.0.0)
@@ -303,6 +310,7 @@ DEPENDENCIES
   ckeditor (= 3.7.1)
   coffee-rails (~> 3.2.1)
   database_cleaner
+  debugger
   delayed_job_mongoid
   devise
   factory_girl_rails

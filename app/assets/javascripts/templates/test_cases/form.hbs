@@ -1,0 +1,51 @@
+<header class='page-header' >
+  {{#if id }}
+    <h4>Editar caso de teste</h4>
+  {{else}}
+    <h4>Novo caso de teste</h4>
+  {{/if}}
+</header>
+<form class="form-vertical" novalidate>
+  <input name="id" type="hidden" />
+
+  <fieldset>
+
+    <div class="control-group content_group">
+      <label class="control-label" for="content">Conteúdo</label>
+      <div class="controls">
+        {{#if id}}
+          <textarea id='ckeditor-{{question_id}}-test_case-{{id}}' name="content" required="required"></textarea>
+        {{else}}
+          <textarea id='ckeditor-{{question_id}}-test_case-new' name="content" required="required"></textarea>
+        {{/if}}
+      </div>
+    </div>
+    
+    <div class="control-group input_group">
+        <label class="control-label" for="input">Entrada</label>
+        <div class="controls">
+          <textarea id="input" name="input"></textarea>
+        </div>
+    </div>
+
+    <div class="control-group output_group">
+        <label class="control-label" for="output">Saída</label>
+        <div class="controls">
+          <textarea id="output" name="output"></textarea>
+        </div>
+    </div>
+
+    <div class="control-group timeout_group">
+        <label class="control-label" for="timeout">
+          Tempo máximo de execução (em segundos)
+          <input id="timeout" name="timeout" type="text" required="required" class='span1' />
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" value="Salvar" class="btn btn-primary" />
+      <input type="button" value="Cancelar" class="btn btn-primary btn-cancel" />
+    </div>
+
+  </fieldset>
+</form>

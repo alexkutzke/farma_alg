@@ -5,8 +5,8 @@ glue @exercise do
 
   child(:questions) do
     attributes :id, :title, :content, :available, :input, :output
-    child(:tips) do
-      attributes :id, :content, :number_of_tries
+    child(:test_cases) do
+      attributes :id, :content, :input, :output
     end
   end
 end

@@ -18,6 +18,7 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
 #        MathJax.Hub.Queue(["Typeset",MathJax.Hub, el])
 #      ), 100
     , @
+    prettyPrint()
 
   onRender: ->
     @endless.load()
@@ -30,6 +31,7 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
   updatePageInfo: ->
     info = "Total de encontrados: #{@endless.get('total')}"
     $(@el).find('.pages-info').html(info)
+    prettyPrint()
 
   mapFilters: ->
     @map =

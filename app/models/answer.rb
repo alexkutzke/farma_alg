@@ -12,8 +12,8 @@ class Answer
   field :correct, type: Boolean
   field :for_test, type: Boolean
   field :compile_errors
-  field :tip, type: String, default: ''
-  field :try_number, type: Integer
+#  field :tip, type: String, default: ''
+#  field :try_number, type: Integer
 
   field :lo, type: Hash
   field :exercise, type: Hash
@@ -108,12 +108,12 @@ private
         question['last_answer'].delete('_id')
         question['last_answer']['response'] = la.first.answer.response
         question['last_answer']['correct'] = la.first.answer.correct
-        question['last_answer']['tip'] = la.first.answer.tip
-        question['last_answer']['try_number'] = la.first.answer.try_number
+#        question['last_answer']['tip'] = la.first.answer.tip
+#        question['last_answer']['try_number'] = la.first.answer.try_number
       end
 
-      tries = question_obj.tips_counts.where(user_id: self.user_id).first.try(:tries) || 0
-      question['tries'] = tries
+#      tries = question_obj.tips_counts.where(user_id: self.user_id).first.try(:tries) || 0
+#      question['tries'] = tries
       end
     self.update_attribute('exercise', _exercise)
   end
@@ -138,32 +138,47 @@ private
     #  self.correct= MathEvaluate::Expression.eql?(question.correct_answer, self.response, options)
     #end
 
+    compile_errors = ""
+    correct = Hash.new
     tmp = Time.now.to_i
 
-    File.open("/tmp/#{tmp}-input.dat", 'w') {|f| f.write(question.input) }
-    File.open("/tmp/#{tmp}-output.dat", 'w') {|f| f.write(question.output) }
     File.open("/tmp/#{tmp}-response.pas", 'w') {|f| f.write(self.response) }
-    self.compile_errors = ""
+      
     result = `fpc /tmp/#{tmp}-response.pas -Fe/tmp/#{tmp}-compile_errors`
-
-
     if $?.exitstatus == 1
       self.compile_errors = simple_format `cat /tmp/#{tmp}-compile_errors`
-    end
-
-    result = `/tmp/#{tmp}-response < /tmp/#{tmp}-input.dat > /tmp/#{tmp}-output_response.dat`
-    result = `diff /tmp/#{tmp}-output_response.dat /tmp/#{tmp}-output.dat`
-
-    if $?.exitstatus == 0
-      self.correct = true
-    end
-
-    if !self.correct
-      set_tip
+      self.correct = false
     else
-      @tips_count = question.tips_counts.find_or_create_by(:user_id => self.user_id)
-      self.try_number= @tips_count.tries
+      question.test_cases.each do |t|
+        File.open("/tmp/#{tmp}-input-#{t.id}.dat", 'w') {|f| f.write(t.input) }
+        File.open("/tmp/#{tmp}-output-#{t.id}.dat", 'w') {|f| f.write(t.output) }
+      
+        `/Users/alexkutzke/Downloads/timeout3 -t #{t.timeout} /tmp/#{tmp}-response < /tmp/#{tmp}-input-#{t.id}.dat > /tmp/#{tmp}-output_response-#{t.id}.dat`
+        `diff /tmp/#{tmp}-output_response-#{t.id}.dat /tmp/#{tmp}-output-#{t.id}.dat`
+
+        if $?.exitstatus == 0
+          correct[t.id] = 1
+        elsif $?.exitstatus == 143
+          correct[t.id] = 2
+        else
+          correct[t.id] = 3
+        end
+      end
+
+      self.correct = true
+      correct.each do |id,r|
+        if not r == 1 
+          self.correct = false
+        end
+      end
     end
+
+#    if !self.correct
+#      set_tip
+#    else
+#      @tips_count = question.tips_counts.find_or_create_by(:user_id => self.user_id)
+#      self.try_number= @tips_count.tries
+#    end
   end
 
   def set_tip

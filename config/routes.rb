@@ -39,6 +39,7 @@ Carrie::Application.routes.draw do
         delete 'delete_last_answers', :on => :member
         resources :questions do
           resources :tips
+          resources :test_cases
           collection {post :sort}
         end
         collection { post :sort }

@@ -1,17 +1,23 @@
 class Carrie.Views.Question extends Backbone.Marionette.CompositeView
   template: 'questions/question'
   tagName: 'article'
-  itemView: Carrie.Views.Tip
+  itemView: Carrie.Views.TestCase
   className: 'question'
+ # itemView: Carrie.Views.Tip
+
 
   initialize: ->
-    @collection = @model.get('tips')
+    @collection = @model.get('test_cases')
+    console.log(@collection)
+#  @collection = @model.get('tips')
 
   events:
     'click .destroy-question-link' : 'destroy'
     'click .edit-question-link' : 'edit'
-    "click .new-tip-link": 'addTip'
-    'click .show-tips-link': 'showTips'
+#    'click .new-tip-link': 'addTip'
+#    'click .show-tips-link': 'showTips'
+    'click .new-test_case-link': 'addTestCase'
+    'click .show-test_cases-link': 'showTestCases'
     'click .answer': 'verify_answer'
 
   onRender: ->
@@ -19,19 +25,19 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
     @view = new Carrie.Views.Answer().render()
     $(@el).find('.answer-group').html @view.render().el
     $(@el).find('span i').tooltip()
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+    #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
 
   appendHtml: (collectionView, itemView, index) ->
-    $(@el).find('.tips section').append(itemView.el) if itemView.model.get('id')
+    $(@el).find('.test_cases section').append(itemView.el) if itemView.model.get('id')
 
-  addTip: (ev) ->
+  addTestCase: (ev) ->
     ev.preventDefault()
-    form = new Carrie.Views.CreateOrSaveTip(question: @model, collection: @collection)
-    $(@el).find('.tips .new-tip').html form.render().el
+    form = new Carrie.Views.CreateOrSaveTestCase(question: @model, collection: @collection)
+    $(@el).find('.test_cases .new-test_case').html form.render().el
 
-  showTips: (ev) ->
+  showTestCases: (ev) ->
     ev.preventDefault()
-    $(@el).find('.tips').toggle()
+    $(@el).find('.test_cases').toggle()
 
   verify_answer: (ev) ->
     ev.preventDefault()
@@ -46,6 +52,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
     $(keyboard.render().el).modal('show')
 
   sendAnswer: (resp) ->
+    bootbox.modal("Compilando e executando ...",{backdrop:'static',keyboard:false})
     answer = new Carrie.Models.Answer
       question: @model
       user_id: Carrie.currentUser.get('id')
@@ -58,6 +65,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
         @view = new Carrie.Views.Answer model: new Carrie.Models.AnswerShow(model.attributes)
         $(@el).find('.answer-group').html @view.render().el
         prettyPrint()
+        bootbox.hideAll()
 
       error: (model, resp) ->
         alert resp.responseText

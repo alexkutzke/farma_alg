@@ -48,6 +48,7 @@ group :development, :test do
   gem 'thin'
   gem 'growl'
   gem 'faker'
+  gem 'debugger'
 end
 
 group :test do

@@ -14,8 +14,6 @@ class Question
 #  field :many_answers, type: Boolean, default: false
 #  field :eql_sinal, type: Boolean, default: false
 
-  has_many :tips_counts
-
   default_scope desc(:position)
 
   before_create :set_position
@@ -29,6 +27,7 @@ class Question
 
   belongs_to :exercise
   has_many :tips, dependent: :delete
+  has_many :test_cases, dependent: :delete
   has_many :tips_counts, dependent: :delete
   has_many :last_answers, dependent: :delete #one last answer for each user
 
