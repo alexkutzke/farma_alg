@@ -3,19 +3,15 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
   tagName: 'article'
   itemView: Carrie.Views.TestCase
   className: 'question'
- # itemView: Carrie.Views.Tip
 
 
   initialize: ->
     @collection = @model.get('test_cases')
     console.log(@collection)
-#  @collection = @model.get('tips')
 
   events:
     'click .destroy-question-link' : 'destroy'
     'click .edit-question-link' : 'edit'
-#    'click .new-tip-link': 'addTip'
-#    'click .show-tips-link': 'showTips'
     'click .new-test_case-link': 'addTestCase'
     'click .show-test_cases-link': 'showTestCases'
     'click .answer': 'verify_answer'
@@ -61,8 +57,8 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
     answer.save answer.attributes,
       wait: true
-      success: (model, response) =>
-        @view = new Carrie.Views.Answer model: new Carrie.Models.AnswerShow(model.attributes)
+      success: (model, response) =>     
+        @view = new Carrie.Views.Answer model: Carrie.Models.AnswerShow.findOrCreate(model.attributes)
         $(@el).find('.answer-group').html @view.render().el
         prettyPrint()
         bootbox.hideAll()

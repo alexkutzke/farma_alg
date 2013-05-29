@@ -3,8 +3,35 @@
     <a href='' class='edit-test_case-link' ><i class="icon-edit"></i> Editar </a>
     <a href='' class='destroy-test_case-link' ><i class="icon-remove-circle"></i> Remover </a>
   </div>
+
+
+
   <p><strong>Texto: </strong>{{safe content}}</p>
-  <p><strong>Entrada: </strong>{{safe input}}</p>
-  <p><strong>Saída: </strong>{{safe output}}</p>
- 	<p><strong>Tempo máximo de execução: </strong>{{safe timeout}} segundo(s)</p>  
+  <p><strong>Tempo máximo de execução: </strong>{{safe timeout}} segundo(s)</p>  
+
+</div>
+<div class="accordion" id="accordion1">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+        Entrada
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <pre>{{safe input}}</pre>
+      </div>
+    </div>
+
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo">
+        Saída
+      </a>
+    </div>
+    <div id="collapseTwo" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <pre>{{safe output}}</pre>
+      </div>
+    </div>
+  </div>
 </div>

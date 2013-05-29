@@ -6,7 +6,7 @@ glue @exercise do
   child(:questions) do
     attributes :id, :title, :content, :available, :input, :output
     child(:test_cases) do
-      attributes :id, :content, :input, :output
+      attributes :id, :content, :input, :output, :timeout
     end
   end
 end

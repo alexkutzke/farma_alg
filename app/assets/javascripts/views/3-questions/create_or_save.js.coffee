@@ -15,8 +15,6 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
       @cked = "ckeditor-#{@model.get('id')}"
       @editing = true
 
-   
-   # Carrie.CKEDITOR.clearWhoHas("#{@cked}-tip")
     Carrie.CKEDITOR.clearWhoHas("#{@cked}-test_case")
     @modelBinder = new Backbone.ModelBinder()
 

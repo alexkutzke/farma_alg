@@ -59,8 +59,6 @@ private
  # Its necessary for clean the database and the tests
  def clear_test_answers
    current_user.answers.where(for_test: true).each do |answer|
-      tips_counts = answer.question.tips_counts.where(user_id: current_user.id)
-      tips_counts.delete
       answer.delete
    end
  end

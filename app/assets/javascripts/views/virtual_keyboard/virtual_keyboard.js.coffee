@@ -22,11 +22,13 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     ev.preventDefault()
     value = $(ev.target).data('value').toString()
     @input.focus()
-    @send()
+    
 
     switch value
       when 'clean'
         @input.val('')
+      when 'send'
+        @send()
 
   send: ->
     val = @input.val()

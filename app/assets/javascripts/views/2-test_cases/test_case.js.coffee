@@ -26,4 +26,4 @@ class Carrie.Views.TestCase extends Backbone.Marionette.ItemView
 
   onRender: ->
     @el.id = @model.get('id')
-#    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+ 
