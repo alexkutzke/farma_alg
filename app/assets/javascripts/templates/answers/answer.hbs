@@ -1,27 +1,72 @@
-<div class="span3 answer" data-toggle="modal">
-  <span class="text-in-border-{{classname}}">{{title}}</span>
-  <div class='{{classname}}-answer'>
-    <pre class="prettyprint lang-pascal">
-
-{{response}}
-    </pre>
-  </div>
+{{#if ok}}
+<div class="alert alert-success">
+  Parabéns! Resposta correta!
 </div>
+{{else}}
+<div class='alert alert-error'>
+  Resposta Incorreta, análise a dica e tente novamente
+</div>
+{{/if}}
 
 {{#if tip}}
-   <div class="span4 answer-tip">
-     <i class='icon-caret-left'></i>
-     <div class='title'>Resposta Incorreta, análise a dica e tente novamente</div>
-     <div class='content'>
-         <p><strong>Tentativa: {{try_number}}</strong></p>
-         {{safe tip}}
-     </div>
-   </div>
+<div class="span4 answer-tip">
+<i class='icon-caret-left'></i>
+<div class='title'>Resposta Incorreta, análise a dica e tente novamente</div>
+<div class='content'>
+<p><strong>Tentativa: {{try_number}}</strong></p>
+{{safe tip}}
+</div>
+</div>
 {{/if}}
 
 {{#if compile_errors }}
-<div class="compile_errors">
-<h3>Saída do compilador</h2>
-{{{compile_errors}}}
-</div>
+  <div class="alert alert-error">
+    <h4>Erro de compilação</h4>
+    <p><strong>Saída do compilador:</strong></p>
+    {{{compile_errors}}}
+  </div>
 {{/if}}
+
+{{#each results}}
+{{#if error}}
+  <div class="alert alert-error">
+    <h4>Erro de execução</h4>
+    <p><strong>Caso de teste:</strong></p>
+    {{{content}}}
+    <p><strong>Dica:</strong></p>
+    {{{tip}}}
+  </div>
+{{/if}}
+{{#if time}}
+  <div class="alert alert-error">
+    <h4>Tempo de execução excedido</h4>
+  </div>
+{{/if}}
+{{/each}}
+
+
+<div class="accordion" id="accordion_code_{{{question_id}}}">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_code_{{question_id}}" href="#collapseCode-{{question_id}}">
+        Ver código enviado
+      </a>
+    </div>
+    <div id="collapseCode-{{question_id}}" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <div class="span3 answer" data-toggle="modal">
+          <span class="text-in-border-{{classname}}">{{title}}</span>
+          <div class='{{classname}}-answer'>
+            <pre class="prettyprint lang-pascal">
+
+{{response}}
+            </pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<button type="button" class="answer_btn btn btn-primary">Responder novamente</button>

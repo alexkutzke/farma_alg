@@ -22,7 +22,6 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     ev.preventDefault()
     value = $(ev.target).data('value').toString()
     @input.focus()
-    
 
     switch value
       when 'clean'
@@ -31,10 +30,9 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
         @send()
 
   send: ->
+    $(@el).modal('hide')
     val = @input.val()
     @callback val
-    $(@el).modal('hide')
-
 
   inputFocus: ->
     self = @

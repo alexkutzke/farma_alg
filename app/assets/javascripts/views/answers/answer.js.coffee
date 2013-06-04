@@ -8,18 +8,20 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
       if not @model.get('correct')
         @model.set('classname', 'wrong')
         @model.set('title', 'Incorreto')
+        @model.set('ok','')
       else
         @model.set('classname', 'right')
         @model.set('title', 'Correto')
+        @model.set('ok','ok')
 
       @template = 'answers/answer'
 
-      console.log @model
+      #console.log @model.attributes
     else
       @template = 'answers/answer_empty'
 
   resp: ->
     if @model
-     return @model.get('response')
+      return @model.get('response')
     else
       return ""

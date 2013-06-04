@@ -39,4 +39,4 @@ class Carrie.Models.Question extends Backbone.RelationalModel
     lo_id: @get('exercise').get('lo').get('id')
     exercise_id: @get('exercise').get('id')
 
-Carrie.Models.Question.setup()
+Carrie.Models.Exercise.setup()

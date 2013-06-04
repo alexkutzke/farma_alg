@@ -1,12 +1,13 @@
-attributes :id, :title, :content, :exp_variables, :many_answers, :eql_sinal
+attributes :id, :title, :content
 
 node :last_answer, if: lambda {|question| ( current_user && question.last_answers.by_user(current_user).size > 0 )} do |question|
   la = question.last_answers.by_user(current_user).first
   {
-    #tip: la.answer.tip,
+    compile_errors: la.answer.compile_errors,
     correct: la.answer.correct,
     response: la.answer.response,
-    #try_number: la.answer.try_number,
     id: la.id,
+    results: la.answer.results,
+    question_id: la.answer.question_id
   }
 end

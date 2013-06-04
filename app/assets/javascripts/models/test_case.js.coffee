@@ -7,6 +7,7 @@ class Carrie.Models.TestCase extends Backbone.RelationalModel
 
   defaults:
     'content': ''
+    'tip': ''
     'input': ''
     'output': ''
     'timeout': '1'
@@ -14,6 +15,7 @@ class Carrie.Models.TestCase extends Backbone.RelationalModel
   toJSON: ->
     id: @get('id')
     content: @get('content')
+    tip: @get('tip')
     input: @get('input')
     output: @get('output')
     timeout: @get('timeout')

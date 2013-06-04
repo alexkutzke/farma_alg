@@ -10,11 +10,14 @@ class Carrie.Views.CreateOrSaveTestCase extends Backbone.Marionette.ItemView
       @model = new Carrie.Models.TestCase
         question: @options.question
       @cked = "ckeditor-#{@model.get('question').get('id')}-test_case-new"
+      @cked2 = "ckeditor-#{@model.get('question').get('id')}-test_case-new-tip"
     else
       @cked = "ckeditor-#{@model.get('question').get('id')}-test_case-#{@model.get('id')}"
+      @cked2 = "ckeditor-#{@model.get('question').get('id')}-test_case-tip-#{@model.get('id')}"
       @editing = true
 
     Carrie.CKEDITOR.clearWhoHas(@cked)
+    Carrie.CKEDITOR.clearWhoHas(@cked2)
     @modelBinder = new Backbone.ModelBinder()
 
     $('.new-test_case-link').hide()
@@ -22,10 +25,12 @@ class Carrie.Views.CreateOrSaveTestCase extends Backbone.Marionette.ItemView
 
   beforeClose: ->
     $(@el).find("\##{@cked}").ckeditorGet().destroy()
+    $(@el).find("\##{@cked2}").ckeditorGet().destroy()
 
   cancel: (ev) ->
     ev.preventDefault()
     $(@el).find("\##{@cked}").ckeditorGet().destroy()
+    $(@el).find("\##{@cked2}").ckeditorGet().destroy()
 
     if @editing
       @modelBinder.unbind()
@@ -43,11 +48,13 @@ class Carrie.Views.CreateOrSaveTestCase extends Backbone.Marionette.ItemView
     Carrie.Helpers.Notifications.Form.loadSubmit(@el)
 
     @model.set('content', CKEDITOR.instances[@cked].getData())
+    @model.set('tip', CKEDITOR.instances[@cked2].getData())
 
     @model.save @model.attributes,
       wait: true
       success: (model, response) =>
         $(@el).find("\##{@cked}").ckeditorGet().destroy()
+        $(@el).find("\##{@cked2}").ckeditorGet().destroy()
 
         Carrie.Helpers.Notifications.Form.resetSubmit(@el)
         Carrie.Helpers.Notifications.Top.success 'Caso de Teste salvo com sucesso!', 4000
@@ -82,3 +89,4 @@ class Carrie.Views.CreateOrSaveTestCase extends Backbone.Marionette.ItemView
         ]
 
     Carrie.CKEDITOR.show "\##{@cked}"
+    Carrie.CKEDITOR.show "\##{@cked2}"

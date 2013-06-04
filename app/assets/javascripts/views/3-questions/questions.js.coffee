@@ -7,14 +7,13 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
   initialize: ->
     @collection = @model.get('test_cases')
-    console.log(@collection)
 
   events:
     'click .destroy-question-link' : 'destroy'
     'click .edit-question-link' : 'edit'
     'click .new-test_case-link': 'addTestCase'
     'click .show-test_cases-link': 'showTestCases'
-    'click .answer': 'verify_answer'
+    'click .answer_btn': 'verify_answer'
 
   onRender: ->
     @el.id = @model.get('id')
@@ -39,9 +38,6 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
     ev.preventDefault()
     keyboard = new Carrie.Views.VirtualKeyBoard
       currentResp: @view.resp()
-      variables: @model.get('exp_variables')
-      many_answers: @model.get('many_answers')
-      eql_sinal: @model.get('eql_sinal')
       callback: (val) =>
         @sendAnswer(val)
 

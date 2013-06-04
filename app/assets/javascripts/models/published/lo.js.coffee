@@ -27,4 +27,4 @@ class Carrie.Published.Models.Lo extends Backbone.RelationalModel
   }
   ]
 
-Carrie.Models.Lo.setup()
+Carrie.Published.Models.Lo.setup()

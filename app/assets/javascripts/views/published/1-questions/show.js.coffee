@@ -13,43 +13,43 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
       @view = new Carrie.Views.Answer()
 
   events:
-    'click .answer': 'verify_answer'
+    'click .answer_btn': 'verify_answer'
 
   verify_answer: (ev) ->
     ev.preventDefault()
-    keyboard = new Carrie.Views.VirtualKeyBoard(
+    keyboard = new Carrie.Views.VirtualKeyBoard
       currentResp: @view.resp()
-      variables: @model.get('exp_variables')
-      many_answers: @model.get('many_answers')
-      eql_sinal: @model.get('eql_sinal')
       callback: (val) =>
         @sendAnswer(val)
-    ).render().el
-    $(keyboard).modal('show')
+        
+    $(keyboard.render().el).modal('show')
 
   sendAnswer: (resp) ->
+    bootbox.modal("Compilando e executando ...",{backdrop:'static',keyboard:false})
+    a = @model
+
     answer = new Carrie.Models.Answer
-      question: @model
+      user_id: Carrie.currentUser.get('id')
       response: resp
-      team_id: @options.team_id
+      for_test: false
+
+    console.log answer
+    answer.attributes.question = a
+
+    console.log answer
+    console.log a
 
     answer.save answer.attributes,
       wait: true
-      success: (model, response, options) =>
+      success: (model, response) =>     
         @view = new Carrie.Views.Answer model: Carrie.Models.AnswerShow.findOrCreate(model.attributes)
         $(@el).find('.answer-group').html @view.render().el
+        prettyPrint()
+        bootbox.hideAll()
 
-        last_answer =
-          tip: model.get('tip')
-          correct: model.get('correct')
-          response: model.get('response')
-          try_number: model.get('try_number')
-        @model.set('last_answer', last_answer)
-
-      error: (model, response, options) ->
+      error: (model, resp) ->
         alert resp.responseText
-
 
   onRender: ->
     $(@el).find('.answer-group').html @view.render().el
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+    #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])

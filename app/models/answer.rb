@@ -10,9 +10,9 @@ class Answer
 
   field :response
   field :correct, type: Boolean
+  field :results, type: Hash
   field :for_test, type: Boolean
   field :compile_errors
-#  field :tip, type: String, default: ''
   field :try_number, type: Integer
 
   field :lo, type: Hash
@@ -28,7 +28,7 @@ class Answer
   alias :super_exercise :exercise
   alias :super_question :question
 
-  attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test, :try_number
+  attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test, :try_number, :results
 
   belongs_to :user
   has_one :last_answer
@@ -36,9 +36,9 @@ class Answer
 
   #default_scope desc(:created_at)
 
-  #scope :wrong, where(correct: false, :team_id.ne => nil, :for_test.ne => true)
-  #scope :corrects, where(correct: true, :team_id.ne => nil, :for_test.ne => true)
-  #scope :every, excludes(team_id: nil, for_test: true)
+  scope :wrong, where(correct: false, :team_id.ne => nil, :for_test.ne => true)
+  scope :corrects, where(correct: true, :team_id.ne => nil, :for_test.ne => true)
+  scope :every, excludes(team_id: nil, for_test: true)
 
   before_create :verify_response, :store_datas
   after_create :register_last_answer#, :update_questions_with_last_answer
@@ -105,6 +105,7 @@ private
     question = Question.find(self.question_id)
     compile_errors = ""
     correct = Hash.new
+    self.results = Hash.new
     tmp = Time.now.to_i
 
     File.open("/tmp/#{tmp}-response.pas", 'w') {|f| f.write(self.response) }
@@ -119,21 +120,26 @@ private
         File.open("/tmp/#{tmp}-output-#{t.id}.dat", 'w') {|f| f.write(t.output) }
       
         `/Users/alexkutzke/Downloads/timeout3 -t #{t.timeout} /tmp/#{tmp}-response < /tmp/#{tmp}-input-#{t.id}.dat > /tmp/#{tmp}-output_response-#{t.id}.dat`
-        `diff /tmp/#{tmp}-output_response-#{t.id}.dat /tmp/#{tmp}-output-#{t.id}.dat`
-
         if $?.exitstatus == 0
-          correct[t.id] = 1
-        elsif $?.exitstatus == 143
-          correct[t.id] = 2
-        else
-          correct[t.id] = 3
+          `diff /tmp/#{tmp}-output_response-#{t.id}.dat /tmp/#{tmp}-output-#{t.id}.dat`
         end
+        correct[t.id] = $?.exitstatus
       end
 
       self.correct = true
       correct.each do |id,r|
-        if not r == 1 
+        if not r == 0
           self.correct = false
+          self.results[id] = Hash.new
+          self.results[id][:error] = false
+          self.results[id][:time] = false
+          if r == 1
+            self.results[id][:error] = true
+          elsif r == 143
+            self.results[id][:time] = true
+          end
+          self.results[id][:content] = question.test_cases.find(id).content
+          self.results[id][:tip] = question.test_cases.find(id).tip
         end
       end
     end
@@ -148,11 +154,13 @@ private
   end
 
   def register_last_answer
-    la = LastAnswer.find_or_create_by(:user_id => self.user.id, :question_id => self.question.id)
-    la.answer = self
-    la.question = self.question
-    la.user = self.user
-    la.save!
+    unless self.for_test
+      la = LastAnswer.find_or_create_by(:user_id => self.user.id, :question_id => self.question.id)
+      la.answer = self
+      la.question = self.question
+      la.user = self.user
+      la.save!
+    end
   end
 
 end

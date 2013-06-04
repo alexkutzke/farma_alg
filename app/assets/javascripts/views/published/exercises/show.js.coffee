@@ -11,10 +11,9 @@ class Carrie.Published.Views.Exercise extends Backbone.Marionette.CompositeView
 
   initialize: ->
     @collection = @model.get('questions')
-    this
 
-  onRender: ->
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+#  onRender: ->
+    #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
 
   clearLastAnswers: (ev) ->
     ev.preventDefault()

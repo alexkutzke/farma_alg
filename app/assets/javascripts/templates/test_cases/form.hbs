@@ -21,6 +21,17 @@
       </div>
     </div>
     
+    <div class="control-group tip_group">
+      <label class="control-label" for="tip">Dica</label>
+      <div class="controls">
+        {{#if id}}
+          <textarea id='ckeditor-{{question_id}}-test_case-tip-{{id}}' name="tip" required="required"></textarea>
+        {{else}}
+          <textarea id='ckeditor-{{question_id}}-test_case-new-tip' name="tip" required="required"></textarea>
+        {{/if}}
+      </div>
+    </div>
+
     <div class="control-group input_group">
         <label class="control-label" for="input">Entrada</label>
         <div class="controls">
