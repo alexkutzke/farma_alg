@@ -32,6 +32,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
       user_id: Carrie.currentUser.get('id')
       response: resp
       for_test: false
+      team_id: @options.team_id
 
     console.log answer
     answer.attributes.question = a
