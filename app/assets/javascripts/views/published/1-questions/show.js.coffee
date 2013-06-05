@@ -26,19 +26,13 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
 
   sendAnswer: (resp) ->
     bootbox.modal("Compilando e executando ...",{backdrop:'static',keyboard:false})
-    a = @model
 
     answer = new Carrie.Models.Answer
       user_id: Carrie.currentUser.get('id')
+      question: @model
       response: resp
       for_test: false
       team_id: @options.team_id
-
-    console.log answer
-    answer.attributes.question = a
-
-    console.log answer
-    console.log a
 
     answer.save answer.attributes,
       wait: true

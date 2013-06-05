@@ -4,6 +4,7 @@ class Carrie.Views.Retroaction.Answer extends Backbone.Marionette.ItemView
   initialize:->
     @exerciseView = new Carrie.CompositeViews.Retroaction.Exercise
       model: @model.get('exercise')
+      questoin :@model.get('question')
     @commentsView = new Carrie.CompositeViews.Retroaction.AnswerComments
       model: @model
       collection: @model.get('comments')

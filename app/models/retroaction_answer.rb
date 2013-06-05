@@ -7,12 +7,13 @@ class RetroactionAnswer
 
   field :response
   field :correct, type: Boolean
-  field :tip, type: String, default: ''
+  field :compile_errors
+  field :results, type: Hash
   field :try_number, type: Integer, default: 0
   field :answer_id, type: Moped::BSON::ObjectId
   field :question_id, type: Moped::BSON::ObjectId
 
-  attr_accessible :id, :response, :user_id, :answer_id, :question_id
+  attr_accessible :id, :response, :user_id, :answer_id, :question_id, :compile_errors, :results
 
   belongs_to :user
 
@@ -31,34 +32,53 @@ class RetroactionAnswer
   end
 
 private
-  def set_try_number
-    if question
-      self.try_number = @question_json['tries']
-    end
-  end
-
   def verify_response
-    options = {variables: question.exp_variables}
+    question = Question.find(self.question_id)
+    compile_errors = ""
+    correct = Hash.new
+    self.results = Hash.new
+    tmp = Time.now.to_i
 
-    if question.many_answers?
-      self.correct= MathEvaluate::Expression.eql_with_many_answers?(question.correct_answer, self.response, options)
+    File.open("/tmp/#{tmp}-response.pas", 'w') {|f| f.write(self.response) }
+      
+    result = `fpc /tmp/#{tmp}-response.pas -Fe/tmp/#{tmp}-compile_errors`
+    if $?.exitstatus == 1
+      self.compile_errors = simple_format `cat /tmp/#{tmp}-compile_errors`
+      self.correct = false
     else
-      self.correct= MathEvaluate::Expression.eql?(question.correct_answer, self.response, options)
+      question.test_cases.each do |t|
+        File.open("/tmp/#{tmp}-input-#{t.id}.dat", 'w') {|f| f.write(t.input) }
+        File.open("/tmp/#{tmp}-output-#{t.id}.dat", 'w') {|f| f.write(t.output) }
+      
+        `/Users/alexkutzke/Downloads/timeout3 -t #{t.timeout} /tmp/#{tmp}-response < /tmp/#{tmp}-input-#{t.id}.dat > /tmp/#{tmp}-output_response-#{t.id}.dat`
+        if $?.exitstatus == 0
+          `diff /tmp/#{tmp}-output_response-#{t.id}.dat /tmp/#{tmp}-output-#{t.id}.dat`
+        end
+        correct[t.id] = $?.exitstatus
+      end
+
+      self.correct = true
+      correct.each do |id,r|
+        if not r == 0
+          self.correct = false
+          self.results[id] = Hash.new
+          self.results[id][:error] = false
+          self.results[id][:time] = false
+          if r == 1
+            self.results[id][:error] = true
+          elsif r == 143
+            self.results[id][:time] = true
+          end
+          self.results[id][:content] = question.test_cases.find(id).content
+          self.results[id][:tip] = question.test_cases.find(id).tip
+        end
+      end
     end
 
-    if !self.correct
-      set_tip
-    else
-      self.tip= ''
-    end
-  end
-
-  def set_tip
-    self.try_number = @question_json['tries'] if self.try_number == 0
-    self.try_number += 1
-    tip = self.answer.super_question['tips'].select {|tip| tip['number_of_tries'] <= self.try_number }
-    if tip.first
-      self.tip = tip.first['content']
-    end
+    #la = LastAnswer.find_or_create_by(:user_id => self.user_id, :question_id => self.question_id)
+    #self.try_number = 1
+    #if not la.answer_id.nil?
+    #  self.try_number = la.answer.try_number + 1
+    #end
   end
 end

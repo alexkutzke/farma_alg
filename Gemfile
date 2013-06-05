@@ -4,8 +4,6 @@ gem 'rails', '3.2.12'
 
 gem 'mongoid', '~> 3.0.23'
 
-gem 'albeano'
-
 gem 'jquery-rails'
 gem 'backbone-on-rails', '0.9.2.1'
 gem 'rabl'
@@ -15,6 +13,7 @@ gem 'delayed_job_mongoid'
 gem 'bson_ext'
 gem 'devise'
 gem 'simple_form'
+gem 'debugger'
 
 gem "ckeditor", "3.7.1"
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
@@ -48,7 +47,6 @@ group :development, :test do
   gem 'thin'
   gem 'growl'
   gem 'faker'
-  gem 'debugger'
 end
 
 group :test do

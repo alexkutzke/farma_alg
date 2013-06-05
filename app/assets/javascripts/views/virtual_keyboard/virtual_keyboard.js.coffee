@@ -6,7 +6,6 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     'click a' : 'setInput'
     
   initialize: ->
-    console.log(@options)
     @callback = @options.callback || ->
     $(@el).on 'destroy', =>
       @remove()

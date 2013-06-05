@@ -19,16 +19,30 @@ class AnswersController < ApplicationController
     else
       @answer = current_or_guest_user.answers.create(params[:answer])
     end
+
+    @answer.response = self.add_line_numbers @answer.response
   end
 
   def retroaction
     delete_retroaction_answers
     @answer = Answer.find(params[:id])
+    
+    @answer.response = self.add_line_numbers @answer.response
   end
 
   def team_ids
     owner_team_ids = Team.where(owner_id: current_user.id).map {|e| e.id}
     @team_ids ||= owner_team_ids | current_user.team_ids
+  end
+
+  def add_line_numbers(x)
+    i = 1
+    new_response = ""
+    x.lines.each do |l|
+      new_response = new_response + "%02d" % i + "  " + l
+      i = i + 1
+    end
+    new_response
   end
 
 private

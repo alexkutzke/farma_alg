@@ -8,6 +8,7 @@ glue @answer do
   node(:team) {|answer| answer.team.name}
   node(:exercise) {|answer| answer.exercise_as_json}
   node(:question) {|answer| answer.question_as_json}
+  node(:user_id) {|answer| answer.user_id}
 
   child(:comments) do
     attributes :id

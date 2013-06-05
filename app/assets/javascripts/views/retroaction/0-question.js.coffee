@@ -3,7 +3,7 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
   className: 'question'
 
   events:
-    'click .answer': 'verify_answer'
+    'click .answer_btn': 'verify_answer'
 
   initialize: ->
     if @model.get('last_answer')
@@ -16,22 +16,20 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
 
   onRender: ->
     $(@el).find('.answer-group').html @view.render().el
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+    #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
 
   verify_answer: (ev) ->
     ev.preventDefault()
-    keyboard = new Carrie.Views.VirtualKeyBoard(
+    keyboard = new Carrie.Views.VirtualKeyBoard
       currentResp: @view.resp()
-      variables: @model.get('exp_variables')
-      many_answers: @model.get('many_answers')
       callback: (val) =>
         @sendAnswer(val)
-    ).render().el
-    $(keyboard).modal('show')
+        
+    $(keyboard.render().el).modal('show')
 
   sendAnswer: (resp) ->
     answer = new Carrie.Models.RetroactionAnswer
-      question_id: @model.get('id')
+      question_id: @model.get('_id')
       answer_id: @model.get('exercise').get('answer').get('id')
       user_id: Carrie.currentUser.get('id')
       response: resp
