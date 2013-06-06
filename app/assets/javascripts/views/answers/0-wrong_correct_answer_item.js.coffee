@@ -16,7 +16,8 @@ class Carrie.Views.WrongCorrectAnswerItem extends Backbone.Marionette.ItemView
       async: false
       success: (model, response, options) =>
         view = new Carrie.Views.Retroaction.Answer(model: @answer).render().el
-        $(view).modal('show')
+        $(view).modal({backdrop: false})
+        
       error: (model, response, options) ->
         Carrie.Helpers.Notifications.Top.success 'Não foi possível retroagir a essa resposta!', 4000
 
