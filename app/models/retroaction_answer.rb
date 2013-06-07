@@ -40,7 +40,7 @@ private
       
     result = `fpc /tmp/#{tmp}-response.pas -Fe/tmp/#{tmp}-compile_errors`
     if $?.exitstatus == 1
-      self.compile_errors = simple_format `cat /tmp/#{tmp}-compile_errors`
+      self.compile_errors = simple_format `cat /tmp/#{tmp}-compile_errors | tail -n +5 | sed -e 's/^#{tmp}-response.pas//'`
       self.correct = false
     else
       question.test_cases.each do |t|

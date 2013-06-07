@@ -72,16 +72,23 @@ class Answer
     %w(position available lo_id updated_at created_at).each {|e| exercises.delete(e)}
     exercises['questions'].each do |question|
       question['answered'] = question['_id'] == self.question_id
-      
-      x = LastAnswer.find_or_create_by(:user_id => self.user_id, :question_id => question['_id'])
-      if x.answer_id.nil?
-        question['last_answer'] = nil
-      else
-        question['last_answer'] = Answer.find(x.answer_id).as_json
+      if question['answered']
+        question['last_answer'] = self.as_json
         %w(updated_at exercise lo question team created_at).each {|e| question['last_answer'].delete(e)}
       end
+      #else
+      #  x = LastAnswer.find_or_create_by(:user_id => self.user_id, :question_id => question['_id'])
+      #  if x.answer_id.nil?
+      #    question['last_answer'] = nil
+      #    x.delete
+      #  else
+      #    question['last_answer'] = Answer.find(x.answer_id).as_json
+      #    %w(updated_at exercise lo question team created_at).each {|e| question['last_answer'].delete(e)}
+      #  end
+      #end
       %w(position available lo_id updated_at test_cases correct_answer created_at).each {|e| question.delete(e)}
     end
+    exercises['questions'].delete_if {|question| not question['answered']}
     exercises
   end
 
@@ -120,7 +127,7 @@ private
       
     result = `fpc /tmp/#{tmp}-response.pas -Fe/tmp/#{tmp}-compile_errors`
     if $?.exitstatus == 1
-      self.compile_errors = simple_format `cat /tmp/#{tmp}-compile_errors | tail -n +5`
+      self.compile_errors = simple_format `cat /tmp/#{tmp}-compile_errors | tail -n +5 | sed -e 's/^#{tmp}-response.pas//'`
       self.correct = false
     else
       question.test_cases.each do |t|
