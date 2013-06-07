@@ -16,6 +16,8 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
 
   onRender: ->
     $(@el).find('.answer-group').html @view.render().el
+    $('.accordion-body').on 'hidden', (event) =>
+      event.stopPropagation()
     #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
 
   verify_answer: (ev) ->
@@ -46,6 +48,8 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
         @view.close()
         @view = new Carrie.Views.Answer model: answerShow
         $(@el).find('.answer-group').html @view.render().el
+        $('.accordion-body').on 'hidden', (event) =>
+          event.stopPropagation()
 
       error: (model, resp, options) ->
         alert resp.responseText

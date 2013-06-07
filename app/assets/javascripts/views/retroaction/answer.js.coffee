@@ -8,15 +8,16 @@ class Carrie.Views.Retroaction.Answer extends Backbone.Marionette.ItemView
     @commentsView = new Carrie.CompositeViews.Retroaction.AnswerComments
       model: @model
       collection: @model.get('comments')
-    @beforeClose()
+    #@beforeClose()
+    $(@el).on 'hidden', =>
+      @.close()
 
   onRender: ->
     $(@el).find('.modal-body .answers').html @exerciseView.render().el
     $(@el).find('.modal-body .comments').html @commentsView.render().el
-
     $(@el).find('.accordion-body').on 'hidden', (event) =>
       event.stopPropagation()
-  beforeClose: ->
-    #$(@el).on 'hide', =>
+
+  onClose: ->
     @exerciseView.close()
     @commentsView.close()

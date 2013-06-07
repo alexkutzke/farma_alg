@@ -1,9 +1,6 @@
-require 'math_evaluate'
-
 class RetroactionAnswer
   include Mongoid::Document
   include Mongoid::Timestamps
-  include MathEvaluate
 
   field :response
   field :correct, type: Boolean

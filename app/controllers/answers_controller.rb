@@ -9,6 +9,10 @@ class AnswersController < ApplicationController
     else
       @answers = Answer.search(params[:page], params[:search], @team_ids)
     end
+
+    @answers.each do |a|
+      a.response = add_line_numbers a.response
+    end
   end
 
   def create

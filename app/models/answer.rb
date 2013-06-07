@@ -157,6 +157,8 @@ private
       self.try_number = 1
       if not la.answer_id.nil?
         self.try_number = la.answer.try_number + 1
+      else
+        la.delete
       end
     end
   end
@@ -164,7 +166,7 @@ private
   def register_last_answer
     unless self.for_test
       la = LastAnswer.find_or_create_by(:user_id => self.user.id, :question_id => self.question.id)
-      la.answer_id = self._id
+      la.answer = self
       la.question = self.question
       la.user = self.user
       la.save!
