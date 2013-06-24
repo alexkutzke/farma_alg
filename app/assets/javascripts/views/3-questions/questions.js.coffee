@@ -41,8 +41,10 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
       callback: (val) =>
         @sendAnswer(val)
 
-    $(keyboard.render().el).modal('show')
-
+    $(keyboard.render().el).modal('show').css({'margin-top':  -> 
+      -($(this).height() / 2)
+    });
+       
   sendAnswer: (resp) ->
     bootbox.modal("Compilando e executando ...",{backdrop:'static',keyboard:false})
     answer = new Carrie.Models.Answer
