@@ -1,9 +1,9 @@
 <div class="modal" id="retroaction-modal" tabindex="-1" >
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Retroação a resposta {{response}}</h3>
+    <h3 id="myModalLabel">Retroação a resposta <em>{{answered_by}}</em></h3>
     <p>
-      Resposta <em>{{response}}</em> do aprendiz <em>{{answered_by}}</em> para questão <strong>{{question.title}}</strong>
+      Resposta do aprendiz <em>{{answered_by}}</em> para questão <strong>{{question.title}}</strong>
       do exercício <em>{{exercise.title}}</em> ocorrida às <em>{{created_at}}</em> durante a tentativa <em>{{try_number}}</em>
     <p>
     {{#ifCond comments.length 1}}
