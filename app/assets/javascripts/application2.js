@@ -11,7 +11,6 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require jquery-ui
 //= require jquery_ujs
 //= require jquery.md5
 //= require prettify
@@ -19,30 +18,10 @@
 //= require bootbox.min
 //= require ckeditor/init
 //= require ckeditor/adapters/jquery
-//= require underscore
-//= require underscore.string
-//= require backbone
-//= require backbone-relational
-//= require backbone.sync.rails
-//= require Backbone.ModelBinder
-//= require backbone.marionette
 //= require twitter/bootstrap
 //= require bootstrap-modalmanager
 //= require bootstrap-modal
-//= require handlebars
-//= require monkeys
-//= require carrie
-//= require parser
-//= require visualsearch
-//= require_tree ./lib
-//= require_tree ./templates
-//= require_tree ./models
-//= require_tree ./collections
-//= require_tree ./views
-//= require_tree ./routers
-//= require_tree ./controllers
-//= require_tree ./helpers
-
+//= require_tree ./answers_panel
 
 $(this).scroll(function() {
    if ($(this).scrollTop() > 120){

@@ -4,7 +4,7 @@ gem 'rails', '3.2.12'
 
 gem 'mongoid', '~> 3.0.23'
 
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 2.3.0'
 gem 'backbone-on-rails', '0.9.2.1'
 gem 'rabl'
 gem 'yajl-ruby'
@@ -19,7 +19,7 @@ gem "ckeditor", "3.7.1"
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
 gem 'kaminari', "~> 0.14.1"
 
-gem 'math_engine', git: 'git://github.com/dmarczal/math_engine.git' #, branch: 'original'
+gem 'math_engine', git: 'https://github.com/dmarczal/math_engine.git' #, branch: 'original'
 
 gem 'redcarpet'
 gem 'whenever', require: false
@@ -30,11 +30,11 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
   #gem 'anjlab-bootstrap-rails', '>= 2.0', :require => 'bootstrap-rails' #, :git => 'git://github.com/anjlab/bootstrap-rails.git'
   gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
-                                :git => 'git://github.com/dmarczal/bootstrap-rails.git'
+                                :git => 'https://github.com/dmarczal/bootstrap-rails.git'
                                 #:git => 'git://github.com/anjlab/bootstrap-rails.git'
   gem 'font-awesome-sass-rails'
   gem 'handlebars_assets'
-  gem 'marionette-rails'
+  gem 'marionette-rails', "~> 0.10.2"
 end
 
 group :development, :test do

@@ -48,7 +48,10 @@ Carrie::Application.routes.draw do
   end
 
   devise_for :users
-
+  
+  get "answers_panel/index"
+  
   root to: "home#index"
+
   match '*path', to: 'home#index'
 end

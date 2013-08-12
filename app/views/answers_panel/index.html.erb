@@ -1,0 +1,32 @@
+<div class='page-header'>
+   <div>
+     <h3>Respostas</h3>
+   </div>
+ </div>
+<p class='pages-info text-right'></p>
+<table class='table table-bordered'>
+  <thead>
+    <th>Turma</th>
+    <th>OA</th>
+    <th>Exercício</th>
+    <th>Questão</th>
+    <th>Ocorrida em</th>
+    <th>Resposta</th>
+    <th>Correta</th>
+  </thead>
+  <tbody>
+  </tbody>
+
+	<% @answers.each do |a| %>
+		<tr>
+			<td><%= a.team.name %></td>
+			<td><%= a.lo.name %></td>
+			<td><%= a.exercise.title %></td>
+			<td><%= a.question.title %></td>
+			<td><%= time_ago_in_words a.created_at %> atrás</td>
+			<td><pre class="prettyprint lang-pascal"><%= a.response %></pre></td>
+			<td><%= a.correct ? "Sim" : "Não" %></td>
+		</tr>
+	<% end %>
+</table>
+
