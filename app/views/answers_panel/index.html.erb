@@ -1,3 +1,46 @@
+    <style type="text/css" media="screen">
+    svg { width: 100%; height: 500px; border: 1px solid;}
+    #graph {width:100%;height: 500px;}
+    #info {
+      border: 1px solid;
+      position: absolute;
+      top: 223px;
+      left: 32px;
+      height: 311px;
+      width: 270px;
+      overflow: scroll;
+      background-color: rgba(230,230,230,0.9);
+      padding-left: 10px;
+      box-shadow: 1px 1px 10px;
+    }
+/*
+    #slider{
+      position: absolute;
+      top: 470px;
+      left: 32px;
+      height: 50px;
+      width: 180px;
+      overflow: hidden;
+    }*/
+    </style>
+    <input id="similarity_degree" type="text"></input>
+    <div id="graph"></div>
+
+    <div id="info">
+      <div class="clearfix">
+        <div class="left"><a href="#" id="close_info" class="left"><i class="icon-remove"></i> Fechar</a>
+        </div>
+      </div>
+      <h4>Resposta</h4>
+      <p id="response"></p>
+      <h4>Correta</h4>
+      <p id="correct"></p>
+      <div id="compile_errors"></div>
+      
+    </div>
+
+
+<!--
 <div class='page-header'>
    <div>
      <h3>Respostas</h3>
@@ -30,3 +73,6 @@
 	<% end %>
 </table>
 
+<div id="example">BLA!</div>
+
+-->

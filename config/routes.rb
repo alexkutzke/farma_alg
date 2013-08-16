@@ -50,6 +50,7 @@ Carrie::Application.routes.draw do
   devise_for :users
   
   get "answers_panel/index"
+  get "answers_panel/answers"
   
   root to: "home#index"
 

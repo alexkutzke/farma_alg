@@ -24,6 +24,9 @@ gem 'math_engine', git: 'https://github.com/dmarczal/math_engine.git' #, branch:
 gem 'redcarpet'
 gem 'whenever', require: false
 
+gem 'text'
+gem 'amatch'
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.5'
   gem 'coffee-rails', '~> 3.2.1'

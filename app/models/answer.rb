@@ -138,21 +138,25 @@ private
         if $?.exitstatus == 0
           `diff /tmp/#{tmp}-output_response-#{t.id}.dat /tmp/#{tmp}-output-#{t.id}.dat`
         end
-        correct[t.id] = $?.exitstatus
+        correct[t.id] = Array.new
+        correct[t.id][0] = $?.exitstatus
+        correct[t.id][1] = File.open("/tmp/#{tmp}-output_response-#{t.id}.dat", "rb") {|io| io.read}
       end
 
       self.correct = true
       correct.each do |id,r|
-        if not r == 0
+        self.results[id] = Hash.new
+        self.results[id][:error] = false
+        self.results[id][:time] = false
+        self.results[id][:output] = r[1]
+        if r[0] == 1
           self.correct = false
-          self.results[id] = Hash.new
-          self.results[id][:error] = false
-          self.results[id][:time] = false
-          if r == 1
-            self.results[id][:error] = true
-          elsif r == 143
-            self.results[id][:time] = true
-          end
+          self.results[id][:error] = true
+        elsif r[0] == 143
+          self.correct = false
+          self.results[id][:time] = true
+        end
+        if not r[0] == 0
           self.results[id][:content] = question.test_cases.find(id).content
           self.results[id][:tip] = question.test_cases.find(id).tip
         end
