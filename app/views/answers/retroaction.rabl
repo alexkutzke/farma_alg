@@ -1,5 +1,5 @@
 glue @answer do
-  attributes :id, :created_at, :response, :try_number
+  attributes :id, :created_at, :response, :try_number, :lang
 
   node(:answered_by) { |answer| answer.user.name }
   node(:created_at) { |answer| l answer.created_at }

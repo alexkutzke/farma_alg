@@ -17,6 +17,20 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     @x = $(@el).find('#code')
     @code = CodeMirror(@x[0], { mode:  "pascal",  tabSize:2, lineNumbers: true })
     @inputFocus()
+    x = @el
+    langs = {}
+    if @options.languages
+      for i in @options.languages
+        if i == "c"
+          langs["c"] = "C"
+        else if i == "pas"
+          langs["pas"] = "Pascal"
+        else if i == "rb"
+          langs["rb"] = "Ruby"
+
+    $.each(langs, (val,text) ->
+      $(x).find("select#languages").append(new Option(text, val))
+    )
     @el
 
   setInput: (ev) ->
@@ -34,7 +48,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     $(@el).modal('hide')
     #val = @input.val()
     val = @code.getValue()
-    @callback val
+    @callback val,$(@el).find("select#languages").val()
 
   inputFocus: ->
     self = @

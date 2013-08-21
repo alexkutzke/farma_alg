@@ -1,4 +1,5 @@
 require 'math_evaluate'
+require 'judge'
 
 include ActionView::Helpers::TextHelper
 
@@ -7,6 +8,7 @@ class Answer
   include Mongoid::Document
   include Mongoid::Timestamps
   include MathEvaluate
+  include Judge
 
   field :response
   field :correct, type: Boolean
@@ -14,6 +16,7 @@ class Answer
   field :for_test, type: Boolean
   field :compile_errors
   field :try_number, type: Integer
+  field :lang
 
   field :lo, type: Hash
   field :exercise, type: Hash
@@ -28,7 +31,7 @@ class Answer
   alias :super_exercise :exercise
   alias :super_question :question
 
-  attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test, :try_number, :results
+  attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test, :try_number, :results, :lang
 
   belongs_to :user
   has_one :last_answer
@@ -118,47 +121,42 @@ private
 
   def verify_response
     question = Question.find(self.question_id)
-    compile_errors = ""
-    correct = Hash.new
-    self.results = Hash.new
     tmp = Time.now.to_i
 
-    File.open("/tmp/#{tmp}-response.pas", 'w') {|f| f.write(self.response) }
-      
-    result = `fpc /tmp/#{tmp}-response.pas -Fe/tmp/#{tmp}-compile_errors`
-    if $?.exitstatus == 1
-      self.compile_errors = simple_format `cat /tmp/#{tmp}-compile_errors | tail -n +5 | sed -e 's/^#{tmp}-response.pas//'`
-      self.correct = false
-    else
-      question.test_cases.each do |t|
-        File.open("/tmp/#{tmp}-input-#{t.id}.dat", 'w') {|f| f.write(t.input) }
-        File.open("/tmp/#{tmp}-output-#{t.id}.dat", 'w') {|f| f.write(t.output) }
-      
-        `bin/timeout3 -t #{t.timeout} /tmp/#{tmp}-response < /tmp/#{tmp}-input-#{t.id}.dat > /tmp/#{tmp}-output_response-#{t.id}.dat`
-        if $?.exitstatus == 0
-          `diff /tmp/#{tmp}-output_response-#{t.id}.dat /tmp/#{tmp}-output-#{t.id}.dat`
-        end
-        correct[t.id] = Array.new
-        correct[t.id][0] = $?.exitstatus
-        correct[t.id][1] = File.open("/tmp/#{tmp}-output_response-#{t.id}.dat", "rb") {|io| io.read}
-      end
+    compile_result = Judge::compile(self.lang,self.response,tmp)
+    
+    p compile_result
+    $stdout.flush
 
+    if compile_result[0] != 0
+      self.compile_errors = compile_result[1]
+      self.correct = false      
+    else
+
+      correct = Judge::test(compile_result[1],question.test_cases,tmp)
+      
+      self.results = Hash.new
       self.correct = true
       correct.each do |id,r|
+
         self.results[id] = Hash.new
         self.results[id][:error] = false
         self.results[id][:time] = false
+        self.results[id][:presentation_error] = false
         self.results[id][:output] = r[1]
-        if r[0] == 1
+
+        if r[0] == 1 
           self.correct = false
           self.results[id][:error] = true
+          self.results[id][:content] = question.test_cases.find(id).content
+          self.results[id][:tip] = question.test_cases.find(id).tip
+        elsif r[0] == 2
+          self.correct = false
+          self.results[id][:presentation_error] = true
+          self.results[id][:content] = question.test_cases.find(id).content
         elsif r[0] == 143
           self.correct = false
           self.results[id][:time] = true
-        end
-        if not r[0] == 0
-          self.results[id][:content] = question.test_cases.find(id).content
-          self.results[id][:tip] = question.test_cases.find(id).tip
         end
       end
     end

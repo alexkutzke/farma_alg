@@ -24,6 +24,11 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
   onRender: ->
     @modelBinder.bind(this.model, this.el)
     Carrie.CKEDITOR.show "\##{@cked}"
+    $(@el).find('input[class=languages]').prop('checked', false)
+    if(@model.get('languages'))
+      for x in @model.get('languages')
+        $(@el).find("."+x).prop('checked', true)
+    
 
   cancel: (ev) ->
     ev.preventDefault()
@@ -44,6 +49,16 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
 
     @model.set('content', CKEDITOR.instances[@cked].getData())
 
+    a = new Array()
+    if $(@el).find(".pas").is(":checked")
+      a.push("pas")
+    if $(@el).find(".c").is(":checked")
+      a.push("c")
+    if $(@el).find(".rb").is(":checked")
+      a.push("rb")
+
+    @model.set('languages', a)
+    
     @model.save @model.attributes,
       wait: true
       success: (model, response, options) =>

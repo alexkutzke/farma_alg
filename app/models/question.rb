@@ -6,12 +6,13 @@ class Question
   field :content, type: String
   field :available, type: Boolean, default: false
   field :position, type: Integer
+  field :languages
 
   default_scope desc(:position)
 
   before_create :set_position
 
-  attr_accessible :id, :title, :content, :available
+  attr_accessible :id, :title, :content, :available, :languages
 
   validates_presence_of :title, :content 
   validates :available, :inclusion => {:in => [true, false]}

@@ -1,4 +1,4 @@
-attributes :id, :title, :content
+attributes :id, :title, :content,:languages
 
 node :last_answer, if: lambda {|question| ( current_user && question.last_answers.by_user(current_user).size > 0 )} do |question|
   la = question.last_answers.by_user(current_user).first

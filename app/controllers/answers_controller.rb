@@ -14,13 +14,13 @@ class AnswersController < ApplicationController
   def create
     last = LastAnswer.where(user_id: current_or_guest_user.id, question_id: params[:answer][:question_id]).try(:first)
 
-    if (last && last.answer && (last.answer.response == params[:answer][:response]))
-      @answer = last.answer
-    else
+#    if (last && last.answer && (last.answer.response == params[:answer][:response]))
+#      @answer = last.answer
+#    else
       @answer = current_or_guest_user.answers.create(params[:answer])
-    end
+#    end
 
-    @answer.response = self.add_line_numbers @answer.response
+#    @answer.response = self.add_line_numbers @answer.response
   end
 
   def retroaction

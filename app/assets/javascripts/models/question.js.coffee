@@ -36,6 +36,7 @@ class Carrie.Models.Question extends Backbone.RelationalModel
     input: @get('input')
     output: @get('output')
     available: @get('available')
+    languages: @get('languages')
     lo_id: @get('exercise').get('lo').get('id')
     exercise_id: @get('exercise').get('id')
 

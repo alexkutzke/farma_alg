@@ -19,16 +19,20 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
     ev.preventDefault()
     keyboard = new Carrie.Views.VirtualKeyBoard
       currentResp: @view.resp()
-      callback: (val) =>
-        @sendAnswer(val)
+      languages: @model.get('languages')
+      callback: (val,lang) =>
+        @sendAnswer(val,lang)
         
-    $(keyboard.render().el).modal('show')
+     $(keyboard.render().el).modal('show').css({'margin-top':  -> 
+      -($(this).height() / 2)
+    });
 
-  sendAnswer: (resp) ->
+  sendAnswer: (resp,lang) ->
     bootbox.modal("Compilando e executando ...",{backdrop:'static',keyboard:false})
 
     answer = new Carrie.Models.Answer
       user_id: Carrie.currentUser.get('id')
+      lang: lang
       question: @model
       response: resp
       for_test: false

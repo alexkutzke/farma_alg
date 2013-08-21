@@ -7,7 +7,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
   initialize: ->
     @collection = @model.get('test_cases')
-
+    
   events:
     'click .destroy-question-link' : 'destroy'
     'click .edit-question-link' : 'edit'
@@ -20,6 +20,8 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
     @view = new Carrie.Views.Answer().render()
     $(@el).find('.answer-group').html @view.render().el
     $(@el).find('span i').tooltip()
+    
+
     #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
 
   appendHtml: (collectionView, itemView, index) ->
@@ -37,20 +39,22 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
   verify_answer: (ev) ->
     ev.preventDefault()
     keyboard = new Carrie.Views.VirtualKeyBoard
+      languages: @model.get('languages')
       currentResp: @view.resp()
-      callback: (val) =>
-        @sendAnswer(val)
+      callback: (val,lang) =>
+        @sendAnswer(val,lang)
 
     $(keyboard.render().el).modal('show').css({'margin-top':  -> 
       -($(this).height() / 2)
     });
        
-  sendAnswer: (resp) ->
+  sendAnswer: (resp,lang) ->
     bootbox.modal("Compilando e executando ...",{backdrop:'static',keyboard:false})
     answer = new Carrie.Models.Answer
       question: @model
       user_id: Carrie.currentUser.get('id')
       response: resp
+      lang: lang
       for_test: true
 
     answer.save answer.attributes,

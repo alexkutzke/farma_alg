@@ -3,7 +3,7 @@ collection @exercises, object_root: false
 attributes :id, :title, :content, :available
 
 child(:questions) do
-  attributes :id, :title, :content, :available
+  attributes :id, :title, :content, :available, :languages
 end
 
 node(:created_at) { |exer| l exer.created_at }

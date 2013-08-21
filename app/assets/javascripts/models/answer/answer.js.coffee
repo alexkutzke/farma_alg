@@ -9,6 +9,7 @@ class Carrie.Models.Answer extends Backbone.RelationalModel
 
   toJSON: ->
     response: @get('response')
+    lang: @get('lang')    
     lo_id: @get('question').get('exercise').get('lo').get('id')
     exercise_id: @get('question').get('exercise').get('id')
     question_id: @get('question').get('id')
