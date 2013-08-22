@@ -140,14 +140,15 @@ private
       correct.each do |id,r|
 
         self.results[id] = Hash.new
-        self.results[id][:error] = false
-        self.results[id][:time] = false
+        self.results[id][:diff_error] = false
+        self.results[id][:time_error] = false
+        self.results[id][:exec_error]
         self.results[id][:presentation_error] = false
         self.results[id][:output] = r[1]
 
-        if r[0] == 1 
+        if r[0] == 3 
           self.correct = false
-          self.results[id][:error] = true
+          self.results[id][:diff_error] = true
           self.results[id][:content] = question.test_cases.find(id).content
           self.results[id][:tip] = question.test_cases.find(id).tip
         elsif r[0] == 2
@@ -156,7 +157,11 @@ private
           self.results[id][:content] = question.test_cases.find(id).content
         elsif r[0] == 143
           self.correct = false
-          self.results[id][:time] = true
+          self.results[id][:time_error] = true
+        else
+          self.correct = false
+          self.results[id][:exec_error] = true
+          self.results[id][:output2] = simple_format r[1]
         end
       end
     end

@@ -18,7 +18,7 @@
 
 {{#each results}}
 
-{{#if error}}
+{{#if diff_error}}
   <div class="alert alert-error">
     <h4>Erro de execução</h4>
     <p><strong>Caso de teste:</strong></p>
@@ -28,7 +28,7 @@
   </div>
 {{/if}}
 
-{{#if time}}
+{{#if time_error}}
   <div class="alert alert-error">
     <h4>Tempo de execução excedido</h4>
   </div>
@@ -39,6 +39,14 @@
     <h4>Erro de apresentação</h4>
     <p><strong>Caso de teste:</strong></p>
     <p><strong>Verifique a diagramação da sua resposta</strong></p>
+  </div>
+{{/if}}
+
+{{#if exec_error}}
+  <div class="alert alert-error">
+    <h4>Erro de execução</h4>
+    <p><strong>Saída:</strong></p>
+    {{{ output2 }}}
   </div>
 {{/if}}
 

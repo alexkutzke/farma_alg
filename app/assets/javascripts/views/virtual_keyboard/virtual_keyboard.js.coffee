@@ -8,14 +8,13 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
   initialize: ->
     @callback = @options.callback || ->
     $(@el).on 'destroy', =>
+    #  editAreaLoader.delete_instance("code_text")
       @remove()
  
   onRender: ->
     @input = $($(@el).find('.keyboard-input').first())
     @input.attr('value', @options.currentResp)
     @draggable()
-    @x = $(@el).find('#code')
-    @code = CodeMirror(@x[0], { mode:  "pascal",  tabSize:2, lineNumbers: true })
     @inputFocus()
     x = @el
     langs = {}
@@ -28,10 +27,44 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
         else if i == "rb"
           langs["rb"] = "Ruby"
 
+    mode = "pascal"
+    select = $(@el).find("select#languages").val()
+    if  select == "c"
+        mode = "clike"
+      else if select == "pas"
+        mode = "pascal"
+      else if select == "rb"
+        mode = "ruby"
+
     $.each(langs, (val,text) ->
       $(x).find("select#languages").append(new Option(text, val))
     )
+
+    @c = $(@el).find('#code')
+    @code = CodeMirror(@c[0], { mode: mode,  tabSize:2, lineNumbers: true })
+    
+    c = @code
+    $(@el).find("select#languages").change( ->
+      if $(this).val() == "c"
+        c.setOption("mode","clike")
+      else if $(this).val() == "pas"
+        c.setOption("mode","pascal")
+      else if $(this).val() == "rb"
+        c.setOption("mode","ruby")
+    )
     @el
+
+    #editAreaLoader.init
+    #  id: "code_text",          
+    #  syntax: "ruby",
+    #  start_highlight: true,
+    #  show_line_colors: true, 
+    #  replace_tab_by_spaces: 2,
+    #  allow_toggle: false,
+    #  toolbar: "",
+    #  begin_toolbar: "",
+    #  end_toolbar : ""
+    
 
   setInput: (ev) ->
     ev.preventDefault()
@@ -48,6 +81,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     $(@el).modal('hide')
     #val = @input.val()
     val = @code.getValue()
+    
     @callback val,$(@el).find("select#languages").val()
 
   inputFocus: ->
