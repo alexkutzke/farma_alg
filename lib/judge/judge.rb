@@ -53,7 +53,7 @@ module Judge
     end
   end
 
-	def self.test(filename,test_cases,id)
+	def self.test(lang,filename,test_cases,id)
 	  correct = Hash.new
     test_cases.each do |t|
       correct[t.id] = Array.new
@@ -61,25 +61,32 @@ module Judge
       File.open("/tmp/#{id}-input-#{t.id}.dat", 'w') {|f| f.write(t.input) }
       File.open("/tmp/#{id}-output-#{t.id}.dat", 'w') {|f| f.write(t.output) }
       
-      if filename.last(2) == "rb"
-        `bin/timeout3 -t #{t.timeout} ruby #{filename} < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}.dat`
+      Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+      if lang == "rb"
+        `bin/timeout3 -t #{t.timeout} ruby #{filename} < /tmp/#{id}-input-#{t.id}.dat > /tmp/#{id}-output_response-#{t.id}.dat`
+         Rails.logger.info "bin/timeout3 -t #{t.timeout} ruby #{filename} < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}.dat"
       else
-        `bin/timeout3 -t #{t.timeout} #{filename} < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}.dat`
+        `bin/timeout3 -t #{t.timeout} #{filename} < /tmp/#{id}-input-#{t.id}.dat > /tmp/#{id}-output_response-#{t.id}.dat`
+        Rails.logger.info "bin/timeout3 -t #{t.timeout} #{filename} < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}.dat"
       end
-      puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-      puts $?.exitstatus
+      Rails.logger.info $?.exitstatus
       # run ok
-      if $?.exitstatus == 0 || $?.exitstatus == 255
+      if $?.exitstatus == 0 || $?.exitstatus == 255 || lang == "c"
         
         `diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
-        puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-      puts $?.exitstatus
+        Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+        Rails.logger.info "diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
+	Rails.logger.info $?.exitstatus
+
         # diff1 ok
         if $?.exitstatus == 0
           correct[t.id][0] = 0
         # diff1 fail
         else
         	`diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
+        	Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+        	Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
+		Rails.logger.info $?.exitstatus
 
           # diff2 ok
          	if $?.exitstatus == 0
@@ -94,15 +101,16 @@ module Judge
         # could be time (143) of other failure (n)
         correct[t.id][0] = $?.exitstatus
 
-        if filename.last(2) == "rb"
-          `{ bin/timeout3 -t #{t.timeout} ruby #{filename} ; } < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}.dat`
+        if lang == "rb"
+          `{ bin/timeout3 -t #{t.timeout} ruby #{filename} ; } < /tmp/#{id}-input-#{t.id}.dat > /tmp/#{id}-output_response-#{t.id}.dat`
         else
-          `{ bin/timeout3 -t #{t.timeout} #{filename} ; } < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}.dat`
+          `{ bin/timeout3 -t #{t.timeout} #{filename} ; } < /tmp/#{id}-input-#{t.id}.dat > /tmp/#{id}-output_response-#{t.id}.dat`
         end
 
       end
       correct[t.id][1] = File.open("/tmp/#{id}-output_response-#{t.id}.dat", "rb") {|io| io.read}
-      puts correct[t.id][0]
+      Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> Final"
+      Rails.logger.info correct[t.id][0]
     end
 
     return correct

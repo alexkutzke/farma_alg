@@ -26,7 +26,7 @@ gem 'whenever', require: false
 
 gem 'text'
 gem 'amatch'
-
+gem 'tins'
 group :assets do
   gem 'sass-rails',   '~> 3.2.5'
   gem 'coffee-rails', '~> 3.2.1'

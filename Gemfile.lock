@@ -337,6 +337,7 @@ DEPENDENCIES
   spork (> 0.9.0.rc)
   text
   thin
+  tins
   uglifier (>= 1.0.3)
   whenever
   yajl-ruby

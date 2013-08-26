@@ -133,7 +133,7 @@ private
       self.correct = false      
     else
 
-      correct = Judge::test(compile_result[1],question.test_cases,tmp)
+      correct = Judge::test(lang,compile_result[1],question.test_cases,tmp)
       
       self.results = Hash.new
       self.correct = true
