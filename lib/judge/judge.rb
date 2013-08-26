@@ -18,9 +18,11 @@ module Judge
 
 	def self.compile_pas(filename,id)
 
-		result = `fpc #{filename} -o#{filename[0..-5]} -Fe#{filename}-compile_errors`
+		result = `bin/compile.sh pas #{filename} #{filename[0..-5]} #{filename}-compile_errors`
 
-		if $?.exitstatus == 1
+    result = result.split(/\n/).last
+
+		if not (result.to_i == 0)
 			return [1,simple_format(`cat #{filename}-compile_errors | tail -n +5 | sed -e 's/^#{id}-response.pas//'`)]
 		else
 			return [0,"#{filename[0..-5]}"]
@@ -29,9 +31,10 @@ module Judge
 
   def self.compile_c(filename,id)
 
-    result = `gcc #{filename} -o #{filename[0..-3]} &> #{filename}-compile_errors`
+    result = `bin/compile.sh c #{filename} #{filename[0..-3]} #{filename}-compile_errors`
+    result = result.split(/\n/).last
 
-    if $?.exitstatus == 1
+    if not (result.to_i == 0)
       return [1,simple_format(`cat #{filename}-compile_errors | sed -e 's#^#{filename}:##'`)]
     else
       return [0,"#{filename[0..-3]}"]
@@ -40,9 +43,10 @@ module Judge
 
   def self.compile_rb(filename,id)
 
-    result = `ruby -c #{filename} &> #{filename}-compile_errors`
+    result = `bin/compile.sh rb #{filename} #{filename[0..-4]} #{filename}-compile_errors`
+    result = result.split(/\n/).last
 
-    if $?.exitstatus == 1
+    if not (result.to_i == 0)
       return [1,simple_format(`cat #{filename}-compile_errors | sed -e 's#^#{filename}:##'`)]
     else
       return [0,filename]
@@ -62,12 +66,14 @@ module Judge
       else
         `bin/timeout3 -t #{t.timeout} #{filename} < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}.dat`
       end
-
+      puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+      puts $?.exitstatus
       # run ok
       if $?.exitstatus == 0 || $?.exitstatus == 255
         
         `diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
-        
+        puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+      puts $?.exitstatus
         # diff1 ok
         if $?.exitstatus == 0
           correct[t.id][0] = 0
@@ -96,6 +102,7 @@ module Judge
 
       end
       correct[t.id][1] = File.open("/tmp/#{id}-output_response-#{t.id}.dat", "rb") {|io| io.read}
+      puts correct[t.id][0]
     end
 
     return correct

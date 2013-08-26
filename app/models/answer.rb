@@ -142,7 +142,7 @@ private
         self.results[id] = Hash.new
         self.results[id][:diff_error] = false
         self.results[id][:time_error] = false
-        self.results[id][:exec_error]
+        self.results[id][:exec_error] = false
         self.results[id][:presentation_error] = false
         self.results[id][:output] = r[1]
 
@@ -158,7 +158,7 @@ private
         elsif r[0] == 143
           self.correct = false
           self.results[id][:time_error] = true
-        else
+        elsif r[0] != 0
           self.correct = false
           self.results[id][:exec_error] = true
           self.results[id][:output2] = simple_format r[1]
