@@ -1,6 +1,0 @@
-Free Pascal Compiler version 2.6.2 [2013/02/03] for i386
-Copyright (c) 1993-2012 by Florian Klaempfl and others
-Target OS: Darwin for i386
-Compiling /tmp/1377284614-response.pas
-1377284614-response.pas(1,1) Fatal: illegal character "'"'" ($22)
-1377284614-response.pas(1,1) Fatal: Compilation aborted
