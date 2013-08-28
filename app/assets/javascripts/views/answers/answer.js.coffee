@@ -36,7 +36,7 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
     )
     i=0
     while i<las.length
-      @diffUsingJS(las[i].id,las[i].response,las[(i+1)%las.length].previous)
+      @diffUsingJS(las[i].id,las[i].response,las[i].previous)
       i++;
 
     #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
