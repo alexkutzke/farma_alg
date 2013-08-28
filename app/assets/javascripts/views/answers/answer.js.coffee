@@ -20,8 +20,44 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
     else
       @template = 'answers/answer_empty'
 
+    console.log @model
+
   resp: ->
     if @model
       return @model.get('response')
     else
       return ""
+
+  onRender: ->
+    las = @model.get('last_answers')
+    console.log(las)
+    las = $.map(las, (k, v) ->
+      [k]
+    )
+    i=0
+    while i<las.length
+      @diffUsingJS(las[i].id,las[i].response,las[(i+1)%las.length].previous)
+      i++;
+
+    #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+
+  diffUsingJS: (answer_id,resp1,resp2) ->
+
+    # get the baseText and newText values from the two textboxes, and split them into lines
+    base = difflib.stringAsLines(resp1)#$("baseText").value);
+    newtxt = difflib.stringAsLines(resp2)#$("newText").value);
+
+    #create a SequenceMatcher instance that diffs the two sets of lines
+    sm = new difflib.SequenceMatcher(base, newtxt);
+
+    # get the opcodes from the SequenceMatcher instance
+    # opcodes is a list of 3-tuples describing what changes should be made to the base text
+    # in order to yield the new text
+    opcodes = sm.get_opcodes();
+    diffoutputdiv = $(@el).find("#"+answer_id);
+    while diffoutputdiv.firstChild
+      diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+
+    console.log opcodes
+
+    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: "Resposta", newTextName: "Resposta anterior", contextSize: 0, viewType: 0 }))

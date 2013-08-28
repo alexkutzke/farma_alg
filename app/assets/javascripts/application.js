@@ -34,6 +34,8 @@
 //= require carrie
 //= require parser
 //= require visualsearch
+//= require difflib
+//= require diffview
 //= require_tree ./lib
 //= require_tree ./templates
 //= require_tree ./models

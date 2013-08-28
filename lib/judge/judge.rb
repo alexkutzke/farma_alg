@@ -76,7 +76,7 @@ module Judge
         `diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
         Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
         Rails.logger.info "diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
-	Rails.logger.info $?.exitstatus
+      	Rails.logger.info $?.exitstatus
 
         # diff1 ok
         if $?.exitstatus == 0
@@ -86,7 +86,7 @@ module Judge
         	`diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
         	Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
         	Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
-		Rails.logger.info $?.exitstatus
+		      Rails.logger.info $?.exitstatus
 
           # diff2 ok
          	if $?.exitstatus == 0

@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  include ActionView::Helpers::DateHelper 
   before_filter :authenticate_user!, except: :create
   respond_to :json
   before_filter :team_ids, only: :index
@@ -18,6 +19,7 @@ class AnswersController < ApplicationController
 #      @answer = last.answer
 #    else
       @answer = current_or_guest_user.answers.create(params[:answer])
+      @last_answers = Answer.where(user_id: current_or_guest_user.id, question_id: params[:answer][:question_id]).desc(:created_at)[0..4]
 #    end
 
 #    @answer.response = self.add_line_numbers @answer.response

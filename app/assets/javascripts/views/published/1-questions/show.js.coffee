@@ -6,8 +6,11 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
   initialize: ->
     if @model.get('last_answer')
       model = Carrie.Models.AnswerShow.findOrCreate(@model.get('last_answer'))
+
       unless model
         model = new Carrie.Models.AnswerShow(@model.get('last_answer'))
+
+      model.set('last_answers',@model.get('last_answers'))
       @view = new Carrie.Views.Answer model: model
     else
       @view = new Carrie.Views.Answer()
@@ -51,4 +54,6 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
 
   onRender: ->
     $(@el).find('.answer-group').html @view.render().el
-    #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+    
+
+

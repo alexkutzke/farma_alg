@@ -52,29 +52,33 @@
 
 {{/each}}
 
+<button type="button" class="answer_btn btn btn-primary">Responder novamente</button>
 
-<div class="accordion" id="accordion_code_{{{question_id}}}">
+<h5>Respostas anteriores</h5>
+
+<div class="accordion" id="accordion_code_{{{question.id}}}">
+
+{{#each last_answers}}
+
   <div class="accordion-group">
     <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="accordion_code_{{question_id}}" href="#collapseCode-{{question_id}}">
-        Ver código enviado
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="accordion_code_{{question_id}}" href="#collapseCode-{{id}}">
+        {{ created_at }} atrás
       </a>
     </div>
-    <div id="collapseCode-{{question_id}}" class="accordion-body collapse">
+    <div id="collapseCode-{{id}}" class="accordion-body collapse">
       <div class="accordion-inner">
         <div class="span3 answer" data-toggle="modal">
           <span class="text-in-border-{{classname}}">{{title}}</span>
-          <div class='{{classname}}-answer'>
-            <pre class="prettyprint lang-pascal">
+          <div class='{{classname}}-answer' id="{{{id}}}">
+            <!--<pre class="prettyprint lang-pascal">
 
 {{response}}
-            </pre>
+            </pre> -->
           </div>
         </div>
       </div>
     </div>
   </div>
+{{/each}}
 </div>
-
-
-<button type="button" class="answer_btn btn btn-primary">Responder novamente</button>
