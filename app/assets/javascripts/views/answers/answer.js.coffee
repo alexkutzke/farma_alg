@@ -2,6 +2,8 @@
 class Carrie.Views.Answer extends Backbone.Marionette.ItemView
   template: null
   tagName: 'div'
+  events:
+    'click .details-answer-link': 'details'
 
   initialize: ->
     if @model
@@ -20,13 +22,24 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
     else
       @template = 'answers/answer_empty'
 
+  details: (ev) ->
+    ev.preventDefault()
+    $(@el).find("#details_answer_"+$(ev.target).data('id')).toggle()
+
   resp: ->
     if @model
       return @model.get('response')
     else
       return ""
 
+  lang: ->
+    if @model
+      return @model.get('lang')
+    else
+      return ""
+
   onRender: ->
+    $(@el).find('span.label').tooltip()
     if @model
       las = @model.get('last_answers')
       #console.log(las)

@@ -17,11 +17,32 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
 
   events:
     'click .answer_btn': 'verify_answer'
+    'click .reload-answer-link': 'reload'
+    'click .last-answers-link': 'showLastAnswers'
+
+  showLastAnswers: (ev) ->
+    ev.preventDefault()
+    console.log "#accordion_code_"+@model.get('id')
+    $(@el).find("#accordion_code_"+@model.get('id')).toggle()
+
+  reload: (ev) ->
+    ev.preventDefault()
+    keyboard = new Carrie.Views.VirtualKeyBoard
+      currentResp: @model.get('last_answers')[parseInt($(ev.target).data('id'))].response
+      lang: @model.get('last_answers')[parseInt($(ev.target).data('id'))].lang
+      languages: @model.get('languages')
+      callback: (val,lang) =>
+        @sendAnswer(val,lang)
+        
+     $(keyboard.render().el).modal({show: true}).css({'margin-top':  -> 
+      -($(this).height() / 2)
+    });
 
   verify_answer: (ev) ->
     ev.preventDefault()
     keyboard = new Carrie.Views.VirtualKeyBoard
       currentResp: @view.resp()
+      lang: @view.lang()
       languages: @model.get('languages')
       callback: (val,lang) =>
         @sendAnswer(val,lang)

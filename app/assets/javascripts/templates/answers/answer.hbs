@@ -55,52 +55,103 @@
 <button type="button" class="answer_btn btn btn-primary">Responder novamente</button>
 
 {{#unless for_test }}
-<h5>Últimas respostas</h5>
+<p style="margin-top: 10px;">
+  <a href='' class='last-answers-link'><i class="icon-backward"></i> Respostas anteriores </a> 
+</p>
 
-<div class="accordion" id="accordion_code_{{{question.id}}}">
+<div class="accordion hide" id="accordion_code_{{{question_id}}}">
 
 {{#each last_answers}}
 
   <div class="accordion-group">
     <div class="accordion-heading" style="padding:5px;">
         <a class="accordion-toggle" style="display:inline;" data-toggle="collapse" data-parent="accordion_code_{{question_id}}" href="#collapseCode-{{id}}">{{ created_at }} atrás </a>
-        <span class="label">{{{ lang }}}</span>
+        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta" class="label">{{{ lang }}}</span>
         {{#if correct}}
-          <span class="label label-success">correta</span>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
         {{else}}
           {{#if compile_errors}}
-            <span class="label label-warning">compilação</span>
+            <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
           {{else}}
             {{#each results}}
               {{#if diff_error}}
-                <span class="label label-important">saída</span>
+                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '{{{title}}}'" class="label label-important">saída</span>
               {{/if}}
 
               {{#if time_error}}
-                <span class="label label-important">tempo</span>
+                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '{{{title}}}'" class="label label-important">tempo</span>
               {{/if}}
 
               {{#if presentation_error}}
-                <span class="label label-important">apresentação</span>
+                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '{{{title}}}'" class="label label-important">apresentação</span>
               {{/if}}
 
               {{#if exec_error}}
-                <span class="label label-important">execução</span>
+                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '{{{title}}}'" class="label label-important">execução</span>
               {{/if}}
             {{/each}}
           {{/if}}
         {{/if}}
     </div>
     <div id="collapseCode-{{id}}" class="accordion-body collapse">
-      <div class="accordion-inner">
+      <div class="accordion-inner" style="background-color:white;">
+
+        <p><a href='' class='details-answer-link' data-id="{{id}}" ><i class="icon-plus"></i> Detalhes da resposta </a> | 
+          <a href='' class='reload-answer-link' data-id="{{@key}}" ><i class="icon-play"></i> Utilizar essa resposta para uma nova tentativa </a></p>
+        <div id="details_answer_{{{id}}}" class="hide">
+
+{{#if compile_errors }}
+  <div class="alert alert-error">
+    <h4>Erro de compilação</h4>
+    <p><strong>Saída do compilador:</strong></p>
+    {{{compile_errors}}}
+  </div>
+{{/if}}
+
+{{#each results}}
+{{#if diff_error}}
+  <div class="alert alert-error">
+    <h4>Erro de saída</h4>
+    <p><strong>Caso de teste:</strong></p>
+    {{{content}}}
+    <p><strong>Dica:</strong></p>
+    {{{tip}}}
+  </div>
+{{/if}}
+
+{{#if time_error}}
+  <div class="alert alert-error">
+    <h4>Tempo de execução excedido</h4>
+  </div>
+{{/if}}
+
+{{#if presentation_error}}
+  <div class="alert alert-error">
+    <h4>Erro de apresentação</h4>
+    <p><strong>Caso de teste:</strong></p>
+    <p><strong>Verifique a diagramação da sua resposta</strong></p>
+  </div>
+{{/if}}
+
+{{#if exec_error}}
+  <div class="alert alert-error">
+    <h4>Erro de execução</h4>
+    <p><strong>Saída:</strong></p>
+    {{{ output2 }}}
+  </div>
+{{/if}}
+{{/each}}
+        </div>
+        <h4>Resposta e comparação com a anterior</h4>
+        <!--
         <div class="span3 answer" data-toggle="modal">
-          <span class="text-in-border-{{classname}}">{{title}}</span>
+          <span class="text-in-border-{{classname}}">{{title}}</span>-->
           <div class='{{classname}}-answer' id="{{{id}}}">
             <!--<pre class="prettyprint lang-pascal">
 
 {{response}}
-            </pre> -->
-          </div>
+            </pre> 
+          </div>-->
         </div>
       </div>
     </div>

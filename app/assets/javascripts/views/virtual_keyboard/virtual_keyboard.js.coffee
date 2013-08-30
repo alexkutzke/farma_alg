@@ -39,6 +39,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     $.each(langs, (val,text) ->
       $(x).find("select#languages").append(new Option(text, val))
     )
+    $(@el).find("select#languages").val(@options.lang)
 
     @c = $(@el).find('#code')
     @code = CodeMirror(@c[0], { mode: mode,  tabSize:2, lineNumbers: true })

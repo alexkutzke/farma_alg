@@ -43,8 +43,10 @@ class Answer
   scope :corrects, where(correct: true, :team_id.ne => nil, :for_test.ne => true)
   scope :every, excludes(team_id: nil, for_test: true)
 
+  #before_save :verify_response, :store_datas
   before_create :verify_response, :store_datas
   after_create :register_last_answer#, :update_questions_with_last_answer
+
 
   def self.search(page, params = nil, team_ids = nil)
     if team_ids
@@ -145,16 +147,16 @@ private
         self.results[id][:exec_error] = false
         self.results[id][:presentation_error] = false
         self.results[id][:output] = r[1]
+        self.results[id][:content] = question.test_cases.find(id).content
+        self.results[id][:tip] = question.test_cases.find(id).tip
+        self.results[id][:title] = question.test_cases.find(id).title
 
         if r[0] == 3 
           self.correct = false
           self.results[id][:diff_error] = true
-          self.results[id][:content] = question.test_cases.find(id).content
-          self.results[id][:tip] = question.test_cases.find(id).tip
         elsif r[0] == 2
           self.correct = false
           self.results[id][:presentation_error] = true
-          self.results[id][:content] = question.test_cases.find(id).content
         elsif r[0] == 143
           self.correct = false
           self.results[id][:time_error] = true
