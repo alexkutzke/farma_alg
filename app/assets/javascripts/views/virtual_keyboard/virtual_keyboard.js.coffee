@@ -8,7 +8,6 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
   initialize: ->
     @callback = @options.callback || ->
     $(@el).on 'destroy', =>
-    #  editAreaLoader.delete_instance("code_text")
       @remove()
  
   onRender: ->
@@ -36,12 +35,14 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
       else if select == "rb"
         mode = "ruby"
 
+    $(@el).find("select#languages").append(new Option("Escolha uma linguagem", ""))
     $.each(langs, (val,text) ->
       $(x).find("select#languages").append(new Option(text, val))
     )
 
     @c = $(@el).find('#code')
     @code = CodeMirror(@c[0], { mode: mode,  tabSize:2, lineNumbers: true })
+    @code.setValue(@options.currentResp)
     
     c = @code
     $(@el).find("select#languages").change( ->
@@ -68,18 +69,27 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
 
   setInput: (ev) ->
     ev.preventDefault()
+
     value = $(ev.target).data('value').toString()
     @input.focus()
 
     switch value
+      when 'cancel'
+        $(@el).modal('hide')
+        @destroy()
       when 'clean'
         @code.setValue('')
       when 'send'
-        @send()
+        if $(@el).find("select#languages").val() == ""
+          alert('Escolha uma linguagem.')
+          $(@el).find("#languages").focus()
+          $(@el).find("#languages").attr('required','required')
+          return false
+        else
+          @send()
 
   send: ->
     $(@el).modal('hide')
-    #val = @input.val()
     val = @code.getValue()
     
     @callback val,$(@el).find("select#languages").val()

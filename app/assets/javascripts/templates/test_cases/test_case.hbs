@@ -1,12 +1,17 @@
-<div class='clearfix'>
-  <div class='right'>
-    <a href='' class='edit-test_case-link' ><i class="icon-edit"></i> Editar </a>
-    <a href='' class='destroy-test_case-link' ><i class="icon-remove-circle"></i> Remover </a>
+<div>
+  <div class='clearfix'>
+    <h5 class='left'>{{{title}}}</h5>
+    <div class='right'>
+      <a href='' class='detail-test_case-link' ><i class="icon-plus"></i> Detalhes </a>
+      <a href='' class='edit-test_case-link' ><i class="icon-edit"></i> Editar </a>
+      <a href='' class='destroy-test_case-link' ><i class="icon-remove-circle"></i> Remover </a>
+    </div>
   </div>
+</div>
+<div id="test_case_{{{id}}}" class="hide">
+<div class='clearfix'>
 
-
-
-  <p><strong>Texto: </strong>{{safe content}}</p>
+  <p><strong>Descrição: </strong>{{safe content}}</p>
   <p><strong>Dica: </strong>{{safe tip}}</p>
   <p><strong>Tempo máximo de execução: </strong>{{safe timeout}} segundo(s)</p>  
 
@@ -35,4 +40,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

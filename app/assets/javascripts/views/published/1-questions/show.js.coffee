@@ -26,7 +26,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
       callback: (val,lang) =>
         @sendAnswer(val,lang)
         
-     $(keyboard.render().el).modal('show').css({'margin-top':  -> 
+     $(keyboard.render().el).modal({show: true}).css({'margin-top':  -> 
       -($(this).height() / 2)
     });
 

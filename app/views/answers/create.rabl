@@ -8,12 +8,17 @@ node :last_answers do
   i = 0
   if las.length > 1
     las[0..-2].each do |la|
+
   	  result[i.to_s] = 
     	{
       	id: las[i].id,
       	response: las[i].response,
       	created_at: time_ago_in_words(las[i].created_at),
-      	previous: las[i+1].response 
+      	previous: las[i+1].response,
+        lang: la.lang,
+        results: la.results,
+        compile_errors: la.compile_errors,
+        correct: la.correct
     	}
     	i = i+1
     end
@@ -24,7 +29,11 @@ node :last_answers do
       	id: las[i].id,
       	response: las[i].response,
       	created_at: time_ago_in_words(las[i].created_at),
-      	previous: ""
+      	previous: "",
+        lang: la.lang,
+        results: la.results,
+        compile_errors: la.compile_errors,
+        correct: la.correct
     	}
     	i = i+1
     end

@@ -13,31 +13,32 @@
     </span>
     <h4 class='left'>{{title}}</h4>
     <div class='right'>
-      <a href='' class='edit-question-link' ><i class="icon-edit"></i> Editar </a>
+      <a href='' class='details-question-link' ><i class="icon-plus"></i> Detalhes </a> | 
+      <a href='' class='show-test_cases-link'><i class="icon-ok"></i> Casos de teste </a> | 
+      <a href='' class='edit-question-link' ><i class="icon-edit"></i> Editar </a> | 
       <a href='' class='destroy-question-link' ><i class="icon-remove-circle"></i> Remover </a>
-      <a href='' class='show-test_cases-link'><i class="icon-ok"></i> Casos de teste </a>
     </div>
   </div>
 </header>
 
+<div id="test_cases_modal_{{{id}}}" class="well hide" style="margin-top:10px; background-color: #ffffff;">
+  <div>
+    <h4>Casos de teste da Questão {{{title}}}</h4>
+  </div>
 
-  <section class='test_cases hide'>
-    <div class='clearfix separator-top'>
-      <div class='left'>
-        <h4>Casos de Teste:</h4>
-      </div>
-      <p></p>
+      <div class='clearfix separator-top'>
       <div class='right'>
-        <a href='' class='new-test_case-link' ><i class="icon-plus-sign"></i> Criar novo caso de teste </a>
+        <a href='' class="new-test_case-link22" ><i class="icon-plus-sign"></i> Criar novo caso de teste </a>
       </div>
     </div>
-    <section>
-      <div class='new-test_case'></div>
-    </section>
 
-  </section>
+  <div>
+      <div id='new_test_case_{{{id}}}'></div>
+    <div class="test_cases"></div>
+  </div>
+</div>
 
-
+<div id="details_question_{{{id}}}" class="hide">
 <p> {{safe content}} </p>
 
 <div class='well' >
@@ -46,5 +47,7 @@
      <div class="answer-group">
      </div>
    </div>
+
+</div>
 
 </div>

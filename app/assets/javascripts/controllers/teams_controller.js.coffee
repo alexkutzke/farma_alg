@@ -11,7 +11,7 @@ class Carrie.Controllers.Teams
   index: ->
     Carrie.Helpers.Session.Exists
       func: ->
-        Carrie.Utils.Menu.highlight 'enrolled-link'
+        Carrie.Utils.Menu.highlight 'teams-link'
         Carrie.layouts.main.loadBreadcrumb
           1: name: 'Turmas que estou matriculado', url: '/teams/enrolled'
           2: name: 'Todas turmas', url: ''

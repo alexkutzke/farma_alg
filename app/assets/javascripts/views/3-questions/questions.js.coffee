@@ -11,30 +11,36 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
   events:
     'click .destroy-question-link' : 'destroy'
     'click .edit-question-link' : 'edit'
-    'click .new-test_case-link': 'addTestCase'
+    #'click .new-test_case-link22': 'addTestCase'
     'click .show-test_cases-link': 'showTestCases'
+    'click .details-question-link': 'details'
     'click .answer_btn': 'verify_answer'
+
 
   onRender: ->
     @el.id = @model.get('id')
     @view = new Carrie.Views.Answer().render()
     $(@el).find('.answer-group').html @view.render().el
     $(@el).find('span i').tooltip()
-    
-
-    #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+    #console.log $(@el).find('.new-test_case-link22')
+    x = this
+    $(@el).find('.new-test_case-link22').on('click', (ev) -> 
+      ev.preventDefault()
+      x.addTestCase(ev)
+    )
 
   appendHtml: (collectionView, itemView, index) ->
-    $(@el).find('.test_cases section').append(itemView.el) if itemView.model.get('id')
+    $(@el).find('.test_cases').append(itemView.el) if itemView.model.get('id')
 
   addTestCase: (ev) ->
-    ev.preventDefault()
-    form = new Carrie.Views.CreateOrSaveTestCase(question: @model, collection: @collection)
-    $(@el).find('.test_cases .new-test_case').html form.render().el
+    #ev.preventDefault()
+    #console.log @collection
+    form = new Carrie.Views.CreateOrSaveTestCase(question: @model, collection: @collection, x: @)
+    $('#new_test_case_'+@model.get('id')).html form.render().el
 
   showTestCases: (ev) ->
     ev.preventDefault()
-    $(@el).find('.test_cases').toggle()
+    $(@el).find('#'+"test_cases_modal_"+@model.get('id')).toggle()
 
   verify_answer: (ev) ->
     ev.preventDefault()
@@ -68,6 +74,10 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
       error: (model, resp) ->
         alert resp.responseText
 
+  details: (ev) ->
+    ev.preventDefault()
+    $(@el).find("#details_question_"+@model.get('id')).toggle()
+
   edit: (ev) ->
     ev.preventDefault()
     form = new Carrie.Views.CreateOrSaveQuestion(model: @model, view: @)
@@ -82,5 +92,6 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
         Carrie.CKEDITOR.clearWhoHas(@model.get('id'))
         @model.destroy
           success: (model, response) =>
+            #console.log @
             @remove()
             Carrie.Helpers.Notifications.Top.success 'Questão removido com sucesso!', 4000

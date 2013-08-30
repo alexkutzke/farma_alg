@@ -14,6 +14,7 @@ class Carrie.Models.TestCase extends Backbone.RelationalModel
 
   toJSON: ->
     id: @get('id')
+    title: @get('title')
     content: @get('content')
     tip: @get('tip')
     input: @get('input')

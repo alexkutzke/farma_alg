@@ -20,8 +20,6 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
     else
       @template = 'answers/answer_empty'
 
-    console.log @model
-
   resp: ->
     if @model
       return @model.get('response')
@@ -29,17 +27,16 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
       return ""
 
   onRender: ->
-    las = @model.get('last_answers')
-    console.log(las)
-    las = $.map(las, (k, v) ->
-      [k]
-    )
-    i=0
-    while i<las.length
-      @diffUsingJS(las[i].id,las[i].response,las[i].previous)
-      i++;
-
-    #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])
+    if @model
+      las = @model.get('last_answers')
+      #console.log(las)
+      las = $.map(las, (k, v) ->
+        [k]
+      )
+      i=0
+      while i<las.length
+        @diffUsingJS(las[i].id,las[i].response,las[i].previous)
+        i++;
 
   diffUsingJS: (answer_id,resp1,resp2) ->
 
@@ -58,6 +55,6 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
     while diffoutputdiv.firstChild
       diffoutputdiv.removeChild(diffoutputdiv.firstChild);
 
-    console.log opcodes
+    #console.log opcodes
 
     $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: "Resposta", newTextName: "Resposta anterior", contextSize: 0, viewType: 0 }))

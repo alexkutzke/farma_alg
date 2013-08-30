@@ -20,7 +20,7 @@
 
 {{#if diff_error}}
   <div class="alert alert-error">
-    <h4>Erro de execução</h4>
+    <h4>Erro de saída</h4>
     <p><strong>Caso de teste:</strong></p>
     {{{content}}}
     <p><strong>Dica:</strong></p>
@@ -54,17 +54,42 @@
 
 <button type="button" class="answer_btn btn btn-primary">Responder novamente</button>
 
-<h5>Respostas anteriores</h5>
+{{#unless for_test }}
+<h5>Últimas respostas</h5>
 
 <div class="accordion" id="accordion_code_{{{question.id}}}">
 
 {{#each last_answers}}
 
   <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="accordion_code_{{question_id}}" href="#collapseCode-{{id}}">
-        {{ created_at }} atrás
-      </a>
+    <div class="accordion-heading" style="padding:5px;">
+        <a class="accordion-toggle" style="display:inline;" data-toggle="collapse" data-parent="accordion_code_{{question_id}}" href="#collapseCode-{{id}}">{{ created_at }} atrás </a>
+        <span class="label">{{{ lang }}}</span>
+        {{#if correct}}
+          <span class="label label-success">correta</span>
+        {{else}}
+          {{#if compile_errors}}
+            <span class="label label-warning">compilação</span>
+          {{else}}
+            {{#each results}}
+              {{#if diff_error}}
+                <span class="label label-important">saída</span>
+              {{/if}}
+
+              {{#if time_error}}
+                <span class="label label-important">tempo</span>
+              {{/if}}
+
+              {{#if presentation_error}}
+                <span class="label label-important">apresentação</span>
+              {{/if}}
+
+              {{#if exec_error}}
+                <span class="label label-important">execução</span>
+              {{/if}}
+            {{/each}}
+          {{/if}}
+        {{/if}}
     </div>
     <div id="collapseCode-{{id}}" class="accordion-body collapse">
       <div class="accordion-inner">
@@ -82,3 +107,4 @@
   </div>
 {{/each}}
 </div>
+{{/unless}}

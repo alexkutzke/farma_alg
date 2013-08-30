@@ -6,11 +6,17 @@ class Carrie.Views.TestCase extends Backbone.Marionette.ItemView
   events:
     'click .destroy-test_case-link' : 'destroy'
     'click .edit-test_case-link' : 'edit'
+    'click .detail-test_case-link' : 'detail'
 
   edit: (ev) ->
     ev.preventDefault()
     form = new Carrie.Views.CreateOrSaveTestCase(model: @model, view: @)
     $(@el).html form.render().el
+    $(@el).find("#test_case_"+@model.get('id')).show()
+
+  detail: (ev) ->
+    ev.preventDefault()
+    $(@el).find("#test_case_"+@model.get('id')).toggle()
 
   destroy: (ev) ->
     ev.preventDefault()
