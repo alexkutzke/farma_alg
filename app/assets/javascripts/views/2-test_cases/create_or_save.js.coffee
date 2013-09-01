@@ -90,3 +90,5 @@ class Carrie.Views.CreateOrSaveTestCase extends Backbone.Marionette.ItemView
 
     Carrie.CKEDITOR.show "\##{@cked}"
     Carrie.CKEDITOR.show "\##{@cked2}"
+    $(@el).find('i.icon-question-sign').tooltip()
+

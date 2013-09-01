@@ -31,5 +31,4 @@ class Carrie.Views.TestCase extends Backbone.Marionette.ItemView
             Carrie.Helpers.Notifications.Top.success 'Caso de teste removido com sucesso!', 4000
 
   onRender: ->
-    @el.id = @model.get('id')
- 
+    @el.id = @model.get('id') 

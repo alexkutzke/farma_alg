@@ -72,28 +72,44 @@ module Judge
       Rails.logger.info $?.exitstatus
       # run ok
       if $?.exitstatus == 0 || $?.exitstatus == 255 || lang == "c"
-        
-        `diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
-        Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-        Rails.logger.info "diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
-      	Rails.logger.info $?.exitstatus
 
-        # diff1 ok
-        if $?.exitstatus == 0
-          correct[t.id][0] = 0
-        # diff1 fail
-        else
-        	`diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
-        	Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-        	Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
-		      Rails.logger.info $?.exitstatus
+        if t.ignore_presentation
+          
+          `diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
+          Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+          Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
+          Rails.logger.info $?.exitstatus
 
           # diff2 ok
-         	if $?.exitstatus == 0
-         		correct[t.id][0] = 2
+          if $?.exitstatus == 0
+            correct[t.id][0] = 0
           # diff2 fail
           else
             correct[t.id][0] = 3
+          end
+        else
+          `diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
+          Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+          Rails.logger.info "diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
+          Rails.logger.info $?.exitstatus
+
+          # diff1 ok
+          if $?.exitstatus == 0
+            correct[t.id][0] = 0
+          # diff1 fail
+          else
+            `diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
+            Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+            Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
+            Rails.logger.info $?.exitstatus
+
+            # diff2 ok
+            if $?.exitstatus == 0
+              correct[t.id][0] = 2
+            # diff2 fail
+            else
+              correct[t.id][0] = 3
+            end
           end
         end
       # run fail

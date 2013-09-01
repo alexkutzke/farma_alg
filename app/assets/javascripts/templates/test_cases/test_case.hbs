@@ -13,7 +13,10 @@
 
   <p><strong>Descrição: </strong>{{safe content}}</p>
   <p><strong>Dica: </strong>{{safe tip}}</p>
-  <p><strong>Tempo máximo de execução: </strong>{{safe timeout}} segundo(s)</p>  
+  <p><strong>Tempo máximo de execução: </strong>{{safe timeout}} segundo(s)</p>
+  {{#if ignore_presentation}}
+  <p><span class="badge badge-warning">!</span> <strong>Este caso de teste irá ignorar diferenças de tabulação</strong></p>
+  {{/if}} 
 
 </div>
 <div class="accordion" id="accordion1">

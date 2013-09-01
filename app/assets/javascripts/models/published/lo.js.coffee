@@ -13,7 +13,7 @@ class Carrie.Published.Models.Lo extends Backbone.RelationalModel
     relatedModel: 'Carrie.Published.Models.Introduction'
     collectionType: 'Carrie.Published.Collections.Introductions'
     reverseRelation: {
-      key: 'lo'
+      key: 'lo_p'
     }
   },
   {
@@ -22,9 +22,9 @@ class Carrie.Published.Models.Lo extends Backbone.RelationalModel
     relatedModel: 'Carrie.Published.Models.Exercise'
     collectionType: 'Carrie.Published.Collections.Exercises'
     reverseRelation: {
-      key: 'lo'
+      key: 'lo_p'
     }
   }
   ]
 
-Carrie.Published.Models.Lo.setup()
+Carrie.Models.Lo.setup()

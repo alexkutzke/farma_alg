@@ -126,9 +126,6 @@ private
     tmp = Time.now.to_i
 
     compile_result = Judge::compile(self.lang,self.response,tmp)
-    
-    p compile_result
-    $stdout.flush
 
     if compile_result[0] != 0
       self.compile_errors = compile_result[1]
