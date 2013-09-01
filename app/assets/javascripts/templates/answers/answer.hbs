@@ -21,7 +21,7 @@
 {{#if diff_error}}
   <div class="alert alert-error">
     <h4>Erro de saída</h4>
-    <p><strong>Caso de teste:</strong></p>
+    <p><strong>Caso de teste '{{title}}'</strong></p>
     {{{content}}}
     <p><strong>Dica:</strong></p>
     {{{tip}}}
@@ -31,13 +31,22 @@
 {{#if time_error}}
   <div class="alert alert-error">
     <h4>Tempo de execução excedido</h4>
+    <p><strong>Caso de teste '{{title}}'</strong></p>
+    {{{content}}}
+    <p><strong>Dica:</strong></p>
+    {{{tip}}}
+  </div>
   </div>
 {{/if}}
 
 {{#if presentation_error}}
   <div class="alert alert-error">
     <h4>Erro de apresentação</h4>
-    <p><strong>Caso de teste:</strong></p>
+    <p><strong>Caso de teste '{{title}}'</strong></p>
+    {{{content}}}
+    <p><strong>Dica:</strong></p>
+    {{{tip}}}
+  </div>
     <p><strong>Verifique a diagramação da sua resposta</strong></p>
   </div>
 {{/if}}
@@ -45,6 +54,11 @@
 {{#if exec_error}}
   <div class="alert alert-error">
     <h4>Erro de execução</h4>
+    <p><strong>Caso de teste '{{title}}'</strong></p>
+    {{{content}}}
+    <p><strong>Dica:</strong></p>
+    {{{tip}}}
+    </div>
     <p><strong>Saída:</strong></p>
     {{{ output2 }}}
   </div>

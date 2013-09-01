@@ -8,10 +8,20 @@ class Carrie.Models.Answer extends Backbone.RelationalModel
     tip: ''
 
   toJSON: ->
+    if @get('question').get('exercise_p')
+      lo_id = @get('question').get('exercise_p').get('lo_p').get('id')
+    else
+      lo_id = @get('question').get('exercise').get('lo').get('id')
+    
+    if @get('question').get('exercise_p') 
+      exercise_id = @get('question').get('exercise_p').get('id')
+    else
+      exercise_id = @get('question').get('exercise').get('id')
+
     response: @get('response')
     lang: @get('lang')    
-    lo_id: @get('question').get('exercise').get('lo').get('id')
-    exercise_id: @get('question').get('exercise').get('id')
+    lo_id: lo_id
+    exercise_id: exercise_id
     question_id: @get('question').get('id')
     tip: @get('tip')
     for_test: @get('for_test')
