@@ -2,6 +2,14 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   respond_to :json
 
+  def verified_request?
+
+    p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    p form_authenticity_token 
+    p request.headers['X-CSRF-Token']
+    super()
+  end
+  
   # if user is logged in, return current_user, else return guest_user
   def current_or_guest_user
     if current_user

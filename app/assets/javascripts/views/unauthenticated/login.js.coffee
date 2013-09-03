@@ -22,6 +22,7 @@ class Carrie.Views.Unauthenticated.Login extends Backbone.Marionette.ItemView
 
     this.model.save this.model.attributes,
       success: (model, response, options) ->
+        console.log response
         el.find('input.btn-primary').button('reset')
         Carrie.currentUser = new Carrie.Models.User(response)
         Carrie.vent.trigger("authentication:logged_in")

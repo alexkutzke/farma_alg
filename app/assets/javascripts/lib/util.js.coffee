@@ -53,6 +53,9 @@ Carrie.Utils.Loading = (obj) ->
   obj.on 'change', ->
     $('.loading').hide()
   , obj
+  obj.on 'sync', ->
+    $('.loading').hide()
+  , obj
 
 Carrie.Utils.Pluralize = (amount, word_s, word_p) ->
   s = amount

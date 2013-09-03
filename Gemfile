@@ -1,21 +1,21 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.14'
 
-gem 'mongoid', '~> 3.0.23'
+gem 'mongoid', '~> 3.1.0'
 
 gem 'jquery-rails', '~> 2.3.0'
-gem 'backbone-on-rails', '0.9.2.1'
+gem 'backbone-on-rails'#, '0.9.2.1'
 gem 'rabl'
 gem 'yajl-ruby'
 
 gem 'delayed_job_mongoid'
 gem 'bson_ext'
-gem 'devise'
+gem 'devise', '2.2.3'
 gem 'simple_form'
 gem 'debugger'
 
-gem "ckeditor", "3.7.1"
+gem "ckeditor", '~> 4.0.4'
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
 gem 'kaminari', "~> 0.14.1"
 
@@ -37,7 +37,7 @@ group :assets do
                                 #:git => 'git://github.com/anjlab/bootstrap-rails.git'
   gem 'font-awesome-sass-rails'
   gem 'handlebars_assets'
-  gem 'marionette-rails', "~> 0.10.2"
+  gem 'marionette-rails'
 end
 
 group :development, :test do
@@ -56,7 +56,7 @@ group :test do
   gem 'spork', '> 0.9.0.rc'
   gem 'guard-rspec'
   gem 'guard-spork'
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails',  "~> 4.2.1"
 end
 
 gem 'bcrypt-ruby', '~> 3.0.0'
@@ -65,7 +65,7 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 # gem 'jbuilder'
 
 # Use unicorn as the web server
-# gem 'unicorn'
+# gem ' icorn'
 
 # Deploy with Capistrano
 gem 'capistrano'
