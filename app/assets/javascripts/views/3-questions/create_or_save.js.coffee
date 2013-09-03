@@ -37,7 +37,11 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
     if @editing
       @modelBinder.unbind()
       @model.fetch(async:false)
-      @options.view.render()
+      x = @
+      $(@el).slideUp('slow',->
+        x.options.view.render()
+        $(x.el).slideDown()
+      )
     else
       $('#new_question').html('')
 

@@ -3,6 +3,8 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
   tagName: 'article'
   itemView: Carrie.Views.TestCase
   className: 'question'
+  openTestCase: true
+  openDetails: true
 
 
   initialize: ->
@@ -34,13 +36,18 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
   addTestCase: (ev) ->
     #ev.preventDefault()
-    #console.log @collection
     form = new Carrie.Views.CreateOrSaveTestCase(question: @model, collection: @collection, x: @)
     $('#new_test_case_'+@model.get('id')).html form.render().el
 
   showTestCases: (ev) ->
     ev.preventDefault()
-    $(@el).find('#'+"test_cases_modal_"+@model.get('id')).toggle()
+
+    if @openTestCase
+      $(@el).find('#'+"test_cases_modal_"+@model.get('id')).slideDown()
+      @openTestCase = false
+    else
+      $(@el).find('#'+"test_cases_modal_"+@model.get('id')).slideUp()
+      @openTestCase = true
 
   verify_answer: (ev) ->
     ev.preventDefault()
@@ -76,12 +83,23 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
   details: (ev) ->
     ev.preventDefault()
-    $(@el).find("#details_question_"+@model.get('id')).toggle()
+
+    if @openDetails
+      $(@el).find("#details_question_"+@model.get('id')).slideDown()
+      @openDetails = false
+    else
+      $(@el).find("#details_question_"+@model.get('id')).slideUp()
+      @openDetails = true
 
   edit: (ev) ->
     ev.preventDefault()
     form = new Carrie.Views.CreateOrSaveQuestion(model: @model, view: @)
-    $(@el).html form.render().el
+    x = @
+    $(@el).slideUp('slow',->
+      $(x.el).html form.render().el
+      $(x.el).slideDown()
+    )
+    
 
   destroy: (ev) ->
     ev.preventDefault()

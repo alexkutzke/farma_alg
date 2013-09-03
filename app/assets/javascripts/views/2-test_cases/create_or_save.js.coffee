@@ -60,10 +60,11 @@ class Carrie.Views.CreateOrSaveTestCase extends Backbone.Marionette.ItemView
         Carrie.Helpers.Notifications.Top.success 'Caso de Teste salvo com sucesso!', 4000
 
         if @editing
-          @model.get('question').get('test_cases').sort()
+          @options.view.render()
         else
-          @options.collection.sort()
           $(@el).parent().html('')
+          @options.x.render()          
+          $(@options.x.el).find('#'+"test_cases_modal_"+@options.x.model.get('id')).slideDown()
 
         $('.new-test_case-link').show()
         $('.edit-test_case-link').show()
