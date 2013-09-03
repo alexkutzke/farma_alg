@@ -18,7 +18,7 @@
 //= require lang-pascal
 //= require bootbox.min
 //= require ckeditor/init
-//= require ckeditor/adapters/jquery
+//= require jquery_ckeditor_adapter
 //= require twitter/bootstrap
 //= require bootstrap-modalmanager
 //= require bootstrap-modal
