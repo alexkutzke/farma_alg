@@ -72,7 +72,11 @@ class Carrie.Views.CreateOrSaveQuestion extends Backbone.Marionette.ItemView
         Carrie.Helpers.Notifications.Top.success 'Questão salva com sucesso!', 4000
 
         if @editing
-          @options.view.render()
+          x = @
+          $(@el).slideUp('slow',->
+            x.options.view.render()
+            $(x.el).slideDown()
+          )
         else
           view = new Carrie.Views.Question({model: @model})
           $('#new_question').after view.render().el
