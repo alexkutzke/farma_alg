@@ -9,6 +9,7 @@ node :last_answer, if: lambda {|question| ( current_user && question.last_answer
     id: la.id,
     results: la.answer.results,
     question_id: la.answer.question_id,
+    lang: la.answer.lang
   }
 end
 

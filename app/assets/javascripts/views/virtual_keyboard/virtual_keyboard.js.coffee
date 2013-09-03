@@ -77,7 +77,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     switch value
       when 'cancel'
         $(@el).modal('hide')
-        @destroy()
+        @remove()
       when 'clean'
         @code.setValue('')
       when 'send'

@@ -11,6 +11,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
         model = new Carrie.Models.AnswerShow(@model.get('last_answer'))
 
       model.set('last_answers',@model.get('last_answers'))
+
       @view = new Carrie.Views.Answer model: model
     else
       @view = new Carrie.Views.Answer()
@@ -22,7 +23,6 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
 
   showLastAnswers: (ev) ->
     ev.preventDefault()
-    console.log "#accordion_code_"+@model.get('id')
     $(@el).find("#accordion_code_"+@model.get('id')).toggle()
 
   reload: (ev) ->
@@ -54,8 +54,6 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
   sendAnswer: (resp,lang) ->
     bootbox.modal("Compilando e executando ...",{backdrop:'static',keyboard:false})
 
-    console.log "123123213---------------------------------"
-
     answer = new Carrie.Models.Answer
       user_id: Carrie.currentUser.get('id')
       lang: lang
@@ -69,6 +67,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
       wait: true
       success: (model, response) =>     
         @view = new Carrie.Views.Answer model: Carrie.Models.AnswerShow.findOrCreate(model.attributes)
+        @model.set('last_answers',model.get('last_answers'))
         $(@el).find('.answer-group').html @view.render().el
         prettyPrint()
         bootbox.hideAll()
