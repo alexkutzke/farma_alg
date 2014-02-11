@@ -166,8 +166,9 @@ private
         elsif r[0] != 0
           self.correct = false
           self.results[id][:exec_error] = true
-          self.results[id][:output2] = simple_format r[1]
         end
+
+        self.results[id][:output2] = simple_format r[1]
       end
     end
 

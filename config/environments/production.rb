@@ -21,7 +21,7 @@ Carrie::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
-  config.action_mailer.default_url_options = { :host => 'farma.educacional.mat.br' }
+  config.action_mailer.default_url_options = { :host => 'farma-alg.educacional.mat.br' }
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
@@ -50,7 +50,7 @@ Carrie::Application.configure do
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   # config.assets.precompile += %w( search.js )
-  config.assets.precompile += %w( application2.js )
+  config.assets.precompile += %w( application2.js panel/*.js )
   config.assets.precompile += Ckeditor.assets
 
   # Disable delivery errors, bad email addresses will be ignored

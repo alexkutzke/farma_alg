@@ -85,7 +85,17 @@ module Judge
             correct[t.id][0] = 0
           # diff2 fail
           else
-            correct[t.id][0] = 3
+            `numdiff -I /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
+            Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+            Rails.logger.info "numdiff -I /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
+            Rails.logger.info $?.exitstatus
+            # diff2 ok
+            if $?.exitstatus == 0
+              correct[t.id][0] = 0
+            # diff2 fail
+            else
+              correct[t.id][0] = 3
+            end
           end
         else
           `diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
