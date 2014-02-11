@@ -9,6 +9,8 @@ class AnswersController < ApplicationController
       @answers = Answer.search(params[:page], params[:search])
     else
       @answers = Answer.search(params[:page], params[:search], @team_ids)
+
+      #@answers = Answer.in(team_id: @team_ids).entries
     end
   end
 
@@ -28,8 +30,7 @@ class AnswersController < ApplicationController
   def retroaction
     delete_retroaction_answers
     @answer = Answer.find(params[:id])
-    
-    @answer.response = self.add_line_numbers @answer.response
+    @last_answers = Answer.where(user_id: current_or_guest_user.id, question_id: @answer.question_id).desc(:created_at)[0..4]
   end
 
   def team_ids

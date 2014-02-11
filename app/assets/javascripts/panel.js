@@ -19,36 +19,16 @@
 //= require bootbox.min
 //= require ckeditor/init
 //= require jquery_ckeditor_adapter
-//= require underscore
-//= require underscore.string
-//= require backbone
-//= require backbone-relational
-//= require backbone.sync.rails
-//= require Backbone.ModelBinder
-//= require backbone.marionette
 //= require twitter/bootstrap
 //= require bootstrap-modalmanager
 //= require bootstrap-modal
-//= require handlebars
-//= require monkeys
-//= require carrie
-//= require parser
-//= require visualsearch
 //= require difflib
 //= require diffview
 //= require codemirror/lib/codemirror
 //= require codemirror/mode/pascal/pascal
 //= require codemirror/mode/ruby/ruby
 //= require codemirror/mode/clike/clike
-//= require_tree ./lib
-//= require_tree ./templates
-//= require_tree ./models
-//= require_tree ./collections
-//= require_tree ./views
-//= require_tree ./routers
-//= require_tree ./controllers
-//= require_tree ./helpers
-
+//= require_tree ./panel/
 
 $(this).scroll(function() {
    if ($(this).scrollTop() > 120){
@@ -56,4 +36,8 @@ $(this).scroll(function() {
    } else {
       $('.sidebar-nav').removeClass('sidebar-nav-fixed');
    }
+});
+
+$(document).ready(function(){
+	prettyPrint();
 });

@@ -1,0 +1,7 @@
+<%= render :partial => "panel/breadcrumb" %>
+
+<ul>
+	<% @team.users.each do |u| %>
+		<li><%= link_to u.name, panel_team_user_path(@team, u)%></li>
+	<% end %>
+</ul>

@@ -40,6 +40,7 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
 
   onRender: ->
     $(@el).find('span.label').tooltip()
+    console.log @model
     if @model
       las = @model.get('last_answers')
       #console.log(las)

@@ -101,9 +101,15 @@ class Answer
     @_question ||= Question.new(super) rescue nil
   end
 
-  def question_as_json
+  def question_as_json(user_id)
     question = super_question
     %w(position available lo_id updated_at test_cases exercise_id correct_answer).each {|e| question.delete(e)}
+    #question['last_answer']['last_answers'] = Answer.where(user_id: user_id, question_id:question['id']).desc(:created_at).first.as_json
+    #question['last_answer']['last_answers'].delete('los_ids')
+    #question['last_answer']['last_answers'].delete('question')
+    #question['last_answer']['last_answers'].delete('exercise')
+    #question['last_answer']['last_answers'].delete('lo')
+    #question['last_answer']['last_answers'].delete('team')
     question
   end
 

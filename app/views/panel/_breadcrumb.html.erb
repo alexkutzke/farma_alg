@@ -1,0 +1,38 @@
+<ol class="breadcrumb">
+	<% if controller.class == PanelController %>
+  	<li class="active">Respostas</li>
+  <% else %>
+  	<li><%= link_to 'Respostas',panel_index_path %></li> <span class="divider">/</span>
+  <% end %>
+  <% unless @team.nil? %>
+  	<% if controller.class == Panel::TeamsController %>
+  		<li class="active"><%= @team.name %></li>	
+  	<% else %>
+  		<li><%= link_to @team.name, panel_team_path(@team) %></li>	 <span class="divider">/</span>
+  	<% end %>
+  <% end %>
+  <% unless @user.nil? %>
+  	<% if controller.class == Panel::UsersController %>
+  		<li class="active"><%= @user.name %></li>	
+  	<% else %>
+  		<li><%= link_to @user.name, panel_team_user_path(@team,@user) %></li>		 <span class="divider">/</span>
+  	<% end %>
+  <% end %>
+  <% unless @lo.nil? %>
+  	<% if controller.class == Panel::LosController %>
+  		<li class="active"><%= @lo.name %></li>	
+  	<% else %>
+  		<li><%= link_to @lo.name, panel_team_user_lo_path(@team,@user,@lo) %></li>	 <span class="divider">/</span>
+  	<% end %>
+  <% end %>
+  <% unless @question.nil? %>
+  	<% if controller.class == Panel::QuestionsController %>
+  		<li class="active"><%= @question.title %></li>	
+  	<% else %>
+  		<li><%= link_to @question.title, panel_team_user_lo_question_path(@team,@user,@lo,@question) %></li>	 <span class="divider">/</span>
+  	<% end %>
+  <% end %>
+  <% unless @answer.nil? %>
+  	<li class="active">Há <%= time_ago_in_words @answer.created_at %></li>	
+  <% end %>
+</ol>

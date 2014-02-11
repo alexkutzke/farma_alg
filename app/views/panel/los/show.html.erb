@@ -1,0 +1,12 @@
+<%= render :partial => "panel/breadcrumb" %>
+
+<ul>
+	<% @exercises.each do |ex| %>
+		<li><%= ex.title %></li>
+		<ul>
+		<% ex.questions.each do |q| %>
+			<li><%= link_to q.title, panel_team_user_lo_question_path(@team,@user,@lo,q) %></li>
+		<% end %>
+		</ul>
+	<% end %>
+</ul>

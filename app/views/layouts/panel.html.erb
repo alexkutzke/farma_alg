@@ -3,10 +3,8 @@
 <head>
   <title>Farma</title>
   <%= stylesheet_link_tag    'application', :media => 'all' %>
-  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%= javascript_include_tag 'panel' %>
 
 </head>
 <body data-logged='<%= current_user.to_json %>'>
@@ -25,8 +23,24 @@
                 <span class="icon-bar"></span>
               </button>
               <div id="header_left_menu">
+                <a class="brand" data-url="" href="/">FARMA - ALG</a>
+                <a class="brand" data-url="welcome" href="/welcome">HOME</a>
               </div>
               <div id="header_right_menu" class="nav-collapse collapse pull-right logged-in">
+                <div class="btn-group ">
+                  <a class="dropdown-toggle btn-clean" data-toggle="dropdown" href="#">
+                    <span name="name"> Olá <%= current_user.name%> </span>
+                    <img src="http://www.gravatar.com/avatar/<%= current_user.gravatar%>?s=25" />
+                    <span>
+                      <a id='link-sign-out' class='btn-sign-out' href="/users/sign_out" data-method='DELETE'
+                      rel="tooltip" data-original-title="Sair do sistema."><i class="icon-signin"></i></a>
+                    </span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <!-- dropdown menu links -->
+                    <a id='perfil-link' href="/users/perfil">Meu Perfil</a>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -36,10 +50,7 @@
       <!-- Subhead ================================================== -->
       <header class="subhead">
         <div class="container-fluid">
-          <h1>Ferramenta de Autoria FARMA - ALG</h1>
-          <p>Ferramenta de Autoria para a Remediação de erros com Mobilidade na Aprendizagem - Algoritmos.</p>
-          <p>Construa Objetos de Aprendizagem para o ensino de progração</p>
-        </div>
+          <h2>Visualização de Respostas</h2>
       </header>
 
       <section class="container-fluid" id="main">
@@ -50,19 +61,7 @@
   </div>
 
   <div class="modal-container">
-        <!-- You can put your modal definitions here but it is not required -->
+    <!-- You can put your modal definitions here but it is not required -->
   </div>
-  <script type="text/javascript"
-	    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full">
-  </script>
-  <script type="text/x-mathjax-config">
-	//<![CDATA[
-	    MathJax.Hub.Config({
-	      asciimath2jax: {
-		delimiters: [['`','`'], ['$','$']]
-	      }
-	    });
-	 //]]>
-  </script>
 </body>
 </html>

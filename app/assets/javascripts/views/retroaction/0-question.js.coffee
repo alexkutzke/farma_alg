@@ -6,6 +6,7 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
     'click .answer_btn': 'verify_answer'
 
   initialize: ->
+    console.log @model
     if @model.get('last_answer')
       model = Carrie.Models.AnswerShow.findOrCreate(@model.get('last_answer'))
       unless model
@@ -15,7 +16,7 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
       @view = new Carrie.Views.Answer()
 
   onRender: ->
-    $(@el).find('.answer-group').html @view.render().el
+    $(@el).find('answer-group').html @view.render().el
     $('.accordion-body').on 'hidden', (event) =>
       event.stopPropagation()
     #MathJax.Hub.Queue(["Typeset",MathJax.Hub, @el])

@@ -1,0 +1,167 @@
+<%= render :partial => "panel/breadcrumb" %>
+
+<h3>Resposta <small>tentativa #<%= @answer['try_number'] %>, realizada <%= time_ago_in_words @answer.created_at %></small></h3>
+
+<% if @answer.correct %>
+<div class="alert alert-success">
+  Resposta correta!
+</div>
+<% else %>
+<div class='alert alert-error'>
+  Resposta Incorreta.
+</div>
+<% end %>
+
+<pre>
+  <%= @answer.response %>
+</pre>
+
+<% if @answer.compile_errors %>
+  <div class="alert alert-error">
+    <h4>Erro de compilação</h4>
+    <p><strong>Saída do compilador:</strong></p>
+    <%= simple_format @answer.compile_errors %>
+  </div>
+<% end %>
+
+<% @answer.results.each do |k,v| %>
+  <div class="alert alert-error">
+
+<% if v['diff_error'] %>
+    <h4>Erro de saída</h4>
+<% end %>
+<% if v['time_error'] %>
+    <h4>Tempo de execução excedido</h4>
+<% end %>
+<% if v['exec_error'] %>
+    <h4>Erro de execução</h4>
+<% end %>
+<% if v['presentation_error'] %>
+    <h4>Erro de apresentação</h4>
+<% end %>
+
+    <p><strong>Caso de teste <%= v['title'] %></strong></p>
+    <%= simple_format v['content'] %>
+    <p><strong>Dica:</strong></p>
+    <%= simple_format v['tip'] %>
+
+<% if v['presentation_error'] %>
+  	<p><strong>Verifique a diagramação da sua resposta</strong></p>
+<% end %>
+
+<% if v['exec_error'] %>
+    <p><strong>Saída:</strong></p>
+    <%= v['output2'] %>
+<% end %>
+  </div>
+<% end %>
+
+<a href=<%= "/published/teams/#{@team.id}/los/#{@lo.id}" %> class="btn btn-primary">Responder	novamente</a>
+
+
+<% unless @answer.for_test %>
+<p style="margin-top: 10px;">
+  <a href='#' class="last-answers-link" data-id="<%= @question.id %>"><i class="icon-backward"></i> Últimas respostas </a> 
+</p>
+
+<div class="accordion hide" id="accordion_code_<%= @question.id %>">
+
+<% @previous_answers.each do |la| %>
+  <div class="accordion-group">
+    <div class="accordion-heading" style="padding:5px;">
+        <a class="accordion-toggle" style="display:inline;" data-toggle="collapse" data-parent="accordion_code_<%= @question.id %>" href="#collapseCode-<%= la.id%>"> <%= time_ago_in_words la.created_at %> atrás </a>
+
+        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta"
+        class="label"><%= la.lang %></span>
+        <% if la.correct %>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
+        <% else %>
+          <% if la.compile_errors %>
+            <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
+          <% else %>
+            <% la.results.each do |k,v| %>
+              <% if v['diff_error'] %>
+                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '<%= v['title'] %>'" class="label label-important">saída</span>
+              <% end %>
+              <% if v['time_error'] %>
+                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '<%= v['title'] %>'" class="label label-important">tempo</span>
+              <% end %>
+              <% if v['presentation_error'] %>
+                 <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '<%= v['title'] %>'" class="label label-important">apresentação</span>
+              <% end %>
+              <% if v['exec_error'] %>
+               <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '<%= v['title'] %>'" class="label label-important">execução</span>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+    </div>
+    <div id="collapseCode-<%= la.id %>" class="accordion-body collapse">
+      <div class="accordion-inner" style="background-color:white;">
+
+        <p><a href='' class='details-answer-link' data-id="<%= la.id %>" ><i class="icon-plus"></i> Detalhes da resposta </a>
+        <div id="details_answer_<%= la.id %>" class="hide">
+
+<% if la.compile_errors %>
+  <div class="alert alert-error">
+    <h4>Erro de compilação</h4>
+    <p><strong>Saída do compilador:</strong></p>
+    <%= simple_format @answer.compile_errors %>
+  </div>
+<% end %>
+
+<% la.results.each do |k,v| %>
+
+  <div class="alert alert-error">
+
+<% if v['diff_error'] %>
+    <h4>Erro de saída</h4>
+<% end %>
+<% if v['time_error'] %>
+    <h4>Tempo de execução excedido</h4>
+<% end %>
+<% if v['exec_error'] %>
+    <h4>Erro de execução</h4>
+<% end %>
+<% if v['presentation_error'] %>
+    <h4>Erro de apresentação</h4>
+<% end %>
+
+    <p><strong>Caso de teste <%= v['title'] %></strong></p>
+    <%= simple_format v['content'] %>
+    <p><strong>Dica:</strong></p>
+    <%= simple_format v['tip'] %>
+
+<% if v['presentation_error'] %>
+    <p><strong>Verifique a diagramação da sua resposta</strong></p>
+<% end %>
+
+<% if v['exec_error'] %>
+    <p><strong>Saída:</strong></p>
+    <%= v['output2'] %>
+<% end %>
+  </div>
+<% end %>
+
+        </div>
+
+        <h4>Resposta e comparação com a anterior</h4>
+<% if la.correct %>
+  <div class='correct-answer' id="<%= la.id %>">
+<% else %>
+  <div class='wrong-answer' id="<%= la.id %>">
+<% end %>
+          <div class="response hide" data-response="<%= la['response'] %>" data-previous="<%= la['previous'] %>" data-id="<%= la.id %>"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<% end %>
+</div>
+<% end %>
+
+

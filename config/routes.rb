@@ -52,6 +52,19 @@ Carrie::Application.routes.draw do
   get "answers_panel/index"
   get "answers_panel/answers"
   
+  namespace :panel do
+    get "index"
+    resources :teams, only: [:show] do
+      resources :users, only: [:show] do
+        resources :los, only: [:show] do
+          resources :questions, only: [:show] do
+            resources :answers, only: [:show]
+          end
+        end
+      end
+    end
+  end
+
   root to: "home#index"
 
   match '*path', to: 'home#index'

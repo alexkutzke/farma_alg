@@ -1,0 +1,19 @@
+<%= render :partial => "panel/breadcrumb" %>
+
+<% unless @my_teams.empty? %>
+	<h3 class="page-header">Respostas dos meus alunos</h3>
+	<ul>
+		<% @my_teams.each do |t| %>
+			<li><%= link_to t.name, panel_team_path(t) %></li>
+		<% end %>
+	</ul>
+<% end %>
+
+<% unless @teams.empty? %>
+	<h3 class="page-header">Minhas respostas</h3>
+	<ul>
+		<% @teams.each do |t| %>
+			<li><%= link_to t.name, panel_team_user_path(t,current_user) %></li>
+		<% end %>
+	</ul>
+<% end %>

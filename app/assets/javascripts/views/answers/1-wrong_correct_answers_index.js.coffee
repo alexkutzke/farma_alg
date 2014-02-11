@@ -69,6 +69,8 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
         value = @map[value] if @map[value]
         key = @map[key] if @map[key]
 
+        console.log [key,value]
+
         value =  @teams.where({label: value})[0].get('id') if key == 'team_id'
 
         if key == 'lo_id'
@@ -83,16 +85,21 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
     return params
 
   updateLos: ->
+    alert("1")
     if @params['team_id']
       params = {team_id: @params['team_id']}
+      alert("2")
       @los.fetch
         async: false
         data: params
     else
+      alert("3")
       @los.fetch
         async: false
 
     @losJSON = @los.toJSON()
+    console.log @losJSON
+
 
   updateLearners: ->
     if @params['team_id']
@@ -121,12 +128,11 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
       query     : ''
       callbacks :
         search : (query, searchCollection) =>
+          console.log(["query", searchCollection.facets(), query])
           @params = @prepareParams searchCollection.facets()
           @endless.reload
             search: @params
           @updatePageInfo()
-
-          #console.log(["query", searchCollection.facets(), query])
 
         # These are the facets that will be autocompleted in an empty input.
         facetMatches : (callback) =>

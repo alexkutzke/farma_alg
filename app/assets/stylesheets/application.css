@@ -13,5 +13,6 @@
  *= require visualsearch
  *= require diffview
  *= require bootstrap-modal
+ *= require codemirror
  *= require_self
 */
