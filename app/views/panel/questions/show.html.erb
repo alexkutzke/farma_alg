@@ -1,8 +1,17 @@
-<%= render :partial => "panel/breadcrumb" %>
-
 <% @answers.each do |a| %>
-	<h5>#<%= a['try_number'] %>, Há <%= time_ago_in_words a['created_at']%></h5>
+	<h5>#<%= a['try_number'] %>, Há <%= time_ago_in_words a['created_at']%>
+		<% if a.correct %>
+			<small>Correta</small>
+		<% else %>
+			<small>Incorreta</small>	
+		<% end %>
+	</h5>
 	<%= link_to panel_team_user_lo_question_answer_path(@team,@user,@lo,@question,a) do %>
-		<pre><%= truncate(a['response'],length:100) %></pre>
+		<% if a.correct %>
+			<pre style="border: 2px green solid;">	
+		<% else %>
+			<pre style="border: 2px red solid;">
+		<% end %>
+		<%= truncate(a['response'],length:100) %></pre>
 	<% end %>
 <% end %>

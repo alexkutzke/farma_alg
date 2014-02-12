@@ -8,5 +8,8 @@ class Panel::TeamsController < ApplicationController
 	end
 
 	def show
+    if not current_user.admin? and @team.owner_id != current_user.id
+      redirect_to panel_team_user_path(@team, @current_user)
+    end
 	end
 end

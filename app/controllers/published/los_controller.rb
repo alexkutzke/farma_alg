@@ -10,7 +10,12 @@ class Published::LosController < ApplicationController
           @lo = team.los.find(params[:id])
         end
       else
-        @lo = current_user.los.find(params[:id])
+        lo = Lo.find(params[:id])
+        if lo.available
+          @lo = lo
+        else  
+          @lo = current_user.los.find(params[:id])
+        end
       end
     end
   end

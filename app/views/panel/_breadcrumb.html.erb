@@ -1,12 +1,14 @@
 <ol class="breadcrumb">
 	<% if controller.class == PanelController %>
-  	<li class="active">Respostas</li>
+  	<li class="active">Turmas</li>
   <% else %>
-  	<li><%= link_to 'Respostas',panel_index_path %></li> <span class="divider">/</span>
+  	<li><%= link_to 'Turmas',panel_index_path %></li> <span class="divider">/</span>
   <% end %>
   <% unless @team.nil? %>
   	<% if controller.class == Panel::TeamsController %>
-  		<li class="active"><%= @team.name %></li>	
+  		<li class="active"><%= @team.name %></li>
+    <% elsif not current_user.admin? and current_user.id != @team.owner_id %>
+      <li class="active"><%= @team.name %></li> <span class="divider">/</span>
   	<% else %>
   		<li><%= link_to @team.name, panel_team_path(@team) %></li>	 <span class="divider">/</span>
   	<% end %>

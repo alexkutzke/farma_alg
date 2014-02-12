@@ -49,8 +49,10 @@
 
       <!-- Subhead ================================================== -->
       <header class="subhead">
-        <div class="container-fluid">
+        <div class="container-fluid" style="margin-bottom:5px;">
           <h2>Visualização de Respostas</h2>
+          <%= render :partial => "panel/breadcrumb" %>
+        </div>
       </header>
 
       <section class="container-fluid" id="main">
@@ -58,10 +60,6 @@
       </section>
 
     </section>
-  </div>
-
-  <div class="modal-container">
-    <!-- You can put your modal definitions here but it is not required -->
   </div>
 </body>
 </html>

@@ -1,21 +1,66 @@
-<%= render :partial => "panel/breadcrumb" %>
 
-<% unless @my_teams.empty? %>
-	<h3 class="page-header">Respostas dos meus alunos</h3>
-	<ul>
-		<% @my_teams.each do |t| %>
-			<li><%= link_to t.name, panel_team_path(t) %></li>
-		<% end %>
-	</ul>
+<h3 class="page-header">Minhas respostas nas turmas em que estou matriculado</h3>
+<% if @teams.empty? %>
+  <h5>Você não está matricula em nenhuma turma. <small><a
+    href="/teams">Matricule-se</a>.</small></h5>
+<% else %>
+
+    <% @teams.each do |t| %>
+    <%= link_to panel_team_user_path(t,current_user) do %>
+<section class="well"><header class="clearfix">
+  <div class="left">
+    <h4><%= t.name %></h4>
+    <span class="date-info">
+      
+         <%= t.user_ids.length %> aprendizes matriculados.
+      
+    </span>
+  </div>
+</section>
+
+      <% end %>
+    <% end %>
+
 <% end %>
 
-<% if @teams.empty? %>
-	<h4>Você não possui nenhuma resposta</h4>
-<% else %>
-	<h3 class="page-header">Minhas respostas</h3>
-	<ul>
-		<% @teams.each do |t| %>
-			<li><%= link_to t.name, panel_team_user_path(t,current_user) %></li>
+<% unless @my_teams.empty? %>
+	<h3 class="page-header">Respostas em turmas criadas por mim</h3>
+		<% @my_teams.each do |t| %>
+    <%= link_to panel_team_path(t) do %>
+<section class="well"><header class="clearfix">
+  <div class="left">
+    <h4><%= t.name %></h4>
+    <span class="date-info">
+      
+         <%= t.user_ids.length %> aprendizes matriculados.
+      
+    </span>
+  </div>
+</section>
+
+		  <% end %>
 		<% end %>
-	</ul>
+
+<% end %>
+
+
+
+<% unless @others.empty? %>
+  <h3 class="page-header">Respostas em turmas criadas por outros usuários</h3>
+
+    <% @others.each do |t| %>
+    <%= link_to panel_team_path(t) do %>
+<section class="well"><header class="clearfix">
+  <div class="left">
+    <h4><%= t.name %></h4>
+    <span class="date-info">
+      
+         <%= t.user_ids.length %> aprendizes matriculados.
+      
+    </span>
+  </div>
+</section>
+
+      <% end %>    <% end %>
+ 
 <% end %>

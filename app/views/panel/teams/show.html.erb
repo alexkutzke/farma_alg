@@ -1,7 +1,6 @@
-<%= render :partial => "panel/breadcrumb" %>
-
+<h4 class="page-header">Alunos matriculados nesta turma</h4>
 <ul>
 	<% @team.users.each do |u| %>
-		<li><%= link_to u.name, panel_team_user_path(@team, u)%></li>
+		<li><%= link_to u.name, panel_team_user_path(@team, u)%> <small><%= "(Seu próprio usuário)" if u.id ==current_user.id %></small></li>
 	<% end %>
 </ul>
