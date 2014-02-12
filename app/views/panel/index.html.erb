@@ -9,7 +9,9 @@
 	</ul>
 <% end %>
 
-<% unless @teams.empty? %>
+<% if @teams.empty? %>
+	<h4>Você não possui nenhuma resposta</h4>
+<% else %>
 	<h3 class="page-header">Minhas respostas</h3>
 	<ul>
 		<% @teams.each do |t| %>

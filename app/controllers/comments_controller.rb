@@ -1,10 +1,11 @@
+#encoding: utf-8
 class CommentsController < ApplicationController
 
   before_filter :authenticate_user!
 
   prepend_before_filter :get_model
   before_filter :get_comment, :only => [:show, :edit, :update, :destroy]
-  respond_to :json
+  respond_to :json,:html
 
   def index
     @comments = @model.comments
@@ -26,14 +27,21 @@ class CommentsController < ApplicationController
   end
 
   def create
+    @answer = Answer.find(params[:answer_id])
     @comment = @model.comments.build(params[:comment])
     @comment.user_id = current_user.id
 
-    if @comment.save
-      respond_with(@model, @comment)
-    else
-      respond_with(@model, @comment, status: 422)
-    end
+    options = {:hard_wrap => true, :filter_html => true, :autolink => true,
+               :no_intraemphasis => true, :fenced_code => true, :gh_blockcode => true}
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, options)
+    @comment.text = markdown.render(@comment.text).html_safe.gsub(/"/,'&quot').gsub(/\n/,'')
+
+    @comment.save
+    #if @comment.save
+      #respond_with(@model, @comment)
+    #else
+      #respond_with(@model, @comment, status: 422)
+    #end
   end
 
   def update
@@ -49,11 +57,14 @@ class CommentsController < ApplicationController
   end
 
   def destroy
+    p @comment
     if can_destroy?
       @comment.destroy
-      respond_with(@model, data: @comment)
+      @destroyed = true
+      #respond_with(@model, data: @comment)
     else
-      render json: {comments: @comment}, status: 405
+      @destroyed = false
+      #render json: {comments: @comment}, status: 405
     end
   end
 
@@ -81,7 +92,7 @@ class CommentsController < ApplicationController
   end
 
   def get_comment
-    @comment = @model.comments.find(params[:id])
+    @comment = Answer.find(params[:answer_id]).comments.find(params[:id])
   end
 
   def can_destroy?

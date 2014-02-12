@@ -7,12 +7,16 @@ class Comment
   field :text, type: String
   field :user_id, type: Moped::BSON::ObjectId
 
-  attr_accessible :text, :user_id
+  attr_accessible :text, :user_id, :created_at
   validates_presence_of :text, :user_id
 
   default_scope order_by([:created_at, :asc])
 
   def user
     @user ||= User.find(self.user_id)
+  end
+
+  def can_destroy?(user)
+    self.created_at >= 15.minutes.ago && self.user_id == user.id
   end
 end

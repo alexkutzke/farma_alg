@@ -164,4 +164,100 @@
 </div>
 <% end %>
 
+<header class='page-header'>
+  <h3>Commentários<h3>
+</header>
+
+<section class='comments-list'>
+  <% @answer.comments.each do |c| %>
+  <% unless c.created_at.nil? %>
+    
+  
+  <div class="comment", id="<%= c.id %>">
+   <div class='avatar'>
+     <img class="gravatar" src="http://www.gravatar.com/avatar/<%= c.user.gravatar %>?s=48" />
+   </div>
+   <div class='main clearfix'>
+     <div class='headline'>
+      Criado por <%= c.user.name %> à <strong> <%= time_ago_in_words(c.created_at) unless c.created_at.blank? %> atrás </strong>
+      <% if c.can_destroy?(current_user) %>
+        <div class='right'> 
+          <%= link_to [@answer,c], method: :delete, data: { confirm: 'Você tem certeza?' },:remote => true do %>
+            <i class='icon-remove'></i> Remover comentário
+          <% end %>
+          </div>
+      <% end %>
+     </div>
+     <div class="comment_content">
+       <p> <%= simple_format c.text %> </p>
+     </div>
+   </div>
+   <% end %>
+<% end %>
+</section>
+
+<section>
+  <div class="comment">
+    <div class="avatar">
+     <img class="gravatar" src="http://www.gravatar.com/avatar/<%= current_user.gravatar %>?s=48" />
+    </div>
+    <div class="main clearfix">
+      <div class="headline">
+        Novo comentário de <%= current_user.name %>
+      </div>
+
+      <div class="comment_content">
+        <div class="formatting">
+          Use a formatação markdown. <a href="#" id="markdown_link">Veja os exemplos.</a>
+          <div id="markdown_examples" style="display: none; ">
+            <table>
+              <tbody>
+                  <tr>
+                    <td><pre>[Link](http://example.com/)</pre></td>
+                    <td><a href="http://example.com/">Link</a></td>
+                  </tr>
+                  <tr>
+                    <td><pre>*Italic*</pre></td>
+                    <td><em>Italic</em></td>
+                  </tr>
+                  <tr>
+                    <td><pre>**Bold**</pre></td>
+                    <td><strong>Bold</strong></td>
+                  </tr>
+                  <tr>
+                    <td>
+<pre> * Listed
+* Items  </pre></td>
+                    <td><ul><li>Listed</li><li>Items</li></ul></td>
+                  </tr>
+                  <tr>
+                    <td><pre>&gt; Block quote</pre></td>
+                    <td><blockquote><p>Block quote</p></blockquote></td>
+                  </tr>
+                  <tr>
+                    <td><pre>`Inline code`</pre></td>
+                    <td><code>Inline code</code></td>
+                   </tr>
+                  <tr>
+                    <td><pre>$ 2^(30+2)/sqrt(9) $</pre></td>
+                    <td>$ 2^(30+2)/sqrt(9) $</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+       </div>
+
+       <%= form_for([@answer,@comment], :remote => true) do |f| %>
+        <div class="form-group">
+          <%= f.text_area :text, :class => "form-control required" %>
+        </div>
+        <div class="actions">
+          <%= f.submit "Salvar", :class => "btn btn-primary" %>
+        </div>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
 

@@ -5,10 +5,12 @@ class PanelController < ApplicationController
 	def index
 		@my_teams = Team.where(owner_id: current_user.id)
 		@teams = Array.new
-		current_user.teams.each do |t|
-			unless t.owner_id == current_user.id
-				@teams << t
-			end 
+		if current_user.admin?
+			current_user.teams.each do |t|
+				unless t.owner_id == current_user.id
+					@teams << t
+				end 
+			end
 		end
 	end
 end

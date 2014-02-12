@@ -12,6 +12,9 @@ class Panel::AnswersController < ApplicationController
 	end
 
 	def show
+		@comment = Comment.new
+		@comment.answer = @answer
+		@comment.user_id = current_user.id
 		@previous_answers = Answer.where(user_id: @user.id, team_id: @team.id, question_id: @question.id).desc(:created_at).lt(created_at: @answer.created_at)[0..4]
 
 		@previous_answers.each do |p|

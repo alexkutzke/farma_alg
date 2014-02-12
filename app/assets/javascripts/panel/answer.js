@@ -22,15 +22,20 @@ function diffUsingJS(answer_id,resp1,resp2){
 $(document).ready(function(){
 	$(".last-answers-link").click(function(ev){
 		ev.preventDefault();
-  	$("#accordion_code_"+$(this).data("id")).toggle();
+  	    $("#accordion_code_"+$(this).data("id")).toggle();
 	});
 
 	$('.details-answer-link').click(function(ev){
 		ev.preventDefault();
-    $("#details_answer_"+$(this).data('id')).toggle();
+        $("#details_answer_"+$(this).data('id')).toggle();
 	});
 
 	$("div.response").each(function(){
-		diffUsingJS($(this).data("id"),$(this).data("response"),$(this).data("previous"));
+	   diffUsingJS($(this).data("id"),$(this).data("response"),$(this).data("previous"));
 	});
+
+    $("#markdown_link").click(function(ev){
+      ev.preventDefault();
+      $("#markdown_examples").toggle();
+    });
 });
