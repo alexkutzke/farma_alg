@@ -2,9 +2,11 @@ require "bundler/capistrano"
 set :rvm_ruby_string, 'ruby-2.0.0-p0@farma_alg'
 require "rvm/capistrano"
 
+set :log_level, :debug
+
+
 #set :whenever_command, "bundle exec whenever"
 #require "whenever/capistrano"
-
 server "192.241.202.98", :web, :app, :db, primary: true
 
 set :user, "alex"
@@ -14,8 +16,8 @@ set :deploy_to, "/home/#{user}/dev/#{application}"
 set :use_sudo, false
 
 set :scm, "git"
-set :repo_url, 'https://github.com/alexkutzke/farma_alg.git'
-set :repository, 'https://github.com/alexkutzke/farma_alg.git'
+set :repo_url, 'git@github.com:alexkutzke/farma_alg.git'
+set :repository, 'git@github.com:alexkutzke/farma_alg.git'
 #set :local_repository, "#{user}@173.246.40.9:/home/#{user}/repos/#{application}.git"
 set :branch, "master"
 
@@ -25,7 +27,7 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 set :rails_env, "production"
 
 #default_run_options[:pty] = true
-#ssh_options[:forward_agent] = true
+ssh_options[:forward_agent] = true
 
 after "deploy", "deploy:cleanup" # keep only the last 5 releases
 after "deploy", "deploy:ckeditor_link"

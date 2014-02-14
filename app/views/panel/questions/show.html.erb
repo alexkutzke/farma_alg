@@ -8,10 +8,10 @@
 	</h5>
 	<%= link_to panel_team_user_lo_question_answer_path(@team,@user,@lo,@question,a) do %>
 		<% if a.correct %>
-			<pre style="border: 2px green solid;">	
+<pre style="border: 2px green solid;">	
 		<% else %>
-			<pre style="border: 2px red solid;">
+<pre style="border: 2px red solid;">
 		<% end %>
-		<%= truncate(a['response'],length:100) %></pre>
+<%= truncate(a['response'],length:100) %></pre>
 	<% end %>
 <% end %>

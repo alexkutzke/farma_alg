@@ -1,6 +1,11 @@
+	<h4>Objetos de aprendizagem já disponibilizados para esta turma</h4>
+  <% @los.each do |lo| %>
+  <%= link_to panel_team_user_lo_path(@team, @user,lo) do%>
+		<section class="well"><header class="clearfix">
+  <div class="left">
+    <h4><%= lo.name %></h4>
+  </div>
+</section>
+<% end %>
 
-<ul>
-	<% @team.los.each do |lo| %>
-		<li><%= link_to lo.name, panel_team_user_lo_path(@team, @user,lo)%></li>
 	<% end %>
-</ul>

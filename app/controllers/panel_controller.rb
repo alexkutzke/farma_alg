@@ -9,5 +9,6 @@ class PanelController < ApplicationController
     if current_user.admin?
       @others = Team.all.entries - @my_teams
 		end
+    #@old_teams = Answer.all.distinct('team_id') - Team.all.entries
 	end
 end
