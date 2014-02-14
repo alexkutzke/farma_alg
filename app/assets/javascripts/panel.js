@@ -40,4 +40,5 @@ $(this).scroll(function() {
 
 $(document).ready(function(){
 	prettyPrint();
+  $("span.label").tooltip();
 });

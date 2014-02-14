@@ -45,7 +45,7 @@ class Answer
 
   #before_save :verify_response, :store_datas
   before_create :verify_response, :store_datas
-  after_create :register_last_answer#, :update_questions_with_last_answer
+  after_create :register_last_answer,:updateStats#, :update_questions_with_last_answer
 
 
   def self.search(page, params = nil, team_ids = nil)
@@ -191,6 +191,18 @@ private
       la.user = self.user
       la.save!
     end
+  end
+
+  def updateStats
+    global_stat = Statistic.find_or_create_by(:question_id => self.question_id, :team_id => nil)
+
+    team_stat = Statistic.find_or_create_by(:question_id => self.question_id, :team_id => self.team_id)
+
+    global_stat.updateStats(self)
+    team_stat.updateStats(self)
+
+    global_stat.save
+    team_stat.save
   end
 
 end

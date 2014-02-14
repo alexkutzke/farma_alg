@@ -20,6 +20,7 @@ class Question
   belongs_to :exercise
   has_many :test_cases, dependent: :delete
   has_many :last_answers, dependent: :delete #one last answer for each user
+  has_many :statistics, dependent: :delete
 
 private
   def set_position

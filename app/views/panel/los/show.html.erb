@@ -1,10 +1,53 @@
-<ul>
-	<% @exercises.each do |ex| %>
-		<li><%= ex.title %></li>
-		<ul>
-		<% ex.questions.each do |q| %>
-			<li><%= link_to q.title, panel_team_user_lo_question_path(@team,@user,@lo,q) %></li>
-		<% end %>
-		</ul>
+<% @exercises.each do |ex| %>
+	<h4 class="page-header"><%= ex.title %></h4>
+	
+	<% ex.questions.each do |q| %>
+    <%= link_to panel_team_user_lo_question_path(@team,@user,@lo,q) do %>
+<section class="well"><header class="clearfix">
+  <div class="left">
+
+    <h4><%= q.title %></h4>
+    <div>
+    <span class="date-info">
+      <%= raw(truncate(strip_tags(q.content),length:200)) %>
+    </span>
+  </div>
+
+  <% if current_user.admin? %>
+    <h5>Estatísticas da Questão:</h5>
+    <ul>
+      <li><strong>Nesta turma:</strong></li>
+    <ul>
+      <li>Taxa de acerto: <%= number_with_precision(@team_stats[ex.id][q.id].correctness_rate*100, :precision => 2) %>%</li>
+      <li>Números de tentativas: <%= @team_stats[ex.id][q.id].correct_tries + @team_stats[ex.id][q.id].wrong_tries %></li>
+      <% unless @team_stats[ex.id][q.id].test_case_results.nil? %>
+        <li><strong>Taxas de acerto para cada caso de teste:</strong></li>
+        <ul>
+          <% @team_stats[ex.id][q.id].test_case_results.each do |id,stats| %>
+            <li><%= stats['title'] %>: <%= number_with_precision(stats['correctness_rate']*100, :precision => 2) %>%</li>
+          <% end %>
+        </ul>
+      <% end %>
+    </ul>
+      <li><strong>Todas as turmas:</strong></li>
+    <ul>
+      <li>Taxa de acerto: <%= number_with_precision(@stats[ex.id][q.id].correctness_rate*100, :precision => 2) %>%</li>
+      <li>Números de tentativas: <%= @stats[ex.id][q.id].correct_tries + @stats[ex.id][q.id].wrong_tries %></li>
+      <% unless @stats[ex.id][q.id].test_case_results.nil? %>
+        <li><strong>Taxas de acerto para cada caso de teste:</strong></li>
+        <ul>
+          <% @stats[ex.id][q.id].test_case_results.each do |id,stats| %>
+            <li><%= stats['title'] %>: <%= number_with_precision(stats['correctness_rate']*100, :precision => 2) %>%</li>
+          <% end %>
+        </ul>
+      <% end %>
+
+  </ul>
+  <% end %>
+
+  </div>
+</section>
+<% end %>
+
 	<% end %>
-</ul>
+<% end %>

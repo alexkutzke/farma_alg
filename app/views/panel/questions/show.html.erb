@@ -1,5 +1,39 @@
+<h3><%= @question.title %> <small><%= @answers.length%> tentativas do usuário <%= @user.name %></small></h3>
+
 <% @answers.each do |a| %>
+
+<section class="well"><header class="clearfix">
+  <div class="left">
+
+
+
 	<h5>#<%= a['try_number'] %>, Há <%= time_ago_in_words a['created_at']%>
+
+      <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta"
+      class="label"><%= a.lang %></span>
+      <% if a.correct %>
+        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
+      <% else %>
+        <% if a.compile_errors %>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
+        <% else %>
+          <% a.results.each do |k,v| %>
+            <% if v['diff_error'] %>
+              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '<%= v['title'] %>'" class="label label-important">saída</span>
+            <% end %>
+            <% if v['time_error'] %>
+              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '<%= v['title'] %>'" class="label label-important">tempo</span>
+            <% end %>
+            <% if v['presentation_error'] %>
+              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '<%= v['title'] %>'" class="label label-important">apresentação</span>
+            <% end %>
+            <% if v['exec_error'] %>
+              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '<%= v['title'] %>'" class="label label-important">execução</span>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
 		<% if a.correct %>
 			<small>Correta</small>
 		<% else %>
@@ -14,4 +48,6 @@
 		<% end %>
 <%= truncate(a['response'],length:100) %></pre>
 	<% end %>
+    </div>
+</section>
 <% end %>
