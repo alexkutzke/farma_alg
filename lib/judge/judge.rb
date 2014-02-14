@@ -85,7 +85,7 @@ module Judge
             correct[t.id][0] = 0
           # diff2 fail
           else
-            `numdiff -I /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
+            `numdiff -I --absolute-tolerance=0.0001 /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
             Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
             Rails.logger.info "numdiff --absolute-tolerance=0.0001 -I /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
             Rails.logger.info $?.exitstatus
