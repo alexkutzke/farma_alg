@@ -1,0 +1,99 @@
+<h4 class="page-header">Quadro resumo do objeto de aprendizagem '<%= @lo.name %>' para a turma '<%= @team.name %>'</h4>
+
+<table class="table table-bordered table-hover">
+<thead>
+  <tr>
+    <th rowspan="2">Aluno</th>
+    <% @exercises.each do |ex| %>
+      <th colspan="<%= ex.questions.length %>">
+      <span class='icon'>
+      <% if ex.available %>
+        <i rel="tooltip" data-original-title="Exercício Publicado" class='left icon-certificate icon-green'></i> 
+      <% else %>
+        <i rel="tooltip" data-original-title="Exercício não Publicado" class='left icon-certificate icon-red'></i> 
+      <% end %>
+      </span>
+        Exercício <%= ex.title %>
+      </th>
+    <% end %>
+  </tr>
+  <tr>
+    <% @exercises.each do |ex| %>
+      <% ex.questions.each do |q| %>
+        <th>
+        <span class='icon'>  
+        <% if q.available %>
+        <i rel="tooltip" data-original-title="Questão Publicada" class='left icon-certificate icon-green'></i> 
+      <% else %>
+        <i rel="tooltip" data-original-title="Questão não Publicada" class='left icon-certificate icon-red'></i> 
+      <% end %>
+    </span>
+          <a href="#" class="stats_popover" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="
+          <% if current_user.admin? or @team.owner_id == current_user.id %>
+            <ul>
+              <li><strong>Nesta turma:</strong></li>
+              <ul>
+                <li>Taxa de acerto: <%= number_with_precision(@team_stats[ex.id][q.id].correctness_rate*100, :precision => 2) %>%</li>
+                <li>Números de tentativas: <%= @team_stats[ex.id][q.id].correct_tries + @team_stats[ex.id][q.id].wrong_tries %></li>
+                <% unless @team_stats[ex.id][q.id].test_case_results.nil? %>
+                  <li><strong>Taxas de acerto para cada caso de teste:</strong></li>
+                  <ul>
+                    <% @team_stats[ex.id][q.id].test_case_results.each do |id,stats| %>
+                      <li><%= stats['title'] %>: <%= number_with_precision(stats['correctness_rate']*100, :precision => 2) %>%</li>
+                    <% end %>
+                  </ul>
+                <% end %>
+              </ul>
+              <% if current_user.admin? %>
+                <li><strong>Todas as turmas:</strong></li>
+                <ul>
+                  <li>Taxa de acerto: <%= number_with_precision(@stats[ex.id][q.id].correctness_rate*100, :precision => 2) %>%</li>
+                  <li>Números de tentativas: <%= @stats[ex.id][q.id].correct_tries + @stats[ex.id][q.id].wrong_tries %></li>
+                  <% unless @stats[ex.id][q.id].test_case_results.nil? %>
+                    <li><strong>Taxas de acerto para cada caso de teste:</strong></li>
+                    <ul>
+                      <% @stats[ex.id][q.id].test_case_results.each do |id,stats| %>
+                        <li><%= stats['title'] %>: <%= number_with_precision(stats['correctness_rate']*100, :precision => 2) %>%</li>
+                      <% end %>
+                    </ul>
+                  <% end %>
+                </ul>
+              <% end %>
+            </ul>
+          <% end %>" title="" data-original-title="Estatísticas da Questão"><%= q.title %></a></th>
+      <% end %>
+    <% end %>
+  </tr>
+</thead>
+<tbody>
+<% @team.users.each do |u| %>
+  <tr>
+    <td><%= u.name %></td>
+    <% @exercises.each do |ex| %>
+      <% ex.questions.each do |q| %>
+        <% a = u.question_overview(@team,q) %>
+        <% if a.nil? %>
+          <td><span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Questão ainda não respondida pelo aluno" class="label">Não respondida</span></td>
+        <% else %>
+          <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
+          <% if a.correct %>
+            <td>
+              <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
+                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta!" class="label label-success">OK</span>
+              <% end %>
+            </td>
+          <% else %>
+            <td>
+              <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
+                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta incorreta!" class="label label-important">ERRO</span>
+              <% end %>
+            </td>
+          <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </tr>
+<% end %>
+</tbody>
+</table>
