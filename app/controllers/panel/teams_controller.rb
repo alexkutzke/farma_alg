@@ -6,7 +6,7 @@ class Panel::TeamsController < ApplicationController
 	def get_team
 		@team = Team.find(params[:id])
     lo_ids = Answer.where(team_id:@team.id).desc("lo_id").distinct("lo_id")
-    if lo_ids.nil?
+    if lo_ids.empty?
       @los - @team.los
     else
       @los = Lo.find(lo_ids) | @team.los
