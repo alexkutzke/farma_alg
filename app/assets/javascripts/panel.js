@@ -41,4 +41,10 @@ $(this).scroll(function() {
 $(document).ready(function(){
 	prettyPrint();
   $("span.label").tooltip();
+  $("i[rel='tooltip']").tooltip();
+  $(".stats_popover").popover();
+
+//  $(".stats_popover").hover(function(){
+//    $(this).popover('toggle');
+//  });
 });

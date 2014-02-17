@@ -1,6 +1,6 @@
 class Carrie.Routers.Home extends Backbone.Marionette.AppRouter
   appRoutes:
-    '': 'index'
+    '': 'welcome'
     'welcome': 'welcome'
     'lo_example': 'lo_example'
     'lo_example/pages/:page': 'lo_example'

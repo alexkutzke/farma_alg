@@ -47,6 +47,14 @@ class User
     self.gravatar= Digest::MD5.hexdigest(self.email)
   end
 
+  def question_overview(team,question)
+    r = Answer.where(user_id: self.id, team_id: team.id, question_id: question.id, correct: true).last
+    unless r.nil?
+      r = Answer.where(user_id: self.id, team_id: team.id, question_id: question.id).last
+    end
+    r
+  end
+
   def self.guest
     @user ||= User.where(email: 'guest@farma.mat.br').first
     return @user

@@ -1,5 +1,8 @@
+<h3><%= @lo.name %> <small><%= link_to "(Resumo)", overview_panel_team_lo_path(@team,@lo) if current_user.admin? or current_user.id == @team.owner_id %></small></h3>
+
+
 <% @exercises.each do |ex| %>
-	<h4 class="page-header"><%= ex.title %></h4>
+	<h4 class="page-header">Exercício <%= ex.title %></h4>
 	
 	<% ex.questions.each do |q| %>
     <%= link_to panel_team_user_lo_question_path(@team,@user,@lo,q) do %>
@@ -13,7 +16,7 @@
     </span>
   </div>
 
-  <% if current_user.admin? %>
+  <% if current_user.admin? or @team.owner_id == current_user.id %>
     <h5>Estatísticas da Questão:</h5>
     <ul>
       <li><strong>Nesta turma:</strong></li>
@@ -29,6 +32,7 @@
         </ul>
       <% end %>
     </ul>
+    <% if current_user.admin? %>
       <li><strong>Todas as turmas:</strong></li>
     <ul>
       <li>Taxa de acerto: <%= number_with_precision(@stats[ex.id][q.id].correctness_rate*100, :precision => 2) %>%</li>
@@ -44,7 +48,8 @@
 
   </ul>
   <% end %>
-
+</ul>
+<% end %>
   </div>
 </section>
 <% end %>

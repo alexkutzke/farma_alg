@@ -14,6 +14,7 @@ class Carrie.Views.HomeIndex extends Backbone.Marionette.ItemView
 
   onRender: ->
     this.modelBinder.bind(this.model, this.el)
+    #window.location.replace("/users/sign-in");
 
   view: (ev) ->
     ev.preventDefault()
@@ -34,6 +35,6 @@ class Carrie.Views.HomeIndex extends Backbone.Marionette.ItemView
       error: (model, response, options) =>
         result = $.parseJSON(response.responseText)
 
-        Carrie.Helpers.Notifications.Form.before 'Existe erros no seu formulário'
+        Carrie.Helpers.Notifications.Form.before 'Existem erros no seu formulário'
         Carrie.Helpers.Notifications.Form.showErrors(result.errors, @el)
         Carrie.Helpers.Notifications.Form.resetSubmit()

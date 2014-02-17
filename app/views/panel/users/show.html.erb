@@ -1,11 +1,14 @@
 	<h4>Objetos de aprendizagem já disponibilizados para esta turma</h4>
   <% @los.each do |lo| %>
-  <%= link_to panel_team_user_lo_path(@team, @user,lo) do%>
+  
 		<section class="well"><header class="clearfix">
   <div class="left">
+    <%= link_to panel_team_user_lo_path(@team, @user,lo) do%>
     <h4><%= lo.name %></h4>
+    <% end %>
+    <%= link_to "Resumo", overview_panel_team_lo_path(@team,lo)  if current_user.admin? or current_user.id == @team.owner_id  %>
   </div>
 </section>
-<% end %>
+
 
 	<% end %>

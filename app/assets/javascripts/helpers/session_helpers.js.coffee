@@ -11,7 +11,10 @@ Carrie.Helpers.Session.notExists = (data) ->
 Carrie.Helpers.Session.Exists = (data) ->
   data.message = 'Você Precisa estar logado para acessar esta página' unless data.message
   unless Carrie.currentUser
+    Carrie.main.show Carrie.layouts.unauthenticated
+    Carrie.layouts.unauthenticated.showView('login')
     Backbone.history.navigate('/users/sign-in')
-    Carrie.Utils.Alert.error(data.message, 5000)
+    #window.location.replace("/users/sign-in")
+    #Carrie.Utils.Alert.error(data.message, 5000)
   else
     data.func.call()
