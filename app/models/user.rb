@@ -49,7 +49,7 @@ class User
 
   def question_overview(team,question)
     r = Answer.where(user_id: self.id, team_id: team.id, question_id: question.id, correct: true).last
-    unless r.nil?
+    if r.nil?
       r = Answer.where(user_id: self.id, team_id: team.id, question_id: question.id).last
     end
     r
