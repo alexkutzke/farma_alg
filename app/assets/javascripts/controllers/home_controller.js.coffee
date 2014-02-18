@@ -16,6 +16,15 @@ class Carrie.Controllers.Home
     Carrie.Helpers.Session.Exists
       func: ->
         Carrie.layouts.main = new Carrie.Views.Layouts.Main()
+        comments = new Carrie.Collections.Comments() if not comments
+        comments.fetch
+          success: (model, response, options) =>
+            console.log comments
+            console.log model
+            @commentsView = new Carrie.CompositeViews.Retroaction.AnswerComments
+              model: model
+              collection: model
+            $(document).find('.comments').html @commentsView.render().el
         Carrie.main.show Carrie.layouts.main
 
   lo_example: (page) ->

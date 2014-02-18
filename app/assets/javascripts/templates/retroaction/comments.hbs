@@ -1,73 +1,10 @@
+{{#if length }}
+
+
 <header class='page-header'>
-  <h3>Commentários<h3>
+  <h4>Últimos comentários direcionados a mim<h4>
 </header>
 
 <section class='comments-list'>
 </section>
-
-<section>
-  <div class="comment">
-    <div class="avatar">
-     <img class="gravatar" src="http://www.gravatar.com/avatar/{{user_gravatar}}?s=48" />
-    </div>
-    <div class="main clearfix">
-      <div class="headline">
-        Novo comentário de {{user_name}}
-      </div>
-
-      <div class="comment_content">
-        <div class="formatting">
-          Use a formatação markdown <a href="" class="markdown_link">Veja os exemplos.</a>
-          <div class="markdown_examples" style="display: none; ">
-            <table>
-              <tbody>
-                  <tr>
-                    <td><pre>[Link](http://example.com/)</pre></td>
-                    <td><a href="http://example.com/">Link</a></td>
-                  </tr>
-                  <tr>
-                    <td><pre>*Italic*</pre></td>
-                    <td><em>Italic</em></td>
-                  </tr>
-                  <tr>
-                    <td><pre>**Bold**</pre></td>
-                    <td><strong>Bold</strong></td>
-                  </tr>
-                  <tr>
-                    <td>
-<pre> * Listed
-* Items  </pre></td>
-                    <td><ul><li>Listed</li><li>Items</li></ul></td>
-                  </tr>
-                  <tr>
-                    <td><pre>&gt; Block quote</pre></td>
-                    <td><blockquote><p>Block quote</p></blockquote></td>
-                  </tr>
-                  <tr>
-                    <td><pre>`Inline code`</pre></td>
-                    <td><code>Inline code</code></td>
-                   </tr>
-                  <tr>
-                    <td><pre>$ 2^(30+2)/sqrt(9) $</pre></td>
-                    <td>$ 2^(30+2)/sqrt(9) $</td>
-                  </tr>
-                </tbody>
-              </table>
-          </div>
-       </div>
-
-       <form id='new_comment' accept-charset="UTF-8" class="new_comment" method="post" novalidate="novalidate">
-          <input name="utf8" type="hidden" value="✓">
-          <input name="answer_id" type="hidden" value="{{id}}">
-          <textarea class="text required" name="text"></textarea>
-          <span class='help-block error'></span>
-          <div class="control-group">
-            <div class="controls">
-              <input type="submit" value="Salvar" class="btn btn-primary" />
-            </div>
-          </div>
-       </form>
-      </div>
-    </div>
-  </div>
-</section>
+{{/if}}

@@ -4,12 +4,8 @@
    </div>
    <div class='main clearfix'>
      <div class='headline'>
-      Criado por {{user_name}} à <strong> {{created_at_in_words}} atrás </strong>
-      {{#if can_destroy}}
-        <div class='right'>
-          <a href='' class='destroy' ><i class='icon-remove'></i> Remover comentário</a>
-        </div>
-      {{/if}}
+      Criado por {{user_name}} à <strong> {{created_at_in_words}} atrás </strong> na resposta à questão 
+      <a href="/panel/teams/{{team_id}}/users/{{target_user_id}}/los/{{lo_id}}/questions/{{question_id}}/answers/{{answer_id}}"><strong>{{question_title}}</strong> na turma <strong>{{team_name}}</strong></a>
      </div>
      <div class="comment_content">
        <p> {{safe text}} </p>

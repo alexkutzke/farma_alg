@@ -8,6 +8,9 @@ Carrie::Application.routes.draw do
       match '/teams/:team_id/los/:id' => "los#show"
     end
 
+    resources :comments,only: :index do
+    end
+
     resources :answers do
       get 'retroaction', on: :member
       get 'page/:page', :action => :index, :on => :collection

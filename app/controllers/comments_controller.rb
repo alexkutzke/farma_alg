@@ -3,13 +3,13 @@ class CommentsController < ApplicationController
 
   before_filter :authenticate_user!
 
-  prepend_before_filter :get_model
+  prepend_before_filter :get_model, :except => [:index]
   before_filter :get_comment, :only => [:show, :edit, :update, :destroy]
   respond_to :json,:html
 
   def index
-    @comments = @model.comments
-    respond_with(@model, @comments)
+    @comments = Comment.where(target_user_id:current_user.id).desc('created_at')[0..4]
+    respond_with(@comments)
   end
 
   def show
@@ -17,7 +17,7 @@ class CommentsController < ApplicationController
   end
 
   def new
-    @comment = @model.comments.buid
+    @comment = @model.comments.build
     respond_with(@model, @comment)
   end
 
