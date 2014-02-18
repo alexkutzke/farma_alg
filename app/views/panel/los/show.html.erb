@@ -17,7 +17,8 @@
   </div>
 
   <% if current_user.admin? or @team.owner_id == current_user.id %>
-    <h5>Estatísticas da Questão:</h5>
+    <a href="#" class="stats_link" data-question-id="<%= q.id %>"><h5><i class="icon-ok"></i> Estatísticas da Questão</h5></a>
+    <div id="stats_<%= q.id %>" class="hide">
     <ul>
       <li><strong>Nesta turma:</strong></li>
     <ul>
@@ -49,6 +50,7 @@
   </ul>
   <% end %>
 </ul>
+  </div>
 <% end %>
   </div>
 </section>

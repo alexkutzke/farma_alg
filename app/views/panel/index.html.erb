@@ -1,5 +1,5 @@
-
-<h3 class="page-header">Minhas respostas nas turmas em que estou matriculado</h3>
+<a href="#" id="enrolled_link"><h3 class="page-header">Minhas respostas nas turmas em que estou matriculado</h3></a>
+<div id="enrolled" class="hide">
 <% if @teams.empty? %>
   <h5>Você não está matricula em nenhuma turma. <small><a
     href="/teams">Matricule-se</a>.</small></h5>
@@ -22,9 +22,11 @@
     <% end %>
 
 <% end %>
+</div>
 
 <% unless @my_teams.empty? %>
-	<h3 class="page-header">Respostas em turmas criadas por mim</h3>
+	<a href="#" id="my_teams_link"><h3 class="page-header">Respostas em turmas criadas por mim</h3></a>
+  <div id="my_teams" class="hide">
 		<% @my_teams.each do |t| %>
     <%= link_to panel_team_path(t) do %>
 <section class="well"><header class="clearfix">
@@ -40,14 +42,14 @@
 
 		  <% end %>
 		<% end %>
-
+</div>
 <% end %>
 
 
 
 <% unless @others.empty? %>
-  <h3 class="page-header">Respostas em turmas criadas por outros usuários</h3>
-
+  <a href="#" id="others_teams_link"><h3 class="page-header">Respostas em turmas criadas por outros usuários</h3></a>
+  <div id="others_teams" class="hide">
     <% @others.each do |t| %>
     <%= link_to panel_team_path(t) do %>
 <section class="well"><header class="clearfix">
@@ -62,5 +64,37 @@
 </section>
 
       <% end %>    <% end %>
- 
+ </div>
 <% end %>
+
+   <header class='page-header'>
+      <a href="#" id="comments_link"><h3>Últimos comentários direcionados a mim<h3></a>
+
+      </header>
+<div id="comments">
+      <%= link_to "Ver todos", panel_comments_path() %>
+      <section class='comments-list'>
+        <% @last_comments.each do |c| %>
+        <% unless c.created_at.nil? %>
+        
+        
+        <div class="comment", id="<%= c.id %>">
+         <div class='avatar'>
+           <img class="gravatar" src="http://www.gravatar.com/avatar/<%= c.user.gravatar %>?s=48" />
+         </div>
+         <div class='main clearfix'>
+           <div class='headline'>
+            Criado por <%= c.user.name %> à <strong> <%= time_ago_in_words(c.created_at) unless c.created_at.blank? %> atrás </strong>
+            na resposta à 
+          <%= link_to panel_team_user_lo_question_answer_path(c.team_id,c.target_user_id,c.answer.lo_id,c.question_id,c.answer_id) do %>
+            questão <strong><%= Question.find(c.question_id).title %></strong> na turma <strong><%= Team.find(c.team_id).name %></strong>
+          <% end %>
+          </div>
+          <div class="comment_content">
+           <p> <%= simple_format c.text %> </p>
+         </div>
+       </div>
+       <% end %>
+       <% end %>
+     </section>
+</div>

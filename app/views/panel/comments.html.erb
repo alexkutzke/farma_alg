@@ -1,0 +1,38 @@
+   <header class='page-header'>
+      <h3>Comentários direcionados a mim<h3>
+
+      </header>
+
+<% if @comments.empty? %>
+  <div>
+    Nenhum comentário foi direcionado a você até o momento.
+  </div>
+<% else %>
+
+
+<div id="comments">
+      <section class='comments-list'>
+        <% @comments.each do |c| %>
+        <% unless c.created_at.nil? %>
+        
+        
+        <div class="comment", id="<%= c.id %>">
+         <div class='avatar'>
+           <img class="gravatar" src="http://www.gravatar.com/avatar/<%= c.user.gravatar %>?s=48" />
+         </div>
+         <div class='main clearfix'>
+           <div class='headline'>
+            Criado por <%= c.user.name %> à <strong> <%= time_ago_in_words(c.created_at) unless c.created_at.blank? %> atrás </strong>
+            na resposta à 
+          <%= link_to panel_team_user_lo_question_answer_path(c.team_id,c.target_user_id,c.answer.lo_id,c.question_id,c.answer_id) do %>
+            questão <strong><%= Question.find(c.question_id).title %></strong> na turma <strong><%= Team.find(c.team_id).name %></strong>
+          <% end %>
+          </div>
+          <div class="comment_content">
+           <p> <%= simple_format c.text %> </p>
+         </div>
+       </div>
+       <% end %>
+       <% end %>
+     </section>
+<% end %>

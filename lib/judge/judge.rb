@@ -1,4 +1,7 @@
 module Judge
+
+  CASE_TEST_END = "<--FIM-->\n"
+
 	def self.compile(lang="pas",source_code,id)
 
 		# records the source code in a file
@@ -57,84 +60,101 @@ module Judge
 	  correct = Hash.new
     test_cases.each do |t|
       correct[t.id] = Array.new
-      
-      File.open("/tmp/#{id}-input-#{t.id}.dat", 'w') {|f| f.write(t.input) }
-      File.open("/tmp/#{id}-output-#{t.id}.dat", 'w') {|f| f.write(t.output) }
-      
-      Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-      if lang == "rb"
-        `bin/timeout3 -t #{t.timeout} ruby #{filename} < /tmp/#{id}-input-#{t.id}.dat > /tmp/#{id}-output_response-#{t.id}.dat`
-         Rails.logger.info "bin/timeout3 -t #{t.timeout} ruby #{filename} < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}.dat"
-      else
-        `bin/timeout3 -t #{t.timeout} #{filename} < /tmp/#{id}-input-#{t.id}.dat > /tmp/#{id}-output_response-#{t.id}.dat`
-        Rails.logger.info "bin/timeout3 -t #{t.timeout} #{filename} < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}.dat"
-      end
-      Rails.logger.info $?.exitstatus
-      # run ok
-      if $?.exitstatus == 0 || $?.exitstatus == 255 || lang == "c"
+      correct[t.id][2] = Array.new
+      correct[t.id][1] = Array.new
 
-        if t.ignore_presentation
-          
-          `diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
-          Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-          Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
-          Rails.logger.info $?.exitstatus
+      input = t.input.split(CASE_TEST_END)
+      output = t.output.split(CASE_TEST_END)
 
-          # diff2 ok
-          if $?.exitstatus == 0
-            correct[t.id][0] = 0
-          # diff2 fail
-          else
-            `numdiff -I --absolute-tolerance=0.001 /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
-            Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-            Rails.logger.info "numdiff --absolute-tolerance=0.001 -I /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
-            Rails.logger.info $?.exitstatus
-            # diff2 ok
-            if $?.exitstatus == 0
-              correct[t.id][0] = 0
-            # diff2 fail
-            else
-              correct[t.id][0] = 3
-            end
-          end
-        else
-          `diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
-          Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-          Rails.logger.info "diff -a /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
-          Rails.logger.info $?.exitstatus
-
-          # diff1 ok
-          if $?.exitstatus == 0
-            correct[t.id][0] = 0
-          # diff1 fail
-          else
-            `diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat`
-            Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-            Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}.dat /tmp/#{id}-output-#{t.id}.dat"
-            Rails.logger.info $?.exitstatus
-
-            # diff2 ok
-            if $?.exitstatus == 0
-              correct[t.id][0] = 2
-            # diff2 fail
-            else
-              correct[t.id][0] = 3
-            end
-          end
-        end
-      # run fail
-      else
-        # could be time (143) of other failure (n)
-        correct[t.id][0] = $?.exitstatus
-
+      for i in 0..input.length-1
+        File.open("/tmp/#{id}-input-#{t.id}-#{i}.dat", 'w') {|f| f.write(input[i]) }
+        File.open("/tmp/#{id}-output-#{t.id}-#{i}.dat", 'w') {|f| f.write(output[i]) }
+        
+        Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
         if lang == "rb"
-          `{ bin/timeout3 -t #{t.timeout} ruby #{filename} ; } < /tmp/#{id}-input-#{t.id}.dat > /tmp/#{id}-output_response-#{t.id}.dat`
+          `bin/timeout3 -t #{t.timeout} ruby #{filename} < /tmp/#{id}-input-#{t.id}-#{i}.dat > /tmp/#{id}-output_response-#{t.id}-#{i}.dat`
+           Rails.logger.info "bin/timeout3 -t #{t.timeout} ruby #{filename} < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}-#{i}.dat"
         else
-          `{ bin/timeout3 -t #{t.timeout} #{filename} ; } < /tmp/#{id}-input-#{t.id}.dat > /tmp/#{id}-output_response-#{t.id}.dat`
+          `bin/timeout3 -t #{t.timeout} #{filename} < /tmp/#{id}-input-#{t.id}-#{i}.dat > /tmp/#{id}-output_response-#{t.id}-#{i}.dat`
+          Rails.logger.info "bin/timeout3 -t #{t.timeout} #{filename} < /tmp/#{id}-input-#{t.id}-#{i}.dat &> /tmp/#{id}-output_response-#{t.id}-#{i}.dat"
         end
+        Rails.logger.info $?.exitstatus
+        # run ok
+        if $?.exitstatus == 0 || $?.exitstatus == 255 || lang == "c"
 
+          if t.ignore_presentation
+            
+            `diff -abBE /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat`
+            Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+            Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat"
+            Rails.logger.info $?.exitstatus
+
+            # diff2 ok
+            if $?.exitstatus == 0
+              correct[t.id][2][i] = 0
+            # diff2 fail
+            else
+              `numdiff -I --absolute-tolerance=0.001 /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat`
+              Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+              Rails.logger.info "numdiff --absolute-tolerance=0.001 -I /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat"
+              Rails.logger.info $?.exitstatus
+              # diff2 ok
+              if $?.exitstatus == 0
+                correct[t.id][2][i] = 0
+              # diff2 fail
+              else
+                correct[t.id][2][i] = 3
+              end
+            end
+          else
+            `diff -a /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat`
+            Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+            Rails.logger.info "diff -a /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat"
+            Rails.logger.info $?.exitstatus
+
+            # diff1 ok
+            if $?.exitstatus == 0
+              correct[t.id][2][i] = 0
+            # diff1 fail
+            else
+              `diff -abBE /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat`
+              Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+              Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat"
+              Rails.logger.info $?.exitstatus
+
+              # diff2 ok
+              if $?.exitstatus == 0
+                correct[t.id][2][i] = 2
+              # diff2 fail
+              else
+                correct[t.id][2][i] = 3
+              end
+            end
+          end
+        # run fail
+        else
+          # could be time (143) of other failure (n)
+          correct[t.id][2][i] = $?.exitstatus
+
+          if lang == "rb"
+            `{ bin/timeout3 -t #{t.timeout} ruby #{filename} ; } < /tmp/#{id}-input-#{t.id}-#{i}.dat > /tmp/#{id}-output_response-#{t.id}-#{i}.dat`
+          else
+            `{ bin/timeout3 -t #{t.timeout} #{filename} ; } < /tmp/#{id}-input-#{t.id}-#{i}.dat > /tmp/#{id}-output_response-#{t.id}-#{i}.dat`
+          end
+
+        end
+        correct[t.id][1][i] = File.open("/tmp/#{id}-output_response-#{t.id}-#{i}.dat", "rb") {|io| io.read}
+
+      end      
+
+      correct[t.id][0] = 0
+      for i in 0..input.length-1
+        if correct[t.id][2][i] != 0
+          correct[t.id][0] = correct[t.id][2][i]
+          break
+        end
       end
-      correct[t.id][1] = File.open("/tmp/#{id}-output_response-#{t.id}.dat", "rb") {|io| io.read}
+
       Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> Final"
       Rails.logger.info correct[t.id][0]
     end

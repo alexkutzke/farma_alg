@@ -54,6 +54,7 @@ Carrie::Application.routes.draw do
   
   namespace :panel do
     get "index"
+    get "comments"
     resources :teams, only: [:show] do
       resources :los, only: [] do
         get 'overview', on: :member

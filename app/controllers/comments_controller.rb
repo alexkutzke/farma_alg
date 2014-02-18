@@ -30,6 +30,9 @@ class CommentsController < ApplicationController
     @answer = Answer.find(params[:answer_id])
     @comment = @model.comments.build(params[:comment])
     @comment.user_id = current_user.id
+    @comment.team_id = @answer.team_id
+    @comment.question_id = @answer.question_id
+    @comment.target_user_id = @answer.user_id
 
     options = {:hard_wrap => true, :filter_html => true, :autolink => true,
                :no_intraemphasis => true, :fenced_code => true, :gh_blockcode => true}

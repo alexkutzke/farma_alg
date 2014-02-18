@@ -39,17 +39,39 @@
       </div>
     </div>
 
+
+    <div>
+      <p>Para realizar mais de uma execução em um mesmo caso de teste, adicione a tag <strong><--FIM--></strong> para informar o fim de uma execução, tanto na entrada quanto na saída. Por exemplo, para três execuções:</p>
+
+      <p><strong>Entrada</strong></p>
+      <pre>
+1 2
+<--FIM-->
+4 2
+<--FIM-->
+3 3
+      </pre>
+
+      <p><strong>Saída</strong></p>
+      <pre>
+10
+<--FIM-->
+20
+<--FIM-->
+22
+      </pre>
+
     <div class="control-group input_group">
         <label class="control-label" for="input">Entrada</label>
         <div class="controls">
-          <textarea id="input" name="input"></textarea>
+          <textarea style="width:100%; height:150px;" id="input" name="input"></textarea>
         </div>
     </div>
 
     <div class="control-group output_group">
         <label class="control-label" for="output">Saída</label>
         <div class="controls">
-          <textarea id="output" name="output"></textarea>
+          <textarea style="width:100%; height:150px;" id="output" name="output"></textarea>
         </div>
     </div>
 

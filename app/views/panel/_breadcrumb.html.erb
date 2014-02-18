@@ -1,6 +1,10 @@
 <ol class="breadcrumb">
 	<% if controller.class == PanelController %>
-  	<li class="active">Turmas</li>
+    <% if controller.action_name == "comments" %>
+      <li><%= link_to 'Turmas',panel_index_path %></li> <span class="divider">/</span>
+    <% else %>
+      <li><%= link_to 'Turmas',panel_index_path %></li> <span class="divider">/</span>
+    <% end %>
   <% else %>
   	<li><%= link_to 'Turmas',panel_index_path %></li> <span class="divider">/</span>
   <% end %>

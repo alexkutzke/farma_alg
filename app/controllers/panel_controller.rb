@@ -9,6 +9,11 @@ class PanelController < ApplicationController
     if current_user.admin?
       @others = Team.all.entries - @my_teams
 		end
+    @last_comments = Comment.where(target_user_id: current_user.id).desc('created_at')[0..4]
     #@old_teams = Answer.all.distinct('team_id') - Team.all.entries
 	end
+
+  def comments
+    @comments = Comment.where(target_user_id:current_user.id).desc('created_at')
+  end
 end

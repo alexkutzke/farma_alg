@@ -35,7 +35,8 @@ class Answer
 
   belongs_to :user
   has_one :last_answer
-  embeds_many :comments, :as => :commentable
+  #embeds_many :comments, :as => :commentable
+  has_many :comments
 
   #default_scope desc(:created_at)
 
@@ -149,7 +150,7 @@ private
         self.results[id][:time_error] = false
         self.results[id][:exec_error] = false
         self.results[id][:presentation_error] = false
-        self.results[id][:output] = r[1]
+        self.results[id][:output] = r[1][0]
         self.results[id][:content] = question.test_cases.find(id).content
         self.results[id][:tip] = question.test_cases.find(id).tip
         self.results[id][:title] = question.test_cases.find(id).title
@@ -168,7 +169,7 @@ private
           self.results[id][:exec_error] = true
         end
 
-        self.results[id][:output2] = simple_format r[1]
+        self.results[id][:output2] = simple_format r[1][0]
       end
     end
 

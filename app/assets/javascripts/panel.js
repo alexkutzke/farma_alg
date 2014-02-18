@@ -47,4 +47,29 @@ $(document).ready(function(){
 //  $(".stats_popover").hover(function(){
 //    $(this).popover('toggle');
 //  });
+
+  $("#comments_link").click(function(ev){
+    ev.preventDefault();
+    $("#comments").slideToggle();
+  });
+
+  $("#enrolled_link").click(function(ev){
+    ev.preventDefault();
+    $("#enrolled").slideToggle();
+  });
+
+  $("#my_teams_link").click(function(ev){
+    ev.preventDefault();
+    $("#my_teams").slideToggle();
+  });
+
+  $("#others_teams_link").click(function(ev){
+    ev.preventDefault();
+    $("#others_teams").slideToggle();
+  });
+
+  $(".stats_link").click(function(ev){
+    ev.preventDefault();
+    $("#stats_"+$(this).data("question-id")).slideToggle();
+  });
 });
