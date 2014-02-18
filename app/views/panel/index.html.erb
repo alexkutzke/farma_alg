@@ -67,7 +67,9 @@
  </div>
 <% end %>
 
-   <header class='page-header'>
+<% unless @last_comments.empty? %>
+  
+  <header class='page-header'>
       <a href="#" id="comments_link"><h3>Últimos comentários direcionados a mim<h3></a>
 
       </header>
@@ -98,3 +100,4 @@
        <% end %>
      </section>
 </div>
+<% end %>
