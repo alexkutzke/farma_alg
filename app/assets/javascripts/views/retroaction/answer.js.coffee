@@ -2,7 +2,7 @@ class Carrie.Views.Retroaction.Answer extends Backbone.Marionette.ItemView
   template: 'retroaction/answer'
 
   initialize:->
-    console.log @model
+    #console.log @model
     @exerciseView = new Carrie.CompositeViews.Retroaction.Exercise
       model: @model.get('exercise')
       question :@model.get('question')

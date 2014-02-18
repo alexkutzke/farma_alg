@@ -6,7 +6,7 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
     'click .answer_btn': 'verify_answer'
 
   initialize: ->
-    console.log @model
+    #console.log @model
     if @model.get('last_answer')
       model = Carrie.Models.AnswerShow.findOrCreate(@model.get('last_answer'))
       unless model

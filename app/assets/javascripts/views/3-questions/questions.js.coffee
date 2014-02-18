@@ -20,7 +20,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
 
   onRender: ->
-    console.log "aqui"
+    #console.log "aqui"
     @el.id = @model.get('id')
     @view = new Carrie.Views.Answer().render()
     $(@el).find('.answer-group').html @view.render().el

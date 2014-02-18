@@ -19,8 +19,8 @@ class Carrie.Controllers.Home
         comments = new Carrie.Collections.Comments() if not comments
         comments.fetch
           success: (model, response, options) =>
-            console.log comments
-            console.log model
+            #console.log comments
+            #console.log model
             @commentsView = new Carrie.CompositeViews.Retroaction.AnswerComments
               model: model
               collection: model

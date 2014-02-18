@@ -69,7 +69,7 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
         value = @map[value] if @map[value]
         key = @map[key] if @map[key]
 
-        console.log [key,value]
+        #console.log [key,value]
 
         value =  @teams.where({label: value})[0].get('id') if key == 'team_id'
 
@@ -98,7 +98,7 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
         async: false
 
     @losJSON = @los.toJSON()
-    console.log @losJSON
+    #console.log @losJSON
 
 
   updateLearners: ->
