@@ -13,7 +13,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
   onRender: ->
     @input = $($(@el).find('.keyboard-input').first())
     @input.attr('value', @options.currentResp)
-    @draggable()
+    #@draggable()
     @inputFocus()
     x = @el
     langs = {}

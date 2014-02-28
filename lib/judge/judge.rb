@@ -2,11 +2,11 @@ module Judge
 
   CASE_TEST_END = "<--FIM-->\n"
 
-	def self.compile(lang="pas",source_code,id)
+  def self.compile(lang="pas",source_code,id)
 
-		# records the source code in a file
-		File.open("/tmp/#{id}-response.#{lang}", 'w') {|f| f.write(source_code) }
-    
+    # records the source code in a file
+    File.open("/tmp/#{id}-response.#{lang}", 'w') {|f| f.write(source_code) }
+
     if lang == "pas"
       output = compile_pas("/tmp/#{id}-response.#{lang}",id)
     elsif lang == "c"
@@ -17,20 +17,20 @@ module Judge
 
 
     return output
-	end
+  end
 
-	def self.compile_pas(filename,id)
+  def self.compile_pas(filename,id)
 
-		result = `bin/compile.sh pas #{filename} #{filename[0..-5]} #{filename}-compile_errors`
+    result = `bin/compile.sh pas #{filename} #{filename[0..-5]} #{filename}-compile_errors`
 
     result = result.split(/\n/).last
 
-		if not (result.to_i == 0)
-			return [1,simple_format(`cat #{filename}-compile_errors | tail -n +5 | sed -e 's/^#{id}-response.pas//'`)]
-		else
-			return [0,"#{filename[0..-5]}"]
-		end
-	end
+    if not (result.to_i == 0)
+      return [1,simple_format(`cat #{filename}-compile_errors | tail -n +5 | sed -e 's/^#{id}-response.pas//'`)]
+    else
+      return [0,"#{filename[0..-5]}"]
+    end
+  end
 
   def self.compile_c(filename,id)
 
@@ -56,8 +56,24 @@ module Judge
     end
   end
 
-	def self.test(lang,filename,test_cases,id)
-	  correct = Hash.new
+  def self.exec_file(filename, lang, timeout, input_file, output_file)
+
+    if lang == "rb"
+      filename = "ruby " + filename
+    end
+    
+    if Rails.env == "production"
+      user_command = "ssh exec@localhost"
+    else
+      user_command = ""
+    end
+
+    `bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}`
+    Rails.logger.info "bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}"
+  end
+
+  def self.test(lang,filename,test_cases,id)
+    correct = Hash.new
     test_cases.each do |t|
       correct[t.id] = Array.new
       correct[t.id][2] = Array.new
@@ -66,24 +82,22 @@ module Judge
       input = t.input.split(CASE_TEST_END)
       output = t.output.split(CASE_TEST_END)
 
-      for i in 0..input.length-1
+      n = input.length-1
+      n = 1 if n == 0
+
+      for i in 0..n
         File.open("/tmp/#{id}-input-#{t.id}-#{i}.dat", 'w') {|f| f.write(input[i]) }
         File.open("/tmp/#{id}-output-#{t.id}-#{i}.dat", 'w') {|f| f.write(output[i]) }
-        
+
         Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-        if lang == "rb"
-          `bin/timeout3 -t #{t.timeout} ruby #{filename} < /tmp/#{id}-input-#{t.id}-#{i}.dat > /tmp/#{id}-output_response-#{t.id}-#{i}.dat`
-           Rails.logger.info "bin/timeout3 -t #{t.timeout} ruby #{filename} < /tmp/#{id}-input-#{t.id}.dat &> /tmp/#{id}-output_response-#{t.id}-#{i}.dat"
-        else
-          `bin/timeout3 -t #{t.timeout} #{filename} < /tmp/#{id}-input-#{t.id}-#{i}.dat > /tmp/#{id}-output_response-#{t.id}-#{i}.dat`
-          Rails.logger.info "bin/timeout3 -t #{t.timeout} #{filename} < /tmp/#{id}-input-#{t.id}-#{i}.dat &> /tmp/#{id}-output_response-#{t.id}-#{i}.dat"
-        end
+        exec_file(filename,lang,t.timeout,"/tmp/#{id}-input-#{t.id}-#{i}.dat","/tmp/#{id}-output_response-#{t.id}-#{i}.dat")
         Rails.logger.info $?.exitstatus
+
         # run ok
         if $?.exitstatus == 0 || $?.exitstatus == 255 || lang == "c"
 
           if t.ignore_presentation
-            
+
             `diff -abBE /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat`
             Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
             Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat"
@@ -135,17 +149,13 @@ module Judge
         else
           # could be time (143) of other failure (n)
           correct[t.id][2][i] = $?.exitstatus
-
-          if lang == "rb"
-            `{ bin/timeout3 -t #{t.timeout} ruby #{filename} ; } < /tmp/#{id}-input-#{t.id}-#{i}.dat > /tmp/#{id}-output_response-#{t.id}-#{i}.dat`
-          else
-            `{ bin/timeout3 -t #{t.timeout} #{filename} ; } < /tmp/#{id}-input-#{t.id}-#{i}.dat > /tmp/#{id}-output_response-#{t.id}-#{i}.dat`
+          
+          if correct[t.id][2][i] != 143
+            correct[t.id][1][i] = File.open("/tmp/#{id}-output_response-#{t.id}-#{i}.dat", "rb") {|io| io.read}
           end
-
         end
-        correct[t.id][1][i] = File.open("/tmp/#{id}-output_response-#{t.id}-#{i}.dat", "rb") {|io| io.read}
 
-      end      
+      end
 
       correct[t.id][0] = 0
       for i in 0..input.length-1
@@ -157,8 +167,12 @@ module Judge
 
       Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> Final"
       Rails.logger.info correct[t.id][0]
+
+      if Rails.env == "production"
+        `echo "poi890poi" | sudo -S pkill -f #{filename} -u exec`
+      end
     end
 
     return correct
-	end
+  end
 end
