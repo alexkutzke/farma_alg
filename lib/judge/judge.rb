@@ -68,8 +68,31 @@ module Judge
       user_command = ""
     end
 
+    Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     `bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}`
     Rails.logger.info "bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}"
+    Rails.logger.info $?.exitstatus
+  end
+
+  def self.diff(ignore_presentation,file1,file2)
+    if ignore_presentation
+      `diff -abBE #{file1} #{file2}`
+      Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+      Rails.logger.info "diff -abBE #{file1} #{file2}"
+      Rails.logger.info $?.exitstatus
+    else
+      `diff -a #{output_response_file} #{output_file}`
+      Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+      Rails.logger.info "diff -a #{file1} #{file2}"
+      Rails.logger.info $?.exitstatus
+    end
+  end
+
+  def self.numdiff(file1,file2)
+    `numdiff -I --absolute-tolerance=0.001 #{file1} #{file2}`
+    Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    Rails.logger.info "numdiff --absolute-tolerance=0.001 -I #{file1} #{file2}"
+    Rails.logger.info $?.exitstatus
   end
 
   def self.test(lang,filename,test_cases,id)
@@ -86,57 +109,50 @@ module Judge
       n = 1 if n == 0
 
       for i in 0..n
-        File.open("/tmp/#{id}-input-#{t.id}-#{i}.dat", 'w') {|f| f.write(input[i]) }
-        File.open("/tmp/#{id}-output-#{t.id}-#{i}.dat", 'w') {|f| f.write(output[i]) }
 
-        Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-        exec_file(filename,lang,t.timeout,"/tmp/#{id}-input-#{t.id}-#{i}.dat","/tmp/#{id}-output_response-#{t.id}-#{i}.dat")
-        Rails.logger.info $?.exitstatus
+        input_file = "/tmp/#{id}-input-#{t.id}-#{i}.dat"
+        output_file = "/tmp/#{id}-output-#{t.id}-#{i}.dat"
+        output_response_file = "/tmp/#{id}-output_response-#{t.id}-#{i}.dat"
 
+        File.open(input_file, 'w') {|f| f.write(input[i]) }
+        File.open(output_file, 'w') {|f| f.write(output[i]) }
+
+        exec_file(filename,lang,t.timeout,input_file,output_response_file)
+        
         # run ok
         if $?.exitstatus == 0 || $?.exitstatus == 255 || lang == "c"
 
           if t.ignore_presentation
 
-            `diff -abBE /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat`
-            Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-            Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat"
-            Rails.logger.info $?.exitstatus
+            diff(true,output_response_file,output_file)
 
-            # diff2 ok
+            # diff ok
             if $?.exitstatus == 0
               correct[t.id][2][i] = 0
-            # diff2 fail
+            # diff fail
             else
-              `numdiff -I --absolute-tolerance=0.001 /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat`
-              Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-              Rails.logger.info "numdiff --absolute-tolerance=0.001 -I /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat"
-              Rails.logger.info $?.exitstatus
-              # diff2 ok
+
+              numdiff(output_response_file,output_file)
+              
+              # numdiff ok
               if $?.exitstatus == 0
                 correct[t.id][2][i] = 0
-              # diff2 fail
+              # numdiff fail
               else
                 correct[t.id][2][i] = 3
               end
             end
           else
-            `diff -a /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat`
-            Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-            Rails.logger.info "diff -a /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat"
-            Rails.logger.info $?.exitstatus
+            diff(false,output_response_file,output_file)
 
             # diff1 ok
             if $?.exitstatus == 0
               correct[t.id][2][i] = 0
             # diff1 fail
             else
-              `diff -abBE /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat`
-              Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-              Rails.logger.info "diff -abBE /tmp/#{id}-output_response-#{t.id}-#{i}.dat /tmp/#{id}-output-#{t.id}-#{i}.dat"
-              Rails.logger.info $?.exitstatus
+              diff(true,output_response_file,output_file)
 
-              # diff2 ok
+              # diff2 ok - presentation error
               if $?.exitstatus == 0
                 correct[t.id][2][i] = 2
               # diff2 fail
@@ -145,18 +161,21 @@ module Judge
               end
             end
           end
+
         # run fail
         else
           # could be time (143) of other failure (n)
           correct[t.id][2][i] = $?.exitstatus
           
+          # if it's not time, then save the output
           if correct[t.id][2][i] != 143
-            correct[t.id][1][i] = File.open("/tmp/#{id}-output_response-#{t.id}-#{i}.dat", "rb") {|io| io.read}
+            correct[t.id][1][i] = File.open(output_response_file, "rb") {|io| io.read}
           end
         end
 
       end
 
+      # get the first fail to present to the user
       correct[t.id][0] = 0
       for i in 0..input.length-1
         if correct[t.id][2][i] != 0
@@ -165,9 +184,11 @@ module Judge
         end
       end
 
+      # print the final result for the test case
       Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> Final"
       Rails.logger.info correct[t.id][0]
 
+      # kill all the proccess that still may be open
       if Rails.env == "production"
         `echo "poi890poi" | sudo -S pkill -f #{filename} -u exec`
       end

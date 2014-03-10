@@ -15,7 +15,7 @@
 <table class="table table-hover table-bordered" style="width:auto;">
 	<% @team.users.each do |u| %>
   <tr>
-		<td><%= link_to u.name, panel_team_user_path(@team, u)%> <small><%= "(Seu próprio usuário)" if u.id ==current_user.id %></small></td>
+		<td><%= link_to u.name, panel_team_user_path(@team, u)%> <small>(<%= u.email %>)</small> <small><%= "(Seu próprio usuário)" if u.id ==current_user.id %></small></td>
   </tr>
 	<% end %>
 </table>

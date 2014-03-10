@@ -20,14 +20,19 @@ function diffUsingJS(answer_id,resp1,resp2){
 }
 
 $(document).ready(function(){
+  $(".question-content-link").click(function(ev){
+    ev.preventDefault();
+    $("#question-content").slideToggle();
+  });
+
 	$(".last-answers-link").click(function(ev){
 		ev.preventDefault();
-  	    $("#accordion_code_"+$(this).data("id")).toggle();
+  	$("#accordion_code_"+$(this).data("id")).toggle();
 	});
 
 	$('.details-answer-link').click(function(ev){
 		ev.preventDefault();
-        $("#details_answer_"+$(this).data('id')).toggle();
+    $("#details_answer_"+$(this).data('id')).toggle();
 	});
 
 	$("div.response").each(function(){

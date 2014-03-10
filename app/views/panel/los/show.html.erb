@@ -1,5 +1,5 @@
+<h4>Aluno <em><%= @user.name %></em> na turma <em><%= @team.name %></em></h4>
 <h3><%= @lo.name %> <small><%= link_to "(Resumo)", overview_panel_team_lo_path(@team,@lo) if current_user.admin? or current_user.id == @team.owner_id %></small></h3>
-
 
 <% @exercises.each do |ex| %>
 	<h4 class="page-header">Exercício <%= ex.title %></h4>
@@ -9,7 +9,7 @@
 <section class="well"><header class="clearfix">
   <div class="left">
 
-    <h4><%= q.title %></h4>
+    <h4><%= q.title %> <small>(<%= Answer.where(user_id: @user.id, question_id: q.id, team_id: @team.id).count %> tentativa(s) do aluno <%= @user.name %>)</small></h4>
     <div>
     <span class="date-info">
       <%= raw(truncate(strip_tags(q.content),length:200)) %>

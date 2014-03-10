@@ -5,5 +5,5 @@ node(:created_at) { |lo| l lo.created_at }
 node(:numbers_of_enrolled) { |team| team.users.count }
 
 child(:users) do
-  attributes :name
+  attributes :name, :email, :id
 end

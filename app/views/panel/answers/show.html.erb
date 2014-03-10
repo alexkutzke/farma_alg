@@ -1,4 +1,10 @@
 
+<a href="#" class="question-content-link"><h3>Enunciado</h3></a>
+
+<div id="question-content" class="hide">
+<%= raw @question.content %>
+</div>
+
 <h3>Tentativa #<%= @answer['try_number'] %> <small>Realizada há <%= time_ago_in_words @answer.created_at %></small></h3>
 
 <% if @answer.correct %>
