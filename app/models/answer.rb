@@ -224,9 +224,11 @@ private
 
   def self.re_run
     Answer.all.each do |a|
-      a.exec
-      a.store_datas
-      a.save!
+      unless a.for_test
+        a.exec
+        a.store_datas
+        a.save!
+      end
     end
   end
 end
