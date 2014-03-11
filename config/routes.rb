@@ -65,7 +65,9 @@ Carrie::Application.routes.draw do
       resources :users, only: [:show] do
         resources :los, only: [:show] do
           resources :questions, only: [:show] do
-            resources :answers, only: [:show]
+            resources :answers, only: [:show] do
+              post 'change_correctness', on: :member
+            end
           end
         end
       end

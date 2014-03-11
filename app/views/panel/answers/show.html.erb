@@ -10,14 +10,65 @@
 <% if @answer.correct %>
 <div class="alert alert-success">
   Resposta correta!
-</div>
-<pre style="border: 2px green solid;">
+  <% if current_user.admin? || current_user.id == @team.owner_id %>
+    <button class="btn btn-mini btn-danger change_correctness" type="button"
+    data-toggle="popover"
+    data-content='
+              <p>Use a formatação markdown.</p>
+              <%= form_for(@answer, :method => :post, :url => url_for(:controller => 'answers', :action => 'change_correctness')) do |f| %>
+              <div class="form-group">
+                <%= f.text_area :changed_correctness_reason, :class => "form-control required", :rows => "7", :cols => "100"%>
+              </div>
+              <div class="actions">
+                <%= f.submit "Salvar", :class => "btn btn-primary" %>
+              </div>
+              <% end %>' 
+    data-original-title="Deixe um comentário que explique a troca"
+    >Tornar incorreta</button>
+  <% end %>
+
 <% else %>
 <div class='alert alert-error'>
   Resposta Incorreta.
-</div>
-<pre style="border: 2px red solid;">
+  <% if current_user.admin? || current_user.id == @team.owner_id %>
+    <button class="btn btn-mini btn-success change_correctness" type="button"
+    data-toggle="popover"
+    data-content='
+    <p>Use a formatação markdown.</p>
+              <%= form_for(@answer, :method => :post, :url => url_for(:controller => 'answers', :action => 'change_correctness')) do |f| %>
+              <div class="form-group">
+                <%= f.text_area :changed_correctness_reason, :class => "form-control required", :rows => "7", :cols => "100"%>
+              </div>
+              <div class="actions">
+                <%= f.submit "Salvar", :class => "btn btn-primary" %>
+              </div>
+              <% end %>' 
+    data-original-title="Deixe um comentário"
+    >Tornar correta</button>
+  <% end %>
+
 <% end %>
+
+<% if @answer.changed_correctness %>
+<br>
+<br>
+<p><strong>Corrigido pelo professor</strong></p> 
+  <% if not @answer.changed_correctness_reason.nil? && @answer.changed_correctness_reason != "" %>
+    <p>
+      Motivo:
+      <%= simple_format @answer.changed_correctness_reason %>
+    </p>
+  <% end %>
+<% end %>
+
+</div>
+
+<% if @answer.correct %>
+  <pre style="border: 2px green solid;">
+<% else %>
+  <pre style="border: 2px red solid;">
+<% end %>
+
 <%= @answer.response %>
 </pre>
 

@@ -39,6 +39,10 @@
 		<% else %>
 			<small>Incorreta</small>	
 		<% end %>
+
+    <% if a.changed_correctness %>
+      <small> (Corrigido pelo professor)</small> 
+    <% end %>
 	</h5>
 	<%= link_to panel_team_user_lo_question_answer_path(@team,@user,@lo,@question,a) do %>
 		<% if a.correct %>

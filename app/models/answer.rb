@@ -11,6 +11,8 @@ class Answer
   include Judge
 
   field :response
+  field :changed_correctness, type: Boolean, default: false
+  field :changed_correctness_reason
   field :correct, type: Boolean
   field :results, type: Hash
   field :for_test, type: Boolean

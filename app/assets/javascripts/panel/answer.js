@@ -39,8 +39,10 @@ $(document).ready(function(){
 	   diffUsingJS($(this).data("id"),$(this).data("response"),$(this).data("previous"));
 	});
 
-    $("#markdown_link").click(function(ev){
-      ev.preventDefault();
-      $("#markdown_examples").toggle();
-    });
+  $("#markdown_link").click(function(ev){
+    ev.preventDefault();
+    $("#markdown_examples").toggle();
+  });
+
+  $('.change_correctness').popover();
 });
