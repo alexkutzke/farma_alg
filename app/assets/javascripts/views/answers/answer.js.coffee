@@ -4,6 +4,7 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
   tagName: 'div'
   events:
     'click .details-answer-link': 'details'
+    'click .test-case-details': 'test_case_details'
 
   initialize: ->
     if @model
@@ -24,7 +25,11 @@ class Carrie.Views.Answer extends Backbone.Marionette.ItemView
 
   details: (ev) ->
     ev.preventDefault()
-    $(@el).find("#details_answer_"+$(ev.target).data('id')).toggle()
+    $(@el).find("#details_answer_"+$(ev.target).data('id')).slideToggle()
+
+  test_case_details: (ev) ->
+    ev.preventDefault()
+    $(@el).find("#test_case_details_"+$(ev.target).data('tcid')+"_"+$(ev.target).data('aid')).slideToggle()
 
   resp: ->
     if @model

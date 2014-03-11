@@ -89,9 +89,9 @@ module Judge
   end
 
   def self.numdiff(file1,file2)
-    `numdiff -I --absolute-tolerance=0.001 #{file1} #{file2}`
+    `numdiff -I --absolute-tolerance=0.00001 #{file1} #{file2}`
     Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-    Rails.logger.info "numdiff --absolute-tolerance=0.001 -I #{file1} #{file2}"
+    Rails.logger.info "numdiff --absolute-tolerance=0.00001 -I #{file1} #{file2}"
     Rails.logger.info $?.exitstatus
   end
 
@@ -99,6 +99,7 @@ module Judge
     correct = Hash.new
     test_cases.each do |t|
       correct[t.id] = Array.new
+      correct[t.id][3] = Array.new
       correct[t.id][2] = Array.new
       correct[t.id][1] = Array.new
 
@@ -106,10 +107,9 @@ module Judge
       output = t.output.split(CASE_TEST_END)
 
       n = input.length-1
-      n = 1 if n == 0
+      n = 0 if n < 0
 
       for i in 0..n
-
         input_file = "/tmp/#{id}-input-#{t.id}-#{i}.dat"
         output_file = "/tmp/#{id}-output-#{t.id}-#{i}.dat"
         output_response_file = "/tmp/#{id}-output_response-#{t.id}-#{i}.dat"
@@ -168,18 +168,21 @@ module Judge
           correct[t.id][2][i] = $?.exitstatus
           
           # if it's not time, then save the output
-          if correct[t.id][2][i] != 143
-            correct[t.id][1][i] = File.open(output_response_file, "rb") {|io| io.read}
-          end
+          #if correct[t.id][2][i] != 143
+          #  correct[t.id][1][i] = File.open(output_response_file, "rb") {|io| io.read}
+          #end
         end
-
+        correct[t.id][3][i] = File.open(output_response_file, "rb") {|io| io.read}
       end
 
       # get the first fail to present to the user
       correct[t.id][0] = 0
-      for i in 0..input.length-1
+      for i in 0..n
         if correct[t.id][2][i] != 0
           correct[t.id][0] = correct[t.id][2][i]
+          correct[t.id][1][0] = input[i]
+          correct[t.id][1][1] = output[i]
+          correct[t.id][1][2] = correct[t.id][3][i]
           break
         end
       end

@@ -121,7 +121,7 @@ class Answer
   end
 
 # Need store all information for retroaction
-private
+
   def store_datas
     question = Question.find(self.question_id)
     self.exercise = question.exercise.as_json(include: {questions: {include: :test_cases }})
@@ -130,7 +130,7 @@ private
     self.team = Team.find(self.team_id).as_json if self.team_id
   end
 
-  def verify_response
+  def exec
     question = Question.find(self.question_id)
     tmp = Time.now.to_i
 
@@ -148,32 +148,45 @@ private
       correct.each do |id,r|
 
         self.results[id] = Hash.new
+        self.results[id][:error] = false
         self.results[id][:diff_error] = false
         self.results[id][:time_error] = false
         self.results[id][:exec_error] = false
         self.results[id][:presentation_error] = false
-        self.results[id][:output] = r[1][0]
         self.results[id][:content] = question.test_cases.find(id).content
         self.results[id][:tip] = question.test_cases.find(id).tip
         self.results[id][:title] = question.test_cases.find(id).title
+        self.results[id][:input] = r[1][0]
+        self.results[id][:output_expected] = r[1][1]
+        self.results[id][:output] = r[1][2]
+        self.results[id][:id] = id
 
         if r[0] == 3 
           self.correct = false
+          self.results[id][:error] = true
           self.results[id][:diff_error] = true
         elsif r[0] == 2
           self.correct = false
+          self.results[id][:error] = true
           self.results[id][:presentation_error] = true
         elsif r[0] == 143
           self.correct = false
+          self.results[id][:error] = true
           self.results[id][:time_error] = true
         elsif r[0] != 0
           self.correct = false
+          self.results[id][:error] = true
           self.results[id][:exec_error] = true
         end
 
-        self.results[id][:output2] = simple_format r[1][0]
+        #self.results[id][:output2] = simple_format r[1][0]
       end
     end
+  end
+
+  def verify_response
+    
+    self.exec
 
     unless self.for_test
       la = LastAnswer.find_or_create_by(:user_id => self.user_id, :question_id => self.question_id)
@@ -186,6 +199,7 @@ private
     end
   end
 
+private
   def register_last_answer
     unless self.for_test
       la = LastAnswer.find_or_create_by(:user_id => self.user.id, :question_id => self.question.id)
@@ -208,4 +222,11 @@ private
     team_stat.save
   end
 
+  def self.re_run
+    Answer.all.each do |a|
+      a.exec
+      a.store_datas
+      a.save!
+    end
+  end
 end

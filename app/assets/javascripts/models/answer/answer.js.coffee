@@ -26,3 +26,4 @@ class Carrie.Models.Answer extends Backbone.RelationalModel
     tip: @get('tip')
     for_test: @get('for_test')
     team_id: @get('team_id')
+    id: @get('id')

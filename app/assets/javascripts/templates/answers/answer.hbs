@@ -17,53 +17,42 @@
 {{/if}}
 
 {{#each results}}
-
+{{#if error}}
+<div class="alert alert-error">
 {{#if diff_error}}
-  <div class="alert alert-error">
     <h4>Erro de saída</h4>
-    <p><strong>Caso de teste '{{title}}'</strong></p>
-    {{{content}}}
-    <p><strong>Dica:</strong></p>
-    {{{tip}}}
-  </div>
 {{/if}}
 
 {{#if time_error}}
-  <div class="alert alert-error">
     <h4>Tempo de execução excedido</h4>
-    <p><strong>Caso de teste '{{title}}'</strong></p>
-    {{{content}}}
-    <p><strong>Dica:</strong></p>
-    {{{tip}}}
-  </div>
-  </div>
 {{/if}}
 
 {{#if presentation_error}}
-  <div class="alert alert-error">
     <h4>Erro de apresentação</h4>
-    <p><strong>Caso de teste '{{title}}'</strong></p>
-    {{{content}}}
-    <p><strong>Dica:</strong></p>
-    {{{tip}}}
-  </div>
     <p><strong>Verifique a diagramação da sua resposta</strong></p>
-  </div>
 {{/if}}
 
 {{#if exec_error}}
-  <div class="alert alert-error">
     <h4>Erro de execução</h4>
-    <p><strong>Caso de teste '{{title}}'</strong></p>
-    {{{content}}}
-    <p><strong>Dica:</strong></p>
-    {{{tip}}}
-    </div>
-    <p><strong>Saída:</strong></p>
-    {{{ output2 }}}
-  </div>
 {{/if}}
 
+  <p><strong>Caso de teste '{{title}}'</strong></p>
+
+  <a href="#" class="test-case-details" data-tcid="{{id}}" data-aid="{{../id}}"><i class="icon-plus"></i> Detalhes do erro</a>
+
+  <div class="hide" id="test_case_details_{{id}}_{{../id}}">
+    {{{content}}}
+    <p><strong>Dica:</strong></p>
+      {{{tip}}}
+    <p><strong>Entrada utilizada:</strong></p>
+      <pre>{{{input}}}</pre>
+    <p><strong>Saída esperada:</strong></p>
+      <pre>{{{output_expected}}}</pre>
+    <p><strong>Saída obtida:</strong></p>
+      <pre>{{{output}}}</pre>
+  </div>
+</div>
+{{/if}}
 {{/each}}
 
 <button type="button" class="answer_btn btn btn-primary">Responder novamente</button>
@@ -123,38 +112,44 @@
 {{/if}}
 
 {{#each results}}
+{{#if error}}
+<div class="alert alert-error">
 {{#if diff_error}}
-  <div class="alert alert-error">
     <h4>Erro de saída</h4>
-    <p><strong>Caso de teste:</strong></p>
-    {{{content}}}
-    <p><strong>Dica:</strong></p>
-    {{{tip}}}
-  </div>
 {{/if}}
 
 {{#if time_error}}
-  <div class="alert alert-error">
     <h4>Tempo de execução excedido</h4>
-  </div>
 {{/if}}
 
 {{#if presentation_error}}
-  <div class="alert alert-error">
     <h4>Erro de apresentação</h4>
-    <p><strong>Caso de teste:</strong></p>
     <p><strong>Verifique a diagramação da sua resposta</strong></p>
-  </div>
 {{/if}}
 
 {{#if exec_error}}
-  <div class="alert alert-error">
     <h4>Erro de execução</h4>
-    <p><strong>Saída:</strong></p>
-    {{{ output2 }}}
+{{/if}}
+
+  <p><strong>Caso de teste '{{title}}'</strong></p>
+
+  <a href="#" class="test-case-details" data-tcid="{{id}}" data-aid="{{../id}}_2"><i class="icon-plus"></i> Detalhes do erro</a>
+
+  <div class="hide" id="test_case_details_{{id}}_{{../id}}_2">
+    {{{content}}}
+    <p><strong>Dica:</strong></p>
+      {{{tip}}}
+    <p><strong>Entrada utilizada:</strong></p>
+      <pre>{{{input}}}</pre>
+    <p><strong>Saída esperada:</strong></p>
+      <pre>{{{output_expected}}}</pre>
+    <p><strong>Saída obtida:</strong></p>
+      <pre>{{{output}}}</pre>
   </div>
+</div>
 {{/if}}
 {{/each}}
+
         </div>
         <h4>Resposta e comparação com a anterior</h4>
         <!--
