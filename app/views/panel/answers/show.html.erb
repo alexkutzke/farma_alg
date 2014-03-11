@@ -80,7 +80,6 @@
 </div>
 <% end %>
 <% unless @answer.results.nil?  %>
-  
 
 <% @answer.results.each do |k,v| %>
 
@@ -97,22 +96,23 @@
     <% end %>
     <% if v['presentation_error'] %>
       <h4>Erro de apresentação</h4>
+      <p><strong>Verifique a diagramação da sua resposta</strong></p>
     <% end %>
-
     <p><strong>Caso de teste <%= v['title'] %></strong></p>
+
+    <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= @answer.id%>"><i class="icon-plus"></i> Detalhes do erro</a>
+    <div class="hide" id="test_case_details_<%= v['id'] %>_<%= @answer.id%>">
     <%= simple_format v['content'] %>
     <p><strong>Dica:</strong></p>
     <%= simple_format v['tip'] %>
+    <p><strong>Entrada utilizada:</strong></p>
+      <pre><%= raw v['input'] %></pre>
+    <p><strong>Saída esperada:</strong></p>
+      <pre><%= raw v['output_expected'] %></pre>
+    <p><strong>Saída obtida:</strong></p>
+      <pre><%= raw v['output'] %></pre>
 
-    <% if v['presentation_error'] %>
-      <p><strong>Verifique a diagramação da sua resposta</strong></p>
-    <% end %>
-
-    <% if v['exec_error'] %>
-      <p><strong>Saída:</strong></p>
-      <%= v['output2'] %>
-    <% end %>
-
+    </div>
   </div>
   <% end %>
 <% end %>
@@ -188,21 +188,27 @@
                   <% end %>
                   <% if v['presentation_error'] %>
                     <h4>Erro de apresentação</h4>
-                  <% end %>
-
-                  <p><strong>Caso de teste <%= v['title'] %></strong></p>
-                  <%= simple_format v['content'] %>
-                  <p><strong>Dica:</strong></p>
-                  <%= simple_format v['tip'] %>
-
-                  <% if v['presentation_error'] %>
                     <p><strong>Verifique a diagramação da sua resposta</strong></p>
                   <% end %>
 
-                  <% if v['exec_error'] %>
-                    <p><strong>Saída:</strong></p>
-                    <%= v['output2'] %>
-                  <% end %>
+                  <p><strong>Caso de teste <%= v['title'] %></strong></p>
+
+
+                  <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= @answer.id%>_2"><i class="icon-plus"></i> Detalhes do erro</a>
+                  <div class="hide" id="test_case_details_<%= v['id'] %>_<%= @answer.id%>_2">
+                    <%= simple_format v['content'] %>
+                    <p><strong>Dica:</strong></p>
+                    <%= simple_format v['tip'] %>
+                    <p><strong>Entrada utilizada:</strong></p>
+                    <pre><%= raw v['input'] %></pre>
+                    <p><strong>Saída esperada:</strong></p>
+                    <pre><%= raw v['output_expected'] %></pre>
+                    <p><strong>Saída obtida:</strong></p>
+                    <pre><%= raw v['output'] %></pre>
+                  </div>
+
+
+
                 </div>
               <% end %> <!-- if v['diff_error'] ... -->
             <% end %><!-- la.results.each -->

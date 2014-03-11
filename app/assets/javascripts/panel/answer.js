@@ -45,4 +45,9 @@ $(document).ready(function(){
   });
 
   $('.change_correctness').popover();
+
+  $(".test-case-details").click(function(ev){
+    ev.preventDefault();
+    $("#test_case_details_"+$(ev.target).data('tcid')+"_"+$(ev.target).data('aid')).slideToggle()
+  });
 });
