@@ -52,7 +52,7 @@ class User
     if r.nil?
       r = Answer.where(user_id: self.id, team_id: team.id, question_id: question.id).last
     end
-    r
+    [r,Answer.where(user_id: self.id, team_id: team.id, question_id: question.id).count]
   end
 
   def self.guest

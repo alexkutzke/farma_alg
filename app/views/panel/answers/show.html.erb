@@ -114,6 +114,20 @@
 
     </div>
   </div>
+  <% else %>
+  <div class="alert alert-success">
+    <h4>Caso de teste <%= v['title'] %></h4>
+    <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= @answer.id%>"><i class="icon-plus"></i> Detalhes</a>
+    <div class="hide" id="test_case_details_<%= v['id'] %>_<%= @answer.id%>">
+    <%= simple_format v['content'] %>
+    <p><strong>Entrada utilizada:</strong></p>
+      <pre><%= raw v['input'] %></pre>
+    <p><strong>Saída esperada:</strong></p>
+      <pre><%= raw v['output_expected'] %></pre>
+    <p><strong>Saída obtida:</strong></p>
+      <pre><%= raw v['output'] %></pre>
+      </div>
+  </div>
   <% end %>
 <% end %>
 <% end %>
@@ -210,6 +224,20 @@
 
 
                 </div>
+              <% else %>
+                <div class="alert alert-success">
+    <h4>Caso de teste <%= v['title'] %></h4>
+    <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= @answer.id%>_2"><i class="icon-plus"></i> Detalhes</a>
+    <div class="hide" id="test_case_details_<%= v['id'] %>_<%= @answer.id%>_2">
+    <%= simple_format v['content'] %>
+    <p><strong>Entrada utilizada:</strong></p>
+      <pre><%= raw v['input'] %></pre>
+    <p><strong>Saída esperada:</strong></p>
+      <pre><%= raw v['output_expected'] %></pre>
+    <p><strong>Saída obtida:</strong></p>
+      <pre><%= raw v['output'] %></pre>
+      </div>
+  </div>
               <% end %> <!-- if v['diff_error'] ... -->
             <% end %><!-- la.results.each -->
           <% end %><!-- la.results.nil? -->

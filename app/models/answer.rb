@@ -199,6 +199,18 @@ class Answer
     end
   end
 
+  def updateStats
+    global_stat = Statistic.find_or_create_by(:question_id => self.question_id, :team_id => nil)
+
+    team_stat = Statistic.find_or_create_by(:question_id => self.question_id, :team_id => self.team_id)
+
+    global_stat.updateStats(self)
+    team_stat.updateStats(self)
+
+    global_stat.save!
+    team_stat.save!
+  end
+
 private
   def register_last_answer
     unless self.for_test
@@ -210,25 +222,23 @@ private
     end
   end
 
-  def updateStats
-    global_stat = Statistic.find_or_create_by(:question_id => self.question_id, :team_id => nil)
 
-    team_stat = Statistic.find_or_create_by(:question_id => self.question_id, :team_id => self.team_id)
 
-    global_stat.updateStats(self)
-    team_stat.updateStats(self)
-
-    global_stat.save
-    team_stat.save
-  end
-
-  def self.re_run
-    Answer.all.each do |a|
-      unless a.for_test
-        a.exec
-        a.store_datas
-        a.save!
+  def self.re_run(user_ids)
+    user_ids.each do |u|
+      p User.find(u).name
+      Answer.where(user_id:u).each do |a|
+        unless a.for_test
+          a.exec
+          a.store_datas
+          a.save!
+        end
       end
+    end
+
+    Statistic.delete_all
+    Answer.all.each do |a|
+      a.updateStats
     end
   end
 end

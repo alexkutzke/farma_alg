@@ -4,7 +4,7 @@
 </div>
 {{else}}
 <div class='alert alert-error'>
-  Resposta Incorreta, analise a dica e tente novamente
+  Resposta Incorreta, analise a dica e tente novamente.
 </div>
 {{/if}}
 
@@ -15,6 +15,12 @@
     {{{compile_errors}}}
   </div>
 {{/if}}
+
+{{#if ok}}
+{{else}}
+<h4>Verifique abaixo os casos de teste em que seu programa falhou:</h4>
+{{/if}}
+
 
 {{#each results}}
 {{#if error}}

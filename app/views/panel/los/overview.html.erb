@@ -72,21 +72,21 @@
     <% @exercises.each do |ex| %>
       <% ex.questions.each do |q| %>
         <% a = u.question_overview(@team,q) %>
-        <% if a.nil? %>
+        <% if a[0].nil? %>
           <td><span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Questão ainda não respondida pelo aluno" class="label">Não respondida</span></td>
         <% else %>
           <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
-          <% if a.correct %>
+          <% if a[0].correct %>
             <td>
               <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
                 <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta!" class="label label-success">OK</span>
-              <% end %>
+              <% end %> <small class="date-info"><%= a[1] %> tentativa(s)</small>
             </td>
           <% else %>
             <td>
               <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
                 <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta incorreta!" class="label label-important">ERRO</span>
-              <% end %>
+              <% end %> <small class="date-info"><%= a[1] %> tentativa(s)</small>
             </td>
           <% end %>
           <% end %>

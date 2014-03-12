@@ -89,9 +89,9 @@ module Judge
   end
 
   def self.numdiff(file1,file2)
-    `numdiff -I --absolute-tolerance=0.00001 #{file1} #{file2}`
+    `numdiff -I --absolute-tolerance=0.000001 #{file1} #{file2}`
     Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-    Rails.logger.info "numdiff --absolute-tolerance=0.00001 -I #{file1} #{file2}"
+    Rails.logger.info "numdiff --absolute-tolerance=0.000001 -I #{file1} #{file2}"
     Rails.logger.info $?.exitstatus
   end
 
@@ -180,12 +180,12 @@ module Judge
       for i in 0..n
         if correct[t.id][2][i] != 0
           correct[t.id][0] = correct[t.id][2][i]
-          correct[t.id][1][0] = input[i]
-          correct[t.id][1][1] = output[i]
-          correct[t.id][1][2] = correct[t.id][3][i]
           break
         end
       end
+      correct[t.id][1][0] = input[i]
+      correct[t.id][1][1] = output[i]
+      correct[t.id][1][2] = correct[t.id][3][i]
 
       # print the final result for the test case
       Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> Final"
