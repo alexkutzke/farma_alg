@@ -39,9 +39,9 @@ $(document).ready(function(){
      diffUsingJS($(this).data("id"),"Resposta",$(this).data("response"),"Resposta anterior",$(this).data("previous"));
 	});
 
-  $("div.output").each(function(){
-     diffUsingJS($(this).data("id"),"Saída esperada",$(this).data("expected"),"Saída obtida",$(this).data("obtained"));
-  });
+  //$("div.output").each(function(){
+  //   diffUsingJS($(this).data("id"),"Saída esperada",$(this).data("expected"),"Saída obtida",$(this).data("obtained"));
+  //});
 
   $("#markdown_link").click(function(ev){
     ev.preventDefault();
