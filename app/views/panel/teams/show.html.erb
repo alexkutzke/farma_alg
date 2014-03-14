@@ -13,7 +13,7 @@
 <% end %>
 <h4 class="page-header">Alunos matriculados nesta turma</h4>
 <table class="table table-hover table-bordered" style="width:auto;">
-	<% @team.users.each do |u| %>
+	<% @team.users.sort_by{|x| x.name.downcase}.each do |u| %>
   <tr>
 		<td><%= link_to u.name, panel_team_user_path(@team, u)%> <small>(<%= u.email %>)</small> <small><%= "(Seu próprio usuário)" if u.id ==current_user.id %></small></td>
   </tr>

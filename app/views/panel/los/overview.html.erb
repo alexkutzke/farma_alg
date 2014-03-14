@@ -66,7 +66,7 @@
   </tr>
 </thead>
 <tbody>
-<% @team.users.each do |u| %>
+<% @team.users.sort_by{|x| x.name.downcase}.each do |u| %>
   <tr>
     <td><%= u.name %></td>
     <% @exercises.each do |ex| %>

@@ -112,6 +112,8 @@
     <p><strong>Saída obtida:</strong></p>
       <pre><%= raw v['output'] %></pre>
 
+      <div id="output_diff_<%= v['id'] %>_<%= @answer.id%>" class="output" data-expected="<%= v['output_expected'] %>" data-obtained="<%= v['output'] %>" data-id="output_diff_<%= v['id'] %>_<%= @answer.id%>"></div>
+
     </div>
   </div>
   <% else %>

@@ -1,7 +1,7 @@
-function diffUsingJS(answer_id,resp1,resp2){
+function diffUsingJS(div_id,label1,txt1,label2,txt2){
     // get the baseText and newText values from the two textboxes, and split them into lines
-    base = difflib.stringAsLines(resp1);//$("baseText").value);
-    newtxt = difflib.stringAsLines(resp2);//$("newText").value);
+    base = difflib.stringAsLines(txt1);//$("baseText").value);
+    newtxt = difflib.stringAsLines(txt2);//$("newText").value);
 
     //create a SequenceMatcher instance that diffs the two sets of lines
     sm = new difflib.SequenceMatcher(base, newtxt);
@@ -10,13 +10,13 @@ function diffUsingJS(answer_id,resp1,resp2){
     // opcodes is a list of 3-tuples describing what changes should be made to the base text
     // in order to yield the new text
     opcodes = sm.get_opcodes();
-    diffoutputdiv = $("#"+answer_id);
+    diffoutputdiv = $("#"+div_id);
     while(diffoutputdiv.firstChild)
       diffoutputdiv.removeChild(diffoutputdiv.firstChild);
 
     //console.log opcodes
 
-    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: "Resposta", newTextName: "Resposta anterior", contextSize: 0, viewType: 0 }))
+    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
 }
 
 $(document).ready(function(){
@@ -36,8 +36,12 @@ $(document).ready(function(){
 	});
 
 	$("div.response").each(function(){
-	   diffUsingJS($(this).data("id"),$(this).data("response"),$(this).data("previous"));
+     diffUsingJS($(this).data("id"),"Resposta",$(this).data("response"),"Resposta anterior",$(this).data("previous"));
 	});
+
+  $("div.output").each(function(){
+     diffUsingJS($(this).data("id"),"Saída esperada",$(this).data("expected"),"Saída obtida",$(this).data("obtained"));
+  });
 
   $("#markdown_link").click(function(ev){
     ev.preventDefault();
