@@ -58,6 +58,25 @@
       <pre>{{{output}}}</pre>
   </div>
 </div>
+{{else}}
+<div class="alert alert-success">
+  <p><strong>Caso de teste '{{title}}'</strong></p>
+
+  <a href="#" class="test-case-details" data-tcid="{{id}}" data-aid="{{../id}}"><i class="icon-plus"></i> Detalhes do erro</a>
+
+  <div class="hide" id="test_case_details_{{id}}_{{../id}}">
+    {{{content}}}
+    <p><strong>Dica:</strong></p>
+      {{{tip}}}
+    <p><strong>Entrada utilizada:</strong></p>
+      <pre>{{{input}}}</pre>
+    <p><strong>Saída esperada:</strong></p>
+      <pre>{{{output_expected}}}</pre>
+    <p><strong>Saída obtida:</strong></p>
+      <pre>{{{output}}}</pre>
+  </div>
+</div>
+
 {{/if}}
 {{/each}}
 
