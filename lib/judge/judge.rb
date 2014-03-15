@@ -63,7 +63,7 @@ module Judge
     end
     
     if Rails.env == "production"
-      user_command = "ssh exec@localhost"
+      user_command = "ssh -p 2358 exec@localhost"
     else
       user_command = ""
     end
