@@ -183,9 +183,21 @@ module Judge
           break
         end
       end
-      correct[t.id][1][0] = input[i]
-      correct[t.id][1][1] = output[i]
-      correct[t.id][1][2] = correct[t.id][3][i]
+
+      correct[t.id][1][0] = ""
+      correct[t.id][1][1] = ""
+      correct[t.id][1][2] = ""
+      for i in 0..n
+        correct[t.id][1][0] = correct[t.id][1][0] + input[i] unless input[i].nil?
+        correct[t.id][1][1] = correct[t.id][1][1] + output[i] unless output[i].nil?
+        correct[t.id][1][2] = correct[t.id][1][2] + correct[t.id][3][i] unless correct[t.id][3][i].nil?
+
+        if n > 1
+          correct[t.id][1][0] = correct[t.id][1][0] + ">>>>>>> fim da entrada do teste número #{i}\n"
+          correct[t.id][1][1] = correct[t.id][1][1] + "<<<<<<< fim da saída do teste número #{i}\n"
+          correct[t.id][1][2] = correct[t.id][1][2] + "<<<<<<< fim da saída do teste número #{i}\n"
+        end
+      end
 
       # print the final result for the test case
       Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> Final"

@@ -9,7 +9,19 @@
 <section class="well"><header class="clearfix">
   <div class="left">
 
-    <h4><%= q.title %> <small>(<%= Answer.where(user_id: @user.id, question_id: q.id, team_id: @team.id).count %> tentativa(s) do aluno <%= @user.name %>)</small></h4>
+    <h4><%= q.title %>
+      <% a = @user.question_overview(@team,q) %>
+        <% if a[0].nil? %>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Questão ainda não respondida pelo aluno" class="label">Não respondida</span>
+        <% else %>  
+          <% if a[0].correct %>
+              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta!" class="label label-success">OK</span> <small class="date-info"><%= a[1] %> tentativa(s)</small>
+          <% else %>
+                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta incorreta!" class="label label-important">ERRO</span> <small class="date-info"><%= a[1] %> tentativa(s)</small>
+          <% end %>
+        <% end %>
+
+    </h4>
     <div>
     <span class="date-info">
       <%= raw(truncate(strip_tags(q.content),length:200)) %>

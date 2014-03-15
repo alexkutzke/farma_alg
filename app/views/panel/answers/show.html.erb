@@ -5,7 +5,7 @@
 <%= raw @question.content %>
 </div>
 
-<h3>Tentativa #<%= @answer['try_number'] %> <small>Realizada há <%= time_ago_in_words @answer.created_at %></small></h3>
+<h3>Tentativa #<%= @answer['try_number'] %> <small>Realizada em <%= @answer['created_at'].strftime("%d/%m/%Y às %H:%M:%S") %></small></h3>
 
 <% if @answer.correct %>
 <div class="alert alert-success">

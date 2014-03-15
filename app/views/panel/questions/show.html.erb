@@ -7,7 +7,7 @@
 
 
 
-	<h5>#<%= a['try_number'] %>, Há <%= time_ago_in_words a['created_at']%>
+	<h5>#<%= a['try_number'] %>, Em <%= a['created_at'].strftime("%d/%m/%Y às %H:%M:%S")%>
 
       <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta"
       class="label"><%= a.lang %></span>
