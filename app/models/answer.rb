@@ -156,8 +156,13 @@ class Answer
         self.results[id][:content] = question.test_cases.find(id).content
         self.results[id][:tip] = question.test_cases.find(id).tip
         self.results[id][:title] = question.test_cases.find(id).title
-        self.results[id][:input] = r[1][0]
-        self.results[id][:output_expected] = r[1][1]
+        self.results[id][:show_input_output] = question.test_cases.find(id).show_input_output
+
+        if question.test_cases.find(id).show_input_output
+          self.results[id][:input] = r[1][0]
+          self.results[id][:output_expected] = r[1][1]
+        end
+
         self.results[id][:output] = r[1][2]
         self.results[id][:id] = id
 

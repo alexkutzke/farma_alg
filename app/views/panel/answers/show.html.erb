@@ -105,10 +105,12 @@
     <%= simple_format v['content'] %>
     <p><strong>Dica:</strong></p>
     <%= simple_format v['tip'] %>
-    <p><strong>Entrada utilizada:</strong></p>
+    <% if v['show_input_output'] %>
+      <p><strong>Entrada utilizada:</strong></p>
       <pre><%= raw v['input'] %></pre>
-    <p><strong>Saída esperada:</strong></p>
+      <p><strong>Saída esperada:</strong></p>
       <pre><%= raw v['output_expected'] %></pre>
+    <% end %>
     <p><strong>Saída obtida:</strong></p>
       <pre><%= raw v['output'] %></pre>
 
@@ -122,10 +124,12 @@
     <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= @answer.id%>"><i class="icon-plus"></i> Detalhes</a>
     <div class="hide" id="test_case_details_<%= v['id'] %>_<%= @answer.id%>">
     <%= simple_format v['content'] %>
-    <p><strong>Entrada utilizada:</strong></p>
+    <% if v['show_input_output']  %>
+      <p><strong>Entrada utilizada:</strong></p>
       <pre><%= raw v['input'] %></pre>
     <p><strong>Saída esperada:</strong></p>
       <pre><%= raw v['output_expected'] %></pre>
+    <% end %>
     <p><strong>Saída obtida:</strong></p>
       <pre><%= raw v['output'] %></pre>
       </div>
@@ -215,10 +219,12 @@
                     <%= simple_format v['content'] %>
                     <p><strong>Dica:</strong></p>
                     <%= simple_format v['tip'] %>
-                    <p><strong>Entrada utilizada:</strong></p>
-                    <pre><%= raw v['input'] %></pre>
-                    <p><strong>Saída esperada:</strong></p>
-                    <pre><%= raw v['output_expected'] %></pre>
+<% if v['show_input_output'] %>
+      <p><strong>Entrada utilizada:</strong></p>
+      <pre><%= raw v['input'] %></pre>
+    <p><strong>Saída esperada:</strong></p>
+      <pre><%= raw v['output_expected'] %></pre>
+    <% end %>
                     <p><strong>Saída obtida:</strong></p>
                     <pre><%= raw v['output'] %></pre>
                   </div>
@@ -232,10 +238,12 @@
     <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= @answer.id%>_2"><i class="icon-plus"></i> Detalhes</a>
     <div class="hide" id="test_case_details_<%= v['id'] %>_<%= @answer.id%>_2">
     <%= simple_format v['content'] %>
-    <p><strong>Entrada utilizada:</strong></p>
+<% if v['show_input_output'] %>
+      <p><strong>Entrada utilizada:</strong></p>
       <pre><%= raw v['input'] %></pre>
     <p><strong>Saída esperada:</strong></p>
       <pre><%= raw v['output_expected'] %></pre>
+    <% end %>
     <p><strong>Saída obtida:</strong></p>
       <pre><%= raw v['output'] %></pre>
       </div>

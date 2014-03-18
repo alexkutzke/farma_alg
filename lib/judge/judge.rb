@@ -1,6 +1,7 @@
 module Judge
 
   CASE_TEST_END = "<--FIM-->\n"
+  OUTPUT_OR = "<--OU-->\n"
 
   def self.compile(lang="pas",source_code,id)
 
@@ -72,6 +73,16 @@ module Judge
     `bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}`
     Rails.logger.info "bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}"
     Rails.logger.info $?.exitstatus
+
+    # run ok
+    if $?.exitstatus == 0 || $?.exitstatus == 255 || lang == "c"
+      result = 1
+    # run fail
+    else
+      result = $?.exitstatus
+    end
+
+    result
   end
 
   def self.diff(ignore_presentation,file1,file2)
@@ -95,6 +106,52 @@ module Judge
     Rails.logger.info $?.exitstatus
   end
 
+  def self.judge(output_file,output_response_file,ignore_presentation)
+    
+
+      if ignore_presentation
+
+        diff(true,output_response_file,output_file)
+
+        # diff ok
+        if $?.exitstatus == 0
+          result = 0
+        # diff fail
+        else
+
+          numdiff(output_response_file,output_file)
+          
+          # numdiff ok
+          if $?.exitstatus == 0
+            result = 0
+          # numdiff fail
+          else
+            result = 3
+          end
+        end
+      else
+        diff(false,output_response_file,output_file)
+
+        # diff1 ok
+        if $?.exitstatus == 0
+          result = 0
+        # diff1 fail
+        else
+          diff(true,output_response_file,output_file)
+
+          # diff2 ok - presentation error
+          if $?.exitstatus == 0
+            result = 2
+          # diff2 fail
+          else
+            result = 3
+          end
+        end
+      end
+
+    result
+  end
+
   def self.test(lang,filename,test_cases,id)
     correct = Hash.new
     test_cases.each do |t|
@@ -106,72 +163,42 @@ module Judge
       input = t.input.split(CASE_TEST_END)
       output = t.output.split(CASE_TEST_END)
 
-      n = input.length-1
+      n = input.length - 1
       n = 0 if n < 0
 
       for i in 0..n
         input_file = "/tmp/#{id}-input-#{t.id}-#{i}.dat"
-        output_file = "/tmp/#{id}-output-#{t.id}-#{i}.dat"
         output_response_file = "/tmp/#{id}-output_response-#{t.id}-#{i}.dat"
 
+        output_tmp = output[i].split(OUTPUT_OR)
+        nout = output_tmp.length - 1
+        nout = 0 if nout < 0
+
         File.open(input_file, 'w') {|f| f.write(input[i]) }
-        File.open(output_file, 'w') {|f| f.write(output[i]) }
 
-        exec_file(filename,lang,t.timeout,input_file,output_response_file)
-        
-        # run ok
-        if $?.exitstatus == 0 || $?.exitstatus == 255 || lang == "c"
+        result_exec = exec_file(filename,lang,t.timeout,input_file,output_response_file)
 
-          if t.ignore_presentation
+        if result_exec == 1
+          result = -1
+          for j in 0..nout
+            output_file = "/tmp/#{id}-output-#{t.id}-#{i}-#{j}.dat"
+            File.open(output_file, 'w') {|f| f.write(output_tmp[j]) }
 
-            diff(true,output_response_file,output_file)
-
-            # diff ok
-            if $?.exitstatus == 0
-              correct[t.id][2][i] = 0
-            # diff fail
+            result_tmp = judge(output_file,output_response_file,t.ignore_presentation)
+            if result_tmp == 0
+              result = 0
             else
-
-              numdiff(output_response_file,output_file)
-              
-              # numdiff ok
-              if $?.exitstatus == 0
-                correct[t.id][2][i] = 0
-              # numdiff fail
-              else
-                correct[t.id][2][i] = 3
-              end
-            end
-          else
-            diff(false,output_response_file,output_file)
-
-            # diff1 ok
-            if $?.exitstatus == 0
-              correct[t.id][2][i] = 0
-            # diff1 fail
-            else
-              diff(true,output_response_file,output_file)
-
-              # diff2 ok - presentation error
-              if $?.exitstatus == 0
-                correct[t.id][2][i] = 2
-              # diff2 fail
-              else
-                correct[t.id][2][i] = 3
+              if result != 0
+                result = result_tmp
               end
             end
           end
-
-        # run fail
+        
+          correct[t.id][2][i] = result
         else
-          # could be time (143) of other failure (n)
-          correct[t.id][2][i] = $?.exitstatus
-          
-          # if it's not time, then save the output
-          #if correct[t.id][2][i] != 143
-          #  correct[t.id][1][i] = File.open(output_response_file, "rb") {|io| io.read}
-          #end
+          correct[t.id][2][i] = result_exec
         end
+
         correct[t.id][3][i] = File.open(output_response_file, "rb") {|io| io.read}
       end
 
@@ -193,9 +220,14 @@ module Judge
         correct[t.id][1][2] = correct[t.id][1][2] + correct[t.id][3][i] unless correct[t.id][3][i].nil?
 
         if n >= 1
-          correct[t.id][1][0] = correct[t.id][1][0] + "\n>>>>>>> fim da entrada do teste número #{i}\n"
-          correct[t.id][1][1] = correct[t.id][1][1] + "\n<<<<<<< fim da saída do teste número #{i}\n"
-          correct[t.id][1][2] = correct[t.id][1][2] + "\n<<<<<<< fim da saída do teste número #{i}\n"
+          correct[t.id][1][0] = correct[t.id][1][0] + "\n" if correct[t.id][1][0].last != "\n"
+          correct[t.id][1][0] = correct[t.id][1][0] + ">>>>>>> fim da entrada do teste número #{i}\n"
+
+          correct[t.id][1][1] = correct[t.id][1][1] + "\n" if correct[t.id][1][1].last != "\n"
+          correct[t.id][1][1] = correct[t.id][1][1] + "<<<<<<< fim da saída do teste número #{i}\n"
+
+          correct[t.id][1][2] = correct[t.id][1][2] + "\n" if correct[t.id][1][2].last != "\n"
+          correct[t.id][1][2] = correct[t.id][1][2] + "<<<<<<< fim da saída do teste número #{i}\n"
         end
       end
 

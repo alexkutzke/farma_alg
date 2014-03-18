@@ -10,8 +10,9 @@ class TestCase
   field :output, type: String
   field :timeout, type: Integer, default: 1
   field :ignore_presentation, type: Boolean, default: true
+  field :show_input_output, type: Boolean, default: true
 
-  attr_accessible :id, :content, :input, :output, :timeout, :tip, :title, :ignore_presentation
+  attr_accessible :id, :content, :input, :output, :timeout, :tip, :title, :ignore_presentation, :show_input_output
 
   validates_presence_of :content, :timeout, :title
   validates :timeout, numericality: { only_integer: true, greater_than: 0, less_than: 100 }
