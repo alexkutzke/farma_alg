@@ -192,7 +192,7 @@ module Judge
         correct[t.id][1][1] = correct[t.id][1][1] + output[i] unless output[i].nil?
         correct[t.id][1][2] = correct[t.id][1][2] + correct[t.id][3][i] unless correct[t.id][3][i].nil?
 
-        if n > 1
+        if n >= 1
           correct[t.id][1][0] = correct[t.id][1][0] + "\n>>>>>>> fim da entrada do teste número #{i}\n"
           correct[t.id][1][1] = correct[t.id][1][1] + "\n<<<<<<< fim da saída do teste número #{i}\n"
           correct[t.id][1][2] = correct[t.id][1][2] + "\n<<<<<<< fim da saída do teste número #{i}\n"
