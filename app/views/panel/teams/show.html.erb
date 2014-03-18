@@ -19,3 +19,62 @@
   </tr>
 	<% end %>
 </table>
+
+<h4 class="page-header">Últimas respostas nesta turma</h4>
+<% @answers.each do |a| %>
+
+<section class="well"><header class="clearfix">
+  <div class="left">
+
+
+  <h5><%= a.user.name %></h5>
+  <h5><%= a.lo.name %> - <%= a.question.title %></h5>
+
+  <h5>#<%= a['try_number'] %>, Em <%= a['created_at'].strftime("%d/%m/%Y às %H:%M:%S")%>
+
+      <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta"
+      class="label"><%= a.lang %></span>
+      <% if a.correct %>
+        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
+      <% else %>
+        <% if a.compile_errors %>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
+        <% else %>
+          <% a.results.each do |k,v| %>
+            <% if v['diff_error'] %>
+              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '<%= v['title'] %>'" class="label label-important">saída</span>
+            <% end %>
+            <% if v['time_error'] %>
+              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '<%= v['title'] %>'" class="label label-important">tempo</span>
+            <% end %>
+            <% if v['presentation_error'] %>
+              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '<%= v['title'] %>'" class="label label-important">apresentação</span>
+            <% end %>
+            <% if v['exec_error'] %>
+              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '<%= v['title'] %>'" class="label label-important">execução</span>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+    <% if a.correct %>
+      <small>Correta</small>
+    <% else %>
+      <small>Incorreta</small>  
+    <% end %>
+
+    <% if a.changed_correctness %>
+      <small> (Corrigido pelo professor)</small> 
+    <% end %>
+  </h5>
+  <%= link_to panel_team_user_lo_question_answer_path(@team,a.user_id,a.lo_id,a.question_id,a) do %>
+    <% if a.correct %>
+<pre style="border: 2px green solid;">  
+    <% else %>
+<pre style="border: 2px red solid;">
+    <% end %>
+<%= truncate(a['response'],length:100) %></pre>
+  <% end %>
+    </div>
+</section>
+<% end %>
