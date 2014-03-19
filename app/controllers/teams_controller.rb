@@ -13,7 +13,7 @@ class TeamsController < ApplicationController
   end
 
   def created
-    @teams = @owner_teams.desc(:created_at)
+    @teams = @owner_teams.asc(:name)
   end
 
   def my_teams
