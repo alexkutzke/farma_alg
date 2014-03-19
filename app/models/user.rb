@@ -2,9 +2,9 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
   # Include default devise modules. Others available are:
-  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
+  # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable, :recoverable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :rememberable, :trackable, :validatable
 
   ## Database authenticatable
   field :email,              :type => String, :default => ''
@@ -29,6 +29,7 @@ class User
   field :name, :type => String
   field :gravatar
   field :admin, :type => Boolean, default: false
+  field :super_admin, :type => Boolean, default: false
   field :guest, :type => Boolean, default: false
 
   attr_accessible :id, :name, :email, :password, :password_confirmation, :remember_me, :guest

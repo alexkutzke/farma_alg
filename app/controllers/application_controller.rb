@@ -1,12 +1,13 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  respond_to :json
+  respond_to :html,:json
+  before_filter :authenticate_user!
+  layout :layout_to_resource
 
   def verified_request?
-
-    p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-    p form_authenticity_token 
-    p request.headers['X-CSRF-Token']
+    #p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    #p form_authenticity_token 
+    #p request.headers['X-CSRF-Token']
     super()
   end
   
@@ -23,7 +24,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def after_sign_in_path_for(resource)
+    root_path
+  end
+
   protected
+
+  def layout_to_resource
+    if devise_controller?
+      "login"
+    else
+      "application"
+    end
+  end
 
    def ckeditor_filebrowser_scope(options = {})
      super({ :assetable_id => current_user.id, :assetable_type => 'User' }.merge(options))

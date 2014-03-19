@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SIGPIBID</title>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "login" %>
+    <%= csrf_meta_tags %>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+
+    <div class="container">
+
+          <div class="row-fluid">
+            <div class="span4 offset4">
+          
+          <div class="page-header text-center">
+            <h2>FARMA-ALG</h2>
+          </div>
+
+          <!-- Main component for a primary marketing message or call to action -->
+          <% if not notice.nil? %>
+              <p id="notice" class="text-center alert alert-info"><%= notice %></p>
+          <% end %>
+          <% if not alert.nil? %>
+            <p id="alert" class="text-center alert alert-danger"><%= alert %></p>
+          <% end %>
+
+           <%= yield %>
+
+        <hr />
+        <p class="text-center"><a href="http://www.inf.ufpr.br/alexander">UFPR 2014</a></p>
+        </div>
+            </div>
+      </div> <!-- /container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
+</html>

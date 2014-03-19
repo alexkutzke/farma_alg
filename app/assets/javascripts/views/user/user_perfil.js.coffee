@@ -32,10 +32,10 @@ class Carrie.Views.UserPerfil extends Backbone.Marionette.ItemView
         Carrie.currentUser.set('gravatar', $.md5(user.get('email')))
 
 
-        $('#content').prepend Carrie.Helpers.Notifications.success('Seus dados foram atualizados!')
-        Carrie.welcome.show new Carrie.Views.Welcome model: Carrie.currentUser
+        Carrie.Helpers.Notifications.Top.success('Seus dados foram atualizados!')
+        Carrie.header_right_menu.show new Carrie.Views.AuthenticateHRM model: Carrie.currentUser
         Carrie.layouts.main.content.close()
-        Backbone.history.navigate '', false
+        Backbone.history.navigate '/welcome', true
 
       error: (userSession, response) =>
         result = $.parseJSON(response.responseText)

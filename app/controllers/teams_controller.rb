@@ -81,7 +81,7 @@ class TeamsController < ApplicationController
 
 private
   def teams
-    if current_user.admin?
+    if current_user.super_admin?
       @owner_teams = Team.all
     else
       @owner_teams = Team.where(owner_id: current_user.id)

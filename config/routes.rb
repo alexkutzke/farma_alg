@@ -2,6 +2,8 @@ Carrie::Application.routes.draw do
 
   mount Ckeditor::Engine => '/ckeditor'
 
+  devise_for :users, :controllers => {:sessions => "sessions"}
+
   scope "api" do
     namespace :published do
       resources :los, only: :show
@@ -49,8 +51,6 @@ Carrie::Application.routes.draw do
       end
     end
   end
-
-  devise_for :users
   
   get "answers_panel/index"
   get "answers_panel/answers"
