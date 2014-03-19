@@ -4,8 +4,8 @@ class TeamsController < ApplicationController
   before_filter :teams, except: :enrolled
 
   def index
-    @teams = Team.search(params[:search]).page(params[:page]).per(10)
-    p @teams
+    @teams = Team.search(params[:search]).page(params[:page]).per(10).asc('name')
+    #p @teams
   end
 
   def enrolled
