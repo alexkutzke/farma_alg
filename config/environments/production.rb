@@ -71,4 +71,26 @@ Carrie::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
+
+  #SMTP
+  config.action_mailer.default_url_options = { :host => 'farma-alg.dyndns.org' }  
+
+ require 'tlsmail' #key but not always described
+    Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)
+   
+    ActionMailer::Base.delivery_method = :smtp
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.raise_delivery_errors = true
+   
+    ActionMailer::Base.smtp_settings = {
+      :enable_starttls_auto => true,  #this is the important stuff!
+      :address        => 'smtp.gmail.com',
+      :port           => 587,
+      :domain         => 'farma-alg.dyndns.org',
+      :authentication => :plain,
+      :user_name            => 'farma.alg@gmail.com',
+    :password             => 'poi890poiewq123ewq'
+}
+
+
 end

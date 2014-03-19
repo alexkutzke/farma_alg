@@ -14,7 +14,7 @@ gem 'bson_ext'
 gem 'devise', '2.2.3'
 gem 'simple_form'
 gem 'debugger'
-#gem 'tlsmail'
+gem 'tlsmail'
 
 gem "ckeditor", '~> 4.0.4'
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'

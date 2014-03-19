@@ -38,8 +38,8 @@ Carrie::Application.configure do
   #SMTP
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }  
 
- #require 'tlsmail' #key but not always described
-  #  Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)
+ require 'tlsmail' #key but not always described
+    Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)
    
     ActionMailer::Base.delivery_method = :smtp
     ActionMailer::Base.perform_deliveries = true
@@ -49,10 +49,10 @@ Carrie::Application.configure do
       :enable_starttls_auto => true,  #this is the important stuff!
       :address        => 'smtp.gmail.com',
       :port           => 587,
-      :domain         => 'localhost',
+      :domain         => 'myapp.com',
       :authentication => :plain,
-      :user_name            => 'farma.alg',
-    :password             => 'poi890poi'
+      :user_name            => 'farma.alg@gmail.com',
+    :password             => 'poi890poiewq123ewq'
 }
 
  
