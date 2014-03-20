@@ -3,7 +3,11 @@
   <% @los.each do |lo| %>
 <section class="well"><header class="clearfix">
   <div class="left">
-    <h4><%= link_to lo.name, overview_panel_team_lo_path(@team, lo)%></h4>
+    <h4><%= link_to lo.name, overview_panel_team_lo_path(@team, lo)%>
+      <% unless @team.lo_ids.include?(lo.id) %>
+        <span class="date-info">(atualmente não disponível para os alunos)</span>
+      <% end %>
+    </h4>
         <span class="date-info">
       Resumo
     </span>
