@@ -125,7 +125,7 @@ function draw(data2)
 		graph.addNode(i, data[0][i]);
 	}
 
-	drawEdges(0.9);
+	drawEdges(0.4);
 
 /*
 	for (i = 0; i < data[1].length; ++i){

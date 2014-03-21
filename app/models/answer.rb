@@ -39,6 +39,7 @@ class Answer
   has_one :last_answer
   #embeds_many :comments, :as => :commentable
   has_many :comments
+  has_many :connections, dependent: :delete
 
   #default_scope desc(:created_at)
 
@@ -65,6 +66,15 @@ class Answer
         Answer.excludes(team_id: nil, for_test: true).page(page).per(20)
       end
     end
+  end
+
+  def similar_answers
+    sa = []
+    self.connections.each do |c|
+      sa << c.target_answer_id
+    end
+
+    sa
   end
 
   def lo

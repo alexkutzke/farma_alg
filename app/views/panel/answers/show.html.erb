@@ -367,3 +367,43 @@
       </section>
 
 
+
+<% @answer.similar_answers.each do |sa_id| %>
+  <% sa = Answer.find(sa_id) %>
+  <% c = @answer.connections.where(target_answer_id:sa.id).first %>
+  <%= link_to sa.user.name + " - " + sa.question.title + " - " + c.weight.to_s, panel_team_user_lo_question_answer_path(@team,@user,@lo,@question,sa) %>
+    <button class="btn btn-mini btn-danger change_correctness" type="button"
+    data-toggle="popover"
+    data-content='<table class="table">
+<tr>
+  <td>code_similarity</td>
+  <td><%= c.code_similarity %></td>
+</tr>
+
+<tr>
+  <td>both_compile_errors</td>
+  <td><%= c.both_compile_errors %></td>
+</tr>
+<tr>
+  <td>compile_errors_similarity</td>
+  <td><%= c.compile_errors_similarity %></td>
+</tr>
+<tr>
+  <td>both_error</td>
+  <td><%= c.both_error %></td>
+</tr>
+<tr>
+  <td>same_question</td>
+  <td><%= c.same_question %></td>
+</tr>
+<tr>
+  <td>test_case_similarity</td>
+  <td><%= c.test_case_similarity.to_s %></td>
+</tr>
+<tr>
+  <td>test_case_similarity_final</td>
+  <td><%= c.test_case_similarity_final %></td>
+</tr>' 
+    data-original-title="Detalhes"
+    >Mostrar detalhes</button></p>
+<% end %>
