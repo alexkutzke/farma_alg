@@ -216,6 +216,17 @@ class Answer
     team_stat.save!
   end
 
+  def previous(n)
+    previous_answers = Answer.where(user_id: self.user_id, team_id: self.team_id, question_id: self.question_id).desc(:created_at).lte(created_at: self.created_at)[0..n-1]
+    previous_answers.each do |p|
+      a = Answer.where(user_id: self.user_id, team_id: self.team_id, question_id: self.question_id).desc(:created_at).lt(created_at: p.created_at).first
+      unless a.nil?
+        p['previous'] = a.response
+      end
+    end
+    previous_answers
+  end
+
 private
   def register_last_answer
     unless self.for_test

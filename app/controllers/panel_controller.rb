@@ -1,5 +1,6 @@
 class PanelController < ApplicationController
 	layout "panel"
+  layout "retroaction", :only => [:retroaction]
 	before_filter :authenticate_user!
 
 	def index
@@ -15,5 +16,26 @@ class PanelController < ApplicationController
 
   def comments
     @comments = Comment.where(target_user_id:current_user.id).desc('created_at')
+  end
+
+  def retroaction
+    @answer = Answer.find(params[:answer_id])
+    @other_answers = Hash.new
+    @answer.exercise.questions.each do |q|
+      if q.id != @answer.question_id
+        @other_answers[q.id] = Hash.new
+
+        #la = LastAnswer.where(user_id: @answer.user_id, question_id: q.id).try(:first)
+        
+        #if la
+        #  @other_answers[q.id] = Answer.find(la.answer_id)
+        #else
+        #  @other_answers[q.id] = nil
+        #end
+
+        @other_answers[q.id][:answer] = Answer.where(user_id: @answer.user_id, question_id: q.id, team_id:@answer.team_id).lte(created_at: @answer.created_at).try(:first)
+        @other_answers[q.id][:previous_answers] = (not @other_answers[q.id][:answer].nil?) ? @other_answers[q.id][:answer].previous(5) : []
+      end
+    end
   end
 end

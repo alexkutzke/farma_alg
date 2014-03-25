@@ -56,6 +56,7 @@ Carrie::Application.routes.draw do
   get "answers_panel/answers"
   
   namespace :panel do
+    get "retroaction/:answer_id", :action => :retroaction
     get "index"
     get "comments"
     resources :teams, only: [:show] do
