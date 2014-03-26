@@ -1,10 +1,8 @@
 
-var code;
+var code = 0;
 
 $(document).ready(function(){
 
-  c = $('#code');
-  code = CodeMirror(c[0], { value: "", mode: $(this).data("lang"),  tabSize:2, lineNumbers: true });
   $(".virtual-keyboard").modal({show: false});
 
   $("#send_answer").click(function(ev){
@@ -26,7 +24,13 @@ $(document).ready(function(){
 	$(document).on('click','#try_again',function(ev){
 		ev.preventDefault();
 
-    code.setValue($(this).data("resp"));
+    if(code == 0){
+      c = $('#code');
+      code = CodeMirror(c[0], { value: "", mode: $(this).data("lang"),  tabSize:2, lineNumbers: true });
+    }
+    else{
+      code.setValue($(this).data("resp"));
+    }
 
     setTimeout(function(){
       self.code.refresh();

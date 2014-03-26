@@ -28,8 +28,12 @@ class AnswersController < ApplicationController
   end
 
   def retroaction
-    @answer = Answer.find(params[:id])
-    @new = Answer.create({user_id:@answer.user_id, team_id:@answer.team_id, lo_id: @answer.lo_id, question_id:@answer.question_id, exercise_id:@answer.exercise_id, response: params[:response], retroaction:true, lang:@answer.lang})
+    if current_user.super_admin? or current_user.id  == @answer.user_id
+      @answer = Answer.find(params[:id])
+      @new = Answer.create({user_id:@answer.user_id, team_id:@answer.team_id, lo_id: @answer.lo_id, question_id:@answer.question_id, exercise_id:@answer.exercise_id, response: params[:response], retroaction:true, lang:@answer.lang})
+    else
+      redirect_to root_url
+    end
   end
 
   def team_ids
