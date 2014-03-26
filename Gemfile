@@ -13,7 +13,7 @@ gem 'delayed_job_mongoid'
 gem 'bson_ext'
 gem 'devise', '2.2.3'
 gem 'simple_form'
-#gem 'debugger'
+gem 'debugger'
 gem 'tlsmail'
 
 gem "ckeditor", '~> 4.0.4'

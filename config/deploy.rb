@@ -8,6 +8,7 @@ set :log_level, :debug
 #set :whenever_command, "bundle exec whenever"
 #require "whenever/capistrano"
 server "192.241.202.98:2358", :web, :app, :db, primary: true
+server "107.170.214.146:2358", :web, :app, :db
 
 set :user, "alex"
 set :application, "farma-alg"
