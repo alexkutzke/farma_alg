@@ -12,8 +12,6 @@ $(document).ready(function(){
 
     data = {'response': code.getValue()};
 
-    console.log(data);
-
     $.ajax({
       type: "POST",
       url: "/api/answers/"+$(this).data("id")+"/retroaction",
