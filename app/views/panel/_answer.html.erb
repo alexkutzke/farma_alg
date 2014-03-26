@@ -2,14 +2,14 @@
 <% buttons = true if buttons.nil? %>
 
 <% if answer.correct %>
-<div class="alert alert-success">
-  Resposta correta!
+  <div class="alert alert-success">
+    Resposta correta!
   
-  <% unless retroaction %>
-  <% if current_user.admin? || current_user.id == answer.team.owner_id %>
-    <button class="btn btn-mini btn-danger change_correctness" type="button"
-    data-toggle="popover"
-    data-content='
+    <% unless retroaction %>
+      <% if current_user.admin? || current_user.id == answer.team.owner_id %>
+        <button class="btn btn-mini btn-danger change_correctness" type="button"
+          data-toggle="popover"
+          data-content='
               <p>Use a formatação markdown.</p>
               <%= form_for(answer, :method => :post, :url => url_for(:controller => 'answers', :action => 'change_correctness')) do |f| %>
               <div class="form-group">
@@ -19,21 +19,19 @@
                 <%= f.submit "Salvar", :class => "btn btn-primary" %>
               </div>
               <% end %>' 
-    data-original-title="Deixe um comentário que explique a troca"
-    >Tornar incorreta</button>
-  <% end %>
-  
-  <% end %>
-
+          data-original-title="Deixe um comentário que explique a troca"
+        >Tornar incorreta</button>
+      <% end %>
+    <% end %>
 <% else %>
-<div class='alert alert-error'>
-  Resposta Incorreta.
-  <% unless retroaction %>
-  <% if current_user.admin? || current_user.id == answer.team.owner_id %>
-    <button class="btn btn-mini btn-success change_correctness" type="button"
-    data-toggle="popover"
-    data-content='
-    <p>Use a formatação markdown.</p>
+  <div class='alert alert-error'>
+    Resposta Incorreta.
+    <% unless retroaction %>
+      <% if current_user.admin? || current_user.id == answer.team.owner_id %>
+        <button class="btn btn-mini btn-success change_correctness" type="button"
+          data-toggle="popover"
+          data-content='
+              <p>Use a formatação markdown.</p>
               <%= form_for(answer, :method => :post, :url => url_for(:controller => 'answers', :action => 'change_correctness')) do |f| %>
               <div class="form-group">
                 <%= f.text_area :changed_correctness_reason, :class => "form-control required", :rows => "7", :cols => "100"%>
@@ -42,26 +40,24 @@
                 <%= f.submit "Salvar", :class => "btn btn-primary" %>
               </div>
               <% end %>' 
-    data-original-title="Deixe um comentário"
-    >Tornar correta</button>
-  <% end %>
-  <% end %>
-
+          data-original-title="Deixe um comentário"
+        >Tornar correta</button>
+      <% end %>
+    <% end %>
 <% end %>
 
-<% if answer.changed_correctness %>
-<br>
-<br>
-<p><strong>Corrigido pelo professor</strong></p> 
-  <% if not answer.changed_correctness_reason.nil? && answer.changed_correctness_reason != "" %>
-    <p>
-      Motivo:
-      <%= simple_format answer.changed_correctness_reason %>
-    </p>
-  <% end %>
-<% end %>
-
-</div>
+    <% if answer.changed_correctness %>
+      <br>
+      <br>
+      <p><strong>Corrigido pelo professor</strong></p> 
+      <% if not answer.changed_correctness_reason.nil? && answer.changed_correctness_reason != "" %>
+        <p>
+          Motivo:
+          <%= simple_format answer.changed_correctness_reason %>
+        </p>
+      <% end %>
+    <% end %>
+  </div> <!-- <div class='alert alert-error'> -->
 
 <% if answer.correct %>
   <pre style="border: 2px green solid;">
@@ -69,74 +65,75 @@
   <pre style="border: 2px red solid;">
 <% end %>
 
-<%= answer.response %>
-</pre>
+    <%= answer.response %>
+  </pre>
 
 <% if answer.compile_errors %>
-<div class="alert alert-error">
-  <h4>Erro de compilação</h4>
-  <p><strong>Saída do compilador:</strong></p>
-  <%= simple_format answer.compile_errors %>
-</div>
-<% end %>
-<% unless answer.results.nil?  %>
-
-<% answer.results.each do |k,v| %>
-
-  <% if v['diff_error'] or v['time_error'] or v['exec_error'] or v['presentation_error'] %>
   <div class="alert alert-error">
-    <% if v['diff_error'] %>
-      <h4>Erro de saída</h4>
-    <% end %>
-    <% if v['time_error'] %>
-      <h4>Tempo de execução excedido</h4>
-    <% end %>
-    <% if v['exec_error'] %>
-      <h4>Erro de execução</h4>
-    <% end %>
-    <% if v['presentation_error'] %>
-      <h4>Erro de apresentação</h4>
-      <p><strong>Verifique a diagramação da sua resposta</strong></p>
-    <% end %>
-    <p><strong>Caso de teste <%= v['title'] %></strong></p>
-
-    <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= answer.id%>"><i class="icon-plus"></i> Detalhes do erro</a>
-    <div class="hide" id="test_case_details_<%= v['id'] %>_<%= answer.id%>">
-    <%= simple_format v['content'] %>
-    <p><strong>Dica:</strong></p>
-    <%= simple_format v['tip'] %>
-    <% if v['show_input_output'] %>
-      <p><strong>Entrada utilizada:</strong></p>
-      <pre><%= raw v['input'] %></pre>
-      <p><strong>Saída esperada:</strong></p>
-      <pre><%= raw v['output_expected'] %></pre>
-    <% end %>
-    <p><strong>Saída obtida:</strong></p>
-      <pre><%= raw v['output'] %></pre>
-
-      <div id="output_diff_<%= v['id'] %>_<%= answer.id%>" class="output" data-expected="<%= v['output_expected'] %>" data-obtained="<%= v['output'] %>" data-id="output_diff_<%= v['id'] %>_<%= answer.id%>"></div>
-
-    </div>
+    <h4>Erro de compilação</h4>
+    <p><strong>Saída do compilador:</strong></p>
+    <%= simple_format answer.compile_errors %>
   </div>
-  <% else %>
-  <div class="alert alert-success">
-    <h4>Caso de teste <%= v['title'] %></h4>
-    <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= answer.id%>"><i class="icon-plus"></i> Detalhes</a>
-    <div class="hide" id="test_case_details_<%= v['id'] %>_<%= answer.id%>">
-    <%= simple_format v['content'] %>
-    <% if v['show_input_output']  %>
-      <p><strong>Entrada utilizada:</strong></p>
-      <pre><%= raw v['input'] %></pre>
-    <p><strong>Saída esperada:</strong></p>
-      <pre><%= raw v['output_expected'] %></pre>
-    <% end %>
-    <p><strong>Saída obtida:</strong></p>
-      <pre><%= raw v['output'] %></pre>
+<% end %>
+
+<% unless answer.results.nil?  %>
+  <% answer.results.each do |k,v| %>
+
+    <% if v['diff_error'] or v['time_error'] or v['exec_error'] or v['presentation_error'] %>
+      <div class="alert alert-error">
+        <% if v['diff_error'] %>
+          <h4>Erro de saída</h4>
+        <% end %>
+        <% if v['time_error'] %>
+          <h4>Tempo de execução excedido</h4>
+        <% end %>
+        <% if v['exec_error'] %>
+          <h4>Erro de execução</h4>
+        <% end %>
+        <% if v['presentation_error'] %>
+          <h4>Erro de apresentação</h4>
+          <p><strong>Verifique a diagramação da sua resposta</strong></p>
+        <% end %>
+        
+        <p><strong>Caso de teste <%= v['title'] %></strong></p>
+
+        <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= answer.id%>"><i class="icon-plus"></i> Detalhes do erro</a>
+
+        <div class="hide" id="test_case_details_<%= v['id'] %>_<%= answer.id%>">
+          <%= simple_format v['content'] %>
+          <p><strong>Dica:</strong></p>
+          <%= simple_format v['tip'] %>
+          <% if v['show_input_output'] %>
+            <p><strong>Entrada utilizada:</strong></p>
+            <pre><%= raw v['input'] %></pre>
+            <p><strong>Saída esperada:</strong></p>
+            <pre><%= raw v['output_expected'] %></pre>
+          <% end %>
+          <p><strong>Saída obtida:</strong></p>
+          <pre><%= raw v['output'] %></pre>
+
+          <div id="output_diff_<%= v['id'] %>_<%= answer.id%>" class="output" data-expected="<%= v['output_expected'] %>" data-obtained="<%= v['output'] %>" data-id="output_diff_<%= v['id'] %>_<%= answer.id%>"></div>
+        </div>
+      </div> <!-- <div class="alert alert-error"> -->
+    <% else %>
+      <div class="alert alert-success">
+        <h4>Caso de teste <%= v['title'] %></h4>
+        <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= answer.id%>"><i class="icon-plus"></i> Detalhes</a>
+        <div class="hide" id="test_case_details_<%= v['id'] %>_<%= answer.id%>">
+          <%= simple_format v['content'] %>
+          <% if v['show_input_output']  %>
+            <p><strong>Entrada utilizada:</strong></p>
+            <pre><%= raw v['input'] %></pre>
+            <p><strong>Saída esperada:</strong></p>
+            <pre><%= raw v['output_expected'] %></pre>
+          <% end %>
+          <p><strong>Saída obtida:</strong></p>
+          <pre><%= raw v['output'] %></pre>
+        </div>
       </div>
-  </div>
-  <% end %>
-<% end %>
-<% end %>
+    <% end %> <!-- if v['diff_error'] or v['time_error'] or v['exec_error'] or v['presentation_error' -->
+  <% end %> <!--  unless answer.results.nil?  -->
+<% end %> <!-- answer.results.each do |k,v| -->
 
 
 <% if buttons %>
@@ -147,140 +144,135 @@
   <% if retroaction %>
     <a href="#" id="try_again" data-lang="<%= answer.lang %>" data-resp="<%= answer.response %>" data-id="<%= answer.id %>" class="btn btn-primary">Fazer uma nova tentativa</a>
   <% end %>
-
 <% end %>
 
 
 <% unless answer.for_test %>
-<p style="margin-top: 10px;">
-  <a href='#' class="last-answers-link" data-id="<%= answer.question.id %>"><i class="icon-backward"></i> Respostas anteriores a esta</a> 
-</p>
+  <p style="margin-top: 10px;">
+    <a href='#' class="last-answers-link" data-id="<%= answer.question.id %>"><i class="icon-backward"></i> Respostas anteriores a esta</a> 
+  </p>
 
-<div class="accordion hide" id="accordion_code_<%= answer.question.id %>">
+  <div class="accordion hide" id="accordion_code_<%= answer.question.id %>">
 
-  <% previous_answers.each do |la| %>
-  <div class="accordion-group">
-    <div class="accordion-heading" style="padding:5px;">
-      <a class="accordion-toggle" style="display:inline;" data-toggle="collapse" data-parent="accordion_code_<%= answer.question.id %>" href="#collapseCode-<%= la.id%>"> <%= time_ago_in_words la.created_at %> atrás </a>
+    <% previous_answers.each do |la| %>
+      <div class="accordion-group">
+        <div class="accordion-heading" style="padding:5px;">
+          <a class="accordion-toggle" style="display:inline;" data-toggle="collapse" data-parent="accordion_code_<%= answer.question.id %>" href="#collapseCode-<%= la.id%>"> <%= la.created_at.strftime("%d/%m/%Y às %H:%M:%S") %> </a>
 
-      <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta"
-      class="label"><%= la.lang %></span>
-      <% if la.correct %>
-        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
-      <% else %>
-        <% if la.compile_errors %>
-          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
-        <% else %>
-          <% la.results.each do |k,v| %>
-            <% if v['diff_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '<%= v['title'] %>'" class="label label-important">saída</span>
-            <% end %>
-            <% if v['time_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '<%= v['title'] %>'" class="label label-important">tempo</span>
-            <% end %>
-            <% if v['presentation_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '<%= v['title'] %>'" class="label label-important">apresentação</span>
-            <% end %>
-            <% if v['exec_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '<%= v['title'] %>'" class="label label-important">execução</span>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-    </div>
-
-    <div id="collapseCode-<%= la.id %>" class="accordion-body collapse">
-      <div class="accordion-inner" style="background-color:white;">
-
-        <p><a href='' class='details-answer-link' data-id="<%= la.id %>" ><i class="icon-plus"></i> Detalhes da resposta </a>
-          
-          <div id="details_answer_<%= la.id %>" class="hide">
-
-            <% if la.compile_errors %>
-              <div class="alert alert-error">
-                <h4>Erro de compilação</h4>
-                <p><strong>Saída do compilador:</strong></p>
-                <%= simple_format la.compile_errors %>
-              </div>
-            <% end %>
-            
-            <% unless la.results.nil? %>
-              <% la.results.each do |k,v| %>
-              <% if v['diff_error'] or v['time_error'] or v['exec_error'] or v['presentation_error'] %>
-                <div class="alert alert-error">
-                  <% if v['diff_error'] %>
-                    <h4>Erro de saída</h4>
-                  <% end %>
-                  <% if v['time_error'] %>
-                    <h4>Tempo de execução excedido</h4>
-                  <% end %>
-                  <% if v['exec_error'] %>
-                    <h4>Erro de execução</h4>
-                  <% end %>
-                  <% if v['presentation_error'] %>
-                    <h4>Erro de apresentação</h4>
-                    <p><strong>Verifique a diagramação da sua resposta</strong></p>
-                  <% end %>
-
-                  <p><strong>Caso de teste <%= v['title'] %></strong></p>
-
-
-                  <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= answer.id%>_2"><i class="icon-plus"></i> Detalhes do erro</a>
-                  <div class="hide" id="test_case_details_<%= v['id'] %>_<%= answer.id%>_2">
-                    <%= simple_format v['content'] %>
-                    <p><strong>Dica:</strong></p>
-                    <%= simple_format v['tip'] %>
-<% if v['show_input_output'] %>
-      <p><strong>Entrada utilizada:</strong></p>
-      <pre><%= raw v['input'] %></pre>
-    <p><strong>Saída esperada:</strong></p>
-      <pre><%= raw v['output_expected'] %></pre>
-    <% end %>
-                    <p><strong>Saída obtida:</strong></p>
-                    <pre><%= raw v['output'] %></pre>
-                  </div>
-
-
-
-                </div>
-              <% else %>
-                <div class="alert alert-success">
-    <h4>Caso de teste <%= v['title'] %></h4>
-    <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= answer.id%>_2"><i class="icon-plus"></i> Detalhes</a>
-    <div class="hide" id="test_case_details_<%= v['id'] %>_<%= answer.id%>_2">
-    <%= simple_format v['content'] %>
-<% if v['show_input_output'] %>
-      <p><strong>Entrada utilizada:</strong></p>
-      <pre><%= raw v['input'] %></pre>
-    <p><strong>Saída esperada:</strong></p>
-      <pre><%= raw v['output_expected'] %></pre>
-    <% end %>
-    <p><strong>Saída obtida:</strong></p>
-      <pre><%= raw v['output'] %></pre>
-      </div>
-  </div>
-              <% end %> <!-- if v['diff_error'] ... -->
-            <% end %><!-- la.results.each -->
-          <% end %><!-- la.results.nil? -->
-           
-          </div><!-- details_answer -->
-
-          <h4>Resposta e comparação com a anterior</h4>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta"
+          class="label"><%= la.lang %></span>
           <% if la.correct %>
-            <div class='correct-answer' id="<%= la.id %>">
+            <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
           <% else %>
-            <div class='wrong-answer' id="<%= la.id %>">
+            <% if la.compile_errors %>
+              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
+            <% else %>
+              <% la.results.each do |k,v| %>
+                <% if v['diff_error'] %>
+                  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '<%= v['title'] %>'" class="label label-important">saída</span>
+                <% end %>
+                <% if v['time_error'] %>
+                  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '<%= v['title'] %>'" class="label label-important">tempo</span>
+                <% end %>
+                <% if v['presentation_error'] %>
+                  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '<%= v['title'] %>'" class="label label-important">apresentação</span>
+                <% end %>
+                <% if v['exec_error'] %>
+                  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '<%= v['title'] %>'" class="label label-important">execução</span>
+                <% end %>
+              <% end %>
+            <% end %>
           <% end %>
-            <div class="response hide" data-response="<%= la['response'] %>" data-previous="<%= la['previous'] %>" data-id="<%= la.id %>"></div>
-            </div>
-        </div>
-      </div>
-    </div>
+        </div> <!-- <div class="accordion-heading" style="padding:5px;"> -->
 
-      <% end %><!-- @previous_answers.each -->
+        <div id="collapseCode-<%= la.id %>" class="accordion-body collapse">
+          
+          <div class="accordion-inner" style="background-color:white;">
 
-    <% end %><!-- unless for_test -->
-</div>
+            <p><a href='' class='details-answer-link' data-id="<%= la.id %>" ><i class="icon-plus"></i> Detalhes da resposta </a>
+            
+            <div id="details_answer_<%= la.id %>" class="hide">
+
+              <% if la.compile_errors %>
+                <div class="alert alert-error">
+                  <h4>Erro de compilação</h4>
+                  <p><strong>Saída do compilador:</strong></p>
+                  <%= simple_format la.compile_errors %>
+                </div>
+              <% end %>
+              
+              <% unless la.results.nil? %>
+                <% la.results.each do |k,v| %>
+                  <% if v['diff_error'] or v['time_error'] or v['exec_error'] or v['presentation_error'] %>
+                    <div class="alert alert-error">
+                      <% if v['diff_error'] %>
+                        <h4>Erro de saída</h4>
+                      <% end %>
+                      <% if v['time_error'] %>
+                        <h4>Tempo de execução excedido</h4>
+                      <% end %>
+                      <% if v['exec_error'] %>
+                        <h4>Erro de execução</h4>
+                      <% end %>
+                      <% if v['presentation_error'] %>
+                        <h4>Erro de apresentação</h4>
+                        <p><strong>Verifique a diagramação da sua resposta</strong></p>
+                      <% end %>
+
+                      <p><strong>Caso de teste <%= v['title'] %></strong></p>
+
+
+                      <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= answer.id%>_2"><i class="icon-plus"></i> Detalhes do erro</a>
+                      <div class="hide" id="test_case_details_<%= v['id'] %>_<%= answer.id%>_2">
+                        <%= simple_format v['content'] %>
+                        <p><strong>Dica:</strong></p>
+                        <%= simple_format v['tip'] %>
+                        <% if v['show_input_output'] %>
+                          <p><strong>Entrada utilizada:</strong></p>
+                          <pre><%= raw v['input'] %></pre>
+                          <p><strong>Saída esperada:</strong></p>
+                          <pre><%= raw v['output_expected'] %></pre>
+                        <% end %>
+                        <p><strong>Saída obtida:</strong></p>
+                        <pre><%= raw v['output'] %></pre>
+                      </div>
+                    </div> <!-- <div class="alert alert-error"> -->
+                  <% else %> <!-- if v['diff_error'] or v['time_error'] or v['exec_error'] or v['presentation_error'] -->
+                    <div class="alert alert-success">
+                      <h4>Caso de teste <%= v['title'] %></h4>
+                      <a href="#" class="test-case-details" data-tcid="<%= v['id'] %>" data-aid="<%= answer.id%>_2"><i class="icon-plus"></i> Detalhes</a>
+                      <div class="hide" id="test_case_details_<%= v['id'] %>_<%= answer.id%>_2">
+                        <%= simple_format v['content'] %>
+                        <% if v['show_input_output'] %>
+                          <p><strong>Entrada utilizada:</strong></p>
+                          <pre><%= raw v['input'] %></pre>
+                          <p><strong>Saída esperada:</strong></p>
+                          <pre><%= raw v['output_expected'] %></pre>
+                        <% end %>
+                        <p><strong>Saída obtida:</strong></p>
+                        <pre><%= raw v['output'] %></pre>
+                      </div>
+                    </div>
+                  <% end %> <!-- if v['diff_error'] ... -->
+                <% end %><!-- la.results.each -->
+              <% end %><!-- la.results.nil? -->
+            </div><!-- details_answer -->
+
+            <h4>Resposta e comparação com a anterior</h4>
+            <% if la.correct %>
+              <div class='correct-answer' id="response-<%= la.id %>">
+            <% else %>
+              <div class='wrong-answer' id="response-<%= la.id %>">
+            <% end %>
+                <div class="response hide" data-response="<%= la['response'] %>" data-previous="<%= la['previous'] %>" data-id="<%= la.id %>"></div>
+              </div>
+          </div> <!-- <div class="accordion-inner" style="background-color:white;"> -->
+        </div> <!-- <div id="collapseCode-<%= la.id %>" class="accordion-body collapse"> -->
+      </div> <!-- <div class="accordion-group"> -->
+    <% end %> <!-- @previous_answers.each -->
+  </div> <!-- <div class="accordion hide" id="accordion_code_<%= answer.question.id %>"> -->
+<% end %><!-- unless for_test -->
+
 
 <% unless retroaction %>
     <header class='page-header'>

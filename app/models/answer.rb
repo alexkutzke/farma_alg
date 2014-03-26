@@ -218,13 +218,21 @@ class Answer
   end
 
   def previous(n)
-    previous_answers = Answer.where(user_id: self.user_id, team_id: self.team_id, question_id: self.question_id).desc(:created_at).lte(created_at: self.created_at)[0..n-1]
-    previous_answers.each do |p|
-      a = Answer.where(user_id: self.user_id, team_id: self.team_id, question_id: self.question_id).desc(:created_at).lt(created_at: p.created_at).first
-      unless a.nil?
-        p['previous'] = a.response
+    previous_answers = Answer.where(user_id: self.user_id, team_id: self.team_id, question_id: self.question_id).desc(:created_at).lte(created_at: self.created_at)[0..n]
+
+
+    x = previous_answers.count
+    if x > 0
+      i = 0
+      while i < x - 1
+        previous_answers[i]['previous'] = previous_answers[i+1].response.clone
+        puts i
+        puts previous_answers[i]['previous']
+        i = i + 1
       end
+      previous_answers[i]['previous'] = ""
     end
+
     previous_answers
   end
 
