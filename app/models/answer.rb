@@ -16,6 +16,7 @@ class Answer
   field :correct, type: Boolean
   field :results, type: Hash
   field :for_test, type: Boolean
+  field :retroaction, type: Boolean, default: false
   field :compile_errors
   field :try_number, type: Integer
   field :lang
@@ -33,7 +34,7 @@ class Answer
   alias :super_exercise :exercise
   alias :super_question :question
 
-  attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test, :try_number, :results, :lang
+  attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test, :try_number, :results, :lang, :retroaction
 
   belongs_to :user
   has_one :last_answer

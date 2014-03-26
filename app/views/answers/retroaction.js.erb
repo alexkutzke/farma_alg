@@ -1,0 +1,3 @@
+bootbox.hideAll();
+
+$("div#<%=@answer.id%>").html("<%= j render :partial => "panel/answer", :locals => {:answer => @new, :previous_answers => @new.previous(5), :retroaction => true } %>");

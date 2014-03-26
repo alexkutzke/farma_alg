@@ -14,7 +14,7 @@ Carrie::Application.routes.draw do
     end
 
     resources :answers do
-      get 'retroaction', on: :member
+      post 'retroaction', on: :member
       get 'page/:page', :action => :index, :on => :collection
       resources :comments
     end

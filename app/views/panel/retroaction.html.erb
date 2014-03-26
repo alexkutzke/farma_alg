@@ -1,0 +1,54 @@
+<header>
+  <div class='center'>
+   <div>
+      <h4><%= @answer.question.title %></h4>
+    </div>
+  </div>
+</header>
+<hr>
+<div><%= raw @answer.exercise.content %></div>
+
+<% @answer.exercise.questions.each do |q| %>
+
+<% if q.id != @answer.question_id %>
+	<div style="opacity: 0.3;">
+<% else %>
+	<div>
+<% end %>
+
+<hr />
+<header>
+   <h4><%= q.title %></h4>
+</header>
+<p> <%= raw q.content %> </p>
+
+<div class="well">
+  <label for="answer">Resposta:</label>
+  <div class="row-fluid show-grid answer-group">
+  </div>
+  <% if q.id == @answer.question_id %>
+  	<div id="<%= @answer.id %>">
+  		<%= render :partial => "panel/answer", :locals => {:answer => @answer, :previous_answers => @answer.previous(5), :retroaction => true } %>	
+  	</div>
+  <% else %>
+  	<% unless @other_answers[q.id][:answer].nil?  %>
+  		<%= render :partial => "panel/answer", :locals => {:answer => @other_answers[q.id][:answer], :previous_answers => @other_answers[q.id][:previous_answers], :retroaction => true,  :buttons => false} %>
+  	<% else %>
+  		Não respondida até o momento desta resposta (<%= @answer.created_at.strftime("%d/%m/%Y às %H:%M:%S") %>).
+  	<% end %>
+  <% end %>
+</div>
+</div>
+<% end %>
+<div class="hide virtual-keyboard modal in" aria-hidden="false" tabindex="-1">
+	 <div class="virtual-keyboard-body modal-body">
+      <div class="well">
+        <div id="code"></div>
+           <div>
+            <a href="#display" class="send btn  btn-primary" data-value="send" title="Enviar" data-id="<%= @answer.id %>" id="send_answer">Enviar</a> 
+            <a style="margin-left:15px;" href="#display" class="clean btn" data-value="clean" title="Limpar">Limpar</a>
+            <a href="#display" class="cancel btn" data-value="cancel" title="Cancelar">Cancelar</a>   
+           </div>
+         </div>
+      </div>
+  </div>

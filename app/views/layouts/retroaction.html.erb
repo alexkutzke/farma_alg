@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Farma</title>
+  <%= stylesheet_link_tag    'application', :media => 'all' %>
+  <%= csrf_meta_tags %>
+  <%= javascript_include_tag 'panel' %>
+
+</head>
+<body data-logged='<%= current_user.to_json %>'>
+  <div class="page-container">
+    <div id="alert-fixed">
+      <span><img  class='brand loading' src='/assets/spinner.gif'></span>
+    </div>
+    <section>
+      <header>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+          <div class="navbar-inner">
+            <div class="container-fluid">
+              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <div id="header_left_menu">
+                <a class="brand" data-url="" href="/">FARMA - ALG</a>
+                <a class="brand" data-url="welcome" href="/welcome">HOME</a>
+              </div>
+              <div id="header_right_menu" class="nav-collapse collapse pull-right logged-in">
+                <div class="btn-group ">
+                  <a class="dropdown-toggle btn-clean" data-toggle="dropdown" href="#">
+                    <span name="name"> Olá <%= current_user.name%> </span>
+                    <img src="http://www.gravatar.com/avatar/<%= current_user.gravatar%>?s=25" />
+                    <span>
+                      <a id='link-sign-out' class='btn-sign-out' href="/users/sign_out" data-method='DELETE'
+                      rel="tooltip" data-original-title="Sair do sistema."><i class="icon-signin"></i></a>
+                    </span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <!-- dropdown menu links -->
+                    <a href="/users/edit">Atualizar dados</a>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Subhead ================================================== -->
+      <header class="subhead">
+        <div class="container-fluid" style="margin-bottom:5px;">
+          <h2>Retorno à resposta do aluno <%= @answer.user.name %></h2>
+          <h2><small>Exercício <strong><%= @answer.exercise.title %></strong> - Questão <strong><%= @answer.question.title %></strong><br>Turma <strong><%= @answer.team.name %></strong><br>Tentativa #<%= @answer.try_number %>, realizada em <%= @answer.created_at.strftime("%d/%m/%Y às %H:%M:%S") %></small></h2>
+        </div>
+      </header>
+
+      <section class="container-fluid" id="main">
+        <%= yield %>
+      </section>
+
+    </section>
+  </div>
+</body>
+</html>
