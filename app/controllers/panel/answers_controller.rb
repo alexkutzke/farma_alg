@@ -15,14 +15,7 @@ class Panel::AnswersController < ApplicationController
 		@comment = Comment.new
 		@comment.answer = @answer
 		@comment.user_id = current_user.id
-		@previous_answers = Answer.where(user_id: @user.id, team_id: @team.id, question_id: @question.id).desc(:created_at).lte(created_at: @answer.created_at)[0..4]
-
-		@previous_answers.each do |p|
-			a = Answer.where(user_id: @user.id, team_id: @team.id, question_id: @question.id).desc(:created_at).lt(created_at: p.created_at).first
-			unless a.nil?
-				p['previous'] = a.response
-			end
-		end
+		@previous_answers = @answer.previous(5)
 	end
 
   def change_correctness

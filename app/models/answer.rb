@@ -16,6 +16,7 @@ class Answer
   field :correct, type: Boolean
   field :results, type: Hash
   field :for_test, type: Boolean
+  field :retroaction, type: Boolean, default: false
   field :compile_errors
   field :try_number, type: Integer
   field :lang
@@ -33,7 +34,7 @@ class Answer
   alias :super_exercise :exercise
   alias :super_question :question
 
-  attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test, :try_number, :results, :lang
+  attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test, :try_number, :results, :lang, :retroaction
 
   belongs_to :user
   has_one :last_answer
@@ -224,6 +225,25 @@ class Answer
 
     global_stat.save!
     team_stat.save!
+  end
+
+  def previous(n)
+    previous_answers = Answer.where(user_id: self.user_id, team_id: self.team_id, question_id: self.question_id).desc(:created_at).lte(created_at: self.created_at)[0..n]
+
+
+    x = previous_answers.count
+    if x > 0
+      i = 0
+      while i < x - 1
+        previous_answers[i]['previous'] = previous_answers[i+1].response.clone
+        puts i
+        puts previous_answers[i]['previous']
+        i = i + 1
+      end
+      previous_answers[i]['previous'] = ""
+    end
+
+    previous_answers
   end
 
 private

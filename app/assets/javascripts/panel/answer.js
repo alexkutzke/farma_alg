@@ -36,7 +36,7 @@ $(document).ready(function(){
 	});
 
 	$("div.response").each(function(){
-     diffUsingJS($(this).data("id"),"Resposta",$(this).data("response"),"Resposta anterior",$(this).data("previous"));
+     diffUsingJS("response-"+$(this).data("id"),"Resposta",$(this).data("response"),"Resposta anterior",$(this).data("previous"));
 	});
 
   $("div.output").each(function(){
