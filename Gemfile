@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.14'
 
 gem 'mongoid', '~> 3.1.0'
+gem 'mongoid_fulltext'
 
 gem 'jquery-rails', '~> 2.3.0'
 gem 'backbone-on-rails'#, '0.9.2.1'

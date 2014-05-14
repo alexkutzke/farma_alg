@@ -82,20 +82,20 @@ function draw(data2)
 	"#bcbd22", "#dbdb8d",
 	"#17becf", "#9edae5"
 	];
-
+/*
 	var layout = Viva.Graph.Layout.forceDirected(graph,{
-		springLength : 200,
+		springLength : 50,
 		springCoeff : 0.0001,
 		dragCoeff : 0.09,
 		gravity : -1.2,
 		thetaCoeff: 1
 	});
-
+*/
 	var svgGraphics = Viva.Graph.View.svgGraphics();
 
 	renderer = Viva.Graph.View.renderer(graph, {
 			container : document.getElementById('graph'),
-			layout : layout,
+	//		layout : layout,
 			graphics : svgGraphics,
     		prerender: 1000,
     	//renderLinks : true

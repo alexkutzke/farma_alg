@@ -19,6 +19,9 @@ module SimilarityMachine
     # code similarity
     code_similarity = `/Users/alexkutzke/Downloads/sim/sim_pasc -e -s -p /tmp/#{tmp}-#{a.id}-response.#{a.lang} /tmp/#{tmp}-#{b.id}-response.#{b.lang} | grep consists | grep '^/tmp/#{tmp}-#{a.id}-response.#{a.lang}' | cut -d " " -f4`.to_f / 100.0
 
+    File.delete("/tmp/#{tmp}-#{a.id}-response.#{a.lang}")
+    File.delete("/tmp/#{tmp}-#{b.id}-response.#{b.lang}")
+
     # compile errors similarity
     both_compile_errors = 0
     compile_errors_similarity = 0
@@ -51,36 +54,42 @@ module SimilarityMachine
 
             test_case_similarity[id]['output_similarity'] = string_similarity(result_a['output'],result_b['output'])
 
-            tc = TestCase.find(id)
+            tc = TestCase.find_or_initialize_by(id:id)
+
             test_case_similarity[id]['diff_to_expected_output'] = (string_similarity(result_a['output'],tc.output) - string_similarity(result_b['output'],tc.output)).abs
 
             tmp = test_case_similarity[id]['output_similarity'] + (1 - test_case_similarity[id]['diff_to_expected_output']) + ((1 - test_case_similarity[id]['error']) * 2) + test_case_similarity[id]['both_error'] + test_case_similarity[id]['same_error']
           end
           test_case_similarity_final = test_case_similarity_final + tmp
-        end 
-        test_case_similarity_final = test_case_similarity_final / a.results.count
+        end
+        if a.results.count > 0 
+          test_case_similarity_final = test_case_similarity_final / a.results.count
+        end
       end
     end
 
     result = Hash.new
-    puts "code_similarity: " + code_similarity.to_s
-    puts "both_compile_errors: " + both_compile_errors.to_s
-    puts "compile_errors_similarity: " + compile_errors_similarity.to_s
-    puts "both_error: " + both_error.to_s
-    puts "same_question: " + same_question.to_s
+    
+    #puts "code_similarity: " + code_similarity.to_s
+    #puts "both_compile_errors: " + both_compile_errors.to_s
+    #puts "compile_errors_similarity: " + compile_errors_similarity.to_s
+    #puts "both_error: " + both_error.to_s
+    #puts "same_question: " + same_question.to_s
+
     if same_question
       test_case_similarity.each do |id,data|
-        puts "test case: " + id.to_s
-        puts "\terror: " + data['error'].to_s
+        #puts "test case: " + id.to_s
+        #puts "\terror: " + data['error'].to_s
         if data['error']
-          puts "\tsame_error: " + data['same_error'].to_s
+          #puts "\tsame_error: " + data['same_error'].to_s
         end
-        puts "\toutput_similarity: " + data['output_similarity'].to_s
-        puts "diff_to_expected_output: " + test_case_similarity[id]['diff_to_expected_output'].to_s
+        #puts "\toutput_similarity: " + data['output_similarity'].to_s
+        #puts "diff_to_expected_output: " + test_case_similarity[id]['diff_to_expected_output'].to_s
       end
     end
-    final_similarity = (code_similarity + both_compile_errors * (compile_errors_similarity + 3) + (1 - both_compile_errors) * (same_question*test_case_similarity_final))/5
-    puts "final_similarity: " + final_similarity.to_s
+    
+    final_similarity = (code_similarity + (both_compile_errors * compile_errors_similarity) + (1.0 - both_compile_errors) * (same_question*test_case_similarity_final/4.0)) /2.0
+    #puts "final_similarity: " + final_similarity.to_s
 
     result['code_similarity'] = code_similarity
     result['both_compile_errors'] = both_compile_errors
@@ -91,14 +100,27 @@ module SimilarityMachine
     result['test_case_similarity_final'] = test_case_similarity_final
     result['final_similarity'] = final_similarity
 
+
     result
   end
 
   def self.match_all
     Connection.delete_all
-    Answer.all.each do |a|
-      Answer.all.each do |b|
+
+    per_batch = 1000
+    i = 0.0
+    t = Answer.count**2.0
+    0.step(Answer.count, per_batch) do |offset|
+      Answer.limit(per_batch).skip(offset).each do |a| 
+        0.step(Answer.count, per_batch) do |offset2|
+          Answer.limit(per_batch).skip(offset2).each do |b| 
+
+    #Answer.all.each do |a|
+      #Answer.all.each do |b|
+        i = i + 1.0
+        puts (i*100.0)/t
         if a.id != b.id
+          puts a.id.to_s + " " + b.id.to_s 
           result = similarity(a,b)
           if result['final_similarity'] > 0.4
             c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
@@ -115,5 +137,7 @@ module SimilarityMachine
         end
       end
     end
+  end
+end
   end
 end

@@ -1,0 +1,100 @@
+<!--
+<ul class="nav nav-tabs">
+  <li id="users">
+    <%= link_to "Alunos", explorer_load_users_path, :remote => true %>
+  </li>
+  <li id="teams">
+    <a href="#">Turmas</a></li>
+  <li id="oas">
+    <a href="#">O.A.'s</a></li>
+  <li id="questions">
+    <a href="#">Questões</a></li>
+  <li id="source_code">
+    <a href="#">Código fonte</a></li>
+</ul>
+
+<div class="row-fluid">
+  <div class="span8 offset1" id="result">
+</div>
+</div>
+-->
+
+<%= form_tag explorer_fulltext_search_path, :remote => true, :method => :put, :id => "fulltext_search_form" do %>
+  <%= text_field_tag "query", nil, :class => "form-control input" %>
+<% end %>
+
+<%= form_tag explorer_search_path, :remote => true, :method => :put, :id => "search_form" do %>
+<div class="row-fluid">
+  <div class="span3">
+    <h2>Alunos</h2>
+    <div style="height: 200px; overflow-y: scroll;">
+    <table class="table table-bordered table-hover">
+    <% @users.each do |u| %>
+      <tr>
+        <td>
+          <%= check_box_tag "user_ids[]", u.id %>
+          <%= u.email %>
+        </td>
+      </tr>
+    <% end %>
+    </table>
+    </div>
+  </div>
+  
+  <div class="span3">
+    <h2>Turmas</h2>
+    <div style="height: 200px; overflow-y: scroll;">
+    <table class="table table-bordered table-hover">
+    <% @teams.each do |t| %>
+      <tr>
+        <td>
+          <%= check_box_tag "team_ids[]", t.id %>
+          <%= t.name %>
+        </td>
+      </tr>
+    <% end %>
+    </table>
+    </div>
+  </div>
+
+  <div class="span3">
+    <h2>O.A.'s</h2>
+    <div style="height: 200px; overflow-y: scroll;">
+    <table class="table table-bordered table-hover">
+    <% @los.each do |l| %>
+      <tr>
+        <td>
+          <%= check_box_tag "lo_ids[]", l.id %>
+          <%= l.name %>
+        </td>
+      </tr>
+    <% end %>
+    </table>
+    </div>
+  </div>
+
+
+  <div class="span3">
+    <h2>Questões</h2>
+    <div style="height: 200px; overflow-y: scroll;">
+    <table class="table table-bordered table-hover">
+    <% @questions.each do |q| %>
+      <tr>
+        <td>
+          <%= check_box_tag "question_ids[]", q.id %>
+          <%= q.title %>
+        </td>
+      </tr>
+    <% end %>
+    </table>
+    </div>
+  </div>
+
+</div>
+<% end %>
+<hr />
+<div class="row">
+  <div id="answers" class="span12">
+
+  </div>
+</div>

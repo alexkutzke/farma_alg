@@ -38,4 +38,8 @@ class PanelController < ApplicationController
       end
     end
   end
+
+  def explorer
+    
+  end
 end

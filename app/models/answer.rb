@@ -9,6 +9,8 @@ class Answer
   include Mongoid::Timestamps
   include MathEvaluate
   include Judge
+  include Mongoid::FullTextSearch
+
 
   field :response
   field :changed_correctness, type: Boolean, default: false
@@ -30,6 +32,12 @@ class Answer
   field :lo_id, type: Moped::BSON::ObjectId
   field :exercise_id, type: Moped::BSON::ObjectId
   field :question_id, type: Moped::BSON::ObjectId
+
+  def search_index_user_name
+    self.user.name
+  end
+
+  fulltext_search_in :response, :compile_errors, :search_index_user_name, :index_name => 'answer_response_index'
 
   alias :super_exercise :exercise
   alias :super_question :question
@@ -53,21 +61,21 @@ class Answer
   after_create :register_last_answer,:updateStats#, :update_questions_with_last_answer
 
 
-  def self.search(page, params = nil, team_ids = nil)
-    if team_ids
-      if params
-        Answer.excludes(team_id: nil, for_test: true).where(params).in(team_id: team_ids).page(page).per(20)
-      else
-        Answer.excludes(team_id: nil, for_test: true).in(team_id: team_ids).page(page).per(20)
-      end
-    else
-      if params
-        Answer.excludes(team_id: nil, for_test: true).where(params).page(page).per(20)
-      else
-        Answer.excludes(team_id: nil, for_test: true).page(page).per(20)
-      end
-    end
-  end
+  #def self.search(page, params = nil, team_ids = nil)
+  #  if team_ids
+  #    if params
+  #      Answer.excludes(team_id: nil, for_test: true).where(params).in(team_id: team_ids).page(page).per(20)
+  #    else
+  #      Answer.excludes(team_id: nil, for_test: true).in(team_id: team_ids).page(page).per(20)
+  #    end
+  #  else
+  #    if params
+  #      Answer.excludes(team_id: nil, for_test: true).where(params).page(page).per(20)
+  #    else
+  #      Answer.excludes(team_id: nil, for_test: true).page(page).per(20)
+  #    end
+  #  end
+  #end
 
   def similar_answers
     sa = []
@@ -257,7 +265,31 @@ private
     end
   end
 
+  def self.search(params)
+    as = Answer.excludes(team_id: nil, for_test: true)
 
+    if params.has_key?(:user_ids)
+      as = as.in(user_id: params[:user_ids])
+    end
+
+    if params.has_key?(:team_ids)
+      as = as.in(team_id: params[:team_ids])
+    end
+
+    if params.has_key?(:lo_ids)
+      as = as.in(lo_id: params[:lo_ids])
+    end
+
+    if params.has_key?(:question_ids)
+      as = as.in(question_id: params[:question_ids])
+    end
+
+    if params.has_key?(:answer_ids)
+      as = as.in(id: params[:answer_ids])
+    end
+
+    as
+  end
 
   def self.re_run(user_ids)
     user_ids.each do |u|

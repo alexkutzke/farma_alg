@@ -180,6 +180,9 @@ GEM
       tzinfo (~> 0.3.22)
     mongoid-paperclip (0.0.8)
       paperclip (>= 2.3.6)
+    mongoid_fulltext (0.6.1)
+      mongoid (~> 3.0)
+      unicode_utils (~> 1.0.0)
     moped (1.5.1)
     multi_json (1.7.9)
     net-scp (1.1.2)
@@ -286,6 +289,7 @@ GEM
     uglifier (2.2.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
+    unicode_utils (1.0.0)
     warden (1.2.3)
       rack (>= 1.0)
     whenever (0.8.4)
@@ -326,6 +330,7 @@ DEPENDENCIES
   math_engine!
   mongoid (~> 3.1.0)
   mongoid-paperclip
+  mongoid_fulltext
   pry-rails
   rabl
   rails (= 3.2.14)

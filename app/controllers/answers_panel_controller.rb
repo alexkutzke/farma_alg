@@ -9,14 +9,14 @@ class AnswersPanelController < ApplicationController
 	def answers
 		links = Array.new
 
-    #answers = Answer.where(question_id:"5319c5bc3cc4502b5b00005c").entries
-    answers = Answer.all.entries
+    answers = Answer.where({team_id: "5329c4a03cc45090a1000062"}).entries
+    #answers = Answer.all.entries
     
     for i in 0..answers.length-1
       answers[i]["neigh"] = Array.new
       for j in 0..answers.length-1
         c = Connection.where(answer_id:answers[i], target_answer_id:answers[j])
-        unless c.empty?
+        unless c.empty? or c.first.weight < 0.85
           answers[i]["neigh"] << [answers[j]._id, c.first.weight, j]
         end
       end

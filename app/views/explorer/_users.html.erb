@@ -1,0 +1,14 @@
+
+	<%= form_tag explorer_search_path, :remote => true, :method => :put do %>
+		<%= submit_tag "Enviar", :class => "btn btn-primary" %><br/>
+		<table class="table table-bordered table-hover">
+		<% @users.each do |u| %>
+			<tr>
+				<td>
+					<%= check_box_tag "user_ids[]", u.id %>
+	      	<%= u.email %>
+				</td>
+	    </tr>
+		<% end %>
+		</table>
+	<% end %>

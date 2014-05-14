@@ -1,0 +1,4 @@
+<p><%= @as.count %> respostas</p>
+<% @as.each do |a| %>
+	<p>Por <b><%= a.user.name %></b> na turma <b><%= a.team.name unless a.team_id.nil? %></b>, questão <b><%= a.question.title %></b> em <b><%= a.created_at.strftime("%d/%m/%Y às %H:%M:%S") %></b></p>
+<% end %>

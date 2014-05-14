@@ -4,7 +4,7 @@
   <title>Farma</title>
   <%= stylesheet_link_tag    'application', :media => 'all' %>
   <%= csrf_meta_tags %>
-  <%= javascript_include_tag 'panel' %>
+  <%= javascript_include_tag 'explorer' %>
 
   <%= yield :head %>
 </head>
@@ -51,8 +51,7 @@
       <!-- Subhead ================================================== -->
       <header class="subhead">
         <div class="container-fluid" style="margin-bottom:5px;">
-          <h2>Visualização de Respostas</h2>
-          <%= render :partial => "panel/breadcrumb" %>
+          <h2>Visualizador de Respostas</h2>
         </div>
       </header>
 
