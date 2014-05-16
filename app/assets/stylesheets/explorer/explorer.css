@@ -1,0 +1,69 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require ../app_bootstrap
+ *= require_tree .
+ *= require diffview
+ *= require bootstrap-modal
+ *= require codemirror
+ *= require_self
+*/
+
+html, body, .page-container {
+    height: 100%;
+}
+
+body
+{
+  padding-top:40px;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+  overflow: hidden;
+}
+
+.menu {
+  padding-left: 10px;
+  padding-right: 10px;
+  position: absolute;
+  bottom: -295px;
+  left: 0;
+  height:300px;
+  -webkit-box-shadow: 0px -4px 19px 0px rgba(50, 50, 50, 0.64);
+  -moz-box-shadow:    0px -4px 19px 0px rgba(50, 50, 50, 0.64);
+  box-shadow:         0px -4px 19px 0px rgba(50, 50, 50, 0.64);
+  background-color: rgba(255,255,255,.5);
+  border-top: solid 1px;
+}
+
+.node_menu {
+  padding-top: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+  position: absolute;
+  top: 0px;
+  left: -300px;
+  width:300px;
+  -webkit-box-shadow: 9px 2px 17px 0px rgba(50, 50, 50, 0.27);
+  -moz-box-shadow:    9px 2px 17px 0px rgba(50, 50, 50, 0.27);
+  box-shadow:         9px 2px 17px 0px rgba(50, 50, 50, 0.27);
+  background-color: rgba(255,255,255,.5);
+  border-right: solid 1px;
+}
+
+svg
+{
+  height: 100%;
+  position: absolute;
+  top: 0;
+}

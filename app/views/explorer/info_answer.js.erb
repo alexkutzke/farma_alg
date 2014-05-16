@@ -1,0 +1,3 @@
+$("#node_menu").html("<%= escape_javascript(render(:partial => 'info_answer', :locals => {:answer => @answer}))%>");
+$("span.label").tooltip();
+prettyPrint();

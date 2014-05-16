@@ -1,0 +1,59 @@
+<br/>
+<div style="text-align:right;"><a href="#" id="hide_node_menu">Esconder <i class="icon-arrow-left"></i></a></div>
+
+<h3 style="margin-top: 0;"class="page-header">Detalhes da resposta</h3>
+
+<table class="table table-bordered" style="margin-bottom:5px;">
+  <tr>
+    <td><b>Aluno</b></td><td><%= @answer.user.name %></td>
+  </tr>
+  <tr>
+    <td><b>Questão</b></td>
+    <td><%= @answer.question.title %></td>
+  </tr>
+  <tr>
+    <td><b>Turma</b></td>
+    <td><%= @answer.team.name %></td>
+  </tr>
+  <tr>
+    <td><b>O.A.</b></td>
+    <td><%= @answer.lo.name %></td>
+  </tr>
+  <tr>
+    <td><b>Tentativa</b></td>
+    <td>#<%= @answer.try_number %></td>
+  </tr>
+</table>
+<small>Realizada em <b><%= @answer['created_at'].strftime("%d/%m/%Y às %H:%M:%S") %></b></small>
+
+<div style="text-align:right;">
+<span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta" class="label"><%= @answer.lang %></span>
+  <% if @answer.correct %>
+    <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
+  <% else %>
+    <% if @answer.compile_errors %>
+      <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
+    <% else %>
+      <% @answer.results.each do |k,v| %>
+        <% if v['diff_error'] %>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '<%= v['title'] %>'" class="label label-important">saída</span>
+        <% end %>
+        <% if v['time_error'] %>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '<%= v['title'] %>'" class="label label-important">tempo</span>
+        <% end %>
+        <% if v['presentation_error'] %>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '<%= v['title'] %>'" class="label label-important">apresentação</span>
+        <% end %>
+        <% if v['exec_error'] %>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '<%= v['title'] %>'" class="label label-important">execução</span>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<br />
+<a href="#" id="show_code" data-toggle="modal"><pre class="prettyprint lang-pascal" style="width:260px;overflow:scroll;margin:auto;height:260px;"><%= @answer.response %></pre></a>
+
+<!-- Modal -->
+<pre id="myModal" class="prettyprint lang-pascal modal hide fade code-modal-body" style="overflow:scroll;"><%= @answer.response %></pre>
