@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Farma</title>
-  <%= stylesheet_link_tag    'application', :media => 'all' %>
+  <%= stylesheet_link_tag    'explorer/explorer', :media => 'all' %>
   <%= csrf_meta_tags %>
   <%= javascript_include_tag 'explorer' %>
 
@@ -10,10 +10,7 @@
 </head>
 <body data-logged='<%= current_user.to_json %>'>
   <div class="page-container">
-    <div id="alert-fixed">
-      <span><img  class='brand loading' src='/assets/spinner.gif'></span>
-    </div>
-    <section>
+
       <header>
         <div class="navbar navbar-inverse navbar-fixed-top">
           <div class="navbar-inner">
@@ -48,18 +45,16 @@
         </div>
       </header>
 
-      <!-- Subhead ================================================== -->
+      <!-- Subhead ==================================================
       <header class="subhead">
         <div class="container-fluid" style="margin-bottom:5px;">
           <h2>Visualizador de Respostas</h2>
         </div>
       </header>
-
-      <section class="container-fluid" id="main">
+-->
         <%= yield %>
-      </section>
 
-    </section>
+
   </div>
 </body>
 </html>

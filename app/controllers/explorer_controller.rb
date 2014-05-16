@@ -22,4 +22,8 @@ class ExplorerController < ApplicationController
 
     render 'search'
   end
+
+  def info_answer
+    @answer = Answer.find(params[:id])
+  end
 end

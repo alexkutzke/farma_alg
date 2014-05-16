@@ -28,7 +28,9 @@
 //= require codemirror/mode/pascal/pascal
 //= require codemirror/mode/ruby/ruby
 //= require codemirror/mode/clike/clike
+//= require answers_panel/vivagraph
 //= require_tree ./explorer/
+//= require run_prettify
 
 $(this).scroll(function() {
    if ($(this).scrollTop() > 120){

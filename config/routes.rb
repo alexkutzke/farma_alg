@@ -57,6 +57,11 @@ Carrie::Application.routes.draw do
   
   namespace :newapi do
     resources :users, :only => [:index]
+    resources :answers, :only => [:show] do
+      member do
+        get "connections"
+      end
+    end
   end
 
   namespace :panel do
@@ -83,6 +88,7 @@ Carrie::Application.routes.draw do
   namespace :explorer do
     get "index"
     get "load_users"
+    post "info_answer"
     put "search"
     put "fulltext_search"
   end

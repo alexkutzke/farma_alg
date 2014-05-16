@@ -1,4 +1,12 @@
 <p><%= @as.count %> respostas</p>
-<% @as.each do |a| %>
-	<p>Por <b><%= a.user.name %></b> na turma <b><%= a.team.name unless a.team_id.nil? %></b>, questão <b><%= a.question.title %></b> em <b><%= a.created_at.strftime("%d/%m/%Y às %H:%M:%S") %></b></p>
-<% end %>
+<ul class="thumbnails">
+  <% @as.each do |a| %>
+    <li class="span2">
+      <a href="#" class="thumbnail addNode" data-id="<%= a.id %>" <%= raw "style='background-color: green;'" if a.correct%>>
+        <pre style="width:80%;height:50px;overflow:scroll;"><%= a.response %></pre>
+        Por <b><%= a.user.name %></b>
+        <!--</b> na turma <b><%= a.team.name unless a.team_id.nil? %></b>, questão <b><%= a.question.title %></b> em <b><%= a.created_at.strftime("%d/%m/%Y às %H:%M:%S") %></b></p>-->
+      </a>
+    </li>
+  <% end %>
+</ul>
