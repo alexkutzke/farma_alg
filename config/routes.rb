@@ -89,6 +89,7 @@ Carrie::Application.routes.draw do
     get "index"
     get "load_users"
     post "info_answer"
+    post "info_connection"
     put "search"
     put "fulltext_search"
   end

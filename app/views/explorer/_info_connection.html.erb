@@ -1,0 +1,21 @@
+<br/>
+<div style="text-align:right;"><a href="#" id="hide_node_menu">Esconder <i class="icon-arrow-left"></i></a></div>
+
+<h3 style="margin-top: 0;"class="page-header">Detalhes da relação</h3>
+
+    <% @connection.test_case_similarity.each do |k,v| %>
+    <p>
+      <%= raw test_case_similarity_in_words(k,v) %>
+    </p>
+    <% end %>
+
+<a href="#" id="show_diff" data-toggle="modal">Diff</a>
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade code-modal-body" style="overflow:scroll;">
+  <div id="response-<%= @answer_a.id %>">
+    <div class="response" data-response="<%= @answer_a.response %>" data-previous="<%= @answer_b.response %>" data-id="<%= @answer_a.id %>"></div>
+  </div>
+</div>
+
+

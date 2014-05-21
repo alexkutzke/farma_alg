@@ -1,11 +1,36 @@
 <p><%= @as.count %> respostas</p>
 <ul class="thumbnails">
   <% @as.each do |a| %>
-    <li class="span2">
-      <a href="#" class="thumbnail addNode" data-id="<%= a.id %>" <%= raw "style='background-color: green;'" if a.correct%>>
-        <pre style="width:80%;height:50px;overflow:scroll;"><%= a.response %></pre>
-        Por <b><%= a.user.name %></b>
-        <!--</b> na turma <b><%= a.team.name unless a.team_id.nil? %></b>, questão <b><%= a.question.title %></b> em <b><%= a.created_at.strftime("%d/%m/%Y às %H:%M:%S") %></b></p>-->
+    <li class="span3">
+      <a href="#" class="thumbnail addNode" data-id="<%= a.id %>" style="hover:">
+        <table class="table table-bordered" style="margin-bottom:5px;">
+  <tr>
+    <td><%= a.user.name %></td>
+  </tr>
+  <tr>
+    <td><%= a.question.title %></td>
+  </tr>
+  <tr>
+    <td><%= a.team.name %></td>
+  </tr>
+  <tr>
+    <td><%= a.lo.name %></td>
+  </tr>
+  <tr>
+    <td>#<%= a.try_number %></td>
+  </tr>
+  <tr>
+    <td>
+      <% if a.correct %>
+        <span rel="tooltip" class="label label-success">Correta</span>  
+      <% else %>
+        <span rel="tooltip" class="label label-important">Incorreta</span>  
+      <% end %>
+    </td>
+  </tr>
+</table>
+<small>Realizada em <b><%= a.created_at.strftime("%d/%m/%Y às %H:%M:%S") %></b></small>
+
       </a>
     </li>
   <% end %>

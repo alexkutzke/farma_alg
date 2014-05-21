@@ -30,92 +30,88 @@
   </div>
 </div>
 
-<div class="container menu" style="width: 100%; overflow: scroll;">
-
-<div class="row-fluid"> 
-<div class="span12">
-<%= form_tag explorer_fulltext_search_path, :remote => true, :method => :put, :id => "fulltext_search_form" do %>
-  <%= text_field_tag "query", nil, :class => "form-control input" %>
-<% end %>
-</div>
-</div>
-
-
-<%= form_tag explorer_search_path, :remote => true, :method => :put, :id => "search_form" do %>
- <div class="row-fluid"> 
-  <div class="span3">
-    <h2>Alunos</h2>
-    <div style="height: 200px; overflow-y: scroll;">
-    <table class="table table-bordered table-hover">
-    <% @users.each do |u| %>
-      <tr>
-        <td>
-          <%= check_box_tag "user_ids[]", u.id %>
-          <%= u.email %>
-        </td>
-      </tr>
-    <% end %>
-    </table>
+<div class="container menu ui-widget-content" style="width: 100%;">
+  <div class="resize" style="width: 100%; overflow: scroll;" data-resize-operation-height="$('.menu').height()-10;">
+    <div class="row-fluid"> 
+      <div class="span12">
+        <%= form_tag explorer_fulltext_search_path, :remote => true, :method => :put, :id => "fulltext_search_form" do %>
+          <%= text_field_tag "query", nil, :class => "form-control input" %>
+        <% end %>
+      </div>
     </div>
-  </div>
+
+    <%= form_tag explorer_search_path, :remote => true, :method => :put, :id => "search_form" do %>
+      <div class="row-fluid"> 
+        <div class="span3">
+          <h2>Alunos</h2>
+          <div style="height: 200px; overflow-y: scroll;">
+            <table class="table table-bordered table-hover">
+              <% @users.each do |u| %>
+                <tr>
+                  <td>
+                    <%= check_box_tag "user_ids[]", u.id %>
+                    <%= u.email %>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
   
-  <div class="span3">
-    <h2>Turmas</h2>
-    <div style="height: 200px; overflow-y: scroll;">
-    <table class="table table-bordered table-hover">
-    <% @teams.each do |t| %>
-      <tr>
-        <td>
-          <%= check_box_tag "team_ids[]", t.id %>
-          <%= t.name %>
-        </td>
-      </tr>
+        <div class="span3">
+          <h2>Turmas</h2>
+          <div style="height: 200px; overflow-y: scroll;">
+            <table class="table table-bordered table-hover">
+              <% @teams.each do |t| %>
+                <tr>
+                  <td>
+                    <%= check_box_tag "team_ids[]", t.id %>
+                    <%= t.name %>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
+
+        <div class="span3">
+          <h2>O.A.'s</h2>
+          <div style="height: 200px; overflow-y: scroll;">
+            <table class="table table-bordered table-hover">
+              <% @los.each do |l| %>
+                <tr>
+                  <td>
+                    <%= check_box_tag "lo_ids[]", l.id %>
+                    <%= l.name %>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
+
+
+        <div class="span3">
+          <h2>Questões</h2>
+          <div style="height: 200px; overflow-y: scroll;">
+            <table class="table table-bordered table-hover">
+              <% @questions.each do |q| %>
+                <tr>
+                  <td>
+                    <%= check_box_tag "question_ids[]", q.id %>
+                    <%= q.title %>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
+      </div>
     <% end %>
-    </table>
+
+    <hr />
+    <div id="answers">
+
     </div>
   </div>
-
-  <div class="span3">
-    <h2>O.A.'s</h2>
-    <div style="height: 200px; overflow-y: scroll;">
-    <table class="table table-bordered table-hover">
-    <% @los.each do |l| %>
-      <tr>
-        <td>
-          <%= check_box_tag "lo_ids[]", l.id %>
-          <%= l.name %>
-        </td>
-      </tr>
-    <% end %>
-    </table>
-    </div>
-  </div>
-
-
-  <div class="span3">
-    <h2>Questões</h2>
-    <div style="height: 200px; overflow-y: scroll;">
-    <table class="table table-bordered table-hover">
-    <% @questions.each do |q| %>
-      <tr>
-        <td>
-          <%= check_box_tag "question_ids[]", q.id %>
-          <%= q.title %>
-        </td>
-      </tr>
-    <% end %>
-    </table>
-    </div>
-  </div>
-
-
-</div>
-<% end %>
-
-
-  <hr />
-  <div id="answers">
-
-  </div>
-
 </div>

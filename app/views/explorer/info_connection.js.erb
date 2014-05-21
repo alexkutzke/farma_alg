@@ -1,0 +1,6 @@
+$("#node_menu").html("<%= escape_javascript(render(:partial => 'info_connection', :locals => {:connection => @connection}))%>");
+$("span.label").tooltip();
+prettyPrint();
+$("div.response").each(function(){
+  diffUsingJS("response-"+$(this).data("id"),"Resposta",$(this).data("response"),"Resposta anterior",$(this).data("previous"));
+});

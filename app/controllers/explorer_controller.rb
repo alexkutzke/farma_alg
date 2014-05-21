@@ -26,4 +26,10 @@ class ExplorerController < ApplicationController
   def info_answer
     @answer = Answer.find(params[:id])
   end
+
+  def info_connection
+    @connection = Connection.find(params[:id])
+    @answer_a = Answer.find(@connection.answer_id)
+    @answer_b = Answer.find(@connection.target_answer_id)
+  end
 end
