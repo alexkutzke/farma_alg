@@ -23,6 +23,8 @@ class Answer
   field :try_number, type: Integer
   field :lang
 
+  field :automatically_assigned_tags, type: Array, default: []
+
   field :lo, type: Hash
   field :exercise, type: Hash
   field :question, type: Hash
@@ -49,6 +51,7 @@ class Answer
   #embeds_many :comments, :as => :commentable
   has_many :comments
   has_many :connections, dependent: :delete
+  has_and_belongs_to_many :tags
 
   #default_scope desc(:created_at)
 
@@ -58,7 +61,7 @@ class Answer
 
   #before_save :verify_response, :store_datas
   before_create :verify_response, :store_datas
-  after_create :register_last_answer,:updateStats#, :update_questions_with_last_answer
+  after_create :register_last_answer,:updateStats,:schedule_process #, :update_questions_with_last_answer
 
 
   #def self.search(page, params = nil, team_ids = nil)
@@ -238,7 +241,6 @@ class Answer
   def previous(n)
     previous_answers = Answer.where(user_id: self.user_id, team_id: self.team_id, question_id: self.question_id).desc(:created_at).lte(created_at: self.created_at)[0..n]
 
-
     x = previous_answers.count
     if x > 0
       i = 0
@@ -254,7 +256,130 @@ class Answer
     previous_answers
   end
 
+  def propagate_properties
+    queue = []
+    visited = []
+
+    queue.push self.id
+
+    while not queue.empty?
+      answer_id = queue.shift
+
+      answer = Answer.find(answer_id)
+
+      for similar_answer in answer.similar_answers do
+        unless visited.include?(similar_answer)
+          queue.push similar_answer
+          visited.push similar_answer
+        end
+
+        neigh = Answer.find(similar_answer)
+        connections = neigh.connections
+        weight = connections[connections.index{|x| x.target_answer_id.to_s == answer.id.to_s}].weight
+        naat = neigh.automatically_assigned_tags
+
+        # confirmed tags
+        for tag in answer.tags do
+          # neigh already has this tag as confirmed
+          if neigh.tags.include?(tag)
+            # do nothing
+          # neigh already has this tag as automatically assigned
+          elsif not (i = naat.index{ |x| x[0].to_s == tag.id.to_s }).nil?
+            t = naat[i]
+
+            # passed by another answer
+            if t[2] != answer.id
+              if t[1] < weight
+                t[1] = weight
+              end
+            # passed by this answers  
+            else
+              # update anyway
+              t[1] = weight
+            end
+          # neigh does not have this tag
+          else
+            naat.push [tag.id,weight,answer.id]
+          end
+        end
+
+        # automatically assigned tags
+        for atag in answer.automatically_assigned_tags do
+          tag = Tag.find(atag[0])
+
+          # neigh already has this tag as confirmed
+          if neigh.tags.include?(tag)
+            # do nothing
+          # neigh already has this tag as automatically assigned
+          elsif not (i = naat.index{ |x| x[0].to_s == tag.id.to_s }).nil?
+            t = naat[i]
+
+            # passed by another answer
+            if t[2] != answer.id
+              if t[1] < weight*atag[1]
+                t[1] = weight*atag[1]
+              end
+            # passed by this answers  
+            else
+              # update anyway
+              t[1] = atag[1] * weight
+            end
+          # neigh does not have this tag
+          else
+            naat.push [tag.id,weight*atag[1],answer.id]
+          end
+        end
+
+        neigh.save!
+
+      end
+    end
+    true
+  end
+
+  def schedule_process
+    ProcessQueue.create(:type => "make_inner_connections", 
+                        :priority => 2,
+                        :params => [self.id])
+    ProcessQueue.create(:type => "make_outer_connections", 
+                        :priority => 5,
+                        :params => [self.id])
+  end
+
+  def make_inner_connections
+    per_batch = 1000
+
+    inner_neigh = Answer.where(:question_id => self.question_id)
+
+    0.step(inner_neigh.count, per_batch) do |offset|
+      inner_neigh.limit(per_batch).skip(offset).each do |a| 
+        if self.id != a.id
+          SimilarityMachine::create_connection(self,a)
+        end
+      end
+    end
+
+    true
+  end
+
+  def make_outer_connections
+    per_batch = 1000
+
+    outer_neigh = Answer.where(:question_id.ne => self.question_id)
+
+    0.step(outer_neigh.count, per_batch) do |offset|
+      outer_neigh.limit(per_batch).skip(offset).each do |a| 
+        if self.id != a.id
+          SimilarityMachine::create_connection(self,a)
+        end
+      end
+    end
+
+    true
+  end
+
 private
+
   def register_last_answer
     unless self.for_test
       la = LastAnswer.find_or_create_by(:user_id => self.user.id, :question_id => self.question.id)

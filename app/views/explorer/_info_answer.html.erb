@@ -52,6 +52,21 @@
   <% end %>
 </div>
 
+<div>
+<% @answer.tags.each do |t| %>
+
+  <% if t.type == 1 %>
+    <% label = "label-important" %>
+  <% elsif t.type == 2 %>
+    <% label = "label-warning" %>
+  <% else %>    
+    <% label = "" %>
+  <% end %>
+
+  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="<%= t.description %>" class="label <%= label %>"><%= t.name %></span>
+<% end %>
+</div>
+
 <br />
 <a href="#" id="show_code" data-toggle="modal"><pre class="prettyprint lang-pascal " style="width:260px;overflow:scroll;margin:auto;height:260px;"><%= @answer.response %></pre></a>
 

@@ -9,7 +9,9 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require app_bootstrap
- *= require_tree .
+ *= require_directory .
+ *= require_directory ./published
+ *= require_directory ./answers_panel
  *= require visualsearch
  *= require diffview
  *= require bootstrap-modal

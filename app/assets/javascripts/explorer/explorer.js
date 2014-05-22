@@ -330,8 +330,8 @@ $(document).ready(function(){
   });
 
   addAnswer("535db8e23cc450f356000027");
-  addAnswer("535db8fe3cc450f356000029");
-  addAnswer("535f99fb3cc450f356000062");
+  //addAnswer("535db8fe3cc450f356000029");
+  //addAnswer("535f99fb3cc450f356000062");
 
 
 });

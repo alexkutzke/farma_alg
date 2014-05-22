@@ -104,6 +104,38 @@ module SimilarityMachine
     result
   end
 
+  def self.create_connection(a,b)
+    
+    c = nil
+    result = similarity(a,b)
+
+    if result['final_similarity'] > 0.4
+      c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
+      c.code_similarity = result['code_similarity']
+      c.both_compile_errors = result['both_compile_errors']
+      c.compile_errors_similarity = result['compile_errors_similarity']
+      c.both_error = result['both_error']
+      c.same_question = result['same_question']
+      c.test_case_similarity = result['test_case_similarity']
+      c.test_case_similarity_final = result['test_case_similarity_final']
+      c.weight = result['final_similarity']
+      c.save!
+    end
+    c
+  end
+
+  def self.create_answer_neighbor(answer)
+    per_batch = 1000
+
+    0.step(Answer.count, per_batch) do |offset|
+      Answer.limit(per_batch).skip(offset).each do |a| 
+        if a.id != answer.id
+          create_connection(answer,a)
+        end
+      end
+    end
+  end
+
   def self.match_all
     Connection.delete_all
 
@@ -114,30 +146,15 @@ module SimilarityMachine
       Answer.limit(per_batch).skip(offset).each do |a| 
         0.step(Answer.count, per_batch) do |offset2|
           Answer.limit(per_batch).skip(offset2).each do |b| 
-
-    #Answer.all.each do |a|
-      #Answer.all.each do |b|
-        i = i + 1.0
-        puts (i*100.0)/t
-        if a.id != b.id
-          puts a.id.to_s + " " + b.id.to_s 
-          result = similarity(a,b)
-          if result['final_similarity'] > 0.4
-            c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
-            c.code_similarity = result['code_similarity']
-            c.both_compile_errors = result['both_compile_errors']
-            c.compile_errors_similarity = result['compile_errors_similarity']
-            c.both_error = result['both_error']
-            c.same_question = result['same_question']
-            c.test_case_similarity = result['test_case_similarity']
-            c.test_case_similarity_final = result['test_case_similarity_final']
-            c.weight = result['final_similarity']
-            c.save!
+            i = i + 1.0
+            puts (i*100.0)/t
+            if a.id != b.id
+              puts a.id.to_s + " " + b.id.to_s 
+              create_connection(a,b)      
+            end
           end
         end
       end
     end
-  end
-end
   end
 end
