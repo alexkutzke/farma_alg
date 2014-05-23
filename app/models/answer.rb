@@ -61,8 +61,7 @@ class Answer
 
   #before_save :verify_response, :store_datas
   before_create :verify_response, :store_datas
-  after_create :register_last_answer,:updateStats,:schedule_process #, :update_questions_with_last_answer
-
+  after_create :register_last_answer,:updateStats,:schedule_process_connections #, :update_questions_with_last_answer
 
   #def self.search(page, params = nil, team_ids = nil)
   #  if team_ids
@@ -211,6 +210,20 @@ class Answer
     end
   end
 
+  def available_tags
+    available_tags = []
+    Tag.all.each do |t|
+      available_tags << t.name
+    end
+
+    tags = []
+    self.tags.each do |t|
+      tags << t.name
+    end
+
+    available_tags - tags
+  end
+
   def verify_response
     
     self.exec
@@ -337,12 +350,18 @@ class Answer
     true
   end
 
-  def schedule_process
+  def schedule_process_connections
     ProcessQueue.create(:type => "make_inner_connections", 
                         :priority => 2,
                         :params => [self.id])
     ProcessQueue.create(:type => "make_outer_connections", 
                         :priority => 5,
+                        :params => [self.id])
+  end
+
+  def schedule_process_propagate
+    ProcessQueue.create(:type => "propagate_properties", 
+                        :priority => 2,
                         :params => [self.id])
   end
 

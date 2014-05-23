@@ -1,3 +1,22 @@
-$("#node_menu").html("<%= escape_javascript(render(:partial => 'info_answer', :locals => {:answer => @answer}))%>");
+$("#node_menu").html("<%= escape_javascript(render(:partial => 'info_answer', :locals => {:answer => @answer, :notice => @notice}))%>");
 $("span.label").tooltip();
 prettyPrint();
+
+var availableTags = <%= raw @available_tags.to_json %>;
+
+$( "#add_tag_field" ).autocomplete({
+  source: availableTags
+});
+
+$("#add_tag_field").focus();
+
+  $(".remove_tag_link").click(function(){
+    $.ajax({
+      url: "/explorer/remove_tag",
+      data: {
+        id: $(this).data("id"),
+        answer_id: $(this).data("answer-id")
+      },
+      type: "delete"    
+    });
+  });

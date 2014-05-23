@@ -1,0 +1,16 @@
+
+<div class="well" style="padding:5px;">
+<h4 class="page-header">Nova Tag</h4>
+
+<hr />
+<%= form_for @tag, :url => explorer_create_tag_path, :remote => true, :html => {:method => :post, :id => "new_tag_form"} do |f| %>
+	<%= f.label "name", "Nome" %>
+  <%= f.text_field "name", :class => "form-control input" %>
+  <%= f.label "description", "Descrição" %>
+  <%= f.text_field "description", :class => "form-control input" %>
+  <%= hidden_field_tag 'answer_id', @answer.id %>
+  <%= f.submit "Enviar", :class => "btn btn-primary" %>
+  <%= f.button "Cancelar", :type => "button", :class => "btn", :id => "new_tag_cancel" %>
+<% end %>
+<hr />
+</div>

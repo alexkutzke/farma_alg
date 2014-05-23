@@ -39,7 +39,14 @@ function nodeDraw(node){
     ui.append(svgText);
     ui.append(circle);
 
-    $(circle).data("content","conteúdo");
+    conteudo = "<div>";
+
+    for(i=0;i<node.data.tags.length;i++)
+      conteudo += "<span rel=\"tooltip\" data-toggle=\"tooltip\" data-placement=\"top\" title data-original-title=\" " + node.data.tags[i].description + "\" class=\"label\"> " + node.data.tags[i].name + "</span>";
+
+    conteudo += "</div>";
+
+    $(circle).data("content",conteudo);
     $(circle).data("original-title","título");
     $(circle).data("trigger","hover");
     $(circle).data("placement","top");
@@ -61,12 +68,12 @@ function nodeDraw(node){
         }
       });
 
-      var i;
+      //var i;
 
-      for(i=0; i<node.data.similar_answers.length; i++)
-      {
-        addAnswer(node.data.similar_answers[i]);
-      }
+      //for(i=0; i<node.data.similar_answers.length; i++)
+      //{
+      //  addAnswer(node.data.similar_answers[i]);
+      //}
     });
 
     return ui;
@@ -103,7 +110,7 @@ function linkDraw(link){
         data: {id:link.data.id},
         dataType: "script",
         success: function(){
-          console.log("OK");
+          //console.log("OK");
         }
       });
     });
@@ -261,7 +268,7 @@ $(document).ready(function(){
 
   $(".menu").hover(
     function() {
-          console.log("="+($(window).height()-$(this).height()).toString());
+          //console.log("="+($(window).height()-$(this).height()).toString());
       $(this).animate({
         top: "+="+($(window).height()-$(this).height()).toString(),
       }, 500);
@@ -311,6 +318,8 @@ $(document).ready(function(){
     $(".code-modal-body").css("margin","0");
   });
 
+  $("")
+
 
   $( ".menu" ).css("top",($(window).height()-10)+"px");
   $( ".menu" ).resizable({
@@ -325,13 +334,23 @@ $(document).ready(function(){
     var pop = $(this);
     window.setTimeout(function(){
       $(pop).attr("style","top: " +y+"px;left: "+x+"px; display: block;");
-      console.log($(pop));
+     // console.log($(pop));
     },10);
   });
 
   addAnswer("535db8e23cc450f356000027");
   //addAnswer("535db8fe3cc450f356000029");
   //addAnswer("535f99fb3cc450f356000062");
+
+
+  $.widget( "ui.autocomplete", $.ui.autocomplete, {
+    _renderItem: function(ul,item) {
+      return $( "<li>" )
+            .attr( "data-value", item.value )
+            .append( $( "<a>" ).text( item.label ) )
+            .appendTo( ul );
+    }
+});
 
 
 });

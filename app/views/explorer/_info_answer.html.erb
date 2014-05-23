@@ -1,6 +1,13 @@
 <br/>
 <div style="text-align:right;"><a href="#" id="hide_node_menu">Esconder <i class="icon-arrow-left"></i></a></div>
 
+<% unless @notice.nil? %>
+<div class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  Tag criada com sucesso.
+</div>
+<% end %>
+
 <h3 style="margin-top: 0;"class="page-header">Detalhes da resposta</h3>
 
 <table class="table table-bordered" style="margin-bottom:5px;">
@@ -52,7 +59,9 @@
   <% end %>
 </div>
 
-<div>
+<h4 class="page-header">Tags</h4>
+<div id="tags">
+<h5>Confirmadas:</h5>
 <% @answer.tags.each do |t| %>
 
   <% if t.type == 1 %>
@@ -63,11 +72,41 @@
     <% label = "" %>
   <% end %>
 
-  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="<%= t.description %>" class="label <%= label %>"><%= t.name %></span>
+  <span style="margin: 3px 3px;" rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="<%= t.description %>" class="label <%= label %>"> <%= t.name %> <a href="#" class="remove_tag_link" data-id="<%= t.id %>" data-answer-id="<%= @answer.id %>"><i class='icon icon-remove' style="color:black;"></i></a> </span> 
 <% end %>
 </div>
 
-<br />
+<h5>Adicionadas automaticamente:</h5>
+<div id="aa_tags">
+<% @answer.automatically_assigned_tags.each do |aat| %>
+
+  <% t = Tag.find(aat[0]) %>
+
+  <% if t.type == 1 %>
+    <% label = "label-important" %>
+  <% elsif t.type == 2 %>
+    <% label = "label-warning" %>
+  <% else %>    
+    <% label = "" %>
+  <% end %>
+
+  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="<%= t.description %>" class="label <%= label %>"><%= t.name %> <span class="badge badge-info"><%= aat[1] %></span></span>
+<% end %>
+</div>
+
+<h5>Inserir tag</h5>
+<div>
+  <%= form_tag explorer_add_tag_path, :remote => true, :method => :put, :id => "add_tag_form" do %>
+    <%= text_field_tag "query", nil, :class => "form-control input", :id => "add_tag_field" %>
+    <%= hidden_field_tag 'answer_id', @answer.id %>
+  <% end %>
+</div>
+
+<div id="new_tag"></div>
+
+<div>
+
+<h4 class="page-header">Resposta</h4>
 <a href="#" id="show_code" data-toggle="modal"><pre class="prettyprint lang-pascal " style="width:260px;overflow:scroll;margin:auto;height:260px;"><%= @answer.response %></pre></a>
 
 <!-- Modal -->

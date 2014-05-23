@@ -92,6 +92,9 @@ Carrie::Application.routes.draw do
     post "info_connection"
     put "search"
     put "fulltext_search"
+    put "add_tag"
+    post "create_tag"
+    delete "remove_tag"
   end
 
   root to: "home#index"

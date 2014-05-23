@@ -1,0 +1,11 @@
+$("#new_tag").html("<%= escape_javascript(render(:partial => 'new_tag', :locals => {:answer => @answer, :tag => @tag}))%>");
+$("#new_tag").show();
+
+$("#add_tag_form").hide();
+
+$("#new_tag_cancel").click(function(){
+  $("#add_tag_form").show();
+  $("#new_tag").hide();
+});
+
+$("#tag_description").focus();
