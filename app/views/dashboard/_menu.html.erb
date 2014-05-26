@@ -1,0 +1,49 @@
+<!-- sidebar menu: : style can be found in sidebar.less -->
+<ul class="sidebar-menu">
+
+    <li class="<%= raw "active" if controller.class == DashboardController && controller.action_name == "home" %>">
+        <%= link_to dashboard_home_path do %>
+            <i class="fa fa-home"></i> <span>Home</span>
+        <% end %>
+    </li>
+
+    <li class="<%= raw "class" if controller.class == DashboardController && controller.action_name == "graph" %>">
+        <%= link_to dashboard_home_path do %>
+          <i class="fa fa-code-fork"></i> <span>Grafo de Manipulação</span>
+        <% end %>
+    </li>
+
+    <li class="<%= raw "class" if controller.class == DashboardController && controller.action_name == "timeline" %>">
+        <%= link_to dashboard_timeline_path do %>
+            <i class="fa fa-clock-o"></i> <span>Linha do Tempo</span>
+        <% end %>
+    </li>
+
+    <li class="<%= raw "class" if controller.class == DashboardController && controller.action_name == "search" %>">
+        <%= link_to dashboard_search_path do %>
+            <i class="fa fa-search"></i> <span>Busca</span>
+        <% end %>
+    </li>
+
+    <!--
+    <li>
+        <a href="pages/widgets.html">
+            <i class="fa fa-th"></i> <span>Widgets</span> <small class="badge pull-right bg-green">new</small>
+        </a>
+    </li>
+    -->
+    <!--
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-bar-chart-o"></i>
+            <span>Charts</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="pages/charts/morris.html"><i class="fa fa-angle-double-right"></i> Morris</a></li>
+            <li><a href="pages/charts/flot.html"><i class="fa fa-angle-double-right"></i> Flot</a></li>
+            <li><a href="pages/charts/inline.html"><i class="fa fa-angle-double-right"></i> Inline charts</a></li>
+        </ul>
+    </li>
+    -->
+</ul>

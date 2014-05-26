@@ -1,0 +1,36 @@
+<%= content_for :scripts do %>
+  <%= javascript_include_tag 'dashboard/search' %>
+<% end %>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Busca
+        <small>Encontre respostas relevantes</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+        <li class="active"><i class="fa fa-search"></i> Busca</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <div style="margin-bottom:20px;" class="col-md-10 col-md-offset-1">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <%= form_tag dashboard_fulltext_search_path, :remote => true, :method => :put, :id => "search-form" do %>
+                    <%= text_field_tag "query", nil, :class => "form-control input", :placeholder => "Busca ..." %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main row -->
+    <div class="row" id="search_result">
+
+    </div>
+
+</section><!-- /.content -->

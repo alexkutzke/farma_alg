@@ -100,6 +100,15 @@ Carrie::Application.routes.draw do
     put "reject_tag"
   end
 
+  namespace :dashboard do
+    get "home"
+    
+    get "timeline"
+
+    get "search"
+    put "fulltext_search"
+  end
+
   root to: "home#index"
 
   match '*path', to: 'home#index'
