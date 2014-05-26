@@ -10,13 +10,35 @@ $( "#add_tag_field" ).autocomplete({
 
 $("#add_tag_field").focus();
 
-  $(".remove_tag_link").click(function(){
-    $.ajax({
-      url: "/explorer/remove_tag",
-      data: {
-        id: $(this).data("id"),
-        answer_id: $(this).data("answer-id")
-      },
-      type: "delete"    
-    });
+$(".remove_tag_link").click(function(){
+  $.ajax({
+    url: "/explorer/remove_tag",
+    data: {
+      id: $(this).data("id"),
+      answer_id: $(this).data("answer-id")
+    },
+    type: "delete"    
   });
+});
+
+$(".accept_tag_link").click(function(){
+  $.ajax({
+    url: "/explorer/accept_tag",
+    data: {
+      id: $(this).data("id"),
+      answer_id: $(this).data("answer-id")
+    },
+    type: "put"    
+  });
+});
+
+$(".reject_tag_link").click(function(){
+  $.ajax({
+    url: "/explorer/reject_tag",
+    data: {
+      id: $(this).data("id"),
+      answer_id: $(this).data("answer-id")
+    },
+    type: "put"    
+  });
+});

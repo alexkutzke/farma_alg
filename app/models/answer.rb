@@ -24,6 +24,7 @@ class Answer
   field :lang
 
   field :automatically_assigned_tags, type: Array, default: []
+  field :rejected_tags, type: Array, default: []
 
   field :lo, type: Hash
   field :exercise, type: Hash
@@ -274,6 +275,7 @@ class Answer
     visited = []
 
     queue.push self.id
+    visited.push similar_answer
 
     while not queue.empty?
       answer_id = queue.shift
@@ -312,7 +314,10 @@ class Answer
             end
           # neigh does not have this tag
           else
-            naat.push [tag.id,weight,answer.id]
+            # was it rejected?
+            unless neigh.rejected_tags.include?(tag.id.to_s)
+              naat.push [tag.id,weight,answer.id]
+            end
           end
         end
 
@@ -339,7 +344,15 @@ class Answer
             end
           # neigh does not have this tag
           else
-            naat.push [tag.id,weight*atag[1],answer.id]
+            unless neigh.rejected_tags.include?(tag.id.to_s)
+              naat.push [tag.id,weight*atag[1],answer.id]
+            end
+          end
+        end
+
+        for rejected in answer.rejected_tags do
+          unless (i = naat.index{ |x| x[2].to_s == current_user.id.to_s && x[0].to_s == rejected.to_s }).nil?
+            naat.delete_at(i)
           end
         end
 

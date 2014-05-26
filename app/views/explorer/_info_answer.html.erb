@@ -90,7 +90,7 @@
     <% label = "" %>
   <% end %>
 
-  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="<%= t.description %>" class="label <%= label %>"><%= t.name %> <span class="badge badge-info"><%= aat[1] %></span></span>
+  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="<%= t.description %>" class="label <%= label %>"><%= t.name %> <span class="badge badge-default"><%= '%.2f' % aat[1] %></span> <a href="#" class="accept_tag_link" data-id="<%= t.id %>" data-answer-id="<%= @answer.id %>"> <i class='icon icon-ok' style="color:black;"></i></a> <a href="#" class="reject_tag_link" data-id="<%= t.id %>" data-answer-id="<%= @answer.id %>"> <i class='icon icon-remove' style="color:black;"></i></a></span>
 <% end %>
 </div>
 
