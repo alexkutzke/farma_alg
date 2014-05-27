@@ -14,5 +14,7 @@
  *= require AdminLTE/ionicons
  *= require AdminLTE/AdminLTE
  *= require AdminLTE/morris/morris
+ *= require AdminLTE/daterangepicker/daterangepicker-bs3
+ *= require AdminLTE/timepicker/bootstrap-timepicker.min
  *= require_self
 */

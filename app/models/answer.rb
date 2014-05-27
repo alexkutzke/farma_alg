@@ -7,9 +7,9 @@ class Answer
 
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Search
   include MathEvaluate
   include Judge
-  include Mongoid::FullTextSearch
 
 
   field :response
@@ -36,11 +36,8 @@ class Answer
   field :exercise_id, type: Moped::BSON::ObjectId
   field :question_id, type: Moped::BSON::ObjectId
 
-  def search_index_user_name
-    self.user.name
-  end
 
-  fulltext_search_in :response, :compile_errors, :search_index_user_name, :index_name => 'answer_response_index'
+  search_in :response, :compile_errors, :user => :name, :question => :title, :question => :content
 
   alias :super_exercise :exercise
   alias :super_question :question
@@ -424,6 +421,22 @@ private
 
   def self.search(params)
     as = Answer.excludes(team_id: nil, for_test: true)
+
+    if params.has_key?(:query) and not params[:query].empty?
+      as = as.full_text_search(params[:query], match: :all)
+    end
+
+    if params.has_key?(:daterange) and not params[:daterange].empty?
+      start_date = DateTime.strptime(params[:daterange].split(" - ").first,"%d/%m/%Y %H:%M").change(:offset => "-0300")
+      end_date = DateTime.strptime(params[:daterange].split(" - ").last,"%d/%m/%Y %H:%M").change(:offset => "-0300")
+
+      puts "==============================================================="
+      puts start_date
+      puts end_date
+
+      as = as.gte(:created_at => start_date)
+      as = as.lte(:created_at => end_date)
+    end
 
     if params.has_key?(:user_ids)
       as = as.in(user_id: params[:user_ids])

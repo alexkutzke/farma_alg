@@ -11,7 +11,7 @@ class DashboardController < ApplicationController
   end
 
   def fulltext_search
-    @as = Answer.fulltext_search(params[:query],{:max_results => 50000 })
+    @as = Answer.search(params)
 
     render 'search_result'
   end
