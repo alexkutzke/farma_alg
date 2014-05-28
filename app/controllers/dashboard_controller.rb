@@ -3,29 +3,29 @@ class DashboardController < ApplicationController
 
   before_filter :authenticate_user!
 
+  def init_search
+    @teams = current_user.all_teams
+    @questions = current_user.all_questions
+    @los = current_user.all_los
+    @users = current_user.all_students
+    @tags = current_user.all_tags
+  end
+
 	def home
 	end
 
   def graph
-    @users = User.all
-    @teams = Team.all
-    @los = Lo.all
-    @questions = Question.all
-    @tags = Tag.all
+    init_search
   end
 
   def graph_search
-    @as = Answer.search(params)
+    @as = Answer.search(params,current_user)
     
     render 'graph_search_result'
   end
 
   def timeline
-    @users = User.all
-    @teams = Team.all
-    @los = Lo.all
-    @questions = Question.all
-    @tags = Tag.all
+    init_search
   end
 
   def timeline_search
@@ -35,15 +35,11 @@ class DashboardController < ApplicationController
   end
 
   def search
-    @users = User.all
-    @teams = Team.all
-    @los = Lo.all
-    @questions = Question.all
-    @tags = Tag.all
+    init_search
   end
 
   def fulltext_search
-    @as = Answer.search(params)
+    @as = Answer.search(params,current_user)
 
     render 'search_result'
   end

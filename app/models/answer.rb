@@ -419,7 +419,21 @@ private
     end
   end
 
-  def self.search(params)
+  def self.search(params,user)
+    if params.has_key?(:query) and params[:query].empty?
+      if params.has_key?(:daterange) and params[:daterange].empty?
+        if not params.has_key?(:user_ids) and
+          not params.has_key?(:team_ids) and
+          not params.has_key?(:lo_ids) and
+          not params.has_key?(:question_ids) and
+          not params.has_key?(:answer_ids) and
+          not params.has_key?(:tag_ids)
+          return []
+        end
+      end
+    end
+
+
     as = Answer.excludes(team_id: nil, for_test: true)
 
     if params.has_key?(:query) and not params[:query].empty?
@@ -456,6 +470,40 @@ private
 
     if params.has_key?(:tag_ids)
       as = as.in(tag_ids: params[:tag_ids])
+    end
+
+    unless user.admin?
+      user_ids = []
+      for u in user.all_students do
+        user_ids << u.id
+      end
+      as = as.in(user_id: user_ids)
+      
+      team_ids = []
+      for t in user.all_teams do
+        team_ids << t.id
+      end
+      as = as.in(team_id: team_ids)
+
+      lo_ids = []
+      for l in user.all_los do
+        lo_ids << l.id
+      end
+      as = as.in(lo_id: lo_ids)
+
+      question_ids = []
+      for q in user.all_questions do
+        question_ids << q.id
+      end
+      as = as.in(question_id: question_ids)
+
+      if params.has_key?(:tag_ids)
+        tag_ids = []
+        for t in user.all_tags do
+          tag_ids << t.id
+        end
+        as = as.in(tag_ids: tag_ids)
+      end
     end
 
     as

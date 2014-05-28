@@ -358,7 +358,6 @@ $(document).ready(function(){
 
   $(".toolbar-btn").click(function(){
     bar = $(this).parent().find(".toolbar-btn-element");
-    console.log(bar);
     if(!bar.hasClass("open")){
       bar.addClass("open");
       bar.animate({width: $(".right-side").width()*0.75},500)

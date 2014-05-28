@@ -61,4 +61,74 @@ class User
     @user ||= User.where(email: 'guest@farma.mat.br').first
     return @user
   end
+
+
+  def all_teams
+    if self.admin?
+      Team.all
+    else
+      teams = Team.where(owner_id: self.id).asc('name') + self.teams.asc('name')
+    end
+  end
+
+  def all_questions
+    if self.admin?
+      Question.all
+    else
+      answered_questions = Answer.where(user_id:self.id).desc("question_id").distinct("question_id")
+      questions = []
+      unless answered_questions.empty?
+        questions = Question.find(answered_questions)
+      end
+
+      question_ids = []
+      for lo in self.all_los
+        for ex in lo.exercises
+          question_ids = question_ids + ex.question_ids
+        end
+      end
+
+      questions = questions + Question.find(question_ids) 
+      questions.uniq{|x| x.id}
+    end
+  end
+
+  def all_los
+    if self.admin?
+      Lo.all
+    else
+      los = Array.new
+      for team in self.all_teams do
+        lo_ids = Answer.where(team_id:team.id).desc("lo_id").distinct("lo_id")
+        if lo_ids.empty?
+          los = los + team.los
+        else
+          los = los + (Lo.find(lo_ids) | team.los)
+        end
+      end
+      
+      los.uniq{|x| x.id}
+    end
+  end
+
+  def all_students
+    if self.admin?
+      User.all
+    else
+      users = [self]
+      for team in Team.where(owner_id: self.id).asc('name') do
+        users << team.users
+      end
+
+      users.uniq{|x| x.id}
+    end
+  end
+
+  def all_tags
+    if self.admin?
+      Tag.all
+    else
+      self.tags
+    end
+  end
 end
