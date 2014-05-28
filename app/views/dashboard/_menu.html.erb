@@ -8,7 +8,7 @@
     </li>
 
     <li class="<%= raw "class" if controller.class == DashboardController && controller.action_name == "graph" %>">
-        <%= link_to dashboard_home_path do %>
+        <%= link_to dashboard_graph_path do %>
           <i class="fa fa-code-fork"></i> <span>Grafo de Manipulação</span>
         <% end %>
     </li>

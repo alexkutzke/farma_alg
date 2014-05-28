@@ -12,6 +12,19 @@
 
 <!-- Main content -->
 <section class="content">
+
+    <div class="row">
+        <div style="margin-bottom:20px;" class="col-md-10 col-md-offset-1">
+           <%= render(:partial => 'search_bar', :locals => { :form_id => "search-form", :path => dashboard_timeline_search_path }) %>
+           <%= render(:partial => 'search_filters', :locals => { :form_id => "search-form", :users => @users, :teams => @teams, :los => @los, :questions => @questions, :tags => @tags }) %>
+        </div>
+    </div>
+
+    <!-- Main row -->
+    <div id="search_result">
+
+    </div>
+
 	<!-- row -->
 	<div class="row">                        
 	    <div class="col-md-12">

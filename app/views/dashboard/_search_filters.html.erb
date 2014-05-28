@@ -1,0 +1,176 @@
+<%= content_for :scripts do %>
+  <%= javascript_include_tag 'dashboard/search_filters' %>
+  <%= javascript_include_tag 'AdminLTE/plugins/daterangepicker/daterangepicker' %>
+<% end %>
+
+<div id="filters">
+
+
+
+<div class="right-side-body no-print" style="max-width:50%;">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box box-solid">
+                            <div id="more-options" class="box-body" style="">
+                                <div class="row">
+                                    
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="box bg-light-gray">
+                                                    <div class="box-header">
+                                                        <h4 class="box-title">Filtrar por intervalo de tempo</h4>
+                                                        <div class="box-tools pull-right">
+                                                            <button class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="box-body">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                            <%= text_field_tag 'daterange', nil, :class => "form-control input pull-right", :placeholder => "Qualquer data ...", :form => form_id %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="box bg-light-gray">
+                                                    <div class="box-header">
+                                                        <h4 class="box-title">Filtrar por O.A.</h4>
+                                                        <div class="box-tools pull-right">
+                                                            <button class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="box-body" style="max-height:200px; overflow:auto;">
+                                                        <div class="form-group"> 
+                                                            <% los.each do |lo| %>
+                                                                <div class="checkbox">
+                                                                    <label class="">
+                                                                        <input id="lo_ids_" name="lo_ids[]" value="<%= lo.id %>" type="checkbox" style="position: absolute; opacity: 0;" form="<%= form_id %>" >
+                                                                        <%= lo.name %>
+                                                                    </label>                                                
+                                                                </div>
+                                                            <% end %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="box bg-light-gray">
+                                                    <div class="box-header">
+                                                        <h4 class="box-title">Filtrar por questão</h4>
+                                                        <div class="box-tools pull-right">
+                                                            <button class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="box-body" style="max-height:200px; overflow:auto;">
+                                                        <div class="form-group"> 
+                                                            <% questions.each do |q| %>
+                                                                <div class="checkbox">
+                                                                    <label class="">
+                                                                        <input id="question_ids_" name="question_ids[]" value="<%= q.id %>" type="checkbox" style="position: absolute; opacity: 0;" form="<%= form_id %>">
+                                                                        <%= q.title %>
+                                                                    </label>                                                
+                                                                </div>
+                                                            <% end %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    
+                                                                        
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="box bg-light-gray">
+                                                    <div class="box-header">
+                                                        <h4 class="box-title">Filtrar por usuário</h4>
+                                                        <div class="box-tools pull-right">
+                                                            <button class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="box-body" style="max-height:200px; overflow:auto;">
+                                                        <div class="form-group"> 
+                                                            <% users.each do |u| %>
+                                                                <div class="checkbox">
+                                                                    <label class="">
+                                                                        <input id="user_ids_" name="user_ids[]" value="<%= u.id %>" type="checkbox" style="position: absolute; opacity: 0;" form="<%= form_id %>">
+                                                                        <%= u.name + " (" + u.email + ")" %>
+                                                                    </label>                                                
+                                                                </div>
+                                                            <% end %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="box bg-light-gray">
+                                                    <div class="box-header">
+                                                        <h4 class="box-title">Filtrar por turma</h4>
+                                                        <div class="box-tools pull-right">
+                                                            <button class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="box-body" style="max-height:200px; overflow:auto;">
+                                                        <div class="form-group"> 
+                                                            <% teams.each do |t| %>
+                                                                <div class="checkbox">
+                                                                    <label class="">
+                                                                        <input id="team_ids_" name="team_ids[]" value="<%= t.id %>" type="checkbox" style="position: absolute; opacity: 0;" form="<%= form_id %>">
+                                                                        <%= t.name %>
+                                                                    </label>                                                
+                                                                </div>
+                                                            <% end %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="box bg-light-gray">
+                                                    <div class="box-header">
+                                                        <h4 class="box-title">Filtrar por categoria</h4>
+                                                        <div class="box-tools pull-right">
+                                                            <button class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="box-body" style="max-height:200px; overflow:auto;">
+                                                        <div class="form-group"> 
+                                                            <% tags.each do |t| %>
+                                                                <div class="checkbox">
+                                                                    <label class="">
+                                                                        <input id="tag_ids_" name="tag_ids[]" value="<%= t.id %>" type="checkbox" style="position: absolute; opacity: 0;" form="<%= form_id %>">
+                                                                        <%= t.name %>
+                                                                    </label>                                                
+                                                                </div>
+                                                            <% end %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            
+        </div>

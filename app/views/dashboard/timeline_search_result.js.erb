@@ -1,0 +1,11 @@
+$("#search_result").html("<%= escape_javascript(render(:partial => 'timeline_search_result', :locals => {:as => @as}))%>");
+
+var i=0;
+
+$('.answer').each(function() {
+	$(this).hide();
+});
+
+$('.answer').each(function() {
+	$(this).delay((i++)*50).fadeIn();
+});

@@ -104,9 +104,13 @@ Carrie::Application.routes.draw do
     get "home"
     
     get "timeline"
+    put "timeline_search"
 
     get "search"
     put "fulltext_search"
+
+    get "graph"
+    put "graph_search"    
   end
 
   root to: "home#index"

@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-md-12 text-center" style="margin-bottom:20px;">
+    <%= as.count %> respostas encontradas.
+  <% if as.count > 0 %>
+    
+  
+  <table class="table table-hover">
+    <tr>
+      <th></th>
+      <th>Aluno</th>
+      <th>Questão</th>
+      <th>Turma</th>
+      <th>O.A.</th>
+      <th>Tentativa</th>
+
+      <th>Data</th>
+    </tr>
+<% i = 0 %>
+<% as.each do |a| %>
+
+                      <% if a.correct %>
+                        <tr class="success">  
+                      <% else %>
+                        <tr class="danger">
+                      <% end %>
+  
+    
+        <td><img src="http://www.gravatar.com/avatar/<%= a.user.gravatar %>?s=35" class="img-circle" alt="Imagem do Usuário" /></td>
+        <td> <%= a.user.name %></td>
+        
+          
+                    <td>
+                      <%= a.question.title %>
+                    </td>
+                    <td>
+                      <%= a.team.name %>
+                    </td>
+                    <td>
+                      <%= a.lo.name %>
+                    </td>
+                    <td>
+                      #<%= a.try_number %>
+                    </td>
+
+
+                  <td>
+                    <small>Realizada em <b><%= a.created_at.strftime("%d/%m/%Y às %H:%M:%S") %></b></small>  
+                  </td>
+  </tr>
+<% end %>
+</table>
+  </div>
+</div>
+<% end %>

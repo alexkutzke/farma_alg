@@ -1,0 +1,81 @@
+<%= content_for :scripts do %>
+  <%= javascript_include_tag 'dashboard/resizeApp' %>
+  <%= javascript_include_tag 'answers_panel/vivagraph' %>
+  <%= javascript_include_tag 'dashboard/graph.js' %>
+<% end %>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Grafo de Manipulação
+        <small>Manipule respostas</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+        <li class="active"><i class="fa fa-code-fork"></i> Grafo de Manipulação</li>
+    </ol>
+</section>
+
+
+<div id="graph" class="resize" data-resize-operation-width="$('.right-side').width()" data-resize-operation-height="$(window).height()-$('.header').height()-$('.content-header').height()-28"></div>
+
+<!-- Main content -->
+<section class="content">
+
+
+    <div class="row">
+        <div id="toolbar" class="col-md-1">
+            <div class="tool-bar" style="width:36px;">
+                <div class="row toolbar-item">
+                    <div class="toolbar-btn-label" style="position: absolute;top: 0;width: 0px;left: 49px; overflow-x:hidden;">
+                        <div class="col-md-10">
+                            <span class="input-group-addon" style="border: 1px solid #cccccc;">Adicionar respostas ao grafo</span>
+                        </div>
+                    </div>
+                    <div class="toolbar-btn-element" style="position: absolute;top: 0;width: 0px;left: 70px; overflow-x:hidden;">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-12 no-padding">
+                                    <%= render(:partial => 'search_bar', :locals => { :no_icon => true, :form_id => "search-form", :path => dashboard_graph_search_path }) %>
+                                    <%= render(:partial => 'search_filters', :locals => { :form_id => "search-form", :users => @users, :teams => @teams, :los => @los, :questions => @questions, :tags => @tags }) %>
+                                </div>
+                            </div>
+                            <div id="search-result-container" class="row" style="display:none;">
+                                <div id="search-result" style="background-color:white;height:400px; overflow-y:auto; border: 1px solid gray" class="col-md-12 no-padding">
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                    <div class="toolbar-btn text-center" style="z-index: 100;position: absolute;top: 0;float: inherit;left: 14px;">
+                        <%= button_tag raw("<i class='fa fa-plus' style='width:30px;'></i>"), :class => "filters-btn btn btn-flat btn-default", :id => "first-btn" %>
+                    </div>
+                </div>
+
+                <div class="row toolbar-item">                
+                    <div class="toolbar-btn-label" style="position: absolute;top: 0;width: 0px;left: 49px; overflow-x:hidden;">
+                        <div class="col-md-10">
+                            <span class="input-group-addon" style="border: 1px solid #cccccc;">Adicionar uma aresta</span>
+                        </div>
+                    </div>               
+                    <div class="toolbar-btn text-center" style="z-index: 100;position: absolute;top: 0;float: inherit;left: 14px;">
+                        <%= button_tag raw("<i class='fa fa-code-fork' style='width:30px;'></i>"), :class => "filters-btn btn btn-flat btn-default", :id => "first-btn" %>
+                    </div>
+                </div>
+
+                <div class="row toolbar-item">                
+                    <div class="toolbar-btn-label" style="position: absolute;top: 0;width: 0px;left: 49px; overflow-x:hidden;">
+                        <div class="col-md-10">
+                            <span class="input-group-addon" style="border: 1px solid #cccccc;">Configurações do grafo</span>
+                        </div>
+                    </div>               
+                    <div class="toolbar-btn text-center" style="z-index: 100;position: absolute;top: 0;float: inherit;left: 14px;">
+                        <%= button_tag raw("<i class='fa fa-cogs' style='width:30px;'></i>"), :class => "filters-btn btn btn-flat btn-default", :id => "first-btn" %>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+</section><!-- /.content -->

@@ -18,3 +18,61 @@
  *= require AdminLTE/timepicker/bootstrap-timepicker.min
  *= require_self
 */
+
+.right-side-button
+{
+  position: fixed;
+  top: 200px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px 15px;
+  font-size: 16px;
+  z-index: 999998;
+  cursor: pointer;
+  color: #ddd;
+}
+
+.right-side-body
+{
+  position: fixed;
+  top: 120px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid black;
+  font-size: 16px;
+  z-index: 999998;
+  max-height: 80%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.search-bar
+{
+  -webkit-box-shadow: 0px 0px 18px 0px rgba(50, 50, 50, 0.73);
+  -moz-box-shadow:    0px 0px 18px 0px rgba(50, 50, 50, 0.73);
+  box-shadow:         0px 0px 18px 0px rgba(50, 50, 50, 0.73);
+}
+
+#toolbar
+{
+  background-color: transparent;
+}
+
+#search-result-container
+{
+  margin-left: 24px;
+  margin-right: 85px;
+}
+
+#graph
+{
+  position:absolute;
+  z-index:0;
+  background-color: whitesmoke;
+}
+
+svg
+{
+  height: 100%;
+  /*position: absolute;
+  top: 0;*/
+}

@@ -430,10 +430,6 @@ private
       start_date = DateTime.strptime(params[:daterange].split(" - ").first,"%d/%m/%Y %H:%M").change(:offset => "-0300")
       end_date = DateTime.strptime(params[:daterange].split(" - ").last,"%d/%m/%Y %H:%M").change(:offset => "-0300")
 
-      puts "==============================================================="
-      puts start_date
-      puts end_date
-
       as = as.gte(:created_at => start_date)
       as = as.lte(:created_at => end_date)
     end
@@ -456,6 +452,10 @@ private
 
     if params.has_key?(:answer_ids)
       as = as.in(id: params[:answer_ids])
+    end
+
+    if params.has_key?(:tag_ids)
+      as = as.in(tag_ids: params[:tag_ids])
     end
 
     as

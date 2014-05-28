@@ -1,0 +1,16 @@
+<%= content_for :scripts do %>
+  <%= javascript_include_tag 'dashboard/search' %>
+<% end %>
+            
+<%= form_tag path, :remote => true, :method => :put, :id => form_id, :class => "search-bar" do %>
+    <div class="row" style="margin-right: -17px;">
+        <div class="col-md-12">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <%= text_field_tag "query", nil, :class => "form-control input", :placeholder => "Busca por palavra-chave ..." %>
+                <span class="input-group-btn"><%= button_tag "Buscar", :type => :submit, :class => "form-control btn btn-flat btn-primary" %></span>
+                <span class="input-group-btn"><%= button_tag raw("<i class='fa fa-filter'></i> Filtrar"), :class => "filters-btn form-control btn btn-flat btn-default" %></span>
+            </div>
+        </div>
+    </div>
+<% end %>
