@@ -1,7 +1,39 @@
 <%= content_for :scripts do %>
   <%= javascript_include_tag 'dashboard/resizeApp' %>
   <%= javascript_include_tag 'answers_panel/vivagraph' %>
+  <%= javascript_include_tag 'answers_panel/vivagraph' %>  
   <%= javascript_include_tag 'dashboard/graph.js' %>
+  <%= javascript_include_tag 'difflib' %>
+  <%= javascript_include_tag 'diffview' %>
+  <%= javascript_include_tag 'codemirror/lib/codemirror' %>
+  <%= javascript_include_tag 'codemirror/mode/pascal/pascal' %>
+  <%= javascript_include_tag 'codemirror/mode/ruby/ruby' %>
+  <%= javascript_include_tag 'codemirror/mode/clike/clike' %>
+  <%= javascript_include_tag 'prettify' %>  
+  <%= javascript_include_tag 'run_prettify' %>
+
+<script type="text/javascript">
+  function diffUsingJS(div_id,label1,txt1,label2,txt2){
+    // get the baseText and newText values from the two textboxes, and split them into lines
+    base = difflib.stringAsLines(txt1);//$("baseText").value);
+    newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+
+    //create a SequenceMatcher instance that diffs the two sets of lines
+    sm = new difflib.SequenceMatcher(base, newtxt);
+
+    // get the opcodes from the SequenceMatcher instance
+    // opcodes is a list of 3-tuples describing what changes should be made to the base text
+    // in order to yield the new text
+    opcodes = sm.get_opcodes();
+    diffoutputdiv = $("#"+div_id);
+    while(diffoutputdiv.firstChild)
+      diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+
+    //console.log opcodes
+
+    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+  }
+  </script>
 <% end %>
 
 <!-- Content Header (Page header) -->
@@ -21,6 +53,14 @@
 <!-- Main content -->
 <section class="content">
 
+    <div class="row">
+      <div id="answer-info" class="col-xs-4">
+        <div class="box box-solid" id="box-answer-info">
+
+        </div>
+      </div>
+    </div>
+
 
     <div class="row">
         <div id="toolbar" class="col-md-1">
@@ -33,7 +73,7 @@
                 </div>
                 <div class="toolbar-btn-element" style="left: 70px;">
                     <div class="col-md-10">
-                        <div class="row">
+                        <div class="row" style="pointer-events: initial;">
                             <div class="col-md-12 no-padding">
                                 <%= render(:partial => 'search_bar', :locals => { :form_id => "search-form", :path => dashboard_graph_search_path }) %>
                                 <%= render(:partial => 'search_filters', :locals => { :form_id => "search-form", :users => @users, :teams => @teams, :los => @los, :questions => @questions, :tags => @tags }) %>
@@ -46,7 +86,24 @@
                     </div>
                 </div>                    
                 <div class="toolbar-btn text-center">
-                    <%= button_tag raw("<i class='fa fa-plus'></i>"), :class => "btn btn-flat btn-default" %>
+                    <%= button_tag raw("<i class='fa fa-plus-circle'></i>"), :class => "btn btn-flat btn-default" %>
+                </div>
+            </div>
+
+            <div class="row toolbar-item">      
+                <div class="toolbar-btn-label">
+                    <div class="col-md-10">
+                        <span class="input-group-addon" >Remover respostas do grafo</span>
+                    </div>
+                </div> 
+                <div class="toolbar-btn-element">
+                    <div class="col-md-10">
+                        <span class="input-group-addon" >Clique nas respostas que deseja retirar do grafo<br />
+                        Pressione ESC para terminar</span>
+                    </div>
+                </div>                 
+                <div class="toolbar-btn text-center">
+                    <%= button_tag raw("<i class='fa fa-minus-circle''></i>"), :class => "btn btn-flat btn-default", :id => "remove-answer" %>
                 </div>
             </div>
 
@@ -64,14 +121,37 @@
             <div class="row toolbar-item">                
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
+                        <span class="input-group-addon" >Remover uma aresta</span>
+                    </div>
+                </div>               
+                <div class="toolbar-btn text-center">
+                    <%= button_tag raw("<i class='fa fa-times'></i>"), :class => "btn btn-flat btn-default" %>
+                </div>
+            </div>
+
+            <div class="row toolbar-item">                
+                <div class="toolbar-btn-label">
+                    <div class="col-md-10">
                         <span class="input-group-addon">Configurações do grafo</span>
                     </div>
                 </div>               
                 <div class="toolbar-btn text-center">
-                    <%= button_tag raw("<i class='fa fa-cogs'></i>"), :class => "btn btn-flat btn-default" %>
+                    <%= button_tag raw("<i class='fa fa-wrench'></i>"), :class => "btn btn-flat btn-default" %>
                 </div>
             </div>
-                
+
+            <div class="row toolbar-item">                
+                <div class="toolbar-btn-label">
+                    <div class="col-md-10">
+                        <span class="input-group-addon">Retornar ao centro do grafo</span>
+                    </div>
+                </div>               
+                <div class="toolbar-btn text-center">
+                    <%= button_tag raw("<i class='fa fa-map-marker'></i>"), :class => "btn btn-flat btn-default", :id => "reset-btn" %>
+                </div>
+            </div>
+
+               
             
         </div>
 

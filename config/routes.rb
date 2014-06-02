@@ -92,12 +92,6 @@ Carrie::Application.routes.draw do
     post "info_connection"
     put "search"
     put "fulltext_search"
-
-    put "add_tag"
-    post "create_tag"
-    delete "remove_tag"
-    put "accept_tag"
-    put "reject_tag"
   end
 
   namespace :dashboard do
@@ -110,7 +104,13 @@ Carrie::Application.routes.draw do
     put "fulltext_search"
 
     get "graph"
-    put "graph_search"    
+    put "graph_search" 
+    post "graph_answer_info"   
+    put "add_tag"
+    post "create_tag"
+    delete "remove_tag"
+    put "accept_tag"
+    put "reject_tag"
   end
 
   root to: "home#index"

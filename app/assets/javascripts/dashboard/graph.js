@@ -1,3 +1,24 @@
+function getQueryParams(qs) {
+    qs = qs.split("+").join(" ");
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+    while (tokens = re.exec(qs)) {
+      if(!params[decodeURIComponent(tokens[1])])
+        params[decodeURIComponent(tokens[1])] = []
+      
+      params[decodeURIComponent(tokens[1])].push(decodeURIComponent(tokens[2]));
+    }
+
+    return params;
+}
+
+var $_GET = getQueryParams(document.location.search);
+
+var status="normal";
+var selectedNode=null;
+
 // ===========================================================
 // GRAPH CORE
 
@@ -13,6 +34,18 @@ var nodes = []
 
 // ----------------------------------------------
 // Node draw function
+function paintNode(n){
+  var color,node;
+
+  node = graph.getNode(n)
+  if (node.data.correct)
+    color = "green";
+  else 
+    color = "black";
+    
+  $("#node-"+n).css('fill',color);
+}
+
 function nodeDraw(node){
 
     var color;
@@ -30,7 +63,8 @@ function nodeDraw(node){
     svgText.append(txt);
    
     var circle = Viva.Graph.svg('circle').attr('r', nodeSize/2)
-                                         .attr('fill', color);     
+                                         .attr('fill', color)
+                                         .attr('id',"node-"+node.id);    
 
     //var circle = Viva.Graph.svg('rect').attr('height', nodeSize)
     //                                     .attr('width', nodeSize)
@@ -53,13 +87,23 @@ function nodeDraw(node){
     $(circle).popover({delay: { show: 500, hide: 100 }});
 
     $(circle).dblclick(function(){
+      if(selectedNode){
+        paintNode(selectedNode);
+      }
 
-      $(".node_menu").animate({
-        left: "+=0",
+      $(this).css("fill","gray");
+      status = "selectedNode";
+      selectedNode = node.id;
+      $("#answer-info").show();
+      $("#box-answer-info").css("display","block");
+      $("#box-answer-info").removeClass("collapsed-box");
+      $("#box-answer-info .box-body").css("display","block");
+      $("#answer-info").animate({
+        height: $(".wrapper").height()*0.8,
       }, 500);
 
       $.ajax({
-        url: "/explorer/info_answer/",
+        url: "/dashboard/graph_answer_info/",
         type: "post",
         data: {id:node.id},
         dataType: "script",
@@ -67,13 +111,27 @@ function nodeDraw(node){
           console.log("OK");
         }
       });
-
       //var i;
 
       //for(i=0; i<node.data.similar_answers.length; i++)
       //{
       //  addAnswer(node.data.similar_answers[i]);
       //}
+    });
+
+    $(circle).hover(function(){
+      if(status == "removeAnswer")
+        $(this).css("fill","gray");
+    },
+    function(){
+      if(status != "selectedNode" || selectedNode != node.id){
+        paintNode(node.id);
+      }
+    });
+
+    $(circle).click(function(){
+      if(status == "removeAnswer")
+        graph.removeNode(node.id);
     });
 
     return ui;
@@ -89,8 +147,8 @@ function linkDraw(link){
     //graphics.getSvgRoot().childNodes[0].append(label);
     
     var edge = Viva.Graph.svg('path')
-                .attr('stroke', 'gray')
-                .attr('stroke-width',link.data.weight*10)
+                .attr('stroke', 'rgb('+Math.floor(255*link.data.weight)+',0,0)')
+                .attr('stroke-width',Math.floor(10*link.data.weight))
                 .attr('id', link.data.id);
 
     $(edge).data("content","conteúdo");
@@ -338,11 +396,6 @@ $(document).ready(function(){
     },10);
   });
 
-  addAnswer("535db8e23cc450f356000027");
-  //addAnswer("535db8fe3cc450f356000029");
-  //addAnswer("535f99fb3cc450f356000062");
-
-
   $.widget( "ui.autocomplete", $.ui.autocomplete, {
     _renderItem: function(ul,item) {
       return $( "<li>" )
@@ -384,10 +437,37 @@ $(document).ready(function(){
   );
 
   $("input[name='query']").keyup(function(e) {
-
+    e.stopPropagation();
     if (e.keyCode == 27){
       $("#search-result-container").hide();
     }
+  });
+
+  $("#remove-answer").click(function(){
+    if(status != "removeAnswer"){
+      status = "removeAnswer";
+      $("body").css("cursor","crosshair");
+    }
+    else{
+     status = "normal";
+     $("body").css("cursor","auto");
+    }
+  });
+
+  $(document).keyup(function(e) {
+    if(status == "removeAnswer"){
+      if (e.keyCode == 27){
+        $("#remove-answer").click();
+      }
+    }
+  });
+
+  $("input[name='query']").focusin(function(e) {
+      $("#search-result-container").show();
+  });
+
+  $("#graph").click(function(){
+    $("#search-result-container").hide();
   });
 
   $(".toolbar-item").each(function()
@@ -404,5 +484,20 @@ $(document).ready(function(){
       $(this).find(".toolbar-btn-element").css("top",0);
       $(this).find(".toolbar-btn-label").css("top",0); 
     }
+  });
+
+  $("#answer-info").height(0);
+  $("#answer-info").hide(0);
+
+  var k,i;
+  for (k in $_GET){
+    for(i=0;i<$_GET[k].length;i++){
+      if(k == "answer_id")
+        addAnswer($_GET[k][i]);
+    }
+  }
+
+  $("#reset-btn").click(function(){
+    renderer.reset();
   });
 });

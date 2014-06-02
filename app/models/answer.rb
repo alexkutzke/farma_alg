@@ -272,7 +272,7 @@ class Answer
     visited = []
 
     queue.push self.id
-    visited.push similar_answer
+    visited.push self.id
 
     while not queue.empty?
       answer_id = queue.shift
@@ -348,7 +348,7 @@ class Answer
         end
 
         for rejected in answer.rejected_tags do
-          unless (i = naat.index{ |x| x[2].to_s == current_user.id.to_s && x[0].to_s == rejected.to_s }).nil?
+          unless (i = naat.index{ |x| x[2].to_s == answers.id.to_s && x[0].to_s == rejected.to_s }).nil?
             naat.delete_at(i)
           end
         end

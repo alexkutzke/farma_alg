@@ -1,0 +1,54 @@
+$("#box-answer-info").html("<%= escape_javascript(render(:partial => 'graph_answer_info', :locals => {:answer => @answer, :notice => @notice}))%>");
+$("span.label").tooltip();
+
+var availableTags = <%= raw @available_tags.to_json %>;
+
+$( "#add_tag_field" ).autocomplete({
+  source: availableTags
+});
+
+$("#add_tag_field").focus();
+
+$(".remove_tag_link").click(function(){
+  $.ajax({
+    url: "/dashboard/remove_tag",
+    data: {
+      id: $(this).data("id"),
+      answer_id: $(this).data("answer-id")
+    },
+    type: "delete"    
+  });
+});
+
+$(".accept_tag_link").click(function(){
+  $.ajax({
+    url: "/dashboard/accept_tag",
+    data: {
+      id: $(this).data("id"),
+      answer_id: $(this).data("answer-id")
+    },
+    type: "put"    
+  });
+});
+
+$(".reject_tag_link").click(function(){
+  $.ajax({
+    url: "/dashboard/reject_tag",
+    data: {
+      id: $(this).data("id"),
+      answer_id: $(this).data("answer-id")
+    },
+    type: "put"    
+  });
+});
+
+$("#close-answer-info").click(function(){
+  $("#answer-info").height(0);
+  $("#answer-info").hide(0);
+
+  paintNode(selectedNode);
+  selectedNode = null;
+});
+
+resizeApp();
+prettyPrint();

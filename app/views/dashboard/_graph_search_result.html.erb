@@ -2,7 +2,7 @@
   <div class="col-md-12 text-center" style="margin-bottom:20px;">
     <%= as.count %> respostas encontradas.
       <% if as.count > 0 %>
-          
+        <%= button_tag raw("<i class='fa fa-plus'></i> Adicionar todas as respostas encontradas"), :class => "btn btn-small btn-default", :id => "add-all" %>
         <table class="table table-hover">
           <tr>
             <th></th>
@@ -17,9 +17,9 @@
           <% as.each do |a| %>
 
             <% if a.correct %>
-              <tr class="success answer">  
+              <tr class="success answer" data-answer-id="<%= a.id %>">  
             <% else %>
-              <tr class="danger  answer">
+              <tr class="danger  answer" data-answer-id="<%= a.id %>">
             <% end %>
     
               <td>

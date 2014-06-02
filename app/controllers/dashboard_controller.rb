@@ -14,16 +14,6 @@ class DashboardController < ApplicationController
 	def home
 	end
 
-  def graph
-    init_search
-  end
-
-  def graph_search
-    @as = Answer.search(params,current_user)
-    
-    render 'graph_search_result'
-  end
-
   def timeline
     init_search
   end
@@ -43,4 +33,97 @@ class DashboardController < ApplicationController
 
     render 'search_result'
   end
+  
+  def graph
+    init_search
+  end
+
+  def graph_search
+    @as = Answer.search(params,current_user)
+    
+    render 'graph_search_result'
+  end
+
+  def graph_answer_info
+    @answer = Answer.find(params[:id])
+    @available_tags = @answer.available_tags
+  end
+
+  # ================================================================
+  # ================================================================
+  # TAGS MANIPULATION
+  def add_tag
+    tag = Tag.where(:name => params[:query])
+    @answer = Answer.find(params[:answer_id])
+
+    if tag.count > 0
+      @answer.tags << tag.first
+      @answer.rejected_tags.delete(tag.first.id.to_s)
+      @answer.save!
+
+      @answer.schedule_process_propagate
+
+      @available_tags = @answer.available_tags
+      render :graph_answer_info
+    else
+      @tag = Tag.new
+      @tag.name = params[:query]
+      render :new_tag
+    end
+  end
+
+  def create_tag
+    @tag = Tag.new(params[:tag])
+
+    if @tag.save
+      @answer = Answer.find(params[:answer_id])
+      @answer.tags << @tag
+      @answer.save!
+
+      @answer.schedule_process_propagate
+
+      @available_tags = @answer.available_tags
+      @notice = "Tag #{@tag.name} criada com sucesso!"
+    end
+
+    render :graph_answer_info
+  end
+
+  def remove_tag
+    @answer = Answer.find(params[:answer_id])
+    @answer.tags.delete(Tag.find(params[:id]))
+    @answer.rejected_tags << params[:id]
+    @answer.save!
+
+    @answer.schedule_process_propagate
+    @available_tags = @answer.available_tags
+
+    render :graph_answer_info
+  end
+
+  def accept_tag
+    @answer = Answer.find(params[:answer_id])
+    @tag = Tag.find(params[:id])
+
+    @answer.tags << @tag
+
+    i = @answer.automatically_assigned_tags.index{ |x| x[0].to_s == @tag.id.to_s }
+    @answer.automatically_assigned_tags.delete_at(i)
+    @answer.save!
+    render :graph_answer_info
+  end
+
+  def reject_tag
+    @answer = Answer.find(params[:answer_id])
+
+    @tag = Tag.find(params[:id])
+
+    i = @answer.automatically_assigned_tags.index{ |x| x[0].to_s == @tag.id.to_s }
+    @answer.automatically_assigned_tags.delete_at(i)
+    @answer.rejected_tags << @tag.id.to_s
+    @answer.save!    
+    render :graph_answer_info
+  end
+  # ================================================================
+  # ================================================================
 end

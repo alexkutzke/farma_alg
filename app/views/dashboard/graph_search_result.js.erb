@@ -11,3 +11,13 @@ $('.answer').each(function() {
 $('.answer').each(function() {
 	$(this).delay((i++)*50).fadeIn();
 });
+
+$("tr.answer").click(function(){
+  addAnswer($(this).data("answer-id"));
+});
+
+$("#add-all").click(function(){
+  $("tr.answer").each(function(e){
+    addAnswer($(this).data("answer-id")); 
+  });
+});

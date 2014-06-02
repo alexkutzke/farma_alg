@@ -44,7 +44,7 @@ $(function() {
     /*     
      * Add collapse and remove events to boxes
      */
-    $("[data-widget='collapse']").click(function() {
+    $(document).on("click","[data-widget='collapse']",function() {
         //Find the box parent        
         var box = $(this).parents(".box").first();
         //Find the body and the footer
@@ -82,7 +82,7 @@ $(function() {
 
     });
 
-    $("[data-widget='remove']").click(function() {
+    $(document).on("click","[data-widget='remove']",function() {
         //Find the box parent        
         var box = $(this).parents(".box").first();
         box.slideUp();

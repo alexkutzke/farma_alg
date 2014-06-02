@@ -9,6 +9,8 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require diffview
+ *= require jquery.ui.all
+ *= require bootstrap-modal
  *= require AdminLTE/bootstrap
  *= require AdminLTE/font-awesome
  *= require AdminLTE/ionicons
@@ -92,12 +94,14 @@
   width: 0px;
   left: 49px; 
   overflow-x:hidden;
+  pointer-events:none;
 }
 
 #search-result-container
 {
   margin-left: 24px;
   margin-right: 124px;
+  pointer-events: initial;
 }
 
 #graph
@@ -119,3 +123,22 @@
 {
   height: 100%;
 }
+
+#answer-info
+{
+  position: absolute;
+  right: 10px;
+  overflow-y: hidden;
+  pointer-events:none;
+}
+
+#box-answer-info
+{
+ pointer-events:initial;
+}
+
+#box-answer-info .box-body
+{
+ overflow-y: auto;
+}
+
