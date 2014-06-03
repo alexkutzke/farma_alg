@@ -51,6 +51,8 @@ class DashboardController < ApplicationController
 
   def graph_connection_info
     @connection = Connection.find(params[:id])
+    @answer1 = Answer.find(@connection.answer_id)
+    @answer2 = Answer.find(@connection.target_answer_id)
   end
 
   # ================================================================

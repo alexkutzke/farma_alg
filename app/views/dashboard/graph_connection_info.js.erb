@@ -1,4 +1,4 @@
-$("#box-answer-info").html("<%= escape_javascript(render(:partial => 'graph_connection_info', :locals => {:connection => @connection, :notice => @notice}))%>");
+$("#box-answer-info").html("<%= escape_javascript(render(:partial => 'graph_connection_info', :locals => {:connection => @connection, :notice => @notice, :answer1 => @answer1, :answer2 => @answer2}))%>");
 $("span.label").tooltip();
 
 $("#close-answer-info").click(function(){
@@ -16,6 +16,48 @@ $("#close-answer-info").click(function(){
     selectedNode = null;
   }
 });
+
+$("div.response").each(function(){
+  diffUsingJS("response-"+$(this).data("id"),"<%= @answer1.user.name + " @ " + @answer1.question.title + " #" + @answer1.try_number.to_s %>",$(this).data("response"),"<%= @answer2.user.name + " @ " + @answer2.question.title + " #" + @answer2.try_number.to_s %>",$(this).data("previous"));
+});
+
+$("#reject-edge").click(function(){
+  $("#alert-reject-edge").fadeToggle();
+});
+
+$("#cancel-reject-edge").click(function(){
+  $("#alert-reject-edge").fadeToggle();
+});
+
+function confirmRejectEdge(data){
+  graph.forEachLink(function(link){
+    if(link.data.id == data[0].id || link.data.id == data[1].id )
+    {
+      graph.removeLink(link);
+    }
+  });
+  
+  $("#close-answer-info").click();
+}
+
+$("#confirm-reject-edge").click(function(){
+  $.ajax({
+    url: "/newapi/connections/<%= @connection.id %>/reject_connection",
+    type: "delete",
+    success: confirmRejectEdge
+  });
+});
+
+$("#accept-edge").click(function(){
+  $("#alert-accept-edge").fadeToggle();
+});
+
+$("#cancel-accept-edge").click(function(){
+  $("#alert-accept-edge").fadeToggle();
+});
+
+
+
 
 resizeApp();
 prettyPrint();

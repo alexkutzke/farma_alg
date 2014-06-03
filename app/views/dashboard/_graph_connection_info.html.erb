@@ -8,7 +8,8 @@
     </div>
 </div>
 <div class="box-body resize" data-resize-operation-height="(($(window).height()-$('.header').height()-$('.content-header').height()-28)*0.8)-100" >
-
+<div class="row">
+  <div class="col-xs-12">
     <% unless @notice.nil? %>
     <div class="alert alert-success">
       <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -16,15 +17,105 @@
     </div>
     <% end %>
 
-    <% if connection.test_case_similarity.nil? %>
-      Sem informações sobre a relação.
-    <% else %>
-    <% connection.test_case_similarity.each do |k,v| %>
-      <p>
-        <%= raw test_case_similarity_in_words(k,v) %>
-      </p>
-    <% end %>
+    <p class="text-center">
+      <% if connection.confirmed %>
+      <span class="label label-warning"><b>Similaridade confirmada manualmente</b></span>
+      <% else %>
+        <b>Grau de semelhanca: </b>
+        <%= connection.weight %>
+      <% end %>
+    </p>
+
+    <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal">
+      Comparar respostas
+    </button>
+
+    <% unless connection.confirmed %>
+      <button class="btn btn-success btn-block" id="accept-edge">
+        Confirmar similaridade
+      </button>
+
+          <div id="alert-accept-edge" class="alert alert-success" style="display:none;">
+            <h4>Você tem certeza?</h4>
+            <p>Ao aceitar esta relação, as duas respostas serão consideradas semelhantes.</p>
+            <p>
+              <button id="confirm-accept-edge" type="button" class="btn btn-success">Confirmar</button>
+              <button id="cancel-accept-edge" type="button" class="btn btn-default">Cancelar</button>
+            </p>
+          </div>   
+    <% end %>   
+
+      <button class="btn btn-danger btn-block" id="reject-edge" style="margin-top:5px;">
+        Rejeitar similaridade
+      </button>
+          <div id="alert-reject-edge" class="alert alert-danger" style="display:none;">
+            <h4>Você tem certeza?</h4>
+            <p>Ao rejeitar esta relação ela deixará de existir no banco de dados.</p>
+            <p>Para adicioná-la novamente, uma nova aresta deverá ser criada manualmente através do grafo de manipulação.</p>
+            <p>
+              <button id="confirm-reject-edge" type="button" class="btn btn-danger">Confirmar</button>
+              <button id="cancel-reject-edge" type="button" class="btn btn-default">Cancelar</button>
+            </p>
+          </div>      
+    
+    </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+
+    <hr />
+    <h4>Comparação dos casos de teste</h4>
+
+    <% unless connection.test_case_similarity.nil? %>
+      <% connection.test_case_similarity.each do |k,v| %>
+        <% t = test_case_title(k) %>
+        <% unless t.nil? %>
+          <div class="row">
+            <div class="col-xs-12">
+              <% if v['error'] != 1 %>
+                <div class="box box-success collapsed-box">
+              <% else %>  
+                <div class="box box-danger collapsed-box">
+              <% end %>
+                <div class="box-header">
+                  <h3 class="box-title">
+                    <%= t %>    
+                  </h3>
+                  <div class="box-tools pull-right">
+                      <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      <button class="btn btn-default btn-sm" data-widget="remove" id="close-answer-info"><i class="fa fa-times"></i></button>
+                  </div>
+                </div>
+                <div class="box-body" style="display: none;">
+                  <%= raw test_case_similarity_in_words(k,v) %>            
+                </div><!-- /.box-body -->
+
+              </div>
+            </div>
+          </div>
+        <% end %>
+        
+        
+      <% end %>
 
     <% end %>
-
+    </div>
+</div>
 </div><!-- /.box-body -->
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg my-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Comparação de respostas</h4>
+      </div>
+      <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
+        <div id="response-<%= answer1.id %>">
+          <div class="response" data-response="<%= answer1.response %>" data-previous="<%= answer2.response %>" data-id="<%= answer1.id %>"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

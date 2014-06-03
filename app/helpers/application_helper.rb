@@ -10,6 +10,15 @@ module ApplicationHelper
         
   end
 
+  def test_case_title(id)
+    t = TestCase.find_or_initialize_by({:id => id})
+    if not t.new_record?
+      t.title
+    else
+      nil
+    end
+  end
+
   def test_case_similarity_in_words(id,tcs)
     t = TestCase.find_or_initialize_by({:id => id})
 
@@ -21,7 +30,7 @@ module ApplicationHelper
 
       if tcs['error'] == 1
         if tcs['both_error'] == 1
-          output = output + "As duas respostas <span class=\"label label-important\">falharam</span> no caso de teste <b>" + t.title + "</b>"
+          output = output + "As duas respostas <span class=\"label label-danger\">falharam</span> no caso de teste <b>" + t.title + "</b>"
 
           if tcs['same_error'] == 1
             output = output + ", apresentando o mesmo erro."
@@ -29,7 +38,7 @@ module ApplicationHelper
             output = output + ", apresentando erros de tipos diferentes."
           end
         else
-          output = output + "Pelo menos uma das respostas <span class=\"label label-important\">falhou</span> no caso de teste <b>" + t.title + "</b>."
+          output = output + "Pelo menos uma das respostas <span class=\"label label-danger\">falhou</span> no caso de teste <b>" + t.title + "</b>."
         end
       else
         output = output + "As duas respostas foram <span class=\"label label-success\">corretas</span> no caso de teste <b>" + t.title + "</b>"      

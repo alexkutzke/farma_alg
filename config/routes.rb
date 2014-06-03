@@ -62,7 +62,12 @@ Carrie::Application.routes.draw do
         get "connections"
       end
     end
-    resources :connections, :only => [:create]
+    resources :connections, :only => [:create] do
+      member do
+        delete "reject_connection"
+        put "accept_connection"
+      end
+    end
   end
 
   namespace :panel do
