@@ -1,0 +1,30 @@
+<div class="box-header">
+  <h3 class="box-title">
+    Detalhes da relação
+  </h3>
+    <div class="box-tools pull-right">
+        <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        <button class="btn btn-default btn-sm" data-widget="remove" id="close-answer-info"><i class="fa fa-times"></i></button>
+    </div>
+</div>
+<div class="box-body resize" data-resize-operation-height="(($(window).height()-$('.header').height()-$('.content-header').height()-28)*0.8)-100" >
+
+    <% unless @notice.nil? %>
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      Tag criada com sucesso.
+    </div>
+    <% end %>
+
+    <% if connection.test_case_similarity.nil? %>
+      Sem informações sobre a relação.
+    <% else %>
+    <% connection.test_case_similarity.each do |k,v| %>
+      <p>
+        <%= raw test_case_similarity_in_words(k,v) %>
+      </p>
+    <% end %>
+
+    <% end %>
+
+</div><!-- /.box-body -->

@@ -1,0 +1,21 @@
+$("#box-answer-info").html("<%= escape_javascript(render(:partial => 'graph_connection_info', :locals => {:connection => @connection, :notice => @notice}))%>");
+$("span.label").tooltip();
+
+$("#close-answer-info").click(function(){
+  $("#answer-info").height(0);
+  $("#answer-info").hide(0);
+
+  if(selectedNode)
+  {
+    paintNode(selectedNode);
+    selectedNode = null;
+  }
+  if(selectedEdge)
+  {
+    paintEdge(selectedEdge);
+    selectedNode = null;
+  }
+});
+
+resizeApp();
+prettyPrint();
