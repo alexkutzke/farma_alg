@@ -49,10 +49,14 @@ class DashboardController < ApplicationController
     @available_tags = @answer.available_tags
   end
 
+  def graph_connection_info
+    @connection = Connection.find(params[:id])
+  end
+
   # ================================================================
   # ================================================================
   # TAGS MANIPULATION
-  def add_tag
+  def graph_add_tag
     tag = Tag.where(:name => params[:query])
     @answer = Answer.find(params[:answer_id])
 
@@ -68,11 +72,11 @@ class DashboardController < ApplicationController
     else
       @tag = Tag.new
       @tag.name = params[:query]
-      render :new_tag
+      render :graph_new_tag
     end
   end
 
-  def create_tag
+  def graph_create_tag
     @tag = Tag.new(params[:tag])
 
     if @tag.save
@@ -89,7 +93,7 @@ class DashboardController < ApplicationController
     render :graph_answer_info
   end
 
-  def remove_tag
+  def graph_remove_tag
     @answer = Answer.find(params[:answer_id])
     @answer.tags.delete(Tag.find(params[:id]))
     @answer.rejected_tags << params[:id]
@@ -101,7 +105,7 @@ class DashboardController < ApplicationController
     render :graph_answer_info
   end
 
-  def accept_tag
+  def graph_accept_tag
     @answer = Answer.find(params[:answer_id])
     @tag = Tag.find(params[:id])
 
@@ -113,7 +117,7 @@ class DashboardController < ApplicationController
     render :graph_answer_info
   end
 
-  def reject_tag
+  def graph_reject_tag
     @answer = Answer.find(params[:answer_id])
 
     @tag = Tag.find(params[:id])

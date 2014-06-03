@@ -113,7 +113,7 @@
 
     <h5>Inserir tag</h5>
     <div>
-      <%= form_tag dashboard_add_tag_path, :remote => true, :method => :put, :id => "add_tag_form" do %>
+      <%= form_tag dashboard_graph_add_tag_path, :remote => true, :method => :put, :id => "add_tag_form" do %>
         <%= text_field_tag "query", nil, :class => "form-control input", :id => "add_tag_field" %>
         <%= hidden_field_tag 'answer_id', @answer.id %>
       <% end %>

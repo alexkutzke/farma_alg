@@ -62,6 +62,7 @@ Carrie::Application.routes.draw do
         get "connections"
       end
     end
+    resources :connections, :only => [:create]
   end
 
   namespace :panel do
@@ -106,11 +107,12 @@ Carrie::Application.routes.draw do
     get "graph"
     put "graph_search" 
     post "graph_answer_info"   
-    put "add_tag"
-    post "create_tag"
-    delete "remove_tag"
-    put "accept_tag"
-    put "reject_tag"
+    post "graph_connection_info"   
+    put "graph_add_tag"
+    post "graph_create_tag"
+    delete "graph_remove_tag"
+    put "graph_accept_tag"
+    put "graph_reject_tag"
   end
 
   root to: "home#index"

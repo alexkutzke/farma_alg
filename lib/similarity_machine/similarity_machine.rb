@@ -104,13 +104,12 @@ module SimilarityMachine
     result
   end
 
-  def self.create_connection(a,b)
-    
+  def self.create_connection(a,b)    
     c = nil
     result = similarity(a,b)
-
+    c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
+    
     if result['final_similarity'] > 0.4
-      c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
       c.code_similarity = result['code_similarity']
       c.both_compile_errors = result['both_compile_errors']
       c.compile_errors_similarity = result['compile_errors_similarity']

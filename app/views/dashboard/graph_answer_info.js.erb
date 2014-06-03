@@ -11,7 +11,7 @@ $("#add_tag_field").focus();
 
 $(".remove_tag_link").click(function(){
   $.ajax({
-    url: "/dashboard/remove_tag",
+    url: "/dashboard/graph_remove_tag",
     data: {
       id: $(this).data("id"),
       answer_id: $(this).data("answer-id")
@@ -22,7 +22,7 @@ $(".remove_tag_link").click(function(){
 
 $(".accept_tag_link").click(function(){
   $.ajax({
-    url: "/dashboard/accept_tag",
+    url: "/dashboard/graph_accept_tag",
     data: {
       id: $(this).data("id"),
       answer_id: $(this).data("answer-id")
@@ -33,7 +33,7 @@ $(".accept_tag_link").click(function(){
 
 $(".reject_tag_link").click(function(){
   $.ajax({
-    url: "/dashboard/reject_tag",
+    url: "/dashboard/graph_reject_tag",
     data: {
       id: $(this).data("id"),
       answer_id: $(this).data("answer-id")
@@ -46,8 +46,16 @@ $("#close-answer-info").click(function(){
   $("#answer-info").height(0);
   $("#answer-info").hide(0);
 
-  paintNode(selectedNode);
-  selectedNode = null;
+  if(selectedNode)
+  {
+    paintNode(selectedNode);
+    selectedNode = null;
+  }
+  if(selectedEdge)
+  {
+    paintEdge(selectedEdge);
+    selectedNode = null;
+  }
 });
 
 resizeApp();

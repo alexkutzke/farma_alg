@@ -1,3 +1,4 @@
+// Get the GET params
 function getQueryParams(qs) {
     qs = qs.split("+").join(" ");
     var params = {},
@@ -16,8 +17,13 @@ function getQueryParams(qs) {
 
 var $_GET = getQueryParams(document.location.search);
 
+// Status vars
 var status="normal";
 var selectedNode=null;
+var selectedEdge=null;
+var firstNode=null;
+var secondNode=null;
+var running=true;
 
 // ===========================================================
 // GRAPH CORE
@@ -49,6 +55,7 @@ function paintNode(n){
 function nodeDraw(node){
 
     var color;
+
     if (node.data.correct)
       color = "green";
     else 
@@ -65,10 +72,6 @@ function nodeDraw(node){
     var circle = Viva.Graph.svg('circle').attr('r', nodeSize/2)
                                          .attr('fill', color)
                                          .attr('id',"node-"+node.id);    
-
-    //var circle = Viva.Graph.svg('rect').attr('height', nodeSize)
-    //                                     .attr('width', nodeSize)
-    //                                     .attr('fill',color);     
 
     ui.append(svgText);
     ui.append(circle);
@@ -91,9 +94,14 @@ function nodeDraw(node){
         paintNode(selectedNode);
       }
 
-      $(this).css("fill","gray");
+      if(selectedEdge){
+        paintEdge(selectedEdge);
+      }
+
+      $(this).css("fill","yellow");
       status = "selectedNode";
       selectedNode = node.id;
+
       $("#answer-info").show();
       $("#box-answer-info").css("display","block");
       $("#box-answer-info").removeClass("collapsed-box");
@@ -111,27 +119,39 @@ function nodeDraw(node){
           console.log("OK");
         }
       });
-      //var i;
-
-      //for(i=0; i<node.data.similar_answers.length; i++)
-      //{
-      //  addAnswer(node.data.similar_answers[i]);
-      //}
     });
 
-    $(circle).hover(function(){
-      if(status == "removeAnswer")
-        $(this).css("fill","gray");
-    },
-    function(){
-      if(status != "selectedNode" || selectedNode != node.id){
-        paintNode(node.id);
+    $(circle).hover(
+      function(){
+      if(status == "removeAnswer"){
+        $(this).css("fill","red");
       }
-    });
+      else if(status == "addEdge"){
+        $(this).css("fill","red");
+      }
+    },
+      function(){
+        if((status != "selectedNode" && status != "addEdge") || (selectedNode != node.id && firstNode != node.id && secondNode != node.id)){
+          paintNode(node.id);
+        }
+      }
+    );
 
     $(circle).click(function(){
-      if(status == "removeAnswer")
+      if(status == "removeAnswer"){
         graph.removeNode(node.id);
+      }
+      else if(status == "addEdge"){
+        if(!firstNode){
+          firstNode = node.id;
+          $(this).css("fill","yellow");
+        }
+        else{
+          secondNode = node.id;
+          $(this).css("fill","yellow");
+          addEdge(firstNode,secondNode);
+        }
+      }
     });
 
     return ui;
@@ -139,17 +159,20 @@ function nodeDraw(node){
 
 // ----------------------------------------------
 // Link draw function
+function paintEdge(e){
+  var color;
+
+  color = 'rgb('+Math.floor(255*parseFloat($("#edge-"+e).data("weight")))+',0,0)';   
+
+  $("#edge-"+e).attr('stroke',color);
+}
+
 function linkDraw(link){
-    // Cria objeto de texto
-    //var label = Viva.Graph.svg('text').attr('id','label_'+link.data.id).text('');//link.data.weight);
-    
-    // Adiciona o objeto de texto ao root svg
-    //graphics.getSvgRoot().childNodes[0].append(label);
-    
     var edge = Viva.Graph.svg('path')
                 .attr('stroke', 'rgb('+Math.floor(255*link.data.weight)+',0,0)')
                 .attr('stroke-width',Math.floor(10*link.data.weight))
-                .attr('id', link.data.id);
+                .attr('id', "edge-"+link.data.id)
+                .attr('data-weight', link.data.weight);
 
     $(edge).data("content","conteúdo");
     $(edge).data("original-title","título");
@@ -158,12 +181,32 @@ function linkDraw(link){
     $(edge).popover();
 
     $(edge).dblclick(function(){
+      if(selectedNode){
+        paintNode(selectedNode);
+      }
+
+      if(selectedEdge){
+        paintEdge(selectedEdge);
+      }
+
+      $("#edge-"+link.data.id).attr('stroke',"yellow");
+
+      selectedEdge = link.data.id;
+
+      $("#answer-info").show();
+      $("#box-answer-info").css("display","block");
+      $("#box-answer-info").removeClass("collapsed-box");
+      $("#box-answer-info .box-body").css("display","block");
+      $("#answer-info").animate({
+        height: $(".wrapper").height()*0.8,
+      }, 500);
+
       $(".node_menu").animate({
         left: "+=0",
       }, 500);
 
       $.ajax({
-        url: "/explorer/info_connection/",
+        url: "/dashboard/graph_connection_info/",
         type: "post",
         data: {id:link.data.id},
         dataType: "script",
@@ -202,11 +245,6 @@ function linkPositioning(linkUI, fromPos, toPos) {
     var data = 'M' + from.x + ',' + from.y + 'L' + to.x + ',' + to.y;
 
     linkUI.attr("d", data);
-  
-    // Adiciona o objeto de texto à aresta
-    //document.getElementById('label_'+linkUI.attr('id'))
-    //                      .attr("x", (from.x + to.x) / 2)
-    //                      .attr("y", (from.y + to.y) / 2);
 }
 
 // ----------------------------------------------
@@ -276,7 +314,6 @@ function defaultBeforeSend(item)
 
 // ===========================================================
 // Graph manipulation functions
-
 function getAnswerSuccess(data)
 {
   console.log(data);
@@ -308,83 +345,48 @@ function addAnswer(id)
   getAnswer(id,defaultBeforeSend,getAnswerSuccess);
 }
 
+function addEdgeSuccess(data)
+{
+  $("#add-edge").click();
+  graph.addLink(data.answer_id, data.target_answer_id, {id: data.id, weight : data.weight});
+}
+
+function addEdge(node1_id,node2_id)
+{
+  if(node1_id == node2_id)
+    return(false);
+  $.ajax({
+    url: "/newapi/connections/",
+    type: "post",
+    data:{
+      answer1_id: node1_id,
+      answer2_id: node2_id
+    },
+    beforeSend: defaultBeforeSend("add-connections"),
+    success: addEdgeSuccess
+  });
+}
+
 // ===========================================================
 // DOCUMENT READY
 var mouse_x,mouse_y;
 
 $(document).ready(function(){
 
+  // Initialize functions
   resizeApp();
-
-  $( "input[type='checkbox']" ).change(function() {
-    $("#search_form").submit();
-  });
-
-  //$( "input[type='text']" ).change(function() {
-    //$("#fulltext_search_form").submit();
-  //});
-
-  $(".menu").hover(
-    function() {
-          //console.log("="+($(window).height()-$(this).height()).toString());
-      $(this).animate({
-        top: "+="+($(window).height()-$(this).height()).toString(),
-      }, 500);
-
-      
-    }, function() {
-      $(this).animate({
-        top: "+="+($(window).height()-10).toString(),
-      }, 500);
-    }
-  );
-
-  $(".node_menu").on('click','#hide_node_menu',function(){
-      $(".node_menu").animate({
-        left: "-=300",
-      }, 500);
-    }
-  );
-  
   draw();
 
-  $(document).mousemove(function(e){
-    mouse_x = e.pageX;
-    mouse_y = e.pageY;
-  });
+  $("#answer-info").height(0);
+  $("#answer-info").hide(0);
 
-  $("#answers").on('click','.addNode',function(){
-    addAnswer($(this).data("id"));
-  });
-
-  $(".node_menu").on('click','#show_code',function(){
-    $(".code-modal-body").modal();
-
-    $(".code-modal-body").height($(window).height() - 50);
-    $(".code-modal-body").width($(window).width() - 50);
-    $(".code-modal-body").css("top","15px");
-    $(".code-modal-body").css("left","15px");
-    $(".code-modal-body").css("margin","0");
-  });
-
-  $(".node_menu").on('click','#show_diff',function(){
-    $(".code-modal-body").modal();
-    $(".code-modal-body").height($(window).height() - 50);
-    $(".code-modal-body").width($(window).width() - 50);
-    $(".code-modal-body").css("top","15px");
-    $(".code-modal-body").css("left","15px");
-    $(".code-modal-body").css("margin","0");
-  });
-
-  $("")
-
-
-  $( ".menu" ).css("top",($(window).height()-10)+"px");
-  $( ".menu" ).resizable({
-      maxHeight: $(window).height()-200,
-      minHeight: 10,
-      handles: "n"
-    });
+  var k,i;
+  for (k in $_GET){
+    for(i=0;i<$_GET[k].length;i++){
+      if(k == "answer_id")
+        addAnswer($_GET[k][i]);
+    }
+  }
 
   $("body").on("DOMNodeInserted",".popover", function(){
     var y = mouse_y - $(this).height()-20;
@@ -392,7 +394,6 @@ $(document).ready(function(){
     var pop = $(this);
     window.setTimeout(function(){
       $(pop).attr("style","top: " +y+"px;left: "+x+"px; display: block;");
-     // console.log($(pop));
     },10);
   });
 
@@ -403,7 +404,7 @@ $(document).ready(function(){
             .append( $( "<a>" ).text( item.label ) )
             .appendTo( ul );
     }
-});
+  });
 
   $("[data-toggle='offcanvas']").click(function(){
     resizeApp();
@@ -419,7 +420,6 @@ $(document).ready(function(){
       bar.removeClass("open");
       bar.animate({width: 0},500) 
     }
-
   })
 
   $(".toolbar-btn").hover(
@@ -443,6 +443,27 @@ $(document).ready(function(){
     }
   });
 
+  $("#add-edge").click(function(){
+    if(status != "addEdge"){
+      status = "addEdge";
+      firstNode = null;
+      secondNode = null;
+      $("body").css("cursor","crosshair");
+    }
+    else{
+     status = "normal";
+     if(firstNode)
+      paintNode(firstNode);
+
+     if(secondNode)
+      paintNode(secondNode);
+
+     firstNode = null;
+     secondNode = null;
+     $("body").css("cursor","auto");
+    }
+  });
+
   $("#remove-answer").click(function(){
     if(status != "removeAnswer"){
       status = "removeAnswer";
@@ -458,6 +479,11 @@ $(document).ready(function(){
     if(status == "removeAnswer"){
       if (e.keyCode == 27){
         $("#remove-answer").click();
+      }
+    }
+    if(status == "addEdge"){
+      if (e.keyCode == 27){
+        $("#add-edge").click();
       }
     }
   });
@@ -486,18 +512,25 @@ $(document).ready(function(){
     }
   });
 
-  $("#answer-info").height(0);
-  $("#answer-info").hide(0);
-
-  var k,i;
-  for (k in $_GET){
-    for(i=0;i<$_GET[k].length;i++){
-      if(k == "answer_id")
-        addAnswer($_GET[k][i]);
-    }
-  }
-
   $("#reset-btn").click(function(){
     renderer.reset();
+  });
+
+  $("#pause-btn").click(function(){
+    if(running){
+      renderer.pause();
+      running = false;
+    }
+    else{
+      renderer.resume();
+      running = true;
+    }
+  });
+
+
+  // Other stuff
+  $(document).mousemove(function(e){
+    mouse_x = e.pageX;
+    mouse_y = e.pageY;
   });
 });

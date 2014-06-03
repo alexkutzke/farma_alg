@@ -86,7 +86,7 @@
                     </div>
                 </div>                    
                 <div class="toolbar-btn text-center">
-                    <%= button_tag raw("<i class='fa fa-plus-circle'></i>"), :class => "btn btn-flat btn-default" %>
+                    <%= button_tag raw("<i class='fa fa-plus-circle'></i>"), :class => "btn btn-flat btn-default",:id => "add-node" %>
                 </div>
             </div>
 
@@ -112,20 +112,15 @@
                     <div class="col-md-10">
                         <span class="input-group-addon" >Adicionar uma aresta</span>
                     </div>
-                </div>               
-                <div class="toolbar-btn text-center">
-                    <%= button_tag raw("<i class='fa fa-code-fork''></i>"), :class => "btn btn-flat btn-default" %>
-                </div>
-            </div>
-
-            <div class="row toolbar-item">                
-                <div class="toolbar-btn-label">
+                </div>    
+                <div class="toolbar-btn-element">
                     <div class="col-md-10">
-                        <span class="input-group-addon" >Remover uma aresta</span>
+                        <span class="input-group-addon" >Selecione duas respostas no grafo para adicionar uma aresta<br />
+                        Pressione ESC para terminar</span>
                     </div>
-                </div>               
+                </div>           
                 <div class="toolbar-btn text-center">
-                    <%= button_tag raw("<i class='fa fa-times'></i>"), :class => "btn btn-flat btn-default" %>
+                    <%= button_tag raw("<i class='fa fa-code-fork''></i>"), :class => "btn btn-flat btn-default", :id => "add-edge"  %>
                 </div>
             </div>
 
@@ -143,6 +138,17 @@
             <div class="row toolbar-item">                
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
+                        <span class="input-group-addon">Pausa/Recomeça o movimento do grafo</span>
+                    </div>
+                </div>               
+                <div class="toolbar-btn text-center">
+                    <%= button_tag raw("<i class='fa fa-pause'></i>"), :class => "btn btn-flat btn-default", :id => "pause-btn" %>
+                </div>
+            </div>
+
+            <div class="row toolbar-item">                
+                <div class="toolbar-btn-label">
+                    <div class="col-md-10">
                         <span class="input-group-addon">Retornar ao centro do grafo</span>
                     </div>
                 </div>               
@@ -151,7 +157,16 @@
                 </div>
             </div>
 
-               
+            <div class="row toolbar-item">                
+                <div class="toolbar-btn-label">
+                    <div class="col-md-10">
+                        <span class="input-group-addon" >Instruções de uso</span>
+                    </div>
+                </div>               
+                <div class="toolbar-btn text-center">
+                    <%= button_tag raw("<i class='fa fa-question'></i>"), :class => "btn btn-flat btn-default" %>
+                </div>
+            </div>               
             
         </div>
 
