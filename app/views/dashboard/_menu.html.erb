@@ -7,11 +7,13 @@
         <% end %>
     </li>
 
+<% if current_user.admin? %>
     <li class="<%= raw "class" if controller.class == DashboardController && controller.action_name == "graph" %>">
         <%= link_to dashboard_graph_path do %>
           <i class="fa fa-code-fork"></i> <span>Grafo de Manipulação</span>
         <% end %>
     </li>
+<% end %>
 
     <li class="<%= raw "class" if controller.class == DashboardController && controller.action_name == "timeline" %>">
         <%= link_to dashboard_timeline_path do %>

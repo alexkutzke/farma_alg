@@ -56,8 +56,17 @@ $("#cancel-accept-edge").click(function(){
   $("#alert-accept-edge").fadeToggle();
 });
 
+function confirmAcceptEdge(data){
+  $("#edge-"+data.id).dblclick();
+}
 
-
+$("#confirm-accept-edge").click(function(){
+  $.ajax({
+    url: "/newapi/connections/<%= @connection.id %>/accept_connection",
+    type: "put",
+    success: confirmAcceptEdge
+  });
+});
 
 resizeApp();
 prettyPrint();

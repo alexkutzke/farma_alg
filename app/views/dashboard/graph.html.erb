@@ -160,14 +160,42 @@
             <div class="row toolbar-item">                
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
-                        <span class="input-group-addon" >Instruções de uso</span>
+                        <span class="input-group-addon">Remover todas as repostas do grafo</span>
                     </div>
                 </div>               
                 <div class="toolbar-btn text-center">
+                    <%= button_tag raw("<i class='fa fa-trash-o'></i>"), :class => "btn btn-flat btn-default", :id => "clean-btn" %>
+                </div>
+            </div>
+
+            <div class="row toolbar-item">                
+                <div class="toolbar-btn-label">
+                    <div class="col-md-10">
+                        <span class="input-group-addon" >Link para este grafo</span>
+                    </div>
+                </div>  
+                <div class="toolbar-btn-element">
+                    <div class="col-md-10">
+                        <textarea class="form-control" id="link-span" rows="3" style="pointer-events:initial;"></textarea>
+                    </div>
+                </div>               
+                <div class="toolbar-btn text-center">
+                    <%= button_tag raw("<i class='fa fa-link'></i>"), :class => "btn btn-flat btn-default", :id => "link-btn" %>
+                </div>
+            </div>           
+            
+            <div class="row toolbar-item">                
+                <div class="toolbar-btn-label">
+                    <div class="col-md-10">
+                        <span class="input-group-addon" >Instruções de uso</span>
+                    </div>
+                </div>  
+                <div class="toolbar-btn text-center">
                     <%= button_tag raw("<i class='fa fa-question'></i>"), :class => "btn btn-flat btn-default" %>
                 </div>
-            </div>               
-            
+            </div>    
+
+
         </div>
 
     </div>

@@ -58,5 +58,9 @@ $("#close-answer-info").click(function(){
   }
 });
 
+$("div.output").each(function(){
+  diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).data("output"),"Saída esperada",$(this).data("expected-output"));
+});
+
 resizeApp();
 prettyPrint();

@@ -25,6 +25,16 @@ var firstNode=null;
 var secondNode=null;
 var running=true;
 
+function makeLink(){
+  var params="?";
+
+  graph.forEachNode(function(node){
+    params += "answer_id=" + node.id + "&";
+  });
+
+  return(document.URL+params);
+}
+
 // ===========================================================
 // GRAPH CORE
 
@@ -46,6 +56,8 @@ function paintNode(n){
   node = graph.getNode(n)
   if (node.data.correct)
     color = "green";
+  else if (node.data.compile_errors)
+    color = "orange";
   else 
     color = "black";
     
@@ -55,11 +67,12 @@ function paintNode(n){
 function nodeDraw(node){
 
     var color;
-
-    if (node.data.correct)
-      color = "green";
-    else 
-      color = "black";
+  if (node.data.correct)
+    color = "green";
+  else if (node.data.compile_errors)
+    color = "orange";
+  else 
+    color = "black";
 
     var ui = Viva.Graph.svg('g'),
                   // Create SVG text element with user id as content
@@ -527,6 +540,15 @@ $(document).ready(function(){
     }
   });
 
+  $("#link-btn").click(function(){
+    $("#link-span").html(makeLink());
+  });
+
+  $("#clean-btn").click(function(){
+    graph.forEachNode(function(node){
+      graph.removeNode(node.id);
+    });
+  });
 
   // Other stuff
   $(document).mousemove(function(e){

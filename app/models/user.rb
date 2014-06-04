@@ -117,7 +117,7 @@ class User
     else
       users = [self]
       for team in Team.where(owner_id: self.id).asc('name') do
-        users << team.users
+        users = users + team.users
       end
 
       users.uniq{|x| x.id}

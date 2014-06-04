@@ -16,15 +16,16 @@
       Tag criada com sucesso.
     </div>
     <% end %>
-
-    <p class="text-center">
-      <% if connection.confirmed %>
-      <span class="label label-warning"><b>Similaridade confirmada manualmente</b></span>
-      <% else %>
-        <b>Grau de semelhanca: </b>
-        <%= connection.weight %>
-      <% end %>
-    </p>
+      <div class="callout callout-info">
+          <p class="text-center">
+            <% if connection.confirmed %>
+              <b>Similaridade confirmada manualmente</b>
+            <% else %>
+              <b>Grau de semelhanca: </b>
+              <%= connection.weight %>
+            <% end %>
+          </p>
+    </div>
 
     <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal">
       Comparar respostas

@@ -124,8 +124,105 @@
     <div>
 
     <h4 class="page-header">Resposta</h4>
-    <a href="#" id="show_code" data-toggle="modal"><pre class="prettyprint lang-pascal" style="width:100%;overflow:scroll;margin:auto;height:260px;"><%= @answer.response %></pre></a>
+    <a href="#" id="show_code" data-toggle="modal" data-target="#responseModal"><pre class="prettyprint lang-pascal" style="width:100%;overflow:scroll;margin:auto;height:260px;"><%= @answer.response %></pre></a>
 
-    <!-- Modal -->
-    <pre id="myModal" class="prettyprint lang-pascal modal hide fade code-modal-body" style="overflow:scroll;"><%= @answer.response %></pre>
+                      <!-- Modal -->
+                      <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg my-modal">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                              <h4 class="modal-title" id="myModalLabel">Resposta</h4>
+                            </div>
+                            <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
+                              <pre class="prettyprint lang-pascal" style="width:100%;overflow:scroll;margin:auto;height:260px;"><%= @answer.response %></pre>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 </div><!-- /.box-body -->
+
+<div class="row">
+  <div class="col-xs-12">
+
+    <% if answer.compile_errors %>
+      <div class="callout callout-warning" style="margin-top:10px;">
+        <h4>Erro de compilação</h4>
+        <%= simple_format answer.compile_errors %>
+      </div>
+    <% else %>
+
+    <hr />
+    <h4>Resultado dos casos de teste</h4>
+
+    
+      <% answer.results.each do |k,v| %>
+        
+
+          <div class="row">
+            <div class="col-xs-12">
+              <% if v['diff_error'] or v['time_error'] or v['exec_error'] or v['presentation_error'] %>
+                <div class="box box-danger">
+              <% else %>  
+                <div class="box box-success">  
+              <% end %>
+                <div class="box-header">
+                  <h3 class="box-title">
+                    <%= v['title'] %>    
+                  </h3>
+                  <div class="box-tools pull-right">
+
+                      <button data-toggle="modal" data-target="#testCaseModal-<%= k %>" class="diff-btn btn btn-default btn-sm" ><i class="fa fa-columns"></i> Diff</button>
+                      <!-- Modal -->
+                      <div class="modal fade" id="testCaseModal-<%= k %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg my-modal">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                              <h4 class="modal-title" id="myModalLabel">Comparação de saídas</h4>
+                            </div>
+                            <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
+                              <div id="output-<%= k %>">
+                                <div class="output" data-output="<%= v['output'] %>" data-expected-output="<%= v['output_expected'] %>" data-id="<%= k %>"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                  </div>
+                </div>
+                <div class="box-body">
+                  <% if v['diff_error'] %>
+                    <div class="callout callout-danger">
+                      <h5>Erro de saída</h5>
+                    </div>
+                  <% end %>
+                  <% if v['time_error'] %>
+                    <div class="callout callout-danger">
+                      <h5>Tempo de execução excedido</h5>
+                    </div>
+                  <% end %>
+                  <% if v['exec_error'] %>
+                    <div class="callout callout-danger">
+                      <h5>Erro de execução</h5>
+                    </div>
+                  <% end %>
+                  <% if v['presentation_error'] %>
+                    <div class="callout callout-danger">
+                      <h5>Erro de apresentação</h5>
+                    </div>
+                  <% end %>
+                </div><!-- /.box-body -->
+
+              </div>
+            </div>
+          </div>
+
+        
+        
+      <% end %>
+      <% end %>
+    
+    </div>
+</div>

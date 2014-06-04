@@ -2,6 +2,13 @@ class Newapi::ConnectionsController < ApplicationController
 	respond_to :json
 
 	before_filter :authenticate_user!
+  before_filter :verify_admin
+
+  def verify_admin
+    unless current_user.admin?
+      render :file => "public/401.html", :status => :unauthorized
+    end
+  end
 
 	def create
 		a = Answer.find(params[:answer1_id])
@@ -11,6 +18,9 @@ class Newapi::ConnectionsController < ApplicationController
 		@connection.weight = 1.0
     @connection.confirmed = true
 		@connection.save!
+
+    #TODO
+    #PROPAGATE
 	end
 
   def accept_connection
@@ -18,6 +28,9 @@ class Newapi::ConnectionsController < ApplicationController
     @connection.weight = 1.0
     @connection.confirmed = true
     @connection.save!
+    
+    #TODO
+    #PROPAGATE
   end
 
   def reject_connection
@@ -28,5 +41,8 @@ class Newapi::ConnectionsController < ApplicationController
     @connection2.delete
 
     @connections = [@connection,@connection2]
+
+    #TODO
+    #PROPAGATE
   end
 end
