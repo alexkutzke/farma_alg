@@ -1,0 +1,45 @@
+<div id="overlay"></div>
+      <h5>Confirmadas:</h5>
+      <% answer.tags.each do |t| %>
+
+        <% if t.type == 1 %>
+          <% label = "label-danger" %>
+        <% elsif t.type == 2 %>
+          <% label = "label-warning" %>
+        <% else %>    
+          <% label = "label-default" %>
+        <% end %>
+
+        <span style="margin: 3px 3px;" rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="<%= t.description %>" class="label <%= label %>"> <%= t.name %> <a href="#" class="remove_tag_link" data-id="<%= t.id %>" data-answer-id="<%= @answer.id %>"><i class='fa fa-times' style="color:black;"></i></a> </span> 
+      <% end %>
+      </div>
+
+      <h5>Adicionadas automaticamente:</h5>
+      <div id="aa_tags">
+      <% answer.automatically_assigned_tags.each do |aat| %>
+
+        <% t = Tag.find(aat[0]) %>
+
+        <% if t.type == 1 %>
+          <% label = "label-danger" %>
+        <% elsif t.type == 2 %>
+          <% label = "label-warning" %>
+        <% else %>    
+          <% label = "label-default" %>
+        <% end %>
+
+        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="<%= t.description %>" class="label <%= label %>"><%= t.name %> <span class="badge badge-default"><%= '%.2f' % aat[1] %></span> <a href="#" class="accept_tag_link" data-id="<%= t.id %>" data-answer-id="<%= @answer.id %>"> <i class='fa fa-check' style="color:black;"></i> </a>  <a href="#" class="reject_tag_link" data-id="<%= t.id %>" data-answer-id="<%= @answer.id %>"> <i class='fa fa-times' style="color:black;"></i></a> </span>&nbsp;
+      <% end %>
+      </div>
+
+      <h5>Inserir tag</h5>
+      <div>
+        <%= form_tag dashboard_tags_add_tag_path, :remote => true, :method => :put, :id => "add_tag_form" do %>
+          <%= text_field_tag "query", nil, :class => "form-control input", :id => "add_tag_field" %>
+          <%= hidden_field_tag 'answer_id', @answer.id %>
+        <% end %>
+      </div>
+
+      <div id="new_tag"></div>
+
+      <div>

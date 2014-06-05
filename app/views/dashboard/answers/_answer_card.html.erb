@@ -1,0 +1,68 @@
+<% i = 0 %>
+<% answers.each do |a| %>
+
+  <% if i == 0 %>
+    <div class="row padding">
+  <% end %>
+  <% i = i + 1 %>
+  <section class="answer col-lg-3" data-id="<%=a.id%>">
+   
+    <% if a.correct %>
+      <div class="box box-success">
+    <% else %>
+      <div class="box box-danger">
+    <% end %>
+    
+          <div class="box-header">
+              <h3 class="box-title">
+                  <img src="http://www.gravatar.com/avatar/<%= a.user.gravatar %>?s=35" class="img-circle" alt="Imagem do Usuário" /> <%= a.user.name %>
+              </h3>
+          </div><!-- /.box-header -->
+
+          <div class="box-body">
+              <div class="row">
+                  <div class="col-md-12">
+                    <p>
+                      <b>Questão:</b> <%= a.question.title %>
+                    </p>
+                    <p>
+                      <b>Turma:</b> <%= a.team.name %>
+                    </p>
+                    <p>
+                      <b>O.A.:</b> <%= a.lo.name %>
+                    </p>
+                    <p>
+                      <b>Tentativa</b> #<%= a.try_number %>
+                    </p>
+                    <p>
+                      <% if a.correct %>
+                        <span rel="tooltip" class="label label-success">Correta</span>  
+                      <% else %>
+                        <span rel="tooltip" class="label label-danger">Incorreta</span>  
+                      <% end %>
+                    </p>
+                    <hr>
+                    <h4>Categorias confirmadas</h4>
+                    <p>
+                      <% a.tags.each do |t| %>
+                        <%= render_tag(t,false) %>
+                      <% end %>
+                    </p>
+                  </div>
+              </div><!-- /.row - inside box -->
+          </div><!-- /.box-body -->
+
+          <div class="box-footer">
+              <div class="row">
+                  <div class="col-md-12 text-center" style="border-right: 1px solid #f4f4f4">
+                    <small>Realizada em <b><%= a.created_at.strftime("%d/%m/%Y às %H:%M:%S") %></b></small>  
+                  </div><!-- ./col -->                        
+              </div><!-- /.row -->
+          </div><!-- /.box-footer -->
+      </div><!-- /.box -->        
+  </section><!-- /.Left col -->
+  <% if i == 4 %>
+    </div>
+    <% i = 0 %>
+  <% end %>
+<% end %>

@@ -35,6 +35,21 @@ function makeLink(){
   return(document.URL+params);
 }
 
+function answerShowCallback(){
+  $("#close-answer-info").click(function(){
+    if(selectedNode)
+    {
+      paintNode(selectedNode);
+      selectedNode = null;
+    }
+    if(selectedEdge)
+    {
+      paintEdge(selectedEdge);
+      selectedNode = null;
+    }
+  });
+}
+
 // ===========================================================
 // GRAPH CORE
 
@@ -114,7 +129,7 @@ function nodeDraw(node){
       $(this).css("fill","yellow");
       status = "selectedNode";
       selectedNode = node.id;
-
+/*
       $("#answer-info").show();
       $("#box-answer-info").css("display","block");
       $("#box-answer-info").removeClass("collapsed-box");
@@ -122,10 +137,10 @@ function nodeDraw(node){
       $("#answer-info").animate({
         height: $(".wrapper").height()*0.8,
       }, 500);
-
+*/
       $.ajax({
-        url: "/dashboard/graph_answer_info/",
-        type: "post",
+        url: "/dashboard/answers/show",
+        type: "get",
         data: {id:node.id},
         dataType: "script",
         success: function(){
@@ -205,7 +220,7 @@ function linkDraw(link){
       $("#edge-"+link.data.id).attr('stroke',"yellow");
 
       selectedEdge = link.data.id;
-
+/*
       $("#answer-info").show();
       $("#box-answer-info").css("display","block");
       $("#box-answer-info").removeClass("collapsed-box");
@@ -217,7 +232,7 @@ function linkDraw(link){
       $(".node_menu").animate({
         left: "+=0",
       }, 500);
-
+*/
       $.ajax({
         url: "/dashboard/graph_connection_info/",
         type: "post",
@@ -390,8 +405,10 @@ $(document).ready(function(){
   resizeApp();
   draw();
 
-  $("#answer-info").height(0);
-  $("#answer-info").hide(0);
+  //$("#answer-info").height(0);
+  //$("#answer-info").hide(0);
+
+  $("#answer-show").css("top",($('.header').height()+$('.content-header').height()+48)+"px")
 
   var k,i;
   for (k in $_GET){
@@ -439,7 +456,7 @@ $(document).ready(function(){
     function(){
       bar = $(this).parent().find(".toolbar-btn-label");
       bar.addClass("open");
-      bar.animate({width: 250},500)
+      bar.animate({width: 300},500)
     },
     function(){
       bar = $(this).parent().find(".toolbar-btn-label");
@@ -548,6 +565,9 @@ $(document).ready(function(){
     graph.forEachNode(function(node){
       graph.removeNode(node.id);
     });
+
+    renderer.stop();
+    renderer.start();
   });
 
   // Other stuff

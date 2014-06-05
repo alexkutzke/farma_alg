@@ -1,0 +1,24 @@
+$("#answer-show").html("<%= escape_javascript(render(:partial => 'show', :locals => {:answer => @answer}))%>");
+
+$("div.output").each(function(){
+  diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
+});
+
+// Carrega tags
+$.ajax({
+  url: "/dashboard/tags/show",
+  type: "get",
+  data: {answer_id:"<%= @answer.id %>"},
+  dataType: "script",
+  success: function(){
+    console.log("OK");
+  }
+});
+
+$("span.label").tooltip();
+
+resizeApp();
+prettyPrint();
+
+if(answerShowCallback)
+	answerShowCallback();

@@ -1,3 +1,6 @@
+        <div class="box box-solid" id="box-answer-info">
+
+        
 <div class="box-header">
   <h3 class="box-title">
     <table>
@@ -16,7 +19,8 @@
         <button class="btn btn-default btn-sm" data-widget="remove" id="close-answer-info"><i class="fa fa-times"></i></button>
     </div>
 </div>
-<div class="box-body resize" data-resize-operation-height="(($(window).height()-$('.header').height()-$('.content-header').height()-28)*0.8)-100" >
+<div class="box-body resize" data-resize-operation-height="($(window).height()-$(this).offset().top+$(window).scrollTop())-50" >
+
   <div class="row">
     <div class="col-xs-12">
       <% unless @notice.nil? %>
@@ -84,7 +88,7 @@
   <div class="row">
     <div class="col-xs-12">
       <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#responseModal">
-        Vizualizar respostas
+        Vizualizar resposta
       </button>
 
       <!-- Modal -->
@@ -96,7 +100,7 @@
               <h4 class="modal-title" id="myModalLabel">Resposta</h4>
             </div>
             <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
-              <pre class="prettyprint lang-pascal" style="width:100%;overflow:scroll;margin:auto;height:260px;"><%= @answer.response %></pre>
+              <pre class="prettyprint lang-pascal" style="width:100%;overflow:scroll;margin:auto;"><%= @answer.response %></pre>
             </div>
           </div>
         </div>
@@ -113,7 +117,7 @@
     </div>
   </div>
 
-</div><!-- /.box-body -->
+  </div>
 
 <div class="row">
   <div class="col-xs-12">
@@ -198,4 +202,5 @@
       <% end %>
     
     </div>
+</div>
 </div>

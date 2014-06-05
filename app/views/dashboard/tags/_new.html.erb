@@ -2,7 +2,7 @@
 <div class="well" style="padding:5px;">
 <h4>Nova Tag</h4>
 
-<%= form_for @tag, :url => dashboard_graph_create_tag_path, :remote => true, :html => {:method => :post, :id => "new_tag_form"} do |f| %>
+<%= form_for @tag, :url => dashboard_tags_create_tag_path, :remote => true, :html => {:method => :post, :id => "new_tag_form"} do |f| %>
 	<%= f.label "name", "Nome" %>
   <%= f.text_field "name", :class => "form-control input" %>
   <%= f.label "description", "Descrição" %>

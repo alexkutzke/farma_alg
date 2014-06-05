@@ -1,3 +1,5 @@
+        <div class="box box-solid" id="box-answer-info">
+
 <div class="box-header">
   <h3 class="box-title">
     Detalhes da relação
@@ -7,7 +9,7 @@
         <button class="btn btn-default btn-sm" data-widget="remove" id="close-answer-info"><i class="fa fa-times"></i></button>
     </div>
 </div>
-<div class="box-body resize" data-resize-operation-height="(($(window).height()-$('.header').height()-$('.content-header').height()-28)*0.8)-100" >
+<div class="box-body resize" data-resize-operation-height="($(window).height()-parseInt($(this).offset().top))-50" >
 <div class="row">
   <div class="col-xs-12">
     <% unless @notice.nil? %>
@@ -26,6 +28,65 @@
             <% end %>
           </p>
     </div>
+
+    <table class="table table-bordered text-center" style="margin-bottom:5px;">
+      <tr>
+        <th></th>
+        <th>Resposta 1</th>
+        <th>Resposta 2</th>
+      </tr>
+
+      <tr>
+        <td><b>Aluno</b></td>
+        <% if answer1.user_id == answer2.user_id %>
+          <td colspan="2"><%= answer1.user.name %></td>
+        <% else %>
+          <td><%= answer1.user.name %></td>
+          <td><%= answer2.user.name %></td>
+        <% end %>
+      </tr>
+
+      <tr>
+        <td><b>Questão</b></td>
+        <% if answer1.question_id == answer2.question_id %>
+          <td colspan="2"><%= answer1.question.title %></td>
+        <% else %>
+          <td><%= answer1.question.title %></td>
+          <td><%= answer2.question.title %></td>
+        <% end %>
+      </tr>
+      
+      <tr>
+        <td><b>Turma</b></td>
+        <% if answer1.team_id == answer2.team_id %>
+          <td colspan="2"><%= answer1.team.name %></td>
+        <% else %>
+          <td><%= answer1.team.name %></td>
+          <td><%= answer2.team.name %></td>
+        <% end %>
+      </tr>
+      
+      <tr>
+        <td><b>O.A.</b></td>
+        <% if answer1.lo_id == answer2.lo_id %>
+          <td colspan="2"><%= answer1.lo.name %></td>
+        <% else %>
+          <td><%= answer1.lo.name %></td>
+          <td><%= answer2.lo.name %></td>
+        <% end %>
+      </tr>
+      
+      <tr>
+        <td><b>Tentativa</b></td>
+        <% if answer1.try_number == answer2.try_number %>
+          <td colspan="2"><%= answer1.try_number %></td>
+        <% else %>
+          <td><%= answer1.try_number %></td>
+          <td><%= answer2.try_number %></td>
+        <% end %>
+      </tr>
+    </table>
+
 
     <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal">
       Comparar respostas
@@ -61,13 +122,16 @@
     
     </div>
 </div>
+
+
+<% unless connection.test_case_similarity.nil? %>
 <div class="row">
   <div class="col-xs-12">
 
     <hr />
     <h4>Comparação dos casos de teste</h4>
 
-    <% unless connection.test_case_similarity.nil? %>
+    
       <% connection.test_case_similarity.each do |k,v| %>
         <% t = test_case_title(k) %>
         <% unless t.nil? %>
@@ -83,8 +147,27 @@
                     <%= t %>    
                   </h3>
                   <div class="box-tools pull-right">
-                      <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                      <button class="btn btn-default btn-sm" data-widget="remove" id="close-answer-info"><i class="fa fa-times"></i></button>
+
+                      <button data-toggle="modal" data-target="#testCaseModal-<%= k %>" class="diff-btn btn btn-default btn-sm" ><i class="fa fa-columns"></i> Diff</button>
+                      <!-- Modal -->
+                      <div class="modal fade" id="testCaseModal-<%= k %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg my-modal">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                              <h4 class="modal-title" id="myModalLabel">Comparação de saídas</h4>
+                            </div>
+                            <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
+                              <div><%= v['output_expected'] %></div>
+                              <div id="output-<%= k %>">
+                                <div class="output" data-output-a="<%= v['output_a'] %>" data-output-b="<%= v['output_b'] %>" data-id="<%= k %>"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i></button>
                   </div>
                 </div>
                 <div class="box-body" style="display: none;">
@@ -95,14 +178,13 @@
             </div>
           </div>
         <% end %>
-        
-        
-      <% end %>
-
     <% end %>
     </div>
 </div>
+<% end %>
+
 </div><!-- /.box-body -->
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

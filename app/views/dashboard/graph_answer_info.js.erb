@@ -1,45 +1,23 @@
 $("#box-answer-info").html("<%= escape_javascript(render(:partial => 'graph_answer_info', :locals => {:answer => @answer, :notice => @notice}))%>");
+
+// Carrega tags
+$.ajax({
+  url: "/dashboard/tags/show",
+  type: "get",
+  data: {answer_id:"<%= @answer.id %>"},
+  dataType: "script",
+  success: function(){
+    console.log("OK");
+  }
+});
+
 $("span.label").tooltip();
 
-var availableTags = <%= raw @available_tags.to_json %>;
+resizeApp();
+prettyPrint();
 
-$( "#add_tag_field" ).autocomplete({
-  source: availableTags
-});
-
-$("#add_tag_field").focus();
-
-$(".remove_tag_link").click(function(){
-  $.ajax({
-    url: "/dashboard/graph_remove_tag",
-    data: {
-      id: $(this).data("id"),
-      answer_id: $(this).data("answer-id")
-    },
-    type: "delete"    
-  });
-});
-
-$(".accept_tag_link").click(function(){
-  $.ajax({
-    url: "/dashboard/graph_accept_tag",
-    data: {
-      id: $(this).data("id"),
-      answer_id: $(this).data("answer-id")
-    },
-    type: "put"    
-  });
-});
-
-$(".reject_tag_link").click(function(){
-  $.ajax({
-    url: "/dashboard/graph_reject_tag",
-    data: {
-      id: $(this).data("id"),
-      answer_id: $(this).data("answer-id")
-    },
-    type: "put"    
-  });
+$("div.output").each(function(){
+  diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
 });
 
 $("#close-answer-info").click(function(){
@@ -57,10 +35,3 @@ $("#close-answer-info").click(function(){
     selectedNode = null;
   }
 });
-
-$("div.output").each(function(){
-  diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).data("output"),"Saída esperada",$(this).data("expected-output"));
-});
-
-resizeApp();
-prettyPrint();

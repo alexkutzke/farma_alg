@@ -132,14 +132,35 @@
   pointer-events:none;
 }
 
+#answer-show
+{
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  overflow-y: auto;
+  pointer-events:none;
+  z-index: 99999;
+  max-width:400px;
+-webkit-box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.73);
+-moz-box-shadow:    0px 0px 30px 0px rgba(50, 50, 50, 0.73);
+box-shadow:         0px 0px 30px 0px rgba(50, 50, 50, 0.73);
+}
+
 #box-answer-info
 {
- pointer-events:initial;
+  pointer-events:initial;
+  margin:0;
 }
 
 #box-answer-info .box-body
 {
  overflow-y: auto;
+ overflow-x: hidden;
+}
+
+.modal
+{
+  pointer-events:initial;
 }
 
 .modal.fade 

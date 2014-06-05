@@ -1,7 +1,6 @@
 <%= content_for :scripts do %>
   <%= javascript_include_tag 'dashboard/resizeApp' %>
   <%= javascript_include_tag 'answers_panel/vivagraph' %>
-  <%= javascript_include_tag 'answers_panel/vivagraph' %>  
   <%= javascript_include_tag 'dashboard/graph.js' %>
   <%= javascript_include_tag 'difflib' %>
   <%= javascript_include_tag 'diffview' %>
@@ -54,11 +53,12 @@
 <section class="content">
 
     <div class="row">
-      <div id="answer-info" class="col-xs-4">
-        <div class="box box-solid" id="box-answer-info">
 
-        </div>
-      </div>
+
+<div id="answer-show" class="resize" style="right:10px;left:initial;position:absolute;">
+
+</div>
+
     </div>
 
 

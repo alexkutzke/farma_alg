@@ -1,0 +1,21 @@
+/* ---------------------------------------
+ * Tags for dashboard#tags
+ * --------------------------------------- */
+
+.tags
+{
+	font-weight: bold;
+	font-size:10pt;
+	cursor: pointer;
+	line-height: 20pt;
+}
+
+.tags:hover
+{
+	border: 2px solid blue;
+}
+
+#tags-body
+{
+	display:none;
+}

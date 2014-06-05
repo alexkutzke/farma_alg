@@ -1,0 +1,17 @@
+<div id="answer-show"></div>
+
+<div class="row">
+  <div class="col-md-12" style="margin-bottom:20px;">
+    <h3>Confirmadas<small> <%= as.count %> respostas encontradas</small></h3>
+  </div>
+</div>
+
+<%= render :partial => "dashboard/answers/answer_card", :locals => {:answers => as} %>
+
+<div class="row">
+  <div class="col-md-12" style="margin-bottom:20px;">
+    <h3>Atribuídas automaticamente<small> <%= as_aat.count %> respostas encontradas</small></h3>
+  </div>
+</div>
+
+<%= render :partial => "dashboard/answers/answer_card", :locals => {:answers => as_aat} %>

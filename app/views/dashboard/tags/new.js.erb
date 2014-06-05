@@ -1,4 +1,4 @@
-$("#new_tag").html("<%= escape_javascript(render(:partial => 'graph_new_tag', :locals => {:answer => @answer, :tag => @tag}))%>");
+$("#new_tag").html("<%= escape_javascript(render(:partial => 'new', :locals => {:answer => @answer, :tag => @tag}))%>");
 $("#new_tag").show();
 
 $("#add_tag_form").hide();

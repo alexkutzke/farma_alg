@@ -267,6 +267,78 @@ class Answer
     previous_answers
   end
 
+  def self.propagate_properties_to_neigh(answer,neigh_id)
+    neigh = Answer.find(neigh_id)
+    connections = neigh.connections
+    weight = connections[connections.index{|x| x.target_answer_id.to_s == answer.id.to_s}].weight
+    naat = neigh.automatically_assigned_tags
+
+    # confirmed tags
+    for tag in answer.tags do
+      # neigh already has this tag as confirmed
+      if neigh.tags.include?(tag)
+        # do nothing
+      # neigh already has this tag as automatically assigned
+      elsif not (i = naat.index{ |x| x[0].to_s == tag.id.to_s }).nil?
+        t = naat[i]
+
+        # passed by another answer
+        if t[2] != answer.id
+          if t[1] < weight
+            t[1] = weight
+          end
+        # passed by this answers  
+        else
+          # update anyway
+          t[1] = weight
+        end
+      # neigh does not have this tag
+      else
+        # was it rejected?
+        unless neigh.rejected_tags.include?(tag.id.to_s)
+          naat.push [tag.id,weight,answer.id]
+        end
+      end
+    end
+
+    # automatically assigned tags
+    for atag in answer.automatically_assigned_tags do
+      tag = Tag.find(atag[0])
+
+      # neigh already has this tag as confirmed
+      if neigh.tags.include?(tag)
+        # do nothing
+      # neigh already has this tag as automatically assigned
+      elsif not (i = naat.index{ |x| x[0].to_s == tag.id.to_s }).nil?
+        t = naat[i]
+
+        # passed by another answer
+        if t[2] != answer.id
+          if t[1] < weight*atag[1]
+            t[1] = weight*atag[1]
+          end
+        # passed by this answers  
+        else
+          # update anyway
+          t[1] = atag[1] * weight
+        end
+      # neigh does not have this tag
+      else
+        unless neigh.rejected_tags.include?(tag.id.to_s)
+          naat.push [tag.id,weight*atag[1],answer.id]
+        end
+      end
+    end
+
+    for rejected in answer.rejected_tags do
+      unless (i = naat.index{ |x| x[2].to_s == answer.id.to_s && x[0].to_s == rejected.to_s }).nil?
+        naat.delete_at(i)
+      end
+    end
+
+    neigh.save!    
+  end
+
   def propagate_properties
     queue = []
     visited = []
@@ -285,76 +357,7 @@ class Answer
           visited.push similar_answer
         end
 
-        neigh = Answer.find(similar_answer)
-        connections = neigh.connections
-        weight = connections[connections.index{|x| x.target_answer_id.to_s == answer.id.to_s}].weight
-        naat = neigh.automatically_assigned_tags
-
-        # confirmed tags
-        for tag in answer.tags do
-          # neigh already has this tag as confirmed
-          if neigh.tags.include?(tag)
-            # do nothing
-          # neigh already has this tag as automatically assigned
-          elsif not (i = naat.index{ |x| x[0].to_s == tag.id.to_s }).nil?
-            t = naat[i]
-
-            # passed by another answer
-            if t[2] != answer.id
-              if t[1] < weight
-                t[1] = weight
-              end
-            # passed by this answers  
-            else
-              # update anyway
-              t[1] = weight
-            end
-          # neigh does not have this tag
-          else
-            # was it rejected?
-            unless neigh.rejected_tags.include?(tag.id.to_s)
-              naat.push [tag.id,weight,answer.id]
-            end
-          end
-        end
-
-        # automatically assigned tags
-        for atag in answer.automatically_assigned_tags do
-          tag = Tag.find(atag[0])
-
-          # neigh already has this tag as confirmed
-          if neigh.tags.include?(tag)
-            # do nothing
-          # neigh already has this tag as automatically assigned
-          elsif not (i = naat.index{ |x| x[0].to_s == tag.id.to_s }).nil?
-            t = naat[i]
-
-            # passed by another answer
-            if t[2] != answer.id
-              if t[1] < weight*atag[1]
-                t[1] = weight*atag[1]
-              end
-            # passed by this answers  
-            else
-              # update anyway
-              t[1] = atag[1] * weight
-            end
-          # neigh does not have this tag
-          else
-            unless neigh.rejected_tags.include?(tag.id.to_s)
-              naat.push [tag.id,weight*atag[1],answer.id]
-            end
-          end
-        end
-
-        for rejected in answer.rejected_tags do
-          unless (i = naat.index{ |x| x[2].to_s == answers.id.to_s && x[0].to_s == rejected.to_s }).nil?
-            naat.delete_at(i)
-          end
-        end
-
-        neigh.save!
-
+        Answer.propagate_properties_to_neigh(answer,similar_answer)        
       end
     end
     true
@@ -419,7 +422,54 @@ private
     end
   end
 
+  def self.search_aat(params,user)
+    as = Answer.search_without_tags(params,user)
+
+    if params.has_key?(:tag_ids)
+      as = as.entries.keep_if { |a| not (a.automatically_assigned_tags.collect{|x| x[0].to_s} & params[:tag_ids]).empty? }
+    end
+
+    unless user.admin?
+      if params.has_key?(:tag_ids)
+        tag_ids = []
+        for t in user.all_tags do
+          if params[:tag_ids].include?(t.id.to_s)
+            tag_ids << t.id.to_s
+          end
+        end
+        as = as.entries.keep_if { |a| not (a.automatically_assigned_tags.collect{|x| x[0].to_s} & tag_ids).empty? }
+      end
+    end
+
+    as
+  end
+
+
   def self.search(params,user)
+    as = Answer.search_without_tags(params,user)
+
+
+    if params.has_key?(:tag_ids)
+      as = as.entries.keep_if { |a| not (a.tag_ids & params[:tag_ids]).empty? }
+    end
+
+
+    unless user.admin?
+      if params.has_key?(:tag_ids)
+        tag_ids = []
+        for t in user.all_tags do
+          if params[:tag_ids].include?(t.id.to_s)
+            tag_ids << t.id.to_s
+          end
+        end
+        as.entries.keep_if! { |a| not (a.tag_ids & tag_ids).empty? }
+      end
+    end
+
+    as
+  end
+
+  def self.search_without_tags(params,user)
     if params.has_key?(:query) and params[:query].empty?
       if params.has_key?(:daterange) and params[:daterange].empty?
         if not params.has_key?(:user_ids) and
@@ -468,9 +518,6 @@ private
       as = as.in(id: params[:answer_ids])
     end
 
-    if params.has_key?(:tag_ids)
-      as = as.in(tag_ids: params[:tag_ids])
-    end
 
     unless user.admin?
       user_ids = []

@@ -52,4 +52,16 @@ module ApplicationHelper
     output
   end
 
+  def render_tag(t,big)
+    if t.type == 1
+     label = "label-danger"
+    elsif t.type == 2
+      label = "label-warning"
+    else 
+      label = "label-default"
+    end
+
+    raw "<span data-id=\"#{t.id}\" style=\"margin: 3px 3px;\" rel=\"tooltip\" data-toggle=\"tooltip\" data-placement=\"top\" title data-original-title=\"#{t.description}\" class=\"#{"tags" if big} label #{label}\">#{t.name}</span>"
+  end
+
 end

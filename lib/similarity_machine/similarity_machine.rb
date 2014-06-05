@@ -53,6 +53,9 @@ module SimilarityMachine
                                                       (result_a['presentation_error'] && result_b['presentation_error']) ? 1 : 0
 
             test_case_similarity[id]['output_similarity'] = string_similarity(result_a['output'],result_b['output'])
+            test_case_similarity[id]['output_a'] = result_a['output']
+            test_case_similarity[id]['output_b'] = result_b['output']
+            test_case_similarity[id]['output_expected'] = result_b['output_expected']
 
             tc = TestCase.find_or_initialize_by(id:id)
 

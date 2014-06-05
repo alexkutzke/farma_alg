@@ -27,6 +27,12 @@
         <% end %>
     </li>
 
+    <li class="<%= raw "class" if controller.class == DashboardController && controller.action_name == "tags" %>">
+        <%= link_to dashboard_tags_path do %>
+            <i class="fa fa-tags"></i> <span>Categorias</span>
+        <% end %>
+    </li>
+
     <!--
     <li>
         <a href="pages/widgets.html">

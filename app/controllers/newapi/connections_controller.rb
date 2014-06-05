@@ -19,8 +19,10 @@ class Newapi::ConnectionsController < ApplicationController
     @connection.confirmed = true
 		@connection.save!
 
-    #TODO
-    #PROPAGATE
+    Answer.propagate_properties_to_neigh(a,b.id)
+    Answer.propagate_properties_to_neigh(b,a.id)
+    a.schedule_process_propagate
+    b.schedule_process_propagate
 	end
 
   def accept_connection
@@ -28,9 +30,15 @@ class Newapi::ConnectionsController < ApplicationController
     @connection.weight = 1.0
     @connection.confirmed = true
     @connection.save!
+
+    a = Answer.find(@connection.answer_id)
+    b = Answer.find(@connection.target_answer_id)
     
-    #TODO
-    #PROPAGATE
+    Answer.propagate_properties_to_neigh(a,b.id)
+    Answer.propagate_properties_to_neigh(b,a.id)
+
+    a.schedule_process_propagate
+    b.schedule_process_propagate
   end
 
   def reject_connection
@@ -42,7 +50,20 @@ class Newapi::ConnectionsController < ApplicationController
 
     @connections = [@connection,@connection2]
 
-    #TODO
-    #PROPAGATE
+    a = Answer.find(@connection.answer_id)
+    b = Answer.find(@connection.target_answer_id)
+
+    aat_a = a.automatically_assigned_tags
+    while not (i = aat_a.index{ |x| x[2].to_s == b.id.to_s }).nil?
+      aat_a.delete_at(i)
+    end
+
+    aat_b = b.automatically_assigned_tags
+    while not (i = aat_b.index{ |x| x[2].to_s == a.id.to_s }).nil?
+      aat_b.delete_at(i)
+    end
+
+    a.save!
+    b.save!
   end
 end

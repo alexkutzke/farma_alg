@@ -1,24 +1,12 @@
-$("#box-answer-info").html("<%= escape_javascript(render(:partial => 'graph_connection_info', :locals => {:connection => @connection, :notice => @notice, :answer1 => @answer1, :answer2 => @answer2}))%>");
+$("#answer-show").html("<%= escape_javascript(render(:partial => 'graph_connection_info', :locals => {:connection => @connection, :notice => @notice, :answer1 => @answer1, :answer2 => @answer2}))%>");
 $("span.label").tooltip();
 
-$("#close-answer-info").click(function(){
-  $("#answer-info").height(0);
-  $("#answer-info").hide(0);
-
-  if(selectedNode)
-  {
-    paintNode(selectedNode);
-    selectedNode = null;
-  }
-  if(selectedEdge)
-  {
-    paintEdge(selectedEdge);
-    selectedNode = null;
-  }
+$("div.response").each(function(){
+  diffUsingJS("response-"+$(this).data("id"),"<%= @answer1.user.name + " @ " + @answer1.question.title + " #" + @answer1.try_number.to_s %>",$(this).attr("data-response"),"<%= @answer2.user.name + " @ " + @answer2.question.title + " #" + @answer2.try_number.to_s %>",$(this).attr("data-previous"));
 });
 
-$("div.response").each(function(){
-  diffUsingJS("response-"+$(this).data("id"),"<%= @answer1.user.name + " @ " + @answer1.question.title + " #" + @answer1.try_number.to_s %>",$(this).data("response"),"<%= @answer2.user.name + " @ " + @answer2.question.title + " #" + @answer2.try_number.to_s %>",$(this).data("previous"));
+$("div.output").each(function(){
+  diffUsingJS("output-"+$(this).data("id"),"Saída A",$(this).attr("data-output-a"),"Saída B",$(this).attr("data-output-b"));
 });
 
 $("#reject-edge").click(function(){

@@ -9,3 +9,19 @@ $('.answer').each(function() {
 $('.answer').each(function() {
 	$(this).delay((i++)*50).fadeIn();
 });
+
+$(".answer").click(function(){
+  $.ajax({
+    url: "/dashboard/answers/show",
+    data: {
+      id: $(this).data("id")
+    },
+    type: "get"    
+  });
+});
+
+
+$("span.label").tooltip();
+
+if(searchResultCallback)
+  searchResultCallback();

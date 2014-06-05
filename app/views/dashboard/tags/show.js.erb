@@ -1,0 +1,49 @@
+$("#tags").html("<%= escape_javascript(render(:partial => 'show', :locals => {:answer => @answer}))%>");
+
+$("span.label").tooltip();
+
+var availableTags = <%= raw @available_tags.to_json %>;
+
+function tags_loading(){
+  $("#tags").html("Carregando tags ...");
+}
+
+$(".remove_tag_link").click(function(){
+  tags_loading();
+  $.ajax({
+    url: "/dashboard/tags/remove_tag",
+    data: {
+      id: $(this).data("id"),
+      answer_id: $(this).data("answer-id")
+    },
+    type: "delete"    
+  });
+});
+
+$(".accept_tag_link").click(function(){
+  tags_loading();
+  $.ajax({
+    url: "/dashboard/tags/accept_tag",
+    data: {
+      id: $(this).data("id"),
+      answer_id: $(this).data("answer-id")
+    },
+    type: "put"    
+  });
+});
+
+$(".reject_tag_link").click(function(){
+  tags_loading();
+  $.ajax({
+    url: "/dashboard/tags/reject_tag",
+    data: {
+      id: $(this).data("id"),
+      answer_id: $(this).data("answer-id")
+    },
+    type: "put"    
+  });
+});
+
+$( "#add_tag_field" ).autocomplete({
+  source: availableTags
+});

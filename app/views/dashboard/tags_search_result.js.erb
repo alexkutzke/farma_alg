@@ -1,0 +1,19 @@
+aa = "<%= escape_javascript(render(:partial => 'tags_search_result', :locals => {:as => @as, :as_aat => @as_aat}))%>";
+
+$("#search_result").html(aa);
+
+$(".answer").click(function(){
+  $.ajax({
+    url: "/dashboard/answers/show",
+    data: {
+      id: $(this).data("id")
+    },
+    type: "get"    
+  });
+});
+
+
+$("span.label").tooltip();
+
+if(searchResultCallback)
+  searchResultCallback();
