@@ -573,4 +573,34 @@ private
       a.updateStats
     end
   end
+
+  def self.make_timeline(as)
+    timeline_items = []
+
+    as.sort!{|x,y| x.created_at <=> y.created_at}
+
+    i=0
+    last = nil
+
+    n = as.count
+
+    while i < n
+      current = i
+
+      if last.nil?
+        timeline_items << ["new_date",[as[current].created_at]]
+      else
+        if as[current].created_at.to_date != as[last].created_at.to_date
+          timeline_items << ["new_date",[as[current].created_at]]
+        end
+      end
+
+      timeline_items << ["answer",[current]]
+
+      last = current
+      i = i+1
+    end
+
+    timeline_items
+  end
 end

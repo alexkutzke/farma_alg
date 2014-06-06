@@ -6,7 +6,11 @@
   </div>
 </div>
 
-<%= render :partial => "dashboard/answers/answer_card", :locals => {:answers => as} %>
+<div class="row">
+  <div class="col-md-12" style="margin-bottom:20px;" id="confirmed-tags">
+    <%= render :partial => "dashboard/answers/answer_card", :locals => {:answers => as, :button_tag => false, :n => 3} %>
+  </div>
+</div>
 
 <div class="row">
   <div class="col-md-12" style="margin-bottom:20px;">
@@ -14,4 +18,8 @@
   </div>
 </div>
 
-<%= render :partial => "dashboard/answers/answer_card", :locals => {:answers => as_aat} %>
+<div class="row">
+  <div class="col-md-12" style="margin-bottom:20px;">
+    <%= render :partial => "dashboard/answers/answer_card", :locals => {:answers => as_aat, :button_tag => true, :n => 3} %>
+  </div>
+</div>

@@ -1,3 +1,37 @@
+<%= content_for :scripts do %>
+    <%= javascript_include_tag 'dashboard/resizeApp' %>
+    <%= javascript_include_tag 'difflib' %>
+    <%= javascript_include_tag 'diffview' %>
+    <%= javascript_include_tag 'dashboard/tags' %>
+
+
+  <script type="text/javascript">
+  function diffUsingJS(div_id,label1,txt1,label2,txt2){
+    // get the baseText and newText values from the two textboxes, and split them into lines
+    base = difflib.stringAsLines(txt1);//$("baseText").value);
+    newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+
+    //create a SequenceMatcher instance that diffs the two sets of lines
+    sm = new difflib.SequenceMatcher(base, newtxt);
+
+    // get the opcodes from the SequenceMatcher instance
+    // opcodes is a list of 3-tuples describing what changes should be made to the base text
+    // in order to yield the new text
+    opcodes = sm.get_opcodes();
+    diffoutputdiv = $("#"+div_id);
+    while(diffoutputdiv.firstChild)
+      diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+
+    //console.log opcodes
+
+    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+  }
+  </script>
+<% end %>
+
+<div id="answer-show">
+
+</div>
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
@@ -20,46 +54,10 @@
         </div>
     </div>
 
-    <!-- Main row -->
-    <div id="search_result">
-
-    </div>
-
 	<!-- row -->
 	<div class="row">                        
-	    <div class="col-md-12">
-	        <!-- The time line -->
-	        <ul class="timeline">
-	            <!-- timeline time label -->
-	            <li class="time-label">
-	                <span class="bg-red">
-	                    10 Feb. 2014
-	                </span>
-	            </li>
-	            <!-- /.timeline-label -->
-	            <!-- timeline item -->
-	            <li>
-	                <i class="fa fa-envelope bg-blue"></i>
-	                <div class="timeline-item">
-	                    <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-	                    <h3 class="timeline-header"><a href="#">Support Team</a> sent you and email</h3>
-	                    <div class="timeline-body">
-	                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-	                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
-	                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-	                        quora plaxo ideeli hulu weebly balihoo...
-	                    </div>
-	                    <div class='timeline-footer'>
-	                        <a class="btn btn-primary btn-xs">Read more</a>
-	                        <a class="btn btn-danger btn-xs">Delete</a>
-	                    </div>
-	                </div>
-	            </li>
-	            
-	            <li>
-	                <i class="fa fa-clock-o"></i>
-	            </li>
-	        </ul>
+	    <div id="timelinee" class="col-md-12">
+	        
 	    </div><!-- /.col -->
 	</div><!-- /.row -->
 </section><!-- /.content -->

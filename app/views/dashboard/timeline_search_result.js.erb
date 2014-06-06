@@ -1,11 +1,17 @@
-$("#search_result").html("<%= escape_javascript(render(:partial => 'timeline_search_result', :locals => {:as => @as}))%>");
+$("#timelinee").html("<%= escape_javascript(render(:partial => 'timeline_search_result', :locals => {:as => @as,:timeline_items => @timeline_items}))%>");
 
-var i=0;
-
-$('.answer').each(function() {
-	$(this).hide();
+$(".answer-btn").click(function(){
+  $.ajax({
+    url: "/dashboard/answers/show",
+    data: {
+      id: $(this).data("id")
+    },
+    type: "get"    
+  });
 });
 
-$('.answer').each(function() {
-	$(this).delay((i++)*50).fadeIn();
-});
+$("span.label").tooltip();
+$("button[rel='tooltip']").tooltip();
+
+if(searchResultCallback)
+  searchResultCallback();

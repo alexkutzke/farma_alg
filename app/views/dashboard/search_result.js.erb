@@ -10,7 +10,7 @@ $('.answer').each(function() {
 	$(this).delay((i++)*50).fadeIn();
 });
 
-$(".answer").click(function(){
+$(".answer-btn").click(function(){
   $.ajax({
     url: "/dashboard/answers/show",
     data: {

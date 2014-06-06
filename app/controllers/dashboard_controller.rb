@@ -26,7 +26,8 @@ class DashboardController < ApplicationController
   end
 
   def timeline_search
-    @as = Answer.search(params)
+    @as = Answer.search(params,current_user).entries
+    @timeline_items = Answer.make_timeline(@as)
 
     render 'timeline_search_result'
   end

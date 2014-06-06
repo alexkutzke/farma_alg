@@ -70,7 +70,7 @@ $(document).ready(function(){
     $("#search-form").submit();
   });
 
-  $("#filters").on("mouseleave",".right-side-body",function(){
+  $("#filters").on("click","#filters-close-btn",function(){
     if($(".right-side-body").hasClass("open")){
       $(".right-side-body").removeClass("open")
       $(".right-side-body").animate({right: -$(".right-side-body").width()-2},500); 

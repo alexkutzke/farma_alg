@@ -1,66 +1,52 @@
 <div class="row">
-  <div class="col-md-12 text-center" style="margin-bottom:20px;">
+  <div id="search-result-count" class="col-md-12 text-center" style="margin-bottom:20px;">
     <%= as.count %> respostas encontradas.
   </div>
 </div>
-<% i = 0 %>
-<% as.each do |a| %>
 
-  <% if i == 0 %>
-    <div class="row padding">
+<!-- The time line -->
+          <ul class="timeline">
+<% timeline_items.each do |item| %>
+  <% case item[0] %>
+  <% when "new_date" %>
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-red">
+          <%= item[1][0].strftime("%d/%m/%Y") %>
+        </span>
+    </li>
+
+  <% when "answer" %>
+    <!-- /.timeline-label -->
+    <!-- timeline item -->
+    <li>
+        <% a = as[item[1][0]] %>
+
+        <% if a.correct %>
+          <i class="fa fa-check bg-green"></i>
+        <% else %>
+          <i class="fa fa-times bg-red"></i>
+        <% end %>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> <%= a.created_at.strftime("%H:%M")%></span>
+            <h3 class="timeline-header">Nova tentativa</h3>
+            <div class="timeline-body">
+              <%= render :partial => "dashboard/answers/card", :locals => {:a => a, :button_tag => false } %>
+
+            </div>
+            <div class='timeline-footer'>
+              
+            </div>
+        </div>
+    </li>
+  
+
   <% end %>
-  <% i = i + 1 %>
-  <section class="answer col-lg-3">
-   
-    <% if a.correct %>
-      <div class="box box-success">
-    <% else %>
-      <div class="box box-danger">
-    <% end %>
-    
-          <div class="box-header">
-              <h3 class="box-title">
-                  <img src="http://www.gravatar.com/avatar/<%= a.user.gravatar %>?s=35" class="img-circle" alt="Imagem do Usuário" /> <%= a.user.name %>
-              </h3>
-          </div><!-- /.box-header -->
-
-          <div class="box-body">
-              <div class="row">
-                  <div class="col-md-12">
-                    <p>
-                      <b>Questão:</b> <%= a.question.title %>
-                    </p>
-                    <p>
-                      <b>Turma:</b> <%= a.team.name %>
-                    </p>
-                    <p>
-                      <b>O.A.:</b> <%= a.lo.name %>
-                    </p>
-                    <p>
-                      <b>Tentativa</b> #<%= a.try_number %>
-                    </p>
-                    <p>
-                      <% if a.correct %>
-                        <span rel="tooltip" class="label label-success">Correta</span>  
-                      <% else %>
-                        <span rel="tooltip" class="label label-danger">Incorreta</span>  
-                      <% end %>
-                    </p>
-                  </div>
-              </div><!-- /.row - inside box -->
-          </div><!-- /.box-body -->
-
-          <div class="box-footer">
-              <div class="row">
-                  <div class="col-md-12 text-center" style="border-right: 1px solid #f4f4f4">
-                    <small>Realizada em <b><%= a.created_at.strftime("%d/%m/%Y às %H:%M:%S") %></b></small>  
-                  </div><!-- ./col -->                        
-              </div><!-- /.row -->
-          </div><!-- /.box-footer -->
-      </div><!-- /.box -->        
-  </section><!-- /.Left col -->
-  <% if i == 4 %>
-    </div>
-    <% i = 0 %>
-  <% end %>
+              
+              
 <% end %>
+
+<li>
+  <i class="fa fa-clock-o"></i>
+</li>
+</ul>
