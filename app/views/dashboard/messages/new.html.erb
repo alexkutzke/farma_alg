@@ -44,7 +44,11 @@
     <ol class="breadcrumb">
         <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
         <li><i class="fa fa-envelope"></i> <%= link_to "Mensagens", dashboard_messages_path %></li>
-        <li class="active"><i class="fa fa-plus"></i> Nova</li>
+        <% if @method == :post %>
+          <li class="active"><i class="fa fa-plus"></i> Nova</li>
+        <% else %>
+          <li class="active"><i class="fa fa-edit"></i> Editar</li>
+        <% end %>
     </ol>
 </section>
 
@@ -54,7 +58,7 @@
     <div class="row">
         <div class="col-md-12">
 
-          <%= form_tag url_for(:controller => "messages", :action => "create"), :method => :post, :id => "message-form" do %>
+          <%= form_tag @path, :method => @method, :id => "message-form" do %>
             <% if @message.errors.any? %>
               <div class="panel panel-danger">
                 <div class="panel-heading">
@@ -113,6 +117,12 @@
             <div class="form-group">
               <%= label_tag "Questões recomendadas" %><br />
               <ul id="questions">
+                  <% unless @message.question_ids.nil? %>
+                    <% @message.question_ids.each do |question_id| %>
+                      <li data-id="question_id-<%=question_id%>"><%= Question.find(question_id).title %> <span class='label label-danger remove-item' style='cursor:pointer;'><i class='fa fa-times'></i></span></li>
+                      <input type="hidden" name="message[question_ids][]" value="<%= question_id %>" form="message-form" id="question_id-<%= question_id %>">
+                    <% end %>
+                  <% end %>
               </ul>
             </div>
             <div class="form-group">
@@ -165,7 +175,7 @@
           <div style="margin-bottom:20px" class="col-md-10 col-md-offset-1">
             <% @questions.each do |q| %>
               <ul>
-                <li><%= q.title %></li>
+                <li style="cursor:pointer;" class="add-question-btn" data-id="<%= q.id %>"><%= q.title %></li>
               </ul>
             <% end %>
           </div>
@@ -176,8 +186,12 @@
     <div class="row">
         <div style="margin-bottom:20px;" class="col-md-12">
             <div class="form-group">
+              <%= label_tag "Assunto" %>
+              <%= text_field_tag "message[subject]", @message.subject, :class => "form-control input", :placeholder => "Assunto ...", :form => "message-form" %>
+            </div>
+            <div class="form-group">
               <%= label_tag "Mensagem" %><br />
-              <%= text_area_tag "message[content]", nil, :class => "form-control input", :placeholder => "Mensagem para os alunos ...", :rows => "8", :form => "message-form" %>
+              <%= text_area_tag "message[content]", @message.content, :class => "form-control input", :placeholder => "Mensagem para os alunos ...", :rows => "8", :form => "message-form" %>
             </div> 
             <div class="form-group">
               <%= button_tag "Enviar", :type => :submit, :class => "btn btm-sm btn-primary", :form => "message-form" %>

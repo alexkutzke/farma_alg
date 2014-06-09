@@ -14,6 +14,17 @@ function addUser(item){
 					 .appendTo($("#users"));
 }
 
+function addQuestion(item){
+  name = $(item).html();
+  id = $(item).data("id");
+
+  $("<li>").data("id","question_id-"+id)
+           .append(name)
+           .append(" <span class='label label-danger remove-item' style='cursor:pointer;'><i class='fa fa-times'></i></span>")
+           .appendTo($("#questions"));
+}
+
+
 function addAnswer(data){
   $("<li>").data("id","answer_id-"+data.id)
            .append(data.user.name+ " @ "+data.question.title + " #"+data.try_number)
@@ -60,7 +71,7 @@ function bindClicks(){
 
 	$("#open-answers-btn").click(function(e){
 		e.preventDefault();
-		$("#add-answers").slideDown();
+		$("#add-answers").slideToggle();
 		$("#add-questions").slideUp();
 		correctFiltersPosition();
 	});
@@ -71,7 +82,7 @@ function bindClicks(){
 
 	$("#open-questions-btn").click(function(e){
 		e.preventDefault();
-		$("#add-questions").slideDown();
+		$("#add-questions").slideToggle();
 		$("#add-answers").slideUp();
 	});
 
@@ -97,6 +108,22 @@ function bindClicks(){
 
 		$("#users-text-field").val('');
 	});
+
+  $(".add-question-btn").click(function(e){
+    e.preventDefault();
+
+    id = $(this).data("id");
+
+    elem = $("<input>").attr("type","hidden")
+                       .attr("value",id)
+                       .attr("name","message[question_ids][]")
+                       .attr("id","question_id-"+id);
+    
+    if(!$("input#question_id-"+id).length){
+      elem.appendTo($("#message-form"));
+      addQuestion($(this));
+    }
+  });
 
 	$(".content").on("click",".remove-item",function(){
 		li = $(this).parent();

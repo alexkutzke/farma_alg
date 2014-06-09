@@ -35,11 +35,31 @@ class Dashboard::MessagesController < ApplicationController
     @tags = current_user.all_tags
   end
 
+  def index
+    @messages = current_user.messages.desc(:updated_at)
+
+    @messages_to_me = Message.any_of(:target_user_ids => current_user.id.to_s).desc(:updated_at)
+  end
+
+  def show
+    @message = Message.find(params[:id])
+  end
 
   def new
     init_search
     get_available_users
+    @method = :post
+    @path = "/dashboard/messages"
     @message = Message.new(params[:message])
+  end
+
+  def edit
+    init_search
+    get_available_users
+    @message = Message.find(params[:id])
+    @path = "/dashboard/messages/"+params[:id]
+    @method = :put
+    render "new"
   end
 
   def create
@@ -60,6 +80,8 @@ class Dashboard::MessagesController < ApplicationController
       end
     end
 
+    @message.new_flag_user_ids = @message.target_user_ids
+
     respond_to do |format|
       if @message.save
         format.html { redirect_to dashboard_messages_path, notice: 'Mensagem criada com sucesso.' }
@@ -70,6 +92,46 @@ class Dashboard::MessagesController < ApplicationController
         format.html { render action: "new" }
         format.json { render json: @messages.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def update
+    @message = Message.find(params[:id])
+
+    @message.user_id = current_user.id
+
+    unless params[:message].nil?
+      if params[:message].has_key?(:user_ids)
+        @message.target_user_ids = params[:message][:user_ids]
+      end
+      if params[:message].has_key?(:team_ids)
+        params[:message][:team_ids].each do |team_id|
+          team = Team.find(team_id)
+          @message.target_user_ids = @message.target_user_ids + team.user_ids
+        end
+      end
+    end
+
+    @message.new_flag_user_ids = @message.target_user_ids
+
+    respond_to do |format|
+      if @message.update_attributes(params[:message])
+        format.html { redirect_to dashboard_message_path(@message), notice: 'Mensagem atualizada!' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @message.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @message = Message.find(params[:id])
+    @message.destroy
+
+    respond_to do |format|
+      format.html { redirect_to "/dashboard/messages" }
+      format.json { head :no_content }
     end
   end
 

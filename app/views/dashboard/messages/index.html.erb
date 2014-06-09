@@ -1,0 +1,84 @@
+<div id="answer-show">
+
+</div>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Mensagens
+        <small>Envie mensagens com recomendações para alunos</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+        <li class="active"><i class="fa fa-envelope"></i> Mensagens</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+
+            <%= link_to new_dashboard_message_path do %>
+                <%= button_tag raw("<i class='fa fa-plus'></i> Nova mensagem"), :class => "btn btn-sm btn-primary" %>
+            <% end %>
+
+            <h3>Mensagens enviados por mim</h3>
+
+            <table class="table">
+                <tr>
+                    <th>Assunto</th>
+                    <th>Mensagem</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <% @messages.each do |m| %>
+                    <tr>
+                        <td><%= m.subject %></td>
+                        <td><%= truncate(m.content) %></td>
+                        <td>
+                            <%= link_to dashboard_message_path(m) do %>
+                                <%= button_tag "Ver", :class => "btn btn-sm btn-success" %>
+                            <% end %>
+                        </td>
+                        <td>
+                            <%= link_to edit_dashboard_message_path(m) do %>
+                                <%= button_tag "Editar", :class => "btn btn-sm btn-info" %>
+                            <% end %>
+                        </td>
+                        <td>
+                            <%= link_to dashboard_message_path(m), method: :delete,data: { confirm: 'Você tem certeza que deseja apagar esta mensagem?'} do %>
+                                <%= button_tag "Apagar", :class => "btn btn-sm btn-danger" %>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Mensagens enviados para mim</h3>
+
+            <table class="table">
+                <tr>
+                    <th>Assunto</th>
+                    <th>Mensagem</th>
+                    <th></th>
+                </tr>
+                <% @messages_to_me.each do |m| %>
+                    <tr>
+                        <td><%= m.subject %></td>
+                        <td><%= truncate(m.content) %></td>
+                        <td>
+                            <%= link_to dashboard_message_path(m) do %>
+                                <%= button_tag "Ver", :class => "btn btn-sm btn-success" %>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
+    </div>
+</section>

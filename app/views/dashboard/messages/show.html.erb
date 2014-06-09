@@ -1,0 +1,116 @@
+<%= content_for :scripts do %>
+    <%= javascript_include_tag 'dashboard/resizeApp' %>
+    <%= javascript_include_tag 'difflib' %>
+    <%= javascript_include_tag 'diffview' %>
+
+  <script type="text/javascript">
+  function diffUsingJS(div_id,label1,txt1,label2,txt2){
+    // get the baseText and newText values from the two textboxes, and split them into lines
+    base = difflib.stringAsLines(txt1);//$("baseText").value);
+    newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+
+    //create a SequenceMatcher instance that diffs the two sets of lines
+    sm = new difflib.SequenceMatcher(base, newtxt);
+
+    // get the opcodes from the SequenceMatcher instance
+    // opcodes is a list of 3-tuples describing what changes should be made to the base text
+    // in order to yield the new text
+    opcodes = sm.get_opcodes();
+    diffoutputdiv = $("#"+div_id);
+    while(diffoutputdiv.firstChild)
+      diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+
+    //console.log opcodes
+
+    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+  }
+
+  var availableUsers = <%= raw @available_users.to_json %>;
+
+  </script>
+  <%= javascript_include_tag 'dashboard/messages' %>
+<% end %>
+
+<div id="answer-show">
+
+</div>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Mensagens
+        <small>Envie mensagens com recomendações para alunos</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+        <li><i class="fa fa-envelope"></i> <%= link_to "Mensagens", dashboard_messages_path %></li>
+        <li class="active"><i class="fa fa-eye"></i> <%= truncate(@message.subject) %></li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <div class="col-md-12">
+
+
+            
+            <div class="form-group">
+              <%= label_tag "Destinatários" %><br />
+              <div>
+                <ul id="users">
+                  <% unless @message.user_ids.nil? %>
+                    <% @message.user_ids.each do |user_id| %>
+                      <li data-id="user_id-<%=user_id%>"><%= User.find(user_id).name %></li>
+                    <% end %>  
+                  <% end %>
+                  <% unless @message.team_ids.nil? %>
+                    <% @message.team_ids.each do |team_id| %>
+                      <li data-id="team_id-<%=team_id%>">Turma: <%= Team.find(team_id).name %></li>
+                    <% end %>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= label_tag "Respostas recomendadas" %><br />
+              <ul id="answers">
+                  <% unless @message.answer_ids.nil? %>
+                    <% @message.answer_ids.each do |answer_id| %>
+                      <% a = Answer.find(answer_id) %>
+                      <li data-id="answer_id-<%=answer_id%>">
+                        <%= a.user.name + " @ " + a.question.title + " #"+ a.try_number.to_s %> 
+                        <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"><i class='fa fa-eye'></i></span>
+                      </li>
+                    <% end %>  
+                  <% end %>
+              </ul>
+            </div>
+            <div class="form-group">
+              <%= label_tag "Questões recomendadas" %><br />
+              <ul id="questions">
+                  <% unless @message.question_ids.nil? %>
+                    <% @message.question_ids.each do |question_id| %>
+                      <li data-id="question_id-<%=question_id%>"><%= Question.find(question_id).title %></li>
+                    <% end %>
+                  <% end %>
+              </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div style="margin-bottom:20px;" class="col-md-12">
+            <div class="form-group">
+              <%= label_tag "Assunto" %>
+              <%= simple_format @message.subject %>
+            </div>
+            <div class="form-group">
+              <%= label_tag "Mensagem" %><br />
+              <%= simple_format @message.content %>
+            </div> 
+      </div>
+    </div>
+</section>
