@@ -1,0 +1,187 @@
+<%= content_for :scripts do %>
+    <%= javascript_include_tag 'dashboard/resizeApp' %>
+    <%= javascript_include_tag 'difflib' %>
+    <%= javascript_include_tag 'diffview' %>
+
+  <script type="text/javascript">
+  function diffUsingJS(div_id,label1,txt1,label2,txt2){
+    // get the baseText and newText values from the two textboxes, and split them into lines
+    base = difflib.stringAsLines(txt1);//$("baseText").value);
+    newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+
+    //create a SequenceMatcher instance that diffs the two sets of lines
+    sm = new difflib.SequenceMatcher(base, newtxt);
+
+    // get the opcodes from the SequenceMatcher instance
+    // opcodes is a list of 3-tuples describing what changes should be made to the base text
+    // in order to yield the new text
+    opcodes = sm.get_opcodes();
+    diffoutputdiv = $("#"+div_id);
+    while(diffoutputdiv.firstChild)
+      diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+
+    //console.log opcodes
+
+    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+  }
+
+  var availableUsers = <%= raw @available_users.to_json %>;
+
+  </script>
+  <%= javascript_include_tag 'dashboard/messages' %>
+<% end %>
+
+<div id="answer-show">
+
+</div>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Mensagens
+        <small>Envie mensagens com recomendações para alunos</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+        <li><i class="fa fa-envelope"></i> <%= link_to "Mensagens", dashboard_messages_path %></li>
+        <li class="active"><i class="fa fa-plus"></i> Nova</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <div class="col-md-12">
+
+          <%= form_tag url_for(:controller => "messages", :action => "create"), :method => :post, :id => "message-form" do %>
+            <% if @message.errors.any? %>
+              <div class="panel panel-danger">
+                <div class="panel-heading">
+                  Não pode ser salvo devido à <%= pluralize(@message.errors.count, "erro")%>:
+                </div>
+        
+                <div class="panel-body">
+                  <ul>
+                  <% @message.errors.messages.each do |msg| %>
+                    <li><%= msg[1][0] %></li>
+                  <% end %>
+                  </ul>
+                </div>
+              </div>
+            <% end %>
+            <%= label_tag "Adicionar destinatário" %>
+            <div class="input-group">
+              <%= text_field_tag "users", nil, :class => "form-control input", :placeholder => "Busca por destinatário ...", :id => "users-text-field" %>
+              <span class="input-group-btn"><%= button_tag "Adicionar", :class => "form-control btn btn-flat btn-primary", :id => "add-users-btn" %></span>
+            </div>
+            <div class="form-group">
+              <%= label_tag "Destinatários adicionados" %><br />
+              <div>
+                <ul id="users">
+                  <% unless @message.user_ids.nil? %>
+                    <% @message.user_ids.each do |user_id| %>
+                      <li data-id="user_id-<%=user_id%>"><%= User.find(user_id).name %> <span class='label label-danger remove-item' style='cursor:pointer;'><i class='fa fa-times'></i></span></li>
+                      <input type="hidden" name="message[user_ids][]" value="<%= user_id %>" form="message-form" id="user_id-<%= user_id %>">
+                    <% end %>  
+                  <% end %>
+                  <% unless @message.team_ids.nil? %>
+                    <% @message.team_ids.each do |team_id| %>
+                      <li data-id="team_id-<%=team_id%>">Turma: <%= Team.find(team_id).name %> <span class='label label-danger remove-item' style='cursor:pointer;'><i class='fa fa-times'></i></span></li>
+                      <input type="hidden" name="message[team_ids][]" value="<%= team_id %>" form="message-form" id="team_id-<%= team_id %>">
+                    <% end %>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= label_tag "Respostas recomendadas" %><br />
+              <ul id="answers">
+                  <% unless @message.answer_ids.nil? %>
+                    <% @message.answer_ids.each do |answer_id| %>
+                      <% a = Answer.find(answer_id) %>
+                      <li data-id="answer_id-<%=answer_id%>">
+                        <%= a.user.name + " @ " + a.question.title + " #"+ a.try_number.to_s %> 
+                        <span class='label label-danger remove-item' style='cursor:pointer;'><i class='fa fa-times'></i></span>
+                        <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"><i class='fa fa-eye'></i></span>
+                      </li>
+                      <input type="hidden" name="message[answer_ids][]" value="<%= answer_id %>" form="message-form" id="answer_id-<%= answer_id %>">
+                    <% end %>  
+                  <% end %>
+              </ul>
+            </div>
+            <div class="form-group">
+              <%= label_tag "Questões recomendadas" %><br />
+              <ul id="questions">
+              </ul>
+            </div>
+            <div class="form-group">
+              <button id="open-answers-btn" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Adicionar respostas</button>
+              <button id="open-questions-btn" class="btn btn-info btn-sm"><i class="fa fa-plus"></i> Adicionar questões</button>
+            </div>
+          <% end %>
+        </div>
+    </div>
+
+    <div id="add-answers" class="row row_inner_shadow top_bottom_borders">
+      <div style="margin-bottom:20px; margin-top:20px" class="col-md-10 col-md-offset-1">
+        <div class="row">
+          <div style="margin-bottom:20px" class="col-md-10 col-md-offset-1">
+            <div class="box-header">
+              <div class="box-tools pull-right">
+                <button id="close-answers-btn" class="btn btn-default btn-sm"><i class="fa fa-times"></i> Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div style="margin-bottom:20px" class="col-md-10 col-md-offset-1">
+            <%= render(:partial => 'dashboard/search_bar', :locals => { :form_id => "search-form", :path => dashboard_fulltext_search_path }) %>
+            <%= render(:partial => 'dashboard/search_filters', :locals => { :form_id => "search-form", :users => @users, :teams => @teams, :los => @los, :questions => @questions, :tags => @tags }) %>
+            <input type="hidden" name="button_add" value="1" form="search-form">
+          </div>
+        </div>
+        <div class="row inner-results">
+          <div style="margin-bottom:20px" class="col-md-12">
+            <div id="search_result">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="add-questions" class="row row_inner_shadow top_bottom_borders">
+      <div style="margin-bottom:20px; margin-top:20px" class="col-md-10 col-md-offset-1">
+        <div class="row">
+          <div style="margin-bottom:20px" class="col-md-10 col-md-offset-1">
+            <div class="box-header">
+              <div class="box-tools pull-right">
+                <button id="close-questions-btn" class="btn btn-default btn-sm"><i class="fa fa-times"></i> Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row inner-results">
+          <div style="margin-bottom:20px" class="col-md-10 col-md-offset-1">
+            <% @questions.each do |q| %>
+              <ul>
+                <li><%= q.title %></li>
+              </ul>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+        <div style="margin-bottom:20px;" class="col-md-12">
+            <div class="form-group">
+              <%= label_tag "Mensagem" %><br />
+              <%= text_area_tag "message[content]", nil, :class => "form-control input", :placeholder => "Mensagem para os alunos ...", :rows => "8", :form => "message-form" %>
+            </div> 
+            <div class="form-group">
+              <%= button_tag "Enviar", :type => :submit, :class => "btn btm-sm btn-primary", :form => "message-form" %>
+            </div>
+      </div>
+    </div>
+</section>
