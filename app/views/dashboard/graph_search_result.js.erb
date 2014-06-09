@@ -1,3 +1,4 @@
+
 $("#graph-search-result").html("<%= escape_javascript(render(:partial => 'graph_search_result', :locals => {:as => @as}))%>");
 
 $("#search-result-container").show();
@@ -9,10 +10,10 @@ $('.answer').each(function() {
 });
 
 $('.answer').each(function() {
-	$(this).delay((i++)*50).fadeIn();
+  $(this).delay((i++)*50).fadeIn();
 });
 
-$("tr.answer").click(function(){
+$("tr.answer").click(function(e){
   addAnswer($(this).data("answer-id"));
 });
 

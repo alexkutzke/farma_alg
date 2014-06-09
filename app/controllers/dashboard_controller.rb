@@ -49,7 +49,9 @@ class DashboardController < ApplicationController
 
   def fulltext_search
     @as = Answer.search(params,current_user)
-
+    @button_add = true
+    @button_add = false unless params.has_key?(:button_add)
+    
     render 'search_result'
   end
   

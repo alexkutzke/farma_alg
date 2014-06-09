@@ -1,4 +1,5 @@
 <% i = 0 %>
+<% button_add = false unless defined?(button_add) %>
 <% answers.each do |a| %>
 
   <% if i == 0 %>
@@ -6,7 +7,7 @@
   <% end %>
   <% i = i + 1 %>
     <section class="answer col-lg-<%= 12/n %>" id="<%=a.id%>">
-      <%= render :partial => "dashboard/answers/card", :locals => {:a => a, :button_tag => button_tag } %>
+      <%= render :partial => "dashboard/answers/card", :locals => {:a => a, :button_tag => button_tag, :button_add => button_add } %>
     </section><!-- /.Left col -->
   <% if i == n %>
     </div>

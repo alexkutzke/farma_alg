@@ -218,11 +218,37 @@ i.comparison{
   left:80px !important;
 }
 
+.row_inner_shadow
+{
+  -webkit-box-shadow: inset 0px 0px 18px -2px rgba(50, 50, 50, 1);
+  -moz-box-shadow:    inset 0px 0px 18px -2px rgba(50, 50, 50, 1);
+  box-shadow:         inset 0px 0px 18px -2px rgba(50, 50, 50, 1);
+  display:none;
+  background-color: darkgrey;
+}
+
+.top_bottom_borders
+{
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.inner-results
+{
+  max-height: 300px;
+  overflow: auto;
+}
+
+.ui-autocomplete
+{
+  z-index: 999999999998;
+}
+
 .pace {
   -webkit-pointer-events: none;
   pointer-events: none;
 
-  z-index: 99999999999i890;
+  z-index: 999999999998;
   position: fixed;
   height: 90px;
   width: 90px;

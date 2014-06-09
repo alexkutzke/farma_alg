@@ -122,6 +122,8 @@ Carrie::Application.routes.draw do
       get "show"
     end
 
+    resources :messages
+
     namespace :tags do
       get "show"
       put "add_tag"

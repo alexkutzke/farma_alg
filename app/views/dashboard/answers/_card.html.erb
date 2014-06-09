@@ -9,7 +9,10 @@
                   <img src="http://www.gravatar.com/avatar/<%= a.user.gravatar %>?s=35" class="img-circle" alt="Imagem do Usuário" /> <%= a.user.name %>
               </h3>
               <div class="box-tools pull-right">
-                <button rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Visualizar resposta" class="answer-btn btn btn-default btn-sm" data-id="<%= a.id %>"><i class="fa fa-plus"></i></button>
+                <button rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Visualizar resposta" class="answer-btn btn btn-default btn-sm" data-id="<%= a.id %>"><i class="fa fa-eye"></i></button>
+              <% if button_add %>
+                  <button rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Adicionar esta resposta à mensagem" data-answer-id="<%= a.id %>" class="add_answer_link btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+              <% end %>
               <% if button_tag %>
                   <button rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Confirmar a tag selecionada para esta resposta" data-answer-id="<%= a.id %>" class="accept_tag_link btn btn-success btn-sm"><i class="fa fa-thumbs-o-up"></i></button>
                   <button rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Rejeitar a tag selecionada para esta resposta" data-answer-id="<%= a.id %>" class="reject_tag_link btn btn-danger btn-sm"><i class="fa fa-thumbs-o-down"></i></button>

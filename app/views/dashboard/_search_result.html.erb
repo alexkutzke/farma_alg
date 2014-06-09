@@ -3,4 +3,5 @@
     <%= as.count %> respostas encontradas.
   </div>
 </div>
-<%= render :partial => "dashboard/answers/answer_card", :locals => {:answers => @as, :button_tag => false, :n => 4} %>
+
+<%= render :partial => "dashboard/answers/answer_card", :locals => {:answers => as, :button_tag => false, :n => 4, :button_add => button_add} %>

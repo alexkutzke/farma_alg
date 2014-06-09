@@ -43,6 +43,7 @@ class User
   has_many :retroaction_answers, dependent: :delete
   has_many :last_answers, dependent: :delete
   has_many :tags, dependent: :delete
+  has_many :messages, dependent: :delete
   has_and_belongs_to_many :teams
 
   def do_gravatar_hash

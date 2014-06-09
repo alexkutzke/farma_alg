@@ -418,15 +418,6 @@ $(document).ready(function(){
     }
   }
 
-  $("body").on("DOMNodeInserted",".popover", function(){
-    var y = mouse_y - $(this).height()-20;
-    var x = mouse_x - $(this).width()/2;
-    var pop = $(this);
-    window.setTimeout(function(){
-      $(pop).attr("style","top: " +y+"px;left: "+x+"px; display: block;");
-    },10);
-  });
-
   $.widget( "ui.autocomplete", $.ui.autocomplete, {
     _renderItem: function(ul,item) {
       return $( "<li>" )

@@ -1,4 +1,4 @@
-$("#search_result").html("<%= escape_javascript(render(:partial => 'search_result', :locals => {:as => @as}))%>");
+$("#search_result").html("<%= escape_javascript(render(:partial => 'search_result', :locals => {:as => @as, :button_add => @button_add}))%>");
 
 var i=0;
 
