@@ -1,4 +1,4 @@
-$("#answer-show").html("<%= escape_javascript(render(:partial => 'graph_connection_info', :locals => {:connection => @connection, :notice => @notice, :answer1 => @answer1, :answer2 => @answer2}))%>");
+$("#answer-show").html("<%= escape_javascript(render(:partial => 'show', :locals => {:connection => @connection, :notice => @notice, :answer1 => @answer1, :answer2 => @answer2}))%>");
 $("span.label").tooltip();
 
 $("div.response").each(function(){
@@ -18,12 +18,19 @@ $("#cancel-reject-edge").click(function(){
 });
 
 function confirmRejectEdge(data){
-  graph.forEachLink(function(link){
-    if(link.data.id == data[0].id || link.data.id == data[1].id )
-    {
-      graph.removeLink(link);
-    }
-  });
+  if(graph){
+    graph.forEachLink(function(link){
+      if(link.data.id == data[0].id || link.data.id == data[1].id )
+      {
+        graph.removeLink(link);
+      }
+    });    
+  }
+  else{
+    $(".time-comparison[data-id='<%= @connection.id %>']").parent().fadeOut(function(){
+      $(this).remove();
+    })
+  }
   
   $("#close-answer-info").click();
 }
@@ -45,7 +52,14 @@ $("#cancel-accept-edge").click(function(){
 });
 
 function confirmAcceptEdge(data){
-  $("#edge-"+data.id).dblclick();
+  if(graph){
+    $("#edge-"+data.id).dblclick();
+  }
+  else{
+    $("#search-form").submit();
+  }
+
+  $("#close-answer-info").click();
 }
 
 $("#confirm-accept-edge").click(function(){

@@ -3,23 +3,26 @@
     <%= as.count %> respostas encontradas.
   </div>
 </div>
-
+<div class="row">
+  <div class="col-md-12">
 <!-- The time line -->
           <ul class="timeline">
+            <% i = 0 %>
 <% timeline_items.each do |item| %>
   <% case item[0] %>
   <% when "new_date" %>
+  <% i = i +1 %>
     <!-- timeline time label -->
     <li class="time-label">
-        <span class="bg-red">
-          <%= item[1][0].strftime("%d/%m/%Y") %>
+        <span class="bg-gray time-btn time-label-btn" data-date="date_<%=i%>">
+          <%= item[1][0].strftime("%d/%m/%Y") %> - <%= item[2] %> respostas
         </span>
     </li>
 
   <% when "answer" %>
     <!-- /.timeline-label -->
     <!-- timeline item -->
-    <li>
+    <li class="date_<%= i %>" style="display:none;">
         <% a = as[item[1][0]] %>
 
         <% if a.correct %>
@@ -27,19 +30,44 @@
         <% else %>
           <i class="fa fa-times bg-red"></i>
         <% end %>
-        <div class="timeline-item">
+        <div class="time-btn timeline-item answer-btn" data-id="<%= a.id%>">
             <span class="time"><i class="fa fa-clock-o"></i> <%= a.created_at.strftime("%H:%M")%></span>
-            <h3 class="timeline-header">Nova tentativa</h3>
             <div class="timeline-body">
-              <%= render :partial => "dashboard/answers/card", :locals => {:a => a, :button_tag => false } %>
+            <h4>
+              <img src="http://www.gravatar.com/avatar/<%= a.user.gravatar %>?s=35" class="img-circle" alt="Imagem do Usuário" /> <%= a.user.name %> - <%= a.question.title %> - <%= a.team.name %> - <%= a.lo.name %>
+            </h4>
+
+            
 
             </div>
+                        <!--
             <div class='timeline-footer'>
               
-            </div>
+            </div>-->
         </div>
     </li>
   
+
+  <% when "comparison" %>
+    <!-- /.timeline-label -->
+    <!-- timeline item -->
+    <li class="date_<%= i %>" style="display:none;">
+        <hr>
+
+          <i class="comparison fa fa-bars bg-orange"></i>
+
+        <div class="time-btn time-comparison timeline-item connection-btn" data-id="<%= item[1][2].id %>">
+            
+            <div class="timeline-body">
+            <h4>
+              Respostas similares.
+            </h4>
+            <p>
+              <b>Grau de similaridade: </b><%= item[1][2].weight %>
+            </p>
+            </div>
+        </div>
+    </li>
 
   <% end %>
               
@@ -50,3 +78,5 @@
   <i class="fa fa-clock-o"></i>
 </li>
 </ul>
+</div>
+</div>

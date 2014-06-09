@@ -10,8 +10,24 @@ $(".answer-btn").click(function(){
   });
 });
 
+$(".connection-btn").click(function(){
+  $.ajax({
+    url: "/dashboard/connections/show",
+    data: {
+      id: $(this).data("id")
+    },
+    type: "get"    
+  });
+});
+
+
 $("span.label").tooltip();
 $("button[rel='tooltip']").tooltip();
+
+$(".time-label-btn").click(function(){
+  date = $(this).data("date");
+  $("."+date).toggle();
+});
 
 if(searchResultCallback)
   searchResultCallback();

@@ -234,8 +234,8 @@ function linkDraw(link){
       }, 500);
 */
       $.ajax({
-        url: "/dashboard/graph_connection_info/",
-        type: "post",
+        url: "/dashboard/connections/show",
+        type: "get",
         data: {id:link.data.id},
         dataType: "script",
         success: function(){

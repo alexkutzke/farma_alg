@@ -17,3 +17,26 @@
 //= require AdminLTE/bootstrap
 //= require AdminLTE/AdminLTE/app
 //= require_self
+
+var comecei = 0;
+  $(document).ajaxSend(function(){
+    comecei +=1;
+    if(comecei == 1)
+    {
+      $("body").addClass("pace-running");
+      $("body").removeClass("pace-done");
+      $(".pace").removeClass("pace-inactive");
+      $(".pace").addClass("pace-active");
+    }
+  });
+
+  $(document).ajaxComplete(function(){
+    comecei -=1;
+    if(!comecei)
+    {
+      $("body").removeClass("pace-running");
+      $("body").addClass("pace-done");
+      $(".pace").addClass("pace-inactive");
+      $(".pace").removeClass("pace-active");
+    }
+  });

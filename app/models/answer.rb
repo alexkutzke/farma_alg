@@ -577,10 +577,10 @@ private
   def self.make_timeline(as)
     timeline_items = []
 
-    as.sort!{|x,y| x.created_at <=> y.created_at}
+    as.sort!{|x,y| y.created_at <=> x.created_at}
 
     i=0
-    last = nil
+    last = nil 
 
     n = as.count
 
@@ -589,18 +589,31 @@ private
 
       if last.nil?
         timeline_items << ["new_date",[as[current].created_at]]
+        last_new_date = 0
+        x = 0
       else
         if as[current].created_at.to_date != as[last].created_at.to_date
+          timeline_items[last_new_date] << x
           timeline_items << ["new_date",[as[current].created_at]]
+          last_new_date = timeline_items.count - 1
+          x = 0
         end
       end
 
+      unless last.nil?
+        c = Connection.find_or_initialize_by(:target_answer_id => as[last].id.to_s, :answer_id => as[current].id.to_s)
+        unless c.new_record?
+          timeline_items << ["comparison",[last,current,c]]
+        end  
+      end
+
       timeline_items << ["answer",[current]]
+      x = x+1
 
       last = current
       i = i+1
     end
-
+    timeline_items[last_new_date] << x if timeline_items.count > 0
     timeline_items
   end
 end

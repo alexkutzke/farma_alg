@@ -63,15 +63,4 @@ class DashboardController < ApplicationController
     render 'graph_search_result'
   end
 
-  def graph_answer_info
-    @answer = Answer.find(params[:id])
-    @available_tags = @answer.available_tags
-  end
-
-  def graph_connection_info
-    @connection = Connection.find(params[:id])
-    @answer1 = Answer.find(@connection.answer_id)
-    @answer2 = Answer.find(@connection.target_answer_id)
-  end
-
 end

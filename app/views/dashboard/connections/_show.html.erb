@@ -9,7 +9,7 @@
         <button class="btn btn-default btn-sm" data-widget="remove" id="close-answer-info"><i class="fa fa-times"></i></button>
     </div>
 </div>
-<div class="box-body resize" data-resize-operation-height="($(window).height()-parseInt($(this).offset().top))-50" >
+<div class="box-body resize" data-resize-operation-height="($(window).height()-$(this).offset().top+$(window).scrollTop())-50" >
 <div class="row">
   <div class="col-xs-12">
     <% unless @notice.nil? %>

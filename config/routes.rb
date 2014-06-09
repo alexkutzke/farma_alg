@@ -118,6 +118,10 @@ Carrie::Application.routes.draw do
       get "show"
     end
 
+    namespace :connections do
+      get "show"
+    end
+
     namespace :tags do
       get "show"
       put "add_tag"
