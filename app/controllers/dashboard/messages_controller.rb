@@ -36,13 +36,17 @@ class Dashboard::MessagesController < ApplicationController
   end
 
   def index
-    @messages = current_user.messages.desc(:updated_at)
+    @messages = current_user.messages.sort{|x,y| x.updated_at <=> y.updated_at}
 
     @messages_to_me = Message.any_of(:target_user_ids => current_user.id.to_s).desc(:updated_at)
   end
 
   def show
     @message = Message.find(params[:id])
+    @message.new_flag_user_ids.delete(current_user.id.to_s)
+    @message.save!
+    @reply = Reply.new
+    get_messages
   end
 
   def new

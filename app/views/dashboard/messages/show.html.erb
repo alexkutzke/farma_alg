@@ -55,6 +55,20 @@
         <div class="col-md-12">
 
 
+          <div class="box box-solid">
+                                <div class="box-header">
+                                    <h3 class="box-title">Mensagem de: <%= @message.user.name %></h3>
+                                    <div class="box-tools pull-right">
+                                      <% if @message.has_recommendation? %>
+                                        <i class="fa fa-paperclip"></i>
+                                      <% end %>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                  
+
+    <div class="row">
+        <div class="col-md-12">
             
             <div class="form-group">
               <%= label_tag "Destinatários" %><br />
@@ -113,4 +127,85 @@
             </div> 
       </div>
     </div>
+
+    </div><!-- /.box-body -->
+  </div>
+  </div>
+</div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Comentários</h3>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <% @message.replies.each do |r| %>
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">
+                      <div class="pull-left image">
+                          <img src="http://www.gravatar.com/avatar/<%= r.user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
+                      </div> 
+                      <%= r.user.name %>
+                      <br><small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words r.updated_at %></small>
+                    </h3>
+                    <% if @message.user.id == current_user.id %>
+                      <div class="box-tools pull-right">
+                        <%= link_to dashboard_message_reply_path(@message,r), method: :delete,data: { confirm: 'Você tem certeza que deseja apagar este comentário?'} do %>
+                          <%= button_tag "Apagar", :class => "btn btn-sm btn-danger" %>
+                        <% end %>
+                      </div>
+
+                    <% end %>
+                </div>
+                <div class="box-body">
+                    <%= simple_format r.content %>
+                </div><!-- /.box-body -->
+            </div>
+          <% end %>
+
+          <% if @message.can_post?(current_user) %>
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">
+                      <div class="pull-left image">
+                          <img src="http://www.gravatar.com/avatar/<%= current_user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
+                      </div> 
+                      Novo comentário de <%= current_user.name %>
+                    </h3>
+                </div>
+                <div class="box-body">
+                    <%= form_tag dashboard_message_replies_path(@message), :method => :post do %>
+                      <% if @reply.errors.any? %>
+                        <div class="panel panel-danger">
+                          <div class="panel-heading">
+                            Não pode ser salvo devido à <%= pluralize(@reply.errors.count, "erro")%>:
+                          </div>
+                  
+                          <div class="panel-body">
+                            <ul>
+                            <% @reply.errors.messages.each do |msg| %>
+                              <li><%= msg[1][0] %></li>
+                            <% end %>
+                            </ul>
+                          </div>
+                        </div>
+                      <% end %>
+
+                      <div class="form-group">
+                        <%= label_tag "Comentário" %><br />
+                        <%= text_area_tag "reply[content]", @reply.content, :class => "form-control input", :placeholder => "Seu comentário ...", :rows => "8" %>
+                      </div> 
+                      <div class="form-group">
+                        <%= button_tag "Enviar", :type => :submit, :class => "btn btm-sm btn-primary" %>
+                      </div>
+                  <% end %>
+                </div><!-- /.box-body -->
+            </div>  
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
 </section>

@@ -6,7 +6,9 @@
 <section class="content-header">
     <h1>
         Mensagens
-        <small>Envie mensagens com recomendações para alunos</small>
+        <% if current_user.admin? %>
+            <small>envie mensagens com recomendações para alunos</small>
+        <% end %>
     </h1>
     <ol class="breadcrumb">
         <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
@@ -16,14 +18,16 @@
 
 <!-- Main content -->
 <section class="content">
-    <div class="row">
-        <div class="col-md-12">
+    <% if current_user.admin? %>
 
+    <div class="row">
+        <div class="col-md-12">    
+            
             <%= link_to new_dashboard_message_path do %>
                 <%= button_tag raw("<i class='fa fa-plus'></i> Nova mensagem"), :class => "btn btn-sm btn-primary" %>
             <% end %>
 
-            <h3>Mensagens enviados por mim</h3>
+            <h3>Mensagens enviadas por mim</h3>
 
             <table class="table">
                 <tr>
@@ -35,7 +39,15 @@
                 </tr>
                 <% @messages.each do |m| %>
                     <tr>
-                        <td><%= m.subject %></td>
+                        <td>
+                            <% if m.has_recommendation? %>
+                                <span><i class="fa fa-paperclip"></i> </span>
+                            <% end %>
+                            <% if m.new_flag_user_ids.include?(current_user.id.to_s) %>
+                                <small class="badge bg-green">nova</small>
+                            <% end %>
+                            <%= truncate(m.subject) %>
+                        </td>
                         <td><%= truncate(m.content) %></td>
                         <td>
                             <%= link_to dashboard_message_path(m) do %>
@@ -57,9 +69,10 @@
             </table>
         </div>
     </div>
+    <% end %>
     <div class="row">
         <div class="col-md-12">
-            <h3>Mensagens enviados para mim</h3>
+            <h3>Mensagens enviadas para mim</h3>
 
             <table class="table">
                 <tr>
@@ -69,7 +82,15 @@
                 </tr>
                 <% @messages_to_me.each do |m| %>
                     <tr>
-                        <td><%= m.subject %></td>
+                        <td>
+                            <% if m.has_recommendation? %>
+                                <span><i class="fa fa-paperclip"></i> </span>
+                            <% end %>
+                            <% if m.new_flag_user_ids.include?(current_user.id.to_s) %>
+                                <small class="badge bg-green">nova</small>
+                            <% end %>                            
+                            <%= truncate(m.subject) %>
+                        </td>
                         <td><%= truncate(m.content) %></td>
                         <td>
                             <%= link_to dashboard_message_path(m) do %>

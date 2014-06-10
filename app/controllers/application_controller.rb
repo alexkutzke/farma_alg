@@ -2,7 +2,15 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   respond_to :html,:json
   before_filter :authenticate_user!
+  before_filter :get_messages
   layout :layout_to_resource
+
+  def get_messages
+    if user_signed_in?
+      @messages_to_me_top = current_user.last_messages_to_me(4)
+      @n_new_messages = current_user.number_of_new_messages
+    end
+  end
 
   def verified_request?
     #p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"

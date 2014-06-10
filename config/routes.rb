@@ -122,7 +122,9 @@ Carrie::Application.routes.draw do
       get "show"
     end
 
-    resources :messages
+    resources :messages do
+      resources :replies, :only => [:create,:destroy]
+    end
 
     namespace :tags do
       get "show"

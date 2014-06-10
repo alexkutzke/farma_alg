@@ -45,6 +45,7 @@ class User
   has_many :tags, dependent: :delete
   has_many :messages, dependent: :delete
   has_and_belongs_to_many :teams
+  has_many :replies, dependent: :delete
 
   def do_gravatar_hash
     self.gravatar= Digest::MD5.hexdigest(self.email)
@@ -132,4 +133,21 @@ class User
       self.tags
     end
   end
+
+  def number_of_new_messages
+    Message.any_of(:new_flag_user_ids => self.id.to_s).count
+  end
+
+  def messages_to_me
+    @messages = Message.any_of(:target_user_ids => self.id.to_s).desc(:updated_at)
+  end
+
+  def last_messages_to_me(n)
+    @messages = Message.any_of(:target_user_ids => self.id.to_s).desc(:updated_at)[0..n]
+  end
+
+  def is_message_new?(m)
+    m.new_flag_user_ids.include?(self.id.to_s)
+  end
+
 end

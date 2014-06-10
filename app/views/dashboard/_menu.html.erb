@@ -34,7 +34,7 @@
     </li>
 
     <li class="<%= raw "active" if controller.class == Dashboard::MessagesController %>">
-        <%= link_to new_dashboard_message_path do %>
+        <%= link_to dashboard_messages_path do %>
             <i class="fa fa-envelope"></i> <span>Mensagens</span>
         <% end %>
     </li>

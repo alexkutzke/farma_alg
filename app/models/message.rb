@@ -17,4 +17,13 @@ class Message
   validates_presence_of :content,:message => "A mensagem precisa ter algum conteúdo"
 
 	belongs_to :user
+  has_many :replies, dependent: :delete
+
+  def has_recommendation?
+    ((not self.answer_ids.nil?) and (not self.answer_ids.empty?)) || ((not self.question_ids.nil?) and (not self.question_ids.empty?)) 
+  end
+
+  def can_post?(user)
+    (self.user_id == user.id) or (self.target_user_ids.include?(user.id.to_s))
+  end
 end

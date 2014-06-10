@@ -34,34 +34,48 @@
                     <ul class="nav navbar-nav">
 
                         <!-- Messages: style can be found in dropdown.less-->
-                        <!--
                         <li class="dropdown messages-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-envelope"></i>
-                                <span class="label label-success">4</span>
+                                <% unless  @n_new_messages == 0 %>
+                                  <span class="label label-success"><%= @n_new_messages %></span>  
+                                <% end %>
+                                
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">You have 4 messages</li>
+                                <% unless  @n_new_messages == 0 %>
+                                  <li class="header">Você tem <%= @n_new_messages %> novas mensagens</li>
+                                <% end %>
                                 <li>
                                     <ul class="menu">
+                                      <% @messages_to_me_top.each do |m| %>
+
                                         <li>
-                                            <a href="#">
+                                            <a href="<%= dashboard_message_path(m) %>">
                                                 <div class="pull-left">
-                                                    <img src="http://www.gravatar.com/avatar/<%= current_user.gravatar%>" class="img-circle" alt="User Image"/>
+                                                    <img src="http://www.gravatar.com/avatar/<%= m.user.gravatar%>" class="img-circle" alt="Imagem do usuário"/>
                                                 </div>
                                                 <h4>
-                                                    Support Team
-                                                    <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                                    <%= truncate(m.subject) %>                                                 
                                                 </h4>
-                                                <p>Why not buy a new awesome theme?</p>
+                                                <p><%= truncate(m.content) %></p>
+                                                <h4>
+                                                  <% if current_user.is_message_new?(m) %>
+                                                    <span class="badge bg-green">nova</span>
+                                                  <% end %>
+                                                  <% if m.has_recommendation? %>
+                                                    <span><i class="fa fa-paperclip"></i> </span>
+                                                  <% end %>
+                                                  <small><i class="fa fa-clock-o"></i> <%= time_ago_in_words m.updated_at %></small>
+                                                </h4>
                                             </a>
                                         </li>
+                                      <% end %>
                                     </ul>
                                 </li>
-                                <li class="footer"><a href="#">See All Messages</a></li>
+                                <li class="footer"><a href="<%= dashboard_messages_path %>">Ver todas as mensagens</a></li>
                             </ul>
                         </li>
-                        -->
 
 
                         <!-- Notifications: style can be found in dropdown.less -->
@@ -122,36 +136,30 @@
 
 
                         <!-- User Account: style can be found in dropdown.less -->
-                        <!--
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span>Jane Doe <i class="caret"></i></span>
+                                <span><%= current_user.name %> <i class="caret"></i></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header bg-light-blue">
                                     <img src="http://www.gravatar.com/avatar/<%= current_user.gravatar%>" class="img-circle" alt="User Image" />
                                     <p>
-                                        Jane Doe - Web Developer
-                                        <small>Member since Nov. 2012</small>
+                                        <%= current_user.name %> <%= raw "Administrador" if current_user.admin? %>
+                                        <small>Último acesso em <%= current_user.last_sign_in_at.strftime("%d/%m/%Y às %H:%M:%S") %></small>
                                     </p>
-                                </li>
-                                
-                                <li class="user-body">
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Followers</a>
-                                    </div>
                                 </li>
                                 
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                        <a href="/users/edit" class="btn btn-default btn-flat">Meus dados</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="/users/sign_out" data-method="delete" class="btn btn-default btn-flat">Sair</a>
                                     </div>
                                 </li>
                             </ul>
-                        </li>
-                        -->
-
+                        </li>                  
                     </ul>
                 </div>
             </nav>
