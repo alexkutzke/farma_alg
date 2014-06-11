@@ -57,7 +57,7 @@
 
           <div class="box box-solid">
                                 <div class="box-header">
-                                    <h3 class="box-title">Mensagem de: <%= @message.user.name %></h3>
+                                    <h3 class="box-title">Mensagem de <%= @message.user.name %></h3>
                                     <div class="box-tools pull-right">
                                       <% if @message.has_recommendation? %>
                                         <i class="fa fa-paperclip"></i>
@@ -69,7 +69,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            
+                        
             <div class="form-group">
               <%= label_tag "Destinatários" %><br />
               <div>
@@ -95,7 +95,7 @@
                       <% a = Answer.find(answer_id) %>
                       <li data-id="answer_id-<%=answer_id%>">
                         <%= a.user.name + " @ " + a.question.title + " #"+ a.try_number.to_s %> 
-                        <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"><i class='fa fa-eye'></i></span>
+                        <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>" data-message-id="<%= @message.id %>"> <i class='fa fa-eye'></i></span>
                       </li>
                     <% end %>  
                   <% end %>
@@ -106,7 +106,11 @@
               <ul id="questions">
                   <% unless @message.question_ids.nil? %>
                     <% @message.question_ids.each do |question_id| %>
-                      <li data-id="question_id-<%=question_id%>"><%= Question.find(question_id).title %></li>
+                      <li data-id="question_id-<%=question_id%>">
+                        <a href="<%= current_user.link_to_question(Question.find(question_id)) %>">
+                          <%= Question.find(question_id).title %>
+                        </a>
+                      </li>
                     <% end %>
                   <% end %>
               </ul>
@@ -117,14 +121,15 @@
 
     <div class="row">
         <div style="margin-bottom:20px;" class="col-md-12">
-            <div class="form-group">
-              <%= label_tag "Assunto" %>
-              <%= simple_format @message.subject %>
-            </div>
-            <div class="form-group">
-              <%= label_tag "Mensagem" %><br />
+            <hr>
+            
+            
+              <h4><%= simple_format @message.subject %></h4>
+            
+            
+              
               <%= simple_format @message.content %>
-            </div> 
+            
       </div>
     </div>
 
@@ -133,15 +138,15 @@
   </div>
 </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <h3>Comentários</h3>
+
+
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
+          <h3>Comentários</h3>
           <% @message.replies.each do |r| %>
             <div class="box box-solid">
                 <div class="box-header">
-                    <h3 class="box-title">
+                    <h3 class="box-title" style="width:80%;">
                       <div class="pull-left image">
                           <img src="http://www.gravatar.com/avatar/<%= r.user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
                       </div> 
@@ -205,7 +210,5 @@
 
         </div>
       </div>
-    </div>
-  </div>
 
 </section>

@@ -132,10 +132,12 @@ function bindClicks(){
 	});
 
   $("#answers").on("click",".answer-btn",function(){
+    var message_id = $(this).data("message-id");
     $.ajax({
       url: "/dashboard/answers/show",
       data: {
-        id: $(this).data("id")
+        id: $(this).data("id"),
+        message_id: message_id
       },
       type: "get"    
     });

@@ -159,4 +159,14 @@ module SimilarityMachine
       end
     end
   end
+
+  def self.get_similarity(a,b)
+    result = self.similarity(a,b)
+    c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
+
+    unless c.new_record?
+      result['final_similarity'] = c.weight
+    end
+    result
+  end
 end

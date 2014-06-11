@@ -150,4 +150,17 @@ class User
     m.new_flag_user_ids.include?(self.id.to_s)
   end
 
+  def link_to_question(q)
+    self.teams.each do |t|
+      t.los.each do |lo|
+        for i in 0..lo.exercises.length-1 do
+          e = lo.exercises[i]
+          if e.question_ids.include?(q.id)
+            return "/published/teams/#{t.id}/los/#{lo.id}/pages/#{i+1}"
+          end
+        end
+      end
+    end
+    return nil    
+  end
 end
