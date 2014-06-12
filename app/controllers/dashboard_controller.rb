@@ -19,6 +19,7 @@ class DashboardController < ApplicationController
   end
 
 	def home
+    @recommendations = Recommendation.where(user_id:current_user.id.to_s)
 	end
 
   def timeline

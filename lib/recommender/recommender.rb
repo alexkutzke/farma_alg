@@ -192,7 +192,7 @@ module Recommender
             end
             
 
-            recommendation << {:user_ids => cc.first, :answer_ids => answer_ids,:answer_scores => answer_scores, :question_id => question[0], :question_references => question[1], :question_score => question[2]}
+            recommendation << {:team_id => team_id, :user_ids => cc.first, :answer_ids => answer_ids,:answer_scores => answer_scores, :question_id => question[0], :question_references => question[1], :question_score => question[2]}
           end
         end
       end
@@ -218,6 +218,24 @@ module Recommender
       end
     end
     recommendations
+  end
+
+  def self.create_recommendations(thres)
+    user_ids = User.all.pluck(:id)
+
+    Recommendation.delete_all
+
+    user_ids.each do |user_id|
+      team_ids = Team.where(owner_id:user_id.to_s).pluck(:id)
+
+      team_ids.each do |team_id|
+        recoms = self.build_team_recommendations(team_id.to_s,thres)
+        recoms.each do |recom|
+          Recommendation.create(:type => "resposta_para_grupo", :item => recom, :user_id => user_id)
+        end
+      end
+    end
+    true
   end
 
   def self.recommendation_in_words(recommendations)

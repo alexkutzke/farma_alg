@@ -64,4 +64,22 @@ module ApplicationHelper
     raw "<span data-id=\"#{t.id}\" style=\"margin: 3px 3px;\" rel=\"tooltip\" data-toggle=\"tooltip\" data-placement=\"top\" title data-original-title=\"#{t.description}\" class=\"#{"tags" if big} label #{label}\">#{t.name}</span>"
   end
 
+  def build_message_link(recommendation)
+    final = "?"
+
+    recommendation.item['user_ids'].each do |user_id|
+      final = final + "message[user_ids][]=" + user_id.to_s + "&"
+    end
+
+    recommendation.item['answer_ids'].each do |answer_id|
+      final = final + "message[answer_ids][]=" + answer_id.to_s + "&"
+    end
+
+    final = final + "message[question_ids][]=" + recommendation.item['question_id'].to_s + "&"
+
+    final = final + "message[subject]=Recomendação de resposta"
+
+    final
+  end
+
 end

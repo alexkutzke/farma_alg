@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-solid" style="border: 1px solid lightgray;">
+                                 
+      <% case recommendation.type %>
+      <% when "resposta_para_grupo" %>
+
+        <div class="box-header">
+            <h3 class="box-title">Recomendação de resposta para grupo de alunos</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-default btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+          <p>
+            Um grupo de <%= recommendation.item['user_ids'].count %> alunos possui semelhanças nas respostas erradas para a questão <%= Question.find(recommendation.item['question_id']).title %>.
+          </p>
+
+          <p>
+            Recomendamos a análise de alguma das seguintes respostas para este grupo de alunos:
+
+            <% recommendation.item['answer_ids'][0..4].each do |answer_id| %>
+              <% a = Answer.find(answer_id.to_s) %>
+              <ul>
+                <li>
+                  <%= a.user.name + " @ " + a.question.title + " #" + a.try_number.to_s %>
+                  <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"> <i class='fa fa-eye'></i></span>
+                </li>
+              </ul>
+            <% end %>
+          </p>
+
+          <ul style="display:none;" class="recommendation_users" data-recommendation-id="<%= recommendation.id %>">
+            <% recommendation.item['user_ids'].each do |user_id| %>
+              <li>
+                <% u = User.find(user_id) %>
+                <%= u.name + " (" + u.email + ")" %>
+              </li>
+            <% end %>
+          </ul>
+
+          <p>
+            <%= link_to new_dashboard_message_path+build_message_link(recommendation) do %>
+              <%= button_tag raw("<i class='fa fa-share'></i> Repassar recomendação aos alunos"), :class => "btn btn-primary" %>
+            <% end %>
+          </p>
+        </div><!-- /.box-body -->
+      <% end %>
+    </div>
+  </div>
+</div>

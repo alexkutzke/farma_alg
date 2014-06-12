@@ -46,6 +46,7 @@ class User
   has_many :messages, dependent: :delete
   has_and_belongs_to_many :teams
   has_many :replies, dependent: :delete
+  has_many :recommendations, dependent: :delete
 
   def do_gravatar_hash
     self.gravatar= Digest::MD5.hexdigest(self.email)

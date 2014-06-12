@@ -1,6 +1,38 @@
 <%= content_for :scripts do %>
+    <%= javascript_include_tag 'dashboard/resizeApp' %>
+    <%= javascript_include_tag 'difflib' %>
+    <%= javascript_include_tag 'diffview' %>
+
+  <script type="text/javascript">
+  function diffUsingJS(div_id,label1,txt1,label2,txt2){
+    // get the baseText and newText values from the two textboxes, and split them into lines
+    base = difflib.stringAsLines(txt1);//$("baseText").value);
+    newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+
+    //create a SequenceMatcher instance that diffs the two sets of lines
+    sm = new difflib.SequenceMatcher(base, newtxt);
+
+    // get the opcodes from the SequenceMatcher instance
+    // opcodes is a list of 3-tuples describing what changes should be made to the base text
+    // in order to yield the new text
+    opcodes = sm.get_opcodes();
+    diffoutputdiv = $("#"+div_id);
+    while(diffoutputdiv.firstChild)
+      diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+
+    //console.log opcodes
+
+    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+  }
+
+  </script>
   <%= javascript_include_tag 'dashboard/home' %>
 <% end %>
+
+
+<div id="answer-show">
+
+</div>
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -85,37 +117,32 @@
         <!-- right col (We are only adding the ID to make the widgets sortable)-->
         <section class="col-lg-6">
             <!-- Box (with bar chart) -->
-            <div class="box box-danger">
+            <div class="box box-info">
                 <div class="box-header">
                     <!-- tools box -->
                     <div class="pull-right box-tools">
-                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-info btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                     </div><!-- /. tools -->
-                    <i class="fa fa-cloud"></i>
+                    <i class="fa fa-exclamation"></i>
 
-                    <h3 class="box-title">Server Load</h3>
+                    <h3 class="box-title">Recomendações automáticas para você</h3>
                 </div><!-- /.box-header -->
 
-                <div class="box-body no-padding">
-                    <div class="row">
-                        <div class="col-sm-7">
-                            
-                            bla
-                        </div>
-                        <div class="col-sm-5">
-                            bla 2
-                        </div><!-- /.col -->
-                    </div><!-- /.row - inside box -->
+                <div class="box-body">
+                  <% unless @recommendations.empty? %>
+                    <% @recommendations.each do |recommendation| %>
+                      <%= render :partial => "recommendation", :locals => {:recommendation => recommendation} %>
+                    <% end %>
+                  <% end %>
                 </div><!-- /.box-body -->
-
+<!--
                 <div class="box-footer">
                     <div class="row">
                         <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                            <input type="text" class="knob" data-readonly="true" value="80" data-width="60" data-height="60" data-fgColor="#f56954"/>
-                            <div class="knob-label">CPU</div>
-                        </div><!-- ./col -->                        
-                    </div><!-- /.row -->
-                </div><!-- /.box-footer -->
+
+                        </div>
+                    </div>
+                </div>-->
             </div><!-- /.box -->             
 
         </section><!-- right col -->
