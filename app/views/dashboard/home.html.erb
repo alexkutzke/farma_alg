@@ -48,69 +48,111 @@
 <!-- Main content -->
 <section class="content">
 
-    <!-- Small boxes (Stat box) -->
-    <!--
-    <div class="row">
-        <div class="col-lg-3 col-xs-6">
-        
-            <div class="small-box bg-aqua">
-                <div class="inner">
-                    <h3>
-                        150
-                    </h3>
-                    <p>
-                        New Orders
-                    </p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-bag"></i>
-                </div>
+  <div class="row">
+    <% @boxes.each do |box| %>
+      <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box <%= box[:color] %>">
+              <div class="inner">
+                  <h3>
+                      <%= box[:value] %>
+                  </h3>
+                  <p>
+                      <%= box[:title] %>
+                  </p>
+              </div>
+              <div class="icon">
+                  <i class="<%= box[:icon] %>"></i>
+              </div>
+              <% if box[:has_link] %>
                 <a href="#" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
+                  More info <i class="fa fa-arrow-circle-right"></i>
                 </a>
-            </div>
-        </div>
-        
+              <% else %>
+                <div class="small-box-footer">
+                </div>
+              <% end %>
 
-    </div>--><!-- /.row -->
+          </div>
+      </div><!-- ./col -->
+    <% end %>
+  </div>
 
     <!-- Main row -->
     <div class="row">
         <!-- Left col -->
-        <section class="col-lg-6 connectedSortable">
+        <section class="col-lg-6">
+
 
             <!-- Box (with bar chart) -->
-            <div class="box box-danger">
+            <div class="box box-info">
                 <div class="box-header">
                     <!-- tools box -->
                     <div class="pull-right box-tools">
-                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-info btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                     </div><!-- /. tools -->
-                    <i class="fa fa-cloud"></i>
+                    <i class="fa fa-comments"></i>
 
-                    <h3 class="box-title">Server Load</h3>
+                    <h3 class="box-title">Últimos comentários nas suas turmas</h3>
                 </div><!-- /.box-header -->
 
-                <div class="box-body no-padding">
-                    <div class="row">
-                        <div class="col-sm-7">
-                            
-                            bla
+                <div class="box-body">
+                  <% @last_comments.each do |c| %>
+                    <% unless c.created_at.nil? %>
+                      <div class="box box-solid" style="border: 1px solid lightgray;">
+                        <div class="box-header">
+                            <h3 class="box-title" style="width:80%;">
+                              <div class="pull-left image">
+                                  <img src="http://www.gravatar.com/avatar/<%= c.user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
+                              </div> 
+                              <%= c.user.name %>
+                              <br><small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words c.created_at %></small>
+                              <br>
+                              <small>
+                                na resposta à 
+                                <%= link_to panel_team_user_lo_question_answer_path(c.team_id,c.target_user_id,c.answer.lo_id,c.question_id,c.answer_id) do %>
+                                  questão <strong><%= Question.find(c.question_id).title %></strong> na turma <strong><%= Team.find(c.team_id).name %></strong>
+                                <% end %>
+                              </small>
+                            </h3>
                         </div>
-                        <div class="col-sm-5">
-                            bla 2
-                        </div><!-- /.col -->
-                    </div><!-- /.row - inside box -->
-                </div><!-- /.box-body -->
+                        <div class="box-body">
+                            <%= simple_format c.text %>
+                        </div><!-- /.box-body -->
+                      </div>
 
-                <div class="box-footer">
-                    <div class="row">
-                        <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                            <input type="text" class="knob" data-readonly="true" value="80" data-width="60" data-height="60" data-fgColor="#f56954"/>
-                            <div class="knob-label">CPU</div>
-                        </div><!-- ./col -->                        
-                    </div><!-- /.row -->
-                </div><!-- /.box-footer -->
+                   <% end %>
+                 <% end %>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->        
+
+
+            <!-- Box (with bar chart) -->
+            <div class="box box-info">
+                <div class="box-header">
+                    <!-- tools box -->
+                    <div class="pull-right box-tools">
+                        <button class="btn btn-info btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /. tools -->
+                    <i class="fa fa-check"></i>
+
+                    <h3 class="box-title">Últimas respostas das suas turmas</h3>
+                </div><!-- /.box-header -->
+
+                <div class="box-body">
+                  <% @last_answers.each do |a| %>
+                    <% if a.correct %>
+                      <div class="callout callout-info">
+                    <% else %>
+                      <div class="callout callout-danger">
+                    <% end %>
+                      <h4>
+                        <%= a.user.name + " @ " + a.question.title + " #" + a.try_number.to_s %>
+                        <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"> <i class='fa fa-eye'></i></span>
+                      </h4>
+                    </div>
+                  <% end %>
+                </div><!-- /.box-body -->
             </div><!-- /.box -->        
         </section><!-- /.Left col -->
 

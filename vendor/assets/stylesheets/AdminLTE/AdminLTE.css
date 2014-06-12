@@ -1206,6 +1206,7 @@ body > .header .logo .icon {
   text-decoration: none;
   color: #f9f9f9;
 }
+/*
 .small-box:hover .icon {
   animation-name: tansformAnimation;
   animation-duration: .5s;
@@ -1222,7 +1223,7 @@ body > .header .logo .icon {
   -moz-animation-iteration-count: 1;
   -moz-animation-timing-function: ease;
   -moz-animation-fill-mode: forwards;
-}
+}*/
 @keyframes tansformAnimation {
   from {
     font-size: 90px;

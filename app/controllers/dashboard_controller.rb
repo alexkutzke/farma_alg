@@ -20,6 +20,31 @@ class DashboardController < ApplicationController
 
 	def home
     @recommendations = Recommendation.where(user_id:current_user.id.to_s)
+    @boxes = []
+
+    num_students = 0
+    num_students_correct_answers = 0
+    num_students_wrong_answers = 0
+    team_ids = Team.where(owner_id:current_user.id.to_s).pluck(:id)
+    team_ids.each do |team_id|
+      t = Team.find(team_id.to_s)
+      num_students = num_students + t.user_ids.count
+      num_students_correct_answers = num_students_correct_answers + Answer.where(:team_id => t.id.to_s, :correct => true).count
+      num_students_wrong_answers = num_students_wrong_answers + Answer.where(:team_id => t.id.to_s, :correct => false).count
+    end
+
+    num_wrong_answers = Answer.where(user_id: current_user.id,:correct => false).count
+    num_correct_answers = Answer.where(user_id: current_user.id,:correct => true).count
+
+    if current_user.admin?
+      @boxes << {:color => "bg-orange", :value => team_ids.count, :title => "Número de turmas", :has_link? => false, :icon => "fa fa-book"}
+      @boxes << {:color => "bg-aqua", :value => num_students, :title => "Número de alunos", :has_link? => false, :icon => "fa fa-users"}
+      @boxes << {:color => "bg-red", :value => num_students_wrong_answers, :title => "Número de respostas incorretas", :has_link? => false, :icon => "fa fa-times"}
+      @boxes << {:color => "bg-green", :value => num_students_correct_answers, :title => "Número de respostas corretas", :has_link? => false, :icon => "fa fa-check"}
+    end
+
+    @last_answers = Answer.in(team_id: team_ids).desc(:created_at)[0..4]
+    @last_comments = Comment.in(team_id: team_ids).desc('created_at')[0..4]
 	end
 
   def timeline
