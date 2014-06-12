@@ -3,6 +3,99 @@
     <div class="box box-solid" style="border: 1px solid lightgray;">
                                  
       <% case recommendation.type %>
+      <% when "questao_com_mais_incorretas" %>
+
+        <div class="box-header">
+            <h3 class="box-title">Questões com mais tentativas incorretas</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-default btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+          <p>
+            A questão <%= Question.find(recommendation.item['question_id']).title %> é uma das que possui mais tentativas incorretas na turma <%= Team.find(recommendation.item['team_id']).name %>.
+          </p>
+          
+          <p>
+            Recomendamos a análise de alguma das seguintes respostas para os alunos desta turma:
+
+            <% recommendation.item['answer_ids'][0..4].each do |answer_id| %>
+              <% a = Answer.find(answer_id.to_s) %>
+              <ul>
+                <li>
+                  <%= a.user.name + " @ " + a.question.title + " #" + a.try_number.to_s %>
+                  <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"> <i class='fa fa-eye'></i></span>
+                </li>
+              </ul>
+            <% end %>
+          </p>
+
+          <p>
+            <%= link_to new_dashboard_message_path+build_message_link(recommendation) do %>
+              <%= button_tag raw("<i class='fa fa-share'></i> Repassar recomendação aos alunos"), :class => "btn btn-primary" %>
+            <% end %>
+          </p>
+        </div><!-- /.box-body -->
+
+      <% when "alunos_com_mais_incorretas" %>
+
+        <div class="box-header">
+            <h3 class="box-title">Alunos com mais tentativas incorretas</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-default btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+          <p>
+            Estes são os alunos da turma <%= Team.find(recommendation.item['team_id']).name %> com mais tentativas incorretas.
+            <ul>
+              <% recommendation.item['user_ids'].each_index do |i| %>
+                <li>
+                  <% user_id = recommendation.item['user_ids'][i] %>
+                  <% u = User.find(user_id) %>
+                  <%= u.name + " (" + u.email + ") - " + recommendation.item['count'][i].to_s + " tentativs incorretas" %>
+                </li>
+              <% end %>
+            </ul>
+          </p>
+
+          <p>
+            <%= link_to new_dashboard_message_path+build_message_link(recommendation) do %>
+              <%= button_tag raw("<i class='fa fa-share'></i> Repassar recomendação aos alunos"), :class => "btn btn-primary" %>
+            <% end %>
+          </p>
+        </div><!-- /.box-body -->
+
+      <% when "alunos_sem_resposta" %>
+
+        <div class="box-header">
+            <h3 class="box-title">Alunos sem participação</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-default btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+          <p>
+            Um grupo de <%= recommendation.item['user_ids'].count %> alunos da turma <%= Team.find(recommendation.item['team_id']).name %> não realizou nenhuma tentativa.
+            São eles:
+
+            <ul>
+              <% recommendation.item['user_ids'].each do |user_id| %>
+                <li>
+                  <% u = User.find(user_id) %>
+                  <%= u.name + " (" + u.email + ")" %>
+                </li>
+              <% end %>
+            </ul>
+          </p>
+
+          <p>
+            <%= link_to new_dashboard_message_path+build_message_link(recommendation) do %>
+              <%= button_tag raw("<i class='fa fa-share'></i> Repassar recomendação aos alunos"), :class => "btn btn-primary" %>
+            <% end %>
+          </p>
+        </div><!-- /.box-body -->
+
       <% when "resposta_para_grupo" %>
 
         <div class="box-header">

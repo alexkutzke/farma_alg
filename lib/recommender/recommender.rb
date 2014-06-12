@@ -163,7 +163,7 @@ module Recommender
       end
     else
       if as.count == 1
-        avgs = [as.first.to_s,1.0]
+        return [[as.first.to_s,1.0]]
       end
     end
 
@@ -233,6 +233,68 @@ module Recommender
         recoms.each do |recom|
           Recommendation.create(:type => "resposta_para_grupo", :item => recom, :user_id => user_id)
         end
+
+        user_with_no_answers_ids = []
+        users_by_wrong_answers = []
+        questions_by_wrong_answers = []
+        team_user_ids = Team.find(team_id.to_s).user_ids
+        team_user_ids.each do |user_id2|
+          if Answer.where(user_id: user_id2.to_s,team_id: team_id.to_s).empty?
+            user_with_no_answers_ids << user_id2.to_s
+          end
+
+          users_by_wrong_answers = []
+          Answer.where(user_id: team_user_ids ,team_id: team_id.to_s, correct: false).sort{|x,y| y[:user_id] <=> x[:user_id]}.chunk{|n| n[:user_id]}.each do |q,a|
+            users_by_wrong_answers << [q,a.count]
+          end
+
+          questions_by_wrong_answers = []
+          Answer.where(team_id: team_id.to_s, correct: false).sort{|x,y| y[:question_id] <=> x[:question_id]}.chunk{|n| n[:question_id]}.each do |q,a|
+            questions_by_wrong_answers << [q,a.count]
+          end
+
+          users_by_wrong_answers.sort!{|x,y| y[1] <=> x[1]}
+        end
+
+        unless users_by_wrong_answers.empty?
+          users_ids_by_wrong_answers = []
+          users_wrong_answers_count = []
+          users_by_wrong_answers.each do |u|
+            users_ids_by_wrong_answers << u[0]
+            users_wrong_answers_count << u[1]
+          end
+          Recommendation.create(:type => "alunos_com_mais_incorretas", :item => {:user_ids => users_ids_by_wrong_answers[0..3], :count => users_wrong_answers_count[0..3], :team_id => team_id.to_s}, :user_id => user_id.to_s)
+        end
+
+        unless questions_by_wrong_answers.empty?
+          questions_ids_by_wrong_answers = []
+          questions_wrong_answers_count = []
+          questions_by_wrong_answers.each do |u|
+            questions_ids_by_wrong_answers << u[0]
+            questions_wrong_answers_count << u[1]
+          end
+
+          as = []
+          questions_ids_by_wrong_answers.each do |question_id|
+            as << self.find_most_relevant_answers(team_user_ids,question_id)
+          end
+
+          questions_ids_by_wrong_answers[0..3].each_index do |i|
+            answer_ids = []
+            answer_scores = []
+            as[i].each do |x|
+              answer_ids << x[0]
+              answer_scores << x[1]
+            end
+            Recommendation.create(:type => "questao_com_mais_incorretas", :item => {:message_team_id => team_id.to_s, :answer_ids => answer_ids, :question_id => questions_ids_by_wrong_answers[i], :count => questions_wrong_answers_count[i], :team_id => team_id.to_s}, :user_id => user_id.to_s)
+          end
+        end
+
+        unless user_with_no_answers_ids.empty?
+          Recommendation.create(:type => "alunos_sem_resposta", :item => {:user_ids => user_with_no_answers_ids, :team_id => team_id.to_s}, :user_id => user_id.to_s)
+        end
+
+
       end
     end
     true

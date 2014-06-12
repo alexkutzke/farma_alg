@@ -67,17 +67,25 @@ module ApplicationHelper
   def build_message_link(recommendation)
     final = "?"
 
-    recommendation.item['user_ids'].each do |user_id|
-      final = final + "message[user_ids][]=" + user_id.to_s + "&"
+    unless recommendation.item['user_ids'].nil?
+      recommendation.item['user_ids'].each do |user_id|
+        final = final + "message[user_ids][]=" + user_id.to_s + "&"
+      end
     end
 
-    recommendation.item['answer_ids'].each do |answer_id|
-      final = final + "message[answer_ids][]=" + answer_id.to_s + "&"
+    unless recommendation.item['answer_ids'].nil?
+      recommendation.item['answer_ids'].each do |answer_id|
+        final = final + "message[answer_ids][]=" + answer_id.to_s + "&"
+      end
     end
 
-    final = final + "message[question_ids][]=" + recommendation.item['question_id'].to_s + "&"
+    unless recommendation.item['message_team_id'].nil?
+      final = final + "message[team_ids][]=" + recommendation.item['message_team_id'].to_s + "&"
+    end
 
-    final = final + "message[subject]=Recomendação de resposta"
+    unless recommendation.item['question_id'].nil?
+      final = final + "message[question_ids][]=" + recommendation.item['question_id'].to_s + "&"
+    end
 
     final
   end
