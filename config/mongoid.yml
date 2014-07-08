@@ -6,6 +6,7 @@ development:
       # Defines the name of the default database that Mongoid can connect to.
       # (required).
 
+      #database: farma_alg-13-06-14
       database: farma_development_alg_ufpr_05-05-14-0931
 
       #database: farma_development_alg

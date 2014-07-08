@@ -59,7 +59,7 @@ class Answer
 
   #before_save :verify_response, :store_datas
   before_create :verify_response, :store_datas
-  after_create :register_last_answer,:updateStats,:schedule_process_connections #, :update_questions_with_last_answer
+  after_create :register_last_answer,:updateStats,:schedule_process_connections,:update_progress #, :update_questions_with_last_answer
 
   #def self.search(page, params = nil, team_ids = nil)
   #  if team_ids
@@ -76,6 +76,38 @@ class Answer
   #    end
   #  end
   #end
+
+  def update_progress
+    p = Progress.find_or_initialize_by(team_id:self.team_id,user_id:self.user_id,question_id:self.question_id)
+    x = self.calc_progress
+    if x > p.value
+      p.value = x
+    end
+    p.save!
+  end
+
+  def calc_progress
+    p = 0.25
+    unless self.compile_errors.nil?
+      p = 0.5
+    end
+
+    if self.correct
+      p = 1.0
+    else
+      unless self.results.nil?
+        p_tc = 0.0
+        self.results.each do |id,result|
+          unless result['error']
+            p_tc = p_tc + 1
+          end
+        end
+        p = p + ((p_tc/self.results.size) * 0.5)
+      end
+    end
+
+    p    
+  end
 
   def similar_answers
     sa = []

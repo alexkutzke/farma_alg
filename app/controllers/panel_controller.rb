@@ -1,6 +1,6 @@
 class PanelController < ApplicationController
-	layout "panel"
-  layout "retroaction", :only => [:retroaction]
+	layout "retroaction", :only => [:retroaction]
+  layout "dashboard"
 	before_filter :authenticate_user!
 
 	def index

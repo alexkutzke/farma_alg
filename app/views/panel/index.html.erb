@@ -1,103 +1,170 @@
-<a href="#" id="enrolled_link"><h3 class="page-header">Minhas respostas nas turmas em que estou matriculado</h3></a>
-<div id="enrolled" class="hide">
-<% if @teams.empty? %>
-  <h5>Você não está matricula em nenhuma turma. <small><a
-    href="/teams">Matricule-se</a>.</small></h5>
-<% else %>
-
-    <% @teams.each do |t| %>
-    <%= link_to panel_team_user_path(t,current_user) do %>
-<section class="well"><header class="clearfix">
-  <div class="left">
-    <h4><%= t.name %></h4>
-    <span class="date-info">
-      
-         <%= t.user_ids.length %> aprendizes matriculados.
-      
-    </span>
-  </div>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Painel
+        <small>Visualize respostas</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-home"></i> Home</li>
+        <li><i class="fa fa-desktop active"></i> Panel</li>
+    </ol>
 </section>
 
-      <% end %>
-    <% end %>
+<!-- Main content -->
+<section class="content">
 
-<% end %>
-</div>
+  <div class="row">
+        <section class="col-lg-6">
+          <div class="box box-solid">
+              <div class="box-header">
+                  <h3 class="box-title">Escolha uma turma</h3>
+              </div><!-- /.box-header -->
+              <div class="box-body">
+                  <div class="box-group" id="accordion">
+                      <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                      <div class="panel box box-primary">
+                          <div class="box-header">
+                              <h4 class="box-title">
+                                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="">
+                                    Turmas em que estou matriculado
+                                  </a>
+                              </h4>
+                          </div>
+                          <div id="collapseOne" class="panel-collapse in" style="height: auto;">
+                              <div class="box-body">
+                                  <% if @teams.empty? %>
+                                    <p>Você não está matricula em nenhuma turma. <a href="/teams">Matricule-se</a>.</p>
+                                  <% else %>
 
-<% unless @my_teams.empty? %>
-	<a href="#" id="my_teams_link"><h3 class="page-header">Respostas em turmas criadas por mim</h3></a>
-  <div id="my_teams" class="hide">
-		<% @my_teams.each do |t| %>
-    <%= link_to panel_team_path(t) do %>
-<section class="well"><header class="clearfix">
-  <div class="left">
-    <h4><%= t.name %></h4>
-    <span class="date-info">
-      
-         <%= t.user_ids.length %> aprendizes matriculados.
-      
-    </span>
-  </div>
-</section>
+                                    <% @teams.each do |t| %>
+                                      <%= link_to panel_team_user_path(t,current_user) do %>
+                                        <section class="well"><header class="clearfix">
+                                          <div class="left">
+                                            <h4><%= t.name %></h4>
+                                            <span class="date-info">
+                                              
+                                              <%= t.user_ids.length %> aprendizes matriculados.
+                                              
+                                            </span>
+                                          </div>
+                                        </section>
+                                      <% end %>
+                                    <% end %>
+                                  <% end %>
+                              </div>
+                          </div>
+                      </div>
 
-		  <% end %>
-		<% end %>
-</div>
-<% end %>
+                      <% unless @my_teams.empty? %>
+                      <div class="panel box box-danger">
+                          <div class="box-header">
+                              <h4 class="box-title">
+                                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed">
+                                      Turmas criadas por mim
+                                  </a>
+                              </h4>
+                          </div>
+                          <div id="collapseTwo" class="panel-collapse collapse" style="height: 0px;">
+                              <div class="box-body">
+                                  <% @my_teams.each do |t| %>
+                                    <%= link_to panel_team_path(t) do %>
+                                      <section class="well"><header class="clearfix">
+                                        <div class="left">
+                                          <h4><%= t.name %></h4>
+                                          <span class="date-info">
+                                      
+                                            <%= t.user_ids.length %> aprendizes matriculados.
+                                      
+                                          </span>
+                                        </div>
+                                      </section>
+                                    <% end %>
+                                  <% end %>
+                              </div>
+                          </div>
+                        </div>
+                      <% end %>
 
-
-
-<% unless @others.empty? %>
-  <a href="#" id="others_teams_link"><h3 class="page-header">Respostas em turmas criadas por outros usuários</h3></a>
-  <div id="others_teams" class="hide">
-    <% @others.each do |t| %>
-    <%= link_to panel_team_path(t) do %>
-<section class="well"><header class="clearfix">
-  <div class="left">
-    <h4><%= t.name %></h4>
-    <span class="date-info">
-      
-         <%= t.user_ids.length %> aprendizes matriculados.
-      
-    </span>
-  </div>
-</section>
-
-      <% end %>    <% end %>
- </div>
-<% end %>
-
-<% unless @last_comments.empty? %>
-  
-  <header class='page-header'>
-      <a href="#" id="comments_link"><h3>Últimos comentários direcionados a mim<h3></a>
-
-      </header>
-<div id="comments">
-      <%= link_to "Ver todos", panel_comments_path() %>
-      <section class='comments-list'>
-        <% @last_comments.each do |c| %>
-        <% unless c.created_at.nil? %>
-        
-        
-        <div class="comment", id="<%= c.id %>">
-         <div class='avatar'>
-           <img class="gravatar" src="http://www.gravatar.com/avatar/<%= c.user.gravatar %>?s=48" />
-         </div>
-         <div class='main clearfix'>
-           <div class='headline'>
-            Criado por <%= c.user.name %> à <strong> <%= time_ago_in_words(c.created_at) unless c.created_at.blank? %> atrás </strong>
-            na resposta à 
-          <%= link_to panel_team_user_lo_question_answer_path(c.team_id,c.target_user_id,c.answer.lo_id,c.question_id,c.answer_id) do %>
-            questão <strong><%= Question.find(c.question_id).title %></strong> na turma <strong><%= Team.find(c.team_id).name %></strong>
-          <% end %>
+                      <% unless @others.empty? %>
+                      <div class="panel box box-success">
+                          <div class="box-header">
+                              <h4 class="box-title">
+                                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="collapsed">
+                                      Turmas criadas por outros usuários
+                                  </a>
+                              </h4>
+                          </div>
+                          <div id="collapseThree" class="panel-collapse collapse" style="height: 0px;">
+                              <div class="box-body">
+                                  <% @others.each do |t| %>
+                                    <%= link_to panel_team_path(t) do %>
+                                      <section class="well"><header class="clearfix">
+                                        <div class="left">
+                                          <h4><%= t.name %></h4>
+                                          <span class="date-info">
+                                            
+                                               <%= t.user_ids.length %> aprendizes matriculados.
+                                            
+                                          </span>
+                                        </div>
+                                      </section>
+                                    <% end %>
+                                  <% end %>
+                              </div>
+                          </div>
+                        </div>
+                      <% end %>
+                  </div>
+              </div><!-- /.box-body -->
           </div>
-          <div class="comment_content">
-           <p> <%= simple_format c.text %> </p>
-         </div>
-       </div>
-       <% end %>
-       <% end %>
-     </section>
-</div>
-<% end %>
+        </section>
+
+        <section class="col-lg-6">
+          
+          <div class="box box-solid">
+            <div class="box-header">
+                <h3 class="box-title">Últimos comentários direcionados a mim</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <% if @last_comments.empty? %>
+                Nenhum comentário recebido até o momento.
+              <% else %>
+                <div id="comments">
+                  <%= link_to "Ver todos", panel_comments_path() %>
+                    <section class='comments-list'>
+                      <% @last_comments.each do |c| %>
+                        <% unless c.created_at.nil? %>
+
+                          <div class="box box-solid">
+                            <div class="box-header">
+                              <h3 class="box-title" style="width:80%;">
+                                <div class="pull-left image">
+                                    <img src="http://www.gravatar.com/avatar/<%= c.user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
+                                </div> 
+                                <%= c.user.name %>
+                                <br><small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words c.updated_at %></small>
+
+                                   <small>na resposta à
+                                <%= link_to panel_team_user_lo_question_answer_path(c.team_id,c.target_user_id,c.answer.lo_id,c.question_id,c.answer_id) do %>
+                                  questão <strong><%= Question.find(c.question_id).title %></strong> na turma <strong><%= Team.find(c.team_id).name %></strong>
+                                <% end %>
+                                </small>
+                                </h3>
+                            </div>
+                            <div class="box-body">
+                                <%= simple_format c.text %>
+                            </div><!-- /.box-body -->
+                          </div>
+                        <% end %>
+                      <% end %>
+                    </section>
+                  </div>
+                <% end %>              
+            </div>
+          </div>
+        </section>
+        </div>
+      </section>
+    </div><!-- /.row (main row) -->
+</section><!-- /.content -->
+

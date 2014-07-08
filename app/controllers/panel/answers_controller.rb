@@ -1,5 +1,5 @@
 class Panel::AnswersController < ApplicationController
-	layout "panel"
+	layout "dashboard"
 	before_filter :authenticate_user!
 	before_filter :get_data
 

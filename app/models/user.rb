@@ -164,4 +164,37 @@ class User
     end
     return nil    
   end
+
+
+  def progress_question(team_id,question_id)
+    Progress.find_or_initialize_by(team_id:team_id,user_id:self.id,question_id:question_id).value
+  end
+
+  def progress_lo(team_id,lo_id)
+    exercises = Lo.find(lo_id).exercises
+
+    progress = 0.0
+    n = 0
+    exercises.each do |ex|
+      ex.questions.each do |q|
+        progress = progress + self.progress_question(team_id,q.id)
+        n = n+1
+      end
+    end
+
+    progress/n
+  end
+
+  def progress_team(team_id)
+    team = Team.find(team_id)
+    
+    progress = 0.0
+    n = 0
+    team.los.each do |lo|
+      progress = progress + self.progress_lo(team_id,lo.id)
+      n = n+1
+    end
+
+    progress/n
+  end
 end

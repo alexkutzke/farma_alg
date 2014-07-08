@@ -18,5 +18,4 @@ module GraphDataGenerator
 
      final
   end
-
 end

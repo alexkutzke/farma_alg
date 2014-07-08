@@ -1,5 +1,5 @@
 class Panel::LosController < ApplicationController
-	layout "panel"
+	layout "dashboard"
 	before_filter :authenticate_user!
 	before_filter :get_data, :only => [:show]
 
@@ -22,6 +22,8 @@ class Panel::LosController < ApplicationController
         @stats[ex.id][q.id] = Statistic.find_or_create_by(:question_id => q.id, :team_id => nil)
       end
     end
+
+    @last_answers = Answer.where(user_id:@user.id,team_id:@team.id,lo_id:@lo.id).desc(:updated_at)[0..5]
 	end
 
   def overview

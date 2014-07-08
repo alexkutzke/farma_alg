@@ -1,4 +1,31 @@
-<h4 class="page-header">Quadro resumo do objeto de aprendizagem '<%= @lo.name %>' para a turma '<%= @team.name %>'</h4>
+<%= content_for :scripts do %>
+  <script type="text/javascript">
+    $(".stats_popover").popover({html:true});
+  </script>
+<% end %>
+
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+      <h1>
+          Objeto de Aprendizagem
+          <small>Quadro resumo do desempenho dos alunos</small>
+      </h1>
+      <ol class="breadcrumb">
+          <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+          <li><i class="fa fa-users"></i> <%= link_to "Turma \"#{@team.name}\"", panel_team_path(@team.id) %></li>
+          <li><i class="fa fa-bar-chart-o active"></i> <%= @lo.name %></li>
+      </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+          <section class="col-lg-12">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Quadro resumo do objeto de aprendizagem '<%= @lo.name %>' para a turma '<%= @team.name %>'</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
 
 <table class="table table-bordered table-hover">
 <thead>
@@ -21,14 +48,7 @@
     <% @exercises.each do |ex| %>
       <% ex.questions.each do |q| %>
         <th>
-        <span class='icon'>  
-        <% if q.available %>
-        <i rel="tooltip" data-original-title="Questão Publicada" class='left icon-certificate icon-green'></i> 
-      <% else %>
-        <i rel="tooltip" data-original-title="Questão não Publicada" class='left icon-certificate icon-red'></i> 
-      <% end %>
-    </span>
-          <a href="#" class="stats_popover" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="
+         <a href="#" style="cursor:default;" class="stats_popover popover-dismiss" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="
           <% if current_user.admin? or @team.owner_id == current_user.id %>
             <ul>
               <li><strong>Nesta turma:</strong></li>
@@ -71,27 +91,42 @@
     <td><%= u.name %></td>
     <% @exercises.each do |ex| %>
       <% ex.questions.each do |q| %>
-        <% a = u.question_overview(@team,q) %>
-        <% if a[0].nil? %>
-          <td><span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Questão ainda não respondida pelo aluno" class="label">Não respondida</span></td>
-        <% else %>
-          <% if a[0].correct %>
-            <td>
-              <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
-                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta!" class="label label-success">OK</span>
-                <% end %><small class="date-info"><%= a[1] %> tentativa(s)</small>
-            </td>
+        <td style="text-align: center;min-width:150px;">
+          <% a = u.question_overview(@team,q) %>
+          <% if a[0].nil? %>
+            <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Questão ainda não respondida pelo aluno" class="label label-default">Não respondida</span>
           <% else %>
-            <td>
-              <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
-                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta incorreta!" class="label label-important">ERRO</span>
-              <% end %><small class="date-info"><%= a[1] %> tentativa(s)</small>
-            </td>
+            <% if a[0].correct %>
+                <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
+                  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta!" class="label label-success">OK</span>
+                  <% end %><small class="date-info"> <%= a[1] %> tentativa(s)</small>
+            <% else %>
+                <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
+                  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta incorreta!" class="label label-danger">ERRO</span>
+                <% end %><small class="date-info"> <%= a[1] %> tentativa(s)</small>
+            <% end %>
           <% end %>
-        <% end %>
+
+          <div class="progress xs" style="margin: 10px auto;width:100px;">
+            <% p = 100 * u.progress_question(@team.id.to_s,q.id.to_s) %>
+            <% if p == 100 %>
+              <% style = "success" %>
+            <% elsif p > 49 %>
+              <% style = "yellow" %>
+            <% else %>
+              <% style = "danger" %>
+            <% end %>
+            <div class="progress-bar progress-bar-<%=style%>" style="width: <%= p %>%"></div>
+          </div>
+        </td>
       <% end %>
     <% end %>
   </tr>
 <% end %>
 </tbody>
 </table>
+</div>
+</div>
+</section>
+</div>
+</section>

@@ -1,3 +1,473 @@
+<% retroaction ||= nil %>
+<% buttons = true if buttons.nil? %>
+
+<%= content_for :scripts do %>
+    <%= javascript_include_tag 'dashboard/resizeApp' %>
+    <%= javascript_include_tag 'difflib' %>
+    <%= javascript_include_tag 'diffview' %>
+    <%= javascript_include_tag 'codemirror/lib/codemirror' %>
+    <%= javascript_include_tag 'codemirror/mode/pascal/pascal' %>
+    <%= javascript_include_tag 'codemirror/mode/ruby/ruby' %>
+    <%= javascript_include_tag 'codemirror/mode/clike/clike' %>
+    <%= javascript_include_tag 'prettify' %>  
+    <%= javascript_include_tag 'run_prettify' %>
+
+  <script type="text/javascript">
+  function diffUsingJS(div_id,label1,txt1,label2,txt2){
+    // get the baseText and newText values from the two textboxes, and split them into lines
+    base = difflib.stringAsLines(txt1);//$("baseText").value);
+    newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+
+    //create a SequenceMatcher instance that diffs the two sets of lines
+    sm = new difflib.SequenceMatcher(base, newtxt);
+
+    // get the opcodes from the SequenceMatcher instance
+    // opcodes is a list of 3-tuples describing what changes should be made to the base text
+    // in order to yield the new text
+    opcodes = sm.get_opcodes();
+    diffoutputdiv = $("#"+div_id);
+    while(diffoutputdiv.firstChild)
+      diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+
+    //console.log opcodes
+
+    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+  }
+// Carrega tags
+$.ajax({
+  url: "/dashboard/tags/show",
+  type: "get",
+  data: {answer_id:"<%= @answer.id %>"},
+  dataType: "script",
+  success: function(){
+    console.log("OK");
+  }
+});
+
+$("span.label").tooltip();
+$('.change_correctness').popover({html:true});
+
+resizeApp();
+prettyPrint();
+
+
+$("div.output").each(function(){
+  diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
+});
+  </script>
+<% end %>
+
+<style type="text/css">
+  .popover{min-width: 500px;}
+</style>
+
+<div id="answer-show">
+
+</div>
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+      <h1>
+          <%= @lo.name %> - Aluno <%= @user.name %>
+          <small>Destalhes do aluno na turma <em><%= @team.name %></em></small>
+      </h1>
+      <br>
+      <ol class="breadcrumb">
+          <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+          <li><i class="fa fa-users"></i> <%= link_to "Turma \"#{@team.name}\"", panel_team_path(@team.id) %></li>
+          <li><i class="fa fa-user"></i> <%= link_to @user.name, panel_team_user_path(@team.id,@user.id) %></li>
+          <li><i class="fa fa-check"></i> <%= link_to @lo.name, panel_team_user_lo_path(@team.id,@user.id,@lo.id) %></li>
+          <li><i class="fa fa-check"></i> <%= link_to @question.title, panel_team_user_lo_question_path(@team.id,@user.id,@lo.id,@question.id) %></li>
+          <li><i class="fa fa-eye active"></i> Tentativa #<%= @answer.try_number %></li>
+      </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+
+          <section class="col-lg-6">
+            <% if @answer.correct %>
+              <div class="box box-success">  
+            <% else %>
+              <div class="box box-danger">
+            <% end %>
+            
+                <div class="box-header">
+                    <h3 class="box-title">Detalhes da tentativa #<%= @answer['try_number'] %> <small>Realizada em <%= @answer['created_at'].strftime("%d/%m/%Y às %H:%M:%S") %></small></h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+<% if @answer.correct %>
+<div class="alert alert-success">
+<i class="fa fa-check"></i>
+<h4>Correta!</h4>
+<% else %>
+<div class="alert alert-danger">
+<i class="fa fa-times"></i>
+<h4>Incorreta</h4>
+<% end %>
+
+      <% if @answer.changed_correctness %>
+      <p><strong>Corrigido pelo professor</strong></p> 
+      <% if not @answer.changed_correctness_reason.nil? && @answer.changed_correctness_reason != "" %>
+        <p>
+          <%= simple_format @answer.changed_correctness_reason %>
+        </p>
+      <% end %>
+    <% end %>
+
+  </div>
+        
+                <div class="row">
+                  <div class="col-xs-12">
+
+                    <table class="table table-bordered" style="margin-bottom:5px;">
+                      <tr>
+                        <td><b>Aluno</b></td><td><%= @answer.user.name %></td>
+                      </tr>
+                      <tr>
+                        <td><b>Questão</b></td>
+                        <td><%= @answer.question.title %></td>
+                      </tr>
+                      <tr>
+                        <td><b>Turma</b></td>
+                        <td><%= @answer.team.name %></td>
+                      </tr>
+                      <tr>
+                        <td><b>O.A.</b></td>
+                        <td><%= @answer.lo.name %></td>
+                      </tr>
+                      <tr>
+                        <td><b>Tentativa</b></td>
+                        <td>#<%= @answer.try_number %></td>
+                      </tr>
+                      <tr>
+                        <td><b>Resultados</b></td>
+                        <td>
+                          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta" class="label label-default"><%= @answer.lang %></span>
+                          <% if @answer.correct %>
+                            <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
+                          <% else %>
+                            <% if @answer.compile_errors %>
+                              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
+                            <% else %>
+                              <% @answer.results.each do |k,v| %>
+                                <% if v['diff_error'] %>
+                                  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '<%= v['title'] %>'" class="label label-danger">saída</span>
+                                <% end %>
+                                <% if v['time_error'] %>
+                                  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '<%= v['title'] %>'" class="label label-danger">tempo</span>
+                                <% end %>
+                                <% if v['presentation_error'] %>
+                                  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '<%= v['title'] %>'" class="label label-danger">apresentação</span>
+                                <% end %>
+                                <% if v['exec_error'] %>
+                                  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '<%= v['title'] %>'" class="label label-danger">execução</span>
+                                <% end %>
+                              <% end %>
+                            <% end %>
+                          <% end %>
+                        </td>
+                      </tr>
+                    </table>
+                    <small>Realizada em <b><%= @answer['created_at'].strftime("%d/%m/%Y às %H:%M:%S") %></b></small>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xs-12">
+                    <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#responseModal">
+                      Vizualizar resposta
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg my-modal">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Resposta</h4>
+                          </div>
+                          <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
+                            <pre class="prettyprint lang-pascal" style="width:100%;overflow:scroll;margin:auto;"><%= @answer.response %></pre>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+<% if @answer.correct %>
+
+    <% unless retroaction %>
+      <% if current_user.admin? || current_user.id == @answer.team.owner_id %>
+        <button class="btn btn-block btn-danger change_correctness" type="button"
+          data-toggle="popover"
+          data-content='
+              <p>Use a formatação markdown.</p>
+              <%= form_for(@answer, :method => :post, :url => url_for(:controller => 'answers', :action => 'change_correctness')) do |f| %>
+              <div class="form-group">
+                <%= f.text_area :changed_correctness_reason, :class => "form-control required", :rows => "7", :cols => "100"%>
+              </div>
+              <div class="actions">
+                <%= f.submit "Salvar", :class => "btn btn-primary" %>
+              </div>
+              <% end %>' 
+          data-original-title="Deixe um comentário que explique a troca"
+        >Tornar incorreta</button>
+      <% end %>
+    <% end %>
+<% else %>
+
+    <% unless retroaction %>
+      <% if current_user.admin? || current_user.id == @answer.team.owner_id %>
+        <button class="btn btn-block btn-success change_correctness" type="button"
+          data-toggle="popover"
+          data-content='
+              <p>Use a formatação markdown.</p>
+              <%= form_for(@answer, :method => :post, :url => url_for(:controller => 'answers', :action => 'change_correctness')) do |f| %>
+              <div class="form-group">
+                <%= f.text_area :changed_correctness_reason, :class => "form-control required", :rows => "7", :cols => "100"%>
+              </div>
+              <div class="actions">
+                <%= f.submit "Salvar", :class => "btn btn-primary" %>
+              </div>
+              <% end %>' 
+          data-original-title="Deixe um comentário"
+        >Tornar correta</button>
+      <% end %>
+    <% end %>
+<% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Box (with bar chart) -->
+            <div class="box box-info">
+                <div class="box-header">
+                    <!-- tools box -->
+                    <div class="pull-right box-tools">
+                        <button class="btn btn-info btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /. tools -->
+                    <i class="fa fa-comments"></i>
+
+                    <h3 class="box-title">Comentários</h3>
+                </div><!-- /.box-header -->
+
+                <div class="box-body">
+                  <div class="comments-list">
+                  <% @answer.comments.each do |c| %>
+                    <% unless c.created_at.nil? %>
+                      <div id="<%=c.id%>" class="box box-solid" style="border: 1px solid lightgray;">
+                        <div class="box-header">
+                            <h3 class="box-title" style="width:100%;">
+                              <div class="pull-left image">
+                                  <img src="http://www.gravatar.com/avatar/<%= c.user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
+                              </div> 
+                              <%= c.user.name %>
+
+                              <% if c.can_destroy?(current_user) %>
+                                <div class="box-tools pull-right" style="padding-right:10px;">
+                                  <%= link_to [@answer,c], method: :delete, data: { confirm: 'Você tem certeza?' },:remote => true do %>
+                                    <%= button_tag "Apagar", :class => "btn btn-sm btn-danger" %>
+                                  <% end %>
+                                </div>  
+                              <% end %>
+                              
+
+
+
+                              <br><small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words c.created_at %></small>
+
+                            </h3>
+                        </div>
+                        <div class="box-body">
+                            <%= simple_format c.text %>
+                        </div><!-- /.box-body -->
+                      </div>
+
+                   <% end %>
+                 <% end %>
+               </div>
+
+                      <div class="box box-solid" style="border: 1px solid lightgray;">
+                        <div class="box-header">
+                            <h3 class="box-title" style="width:80%;">
+                              Novo comentário de
+                              <div class="pull-left image">
+                                  <img src="http://www.gravatar.com/avatar/<%= current_user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
+                              </div> 
+                              <%= current_user.name %>
+                            </h3>
+                        </div>
+                        <div class="box-body">
+
+        <div class="comment_content">
+          <div class="formatting">
+            Use a formatação markdown. <a href="#" id="markdown_link">Veja os exemplos.</a>
+            <div id="markdown_examples" style="display: none; ">
+              <table>
+                <tbody>
+                  <tr>
+                    <td><pre>[Link](http://example.com/)</pre></td>
+                    <td><a href="http://example.com/">Link</a></td>
+                  </tr>
+                  <tr>
+                    <td><pre>*Italic*</pre></td>
+                    <td><em>Italic</em></td>
+                  </tr>
+                  <tr>
+                    <td><pre>**Bold**</pre></td>
+                    <td><strong>Bold</strong></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <pre> * Listed
+                        * Items  </pre></td>
+                        <td><ul><li>Listed</li><li>Items</li></ul></td>
+                      </tr>
+                      <tr>
+                        <td><pre>&gt; Block quote</pre></td>
+                        <td><blockquote><p>Block quote</p></blockquote></td>
+                      </tr>
+                      <tr>
+                        <td><pre>`Inline code`</pre></td>
+                        <td><code>Inline code</code></td>
+                      </tr>
+                      <tr>
+                        <td><pre>$ 2^(30+2)/sqrt(9) $</pre></td>
+                        <td>$ 2^(30+2)/sqrt(9) $</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <%= form_for([@answer,@comment], :remote => true) do |f| %>
+              <div class="form-group">
+                <%= f.text_area :text, :class => "form-control required", :rows => 10 %>
+              </div>
+              <div class="actions">
+                <%= f.submit "Salvar", :class => "btn btn-primary" %>
+              </div>
+              <% end %>
+            </div>
+
+
+                        </div>
+                      </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box --> 
+
+
+
+          </section>
+
+          <section class="col-lg-6">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Tags para esta resposta</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <% unless @notice.nil? %>
+                    <div class="alert alert-success">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                      Tag criada com sucesso.
+                    </div>
+                  <% end %>
+                  <div id="tags">
+                  </div>
+                </div>
+            </div>
+
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Resultado para casos de teste</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <% if @answer.compile_errors %>
+      <div class="callout callout-warning" style="margin-top:10px;">
+        <h4>Erro de compilação</h4>
+        <%= simple_format @answer.compile_errors %>
+      </div>
+    <% else %>
+
+    
+      <% @answer.results.each do |k,v| %>
+        
+
+          <div class="row">
+            <div class="col-xs-12">
+              <% if v['diff_error'] or v['time_error'] or v['exec_error'] or v['presentation_error'] %>
+                <div class="box box-danger">
+              <% else %>  
+                <div class="box box-success">  
+              <% end %>
+                <div class="box-header">
+                  <h3 class="box-title">
+                    <%= v['title'] %>    
+                  </h3>
+                  <div class="box-tools pull-right">
+
+                      <button data-toggle="modal" data-target="#testCaseModal-<%= k %>" class="diff-btn btn btn-default btn-sm" ><i class="fa fa-columns"></i> Diff</button>
+                      <!-- Modal -->
+                      <div class="modal fade" id="testCaseModal-<%= k %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg my-modal">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                              <h4 class="modal-title" id="myModalLabel">Comparação de saídas</h4>
+                            </div>
+                            <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
+                              <div id="output-<%= k %>">
+                                <div class="output" data-output="<%= v['output'] %>" data-expected-output="<%= v['output_expected'] %>" data-id="<%= k %>"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                  </div>
+                </div>
+                <div class="box-body">
+                  <% if v['diff_error'] %>
+                    <div class="callout callout-danger">
+                      <h5>Erro de saída</h5>
+                    </div>
+                  <% end %>
+                  <% if v['time_error'] %>
+                    <div class="callout callout-danger">
+                      <h5>Tempo de execução excedido</h5>
+                    </div>
+                  <% end %>
+                  <% if v['exec_error'] %>
+                    <div class="callout callout-danger">
+                      <h5>Erro de execução</h5>
+                    </div>
+                  <% end %>
+                  <% if v['presentation_error'] %>
+                    <div class="callout callout-danger">
+                      <h5>Erro de apresentação</h5>
+                    </div>
+                  <% end %>
+                </div><!-- /.box-body -->
+
+              </div>
+            </div>
+          </div>
+
+        
+        
+      <% end %>
+      <% end %>
+                </div>
+            </div>
+          </section>
+
+    </div>
+
+  </section>
+
+
 
 <a href="#" class="question-content-link"><h3>Enunciado</h3></a>
 

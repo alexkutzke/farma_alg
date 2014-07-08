@@ -1,84 +1,102 @@
 <% if  current_user.admin? or current_user.id == @team.owner_id %>
-<h4 class="page-header">Objetos de aprendizagem já utilizados nesta turma</h4>
-  <% @los.each do |lo| %>
-<section class="well"><header class="clearfix">
-  <div class="left">
-    <h4><%= link_to lo.name, overview_panel_team_lo_path(@team, lo)%>
-      <% unless @team.lo_ids.include?(lo.id) %>
-        <span class="date-info">(atualmente não disponível para os alunos)</span>
-      <% end %>
-    </h4>
-        <span class="date-info">
-      Resumo
-    </span>
-  </div>
-</section>
-  <% end %>
-<% end %>
-<h4 class="page-header">Alunos matriculados nesta turma</h4>
-<table class="table table-hover table-bordered" style="width:auto;">
-	<% @team.users.sort_by{|x| x.name.downcase}.each do |u| %>
-  <tr>
-		<td><%= link_to u.name, panel_team_user_path(@team, u)%> <small>(<%= u.email %>)</small> <small><%= "(Seu próprio usuário)" if u.id ==current_user.id %></small></td>
-  </tr>
-	<% end %>
-</table>
 
-<h4 class="page-header">Últimas respostas nesta turma</h4>
-<% @answers.each do |a| %>
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+      <h1>
+          Turma
+          <small>Analise o desempenho da sua turma</small>
+      </h1>
+      <ol class="breadcrumb">
+          <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+          <li><i class="fa fa-users active"></i> Turma "<%= @team.name %>"</li>
+      </ol>
+  </section>
 
-<section class="well"><header class="clearfix">
-  <div class="left">
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+          <section class="col-lg-6">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Objetos de aprendizagem já utilizados nesta turma</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <% @los.each do |lo| %>
+                    <section class="well">
+                      <header class="clearfix">
+                        <div class="left">
+                          <h4><%= link_to lo.name, overview_panel_team_lo_path(@team, lo)%>
+                            <% unless @team.lo_ids.include?(lo.id) %>
+                              <span class="date-info">(atualmente não disponível para os alunos)</span>
+                            <% end %>
+                          </h4>
+                        </div>
+                      </header>
+                    </section>
+                  
+                  <% end %>
+              </div>
+            </div>
+          </section>
 
+          <section class="col-lg-6">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Alunos matriculados nesta turma</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <table class="table table-hover table-bordered">
+                    <tr>
+                      <th>Nome</th>
+                      <th>Progresso</th>
+                    </tr>
+                    <% @team.users.sort_by{|x| x.name.downcase}.each do |u| %>
 
-  <h5><%= a.user.name %></h5>
-  <h5><%= a.lo.name %> - <%= a.question.title %></h5>
+                      <tr>
+                        <td><%= link_to u.name, panel_team_user_path(@team, u)%> <small>(<%= u.email %>)</small> <small><%= "(Seu próprio usuário)" if u.id ==current_user.id %></small></td>
+                        <td>
+                          <div class="progress xs" style="width:70px;">
+                            <% p = 100 * u.progress_team(@team.id) %>
+                            <% if p == 100 %>
+                              <% style = "success" %>
+                            <% elsif p > 49 %>
+                              <% style = "yellow" %>
+                            <% else %>
+                              <% style = "danger" %>
+                            <% end %>
+                            <div class="progress-bar progress-bar-<%=style%>" style="width: <%= p %>%"></div>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </table>
+                </div>
+            </div>
+          </section>
+      </div>
 
-  <h5>#<%= a['try_number'] %>, Em <%= a['created_at'].strftime("%d/%m/%Y às %H:%M:%S")%>
-
-      <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta"
-      class="label"><%= a.lang %></span>
-      <% if a.correct %>
-        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
-      <% else %>
-        <% if a.compile_errors %>
-          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
-        <% else %>
-          <% a.results.each do |k,v| %>
-            <% if v['diff_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '<%= v['title'] %>'" class="label label-important">saída</span>
-            <% end %>
-            <% if v['time_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '<%= v['title'] %>'" class="label label-important">tempo</span>
-            <% end %>
-            <% if v['presentation_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '<%= v['title'] %>'" class="label label-important">apresentação</span>
-            <% end %>
-            <% if v['exec_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '<%= v['title'] %>'" class="label label-important">execução</span>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-    <% if a.correct %>
-      <small>Correta</small>
-    <% else %>
-      <small>Incorreta</small>  
-    <% end %>
-
-    <% if a.changed_correctness %>
-      <small> (Corrigido pelo professor)</small> 
-    <% end %>
-  </h5>
-  <%= link_to panel_team_user_lo_question_answer_path(@team,a.user_id,a.lo_id,a.question_id,a) do %>
-    <% if a.correct %>
-<pre style="border: 2px green solid;">  
-    <% else %>
-<pre style="border: 2px red solid;">
-    <% end %>
-<%= truncate(a['response'],length:100) %></pre>
-  <% end %>
-    </div>
-</section>
+      <div class="row">
+          <section class="col-lg-12">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Últimas respostas nesta turma</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <% @answers.each do |a| %>
+                    <% if a.correct %>
+                      <div class="callout callout-info">
+                    <% else %>
+                      <div class="callout callout-danger">
+                    <% end %>
+                      <h4>
+                        <%= a.user.name + " @ " + a.question.title + " #" + a.try_number.to_s %> <small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words a.updated_at %></small>
+                        <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"> <i class='fa fa-eye'></i></span>
+                      </h4>
+                    </div>
+                  <% end %>
+              </div>
+            </div>
+          </section>
+      </div>
+  </section>
 <% end %>

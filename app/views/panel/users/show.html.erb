@@ -1,17 +1,53 @@
-	<h4>Aluno <em><%= @user.name %></em> na turma <em><%= @team.name %></em></h4>
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+      <h1>
+          Aluno <em><%= @user.name %></em>
+          <small>Destalhes do aluno na turma <em><%= @team.name %></em></small>
+      </h1>
+      <ol class="breadcrumb">
+          <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+          <li><i class="fa fa-users"></i> <%= link_to "Turma \"#{@team.name}\"", panel_team_path(@team.id) %></li>
+          <li><i class="fa fa-user active"></i> <%= @user.name %></li>
+      </ol>
+  </section>
 
-  <h5>Objetos de aprendizagem já disponibilizados para esta turma:</h5>
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
 
-  <% @los.each do |lo| %>
-  
-		<section class="well"><header class="clearfix">
-  <div class="left">
-    <%= link_to panel_team_user_lo_path(@team, @user,lo) do%>
-    <h4><%= lo.name %></h4>
-    <% end %>
-    <!--<small><%= link_to "Respostas de toda a turma", overview_panel_team_lo_path(@team,lo)  if current_user.admin? or current_user.id == @team.owner_id  %></small>-->
-  </div>
-</section>
+          <section class="col-lg-6">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Progresso</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <table class="table table-hover table-bordered">
+                    <tr>
+                      <th>O.A.</th>
+                      <th>Progresso</th>
+                    </tr>
+                    <% @los.sort_by{|x| x.name.downcase}.each do |lo| %>
 
-
-	<% end %>
+                      <tr>
+                        <td><%= link_to lo.name, panel_team_user_lo_path(@team, @user,lo)%></td>
+                        <td style="text-align:center;">
+                          <div class="progress xs" style="width:100px;">
+                            <% p = 100 * @user.progress_lo(@team.id,lo.id) %>
+                            <% if p == 100 %>
+                              <% style = "success" %>
+                            <% elsif p > 49 %>
+                              <% style = "yellow" %>
+                            <% else %>
+                              <% style = "danger" %>
+                            <% end %>
+                            <div class="progress-bar progress-bar-<%=style%>" style="width: <%= p %>%"></div>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </table>
+                </div>
+            </div>
+          </section>
+    </div>
+  </section>

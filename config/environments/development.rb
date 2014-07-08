@@ -34,26 +34,4 @@ Carrie::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
-
-  #SMTP
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }  
-
- require 'tlsmail' #key but not always described
-    Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)
-   
-    ActionMailer::Base.delivery_method = :smtp
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.raise_delivery_errors = true
-   
-    ActionMailer::Base.smtp_settings = {
-      :enable_starttls_auto => true,  #this is the important stuff!
-      :address        => 'smtp.gmail.com',
-      :port           => 587,
-      :domain         => 'myapp.com',
-      :authentication => :plain,
-      :user_name            => 'farma.alg@gmail.com',
-    :password             => 'poi890poiewq123ewq'
-}
-
- 
 end

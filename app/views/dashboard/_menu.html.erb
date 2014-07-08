@@ -39,6 +39,67 @@
         <% end %>
     </li>
 
+    <% # sorry about the next few lines =/ %>
+    <% my_teams = Team.where(owner_id: current_user.id).asc('name') %>
+    <% teams = current_user.teams.asc('name') %>
+    <% others = Array.new %>
+    <% if current_user.admin? %>
+      <% others = Team.all.asc('name').entries - my_teams %>
+    <% end %>
+
+    <% unless my_teams.empty? %>
+      <li class="treeview">
+        <a href="#">
+            <i class="fa fa-users"></i>
+            <span>Minhas Turmas</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        
+        <ul class="treeview-menu">
+          <% my_teams.each do |t| %>
+            <li><%= link_to t.name, panel_team_path(t.id), :style=>"margin-left:10px;" %></li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+
+
+    <% unless others.empty? %>
+      <li class="treeview">
+        <a href="#">
+            <i class="fa fa-users"></i>
+            <span>Outras Turmas</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        
+        <ul class="treeview-menu">
+          <% others.each do |t| %>
+            <li>
+              <%= link_to panel_team_path(t.id), :style=>"margin-left:10px;" do %>
+                <i class="fa fa-angle-double-right"></i> <%= t.name %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+
+
+    <li class="treeview">
+      <a href="#">
+          <i class="fa fa-check-square-o"></i>
+          <span>Turmas Matriculadas</span>
+          <i class="fa fa-angle-left pull-right"></i>
+      </a>
+        
+      <ul class="treeview-menu">
+        <% teams.each do |t| %>
+          <li><%= link_to t.name, panel_team_path(t.id), :style=>"margin-left:10px;" %></li>
+        <% end %>
+      </ul>
+    </li>
+
+
     <!--
     <li>
         <a href="pages/widgets.html">

@@ -435,7 +435,7 @@ body > .header .logo .icon {
   font-size: 12px;
   padding: 7px 5px;
   position: absolute;
-  top: 15px;
+  bottom: 5px;
   right: 10px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;

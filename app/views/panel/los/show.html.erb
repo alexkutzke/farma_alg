@@ -1,25 +1,107 @@
-<h4>Aluno <em><%= @user.name %></em> na turma <em><%= @team.name %></em></h4>
-<h3><%= @lo.name %> <small><%= link_to "(Resumo)", overview_panel_team_lo_path(@team,@lo) if current_user.admin? or current_user.id == @team.owner_id %></small></h3>
+<%= content_for :scripts do %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $(".question_stats").hide();
 
-<% @exercises.each do |ex| %>
-	<h4 class="page-header">Exercício <%= ex.title %></h4>
-	
-	<% ex.questions.each do |q| %>
+      $(".stats_link").click(function(ev){
+        ev.preventDefault();
+        $("#stats_"+$(this).data("question-id")).slideToggle();
+      });
+    });
+  </script>
+    <%= javascript_include_tag 'dashboard/resizeApp' %>
+    <%= javascript_include_tag 'difflib' %>
+    <%= javascript_include_tag 'diffview' %>
+
+  <script type="text/javascript">
+  function diffUsingJS(div_id,label1,txt1,label2,txt2){
+    // get the baseText and newText values from the two textboxes, and split them into lines
+    base = difflib.stringAsLines(txt1);//$("baseText").value);
+    newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+
+    //create a SequenceMatcher instance that diffs the two sets of lines
+    sm = new difflib.SequenceMatcher(base, newtxt);
+
+    // get the opcodes from the SequenceMatcher instance
+    // opcodes is a list of 3-tuples describing what changes should be made to the base text
+    // in order to yield the new text
+    opcodes = sm.get_opcodes();
+    diffoutputdiv = $("#"+div_id);
+    while(diffoutputdiv.firstChild)
+      diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+
+    //console.log opcodes
+
+    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+  }
+
+  </script>
+  <%= javascript_include_tag 'dashboard/home' %>
+<% end %>
+
+<div id="answer-show">
+
+</div>
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+      <h1>
+          <%= @lo.name %> - Aluno <%= @user.name %>
+          <small>Destalhes do aluno na turma <em><%= @team.name %></em></small>
+      </h1>
+      <br>
+      <ol class="breadcrumb">
+          <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+          <li><i class="fa fa-users"></i> <%= link_to "Turma \"#{@team.name}\"", panel_team_path(@team.id) %></li>
+          <li><i class="fa fa-user"></i> <%= link_to @user.name, panel_team_user_path(@team.id,@user.id) %></li>
+          <li><i class="fa fa-check"></i> <%= @lo.name %></li>
+      </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+
+          <section class="col-lg-6">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Exercícios</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+                  <% @exercises.each do |ex| %>
+  <h4>Exercício <%= ex.title %></h4>
+  
+  <% ex.questions.each do |q| %>
     <%= link_to panel_team_user_lo_question_path(@team,@user,@lo,q) do %>
 <section class="well"><header class="clearfix">
   <div class="left">
 
     <h4><%= q.title %>
       <% a = @user.question_overview(@team,q) %>
+      <div class="pull-right">
         <% if a[0].nil? %>
-          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Questão ainda não respondida pelo aluno" class="label">Não respondida</span>
+          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Questão ainda não respondida pelo aluno" class="label label-default">Não respondida</span>
         <% else %>  
           <% if a[0].correct %>
               <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta!" class="label label-success">OK</span> <small class="date-info"><%= a[1] %> tentativa(s)</small>
           <% else %>
-                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta incorreta!" class="label label-important">ERRO</span> <small class="date-info"><%= a[1] %> tentativa(s)</small>
+                <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta incorreta!" class="label label-danger">ERRO</span> <small class="date-info"><%= a[1] %> tentativa(s)</small>
           <% end %>
         <% end %>
+      </div>
+
+
+                          <div class="progress xs" style="margin:10px 0;width:100%;">
+                            <% p = 100 * @user.progress_question(@team.id,q.id) %>
+                            <% if p == 100 %>
+                              <% style = "success" %>
+                            <% elsif p > 49 %>
+                              <% style = "yellow" %>
+                            <% else %>
+                              <% style = "danger" %>
+                            <% end %>
+                            <div class="progress-bar progress-bar-<%=style%>" style="width: <%= p %>%"></div>
+                          </div>
 
     </h4>
     <div>
@@ -30,7 +112,7 @@
 
   <% if current_user.admin? or @team.owner_id == current_user.id %>
     <a href="#" class="stats_link" data-question-id="<%= q.id %>"><h5><i class="icon-ok"></i> Estatísticas da Questão</h5></a>
-    <div id="stats_<%= q.id %>" class="hide">
+    <div class="question_stats" id="stats_<%= q.id %>">
     <ul>
       <li><strong>Nesta turma:</strong></li>
     <ul>
@@ -68,5 +150,37 @@
 </section>
 <% end %>
 
-	<% end %>
+  <% end %>
 <% end %>
+                  
+                </div>
+            </div>
+          </section>
+
+          <section class="col-lg-6">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Últimas respostas neste O.A.</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <% @last_answers.each do |a| %>
+                    <% if a.correct %>
+                      <div class="callout callout-info">
+                    <% else %>
+                      <div class="callout callout-danger">
+                    <% end %>
+                      <h4>
+                        <%= link_to a.user.name + " @ " + a.question.title + " #" + a.try_number.to_s, panel_team_user_lo_question_answer_path(@team.id,@user.id,@lo.id,a.question_id,a.id) %>
+                        <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"> <i class='fa fa-eye'></i></span>
+                        <br>
+                        <small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words a.updated_at %></small>
+                      </h4>
+                    </div>
+                  <% end %>
+              </div>
+            </div>
+          </section>
+
+    </div>
+  </section>
+
