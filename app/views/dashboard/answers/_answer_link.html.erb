@@ -1,0 +1,16 @@
+<% if answer.correct %>
+  <div class="callout callout-info">
+<% else %>
+  <div class="callout callout-danger">
+<% end %>
+  <h4>
+    <%= link_to answer.user.name.truncate(18) + " @ " + answer.question.title.truncate(18) + " #" + answer.try_number.to_s, panel_team_user_lo_question_answer_path(answer.team_id,answer.user_id,answer.lo_id,answer.question_id,answer.id) %>
+    <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= answer.id %>"> <i class='fa fa-eye'></i></span>
+    <% unless c.nil? %>
+      <span class='label label-default connection-btn' style='cursor:pointer;' data-id="<%= c.id %>"> <i class='fa fa-link'></i></span>
+    <% end %>
+    <br><small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words answer.updated_at %></small>
+    
+  </h4>
+  <%= answer_labels(answer) %>
+</div>

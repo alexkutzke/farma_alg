@@ -1,0 +1,25 @@
+<div class="answer-label">
+<span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta" class="label label-default"><%= answer.lang %></span>
+<% if answer.correct %>
+  <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
+<% else %>
+  <% if answer.compile_errors %>
+    <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
+  <% else %>
+    <% answer.results.each do |k,v| %>
+      <% if v['diff_error'] %>
+        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '<%= v['title'] %>'" class="label label-danger">saída</span>
+      <% end %>
+      <% if v['time_error'] %>
+        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '<%= v['title'] %>'" class="label label-danger">tempo</span>
+      <% end %>
+      <% if v['presentation_error'] %>
+        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '<%= v['title'] %>'" class="label label-danger">apresentação</span>
+      <% end %>
+      <% if v['exec_error'] %>
+        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '<%= v['title'] %>'" class="label label-danger">execução</span>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+</div>
