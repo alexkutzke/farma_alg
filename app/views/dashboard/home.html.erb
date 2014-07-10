@@ -2,7 +2,10 @@
     <%= javascript_include_tag 'dashboard/resizeApp' %>
     <%= javascript_include_tag 'difflib' %>
     <%= javascript_include_tag 'diffview' %>
-
+  <%= javascript_include_tag 'dashboard/home' %>
+  <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.5.1.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+  <script src="http://cdn.oesmith.co.uk/morris-0.5.1.min.js"></script>
   <script type="text/javascript">
   function diffUsingJS(div_id,label1,txt1,label2,txt2){
     // get the baseText and newText values from the two textboxes, and split them into lines
@@ -24,9 +27,7 @@
 
     $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
   }
-
   </script>
-  <%= javascript_include_tag 'dashboard/home' %>
 <% end %>
 
 
@@ -141,16 +142,7 @@
 
                 <div class="box-body">
                   <% @last_answers.each do |a| %>
-                    <% if a.correct %>
-                      <div class="callout callout-info">
-                    <% else %>
-                      <div class="callout callout-danger">
-                    <% end %>
-                      <h4>
-                        <%= a.user.name + " @ " + a.question.title + " #" + a.try_number.to_s %>
-                        <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"> <i class='fa fa-eye'></i></span>
-                      </h4>
-                    </div>
+                    <%= answer_link(a) %>
                   <% end %>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->        
@@ -185,9 +177,12 @@
                         </div>
                     </div>
                 </div>-->
-            </div><!-- /.box -->             
+            </div><!-- /.box -->     
+
+        
 
         </section><!-- right col -->
     </div><!-- /.row (main row) -->
+
 
 </section><!-- /.content -->

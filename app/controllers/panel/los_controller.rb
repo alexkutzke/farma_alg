@@ -24,6 +24,8 @@ class Panel::LosController < ApplicationController
     end
 
     @last_answers = Answer.where(user_id:@user.id,team_id:@team.id,lo_id:@lo.id).desc(:updated_at)[0..5]
+
+    @recent_activity_data = GraphDataGenerator::team_user_lo_recent_activity(@team.id,@user.id,@lo.id)
 	end
 
   def overview

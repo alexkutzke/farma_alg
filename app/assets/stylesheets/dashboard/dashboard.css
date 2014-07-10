@@ -20,6 +20,21 @@
  *= require AdminLTE/timepicker/bootstrap-timepicker.min
 */
 
+
+#cal-heatmap
+{
+  overflow-x:hidden;
+}
+
+svg.graph
+{
+  margin:10px auto;
+}
+
+.answer-label
+{
+  margin: 10px 2px;
+}
 .right-side-button
 {
   position: fixed;
@@ -138,7 +153,7 @@
   top: 10px;
   overflow-y: auto;
   pointer-events:none;
-  z-index: 1030;
+  z-index: 1032;
   max-width:400px;
 -webkit-box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.73);
 -moz-box-shadow:    0px 0px 30px 0px rgba(50, 50, 50, 0.73);
@@ -179,7 +194,7 @@ box-shadow:         0px 0px 30px 0px rgba(50, 50, 50, 0.73);
 
 .modal-backdrop
 {
-  z-index: 1029;
+  z-index: 1031;
 }
 
 .time-btn

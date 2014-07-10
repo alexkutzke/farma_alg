@@ -18,6 +18,14 @@
         <![endif]-->
     </head>
     <body class="skin-black">
+      <div id="farmaAlgModals">
+        <%= yield :modals %>
+      </div>
+
+      <div id="farmaAlgShowModals">
+        
+      </div>
+
         <!-- header logo: style can be found in header.less -->
         <header class="header">
             <%= link_to "FARMA-ALG", dashboard_home_path, :class => "logo" %>

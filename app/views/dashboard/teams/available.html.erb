@@ -1,0 +1,63 @@
+<div id="answer-show">
+
+</div>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Turmas <small>lista de todas as turmas disponíveis para matrícula</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+        <li class="active"><i class="fa fa-users"></i> Turmas disponíveis</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">    
+            <div class="box box-solid">
+                <div class="box-header">
+                  <h3 class="box-title">Todas as turmas</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                    <div class="col-lg-8">
+                    <% @teams.sort_by{|x|x.name}.each do |t| %>
+                    
+                        <% if t.users.include?(current_user) %>
+                            <div class="input-group" style="margin: 10px;">
+                                <span class="input-group-addon"><%= link_to t.name,panel_team_path(t) %></span>
+                                <span class="input-group-addon"> 
+                                    <span class="label label-success">Matriculado!</span>
+                                </span>
+                            
+                        </div>
+                        <% else %>
+                            <%= form_tag dashboard_teams_enroll_path, :method => :post, :id => "enroll-form", :class => "form" do %>
+                            <div class="input-group <%= raw "has-error" if @wrong_code_team_id == t.id %>" style="margin: 10px;">
+                                    <span class="input-group-addon"><%= t.name %></span>
+                                    <input type="hidden" name="team[id]" value="<%= t.id %>">
+                                    <% if @wrong_code_team_id != t.id %>
+                                        <% placeholder = "Senha para matrícula ..." %>
+                                    <% else %>
+                                        <% placeholder = "Senha incorreta!" %>
+                                    <% end %>
+                                    <%= password_field_tag(:password,nil, :class => "form-control" , :placeholder => placeholder) %>
+                                    <div class="input-group-btn">
+                                        <%= button_tag "Matricular-se", :type => :submit, :class => "btn btn-info" %>
+                                    </div><!-- /btn-group -->
+                                </div>
+                                <% end %>
+                            
+                        <% end %>
+                        
+                    <% end %>
+                    </div>
+                    </div>
+                 </div><!-- /.box-body -->
+            </div>    
+        </div>
+    </div>
+</section>

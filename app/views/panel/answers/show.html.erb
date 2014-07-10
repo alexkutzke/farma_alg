@@ -2,58 +2,55 @@
 <% buttons = true if buttons.nil? %>
 
 <%= content_for :scripts do %>
-    <%= javascript_include_tag 'dashboard/resizeApp' %>
-    <%= javascript_include_tag 'difflib' %>
-    <%= javascript_include_tag 'diffview' %>
-    <%= javascript_include_tag 'codemirror/lib/codemirror' %>
-    <%= javascript_include_tag 'codemirror/mode/pascal/pascal' %>
-    <%= javascript_include_tag 'codemirror/mode/ruby/ruby' %>
-    <%= javascript_include_tag 'codemirror/mode/clike/clike' %>
-    <%= javascript_include_tag 'prettify' %>  
-    <%= javascript_include_tag 'run_prettify' %>
+  <%= javascript_include_tag 'dashboard/resizeApp' %>
+  <%= javascript_include_tag 'difflib' %>
+  <%= javascript_include_tag 'diffview' %>
+  <%= javascript_include_tag 'dashboard/home' %>
+
 
   <script type="text/javascript">
-  function diffUsingJS(div_id,label1,txt1,label2,txt2){
-    // get the baseText and newText values from the two textboxes, and split them into lines
-    base = difflib.stringAsLines(txt1);//$("baseText").value);
-    newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+    function diffUsingJS(div_id,label1,txt1,label2,txt2){
+      // get the baseText and newText values from the two textboxes, and split them into lines
+      base = difflib.stringAsLines(txt1);//$("baseText").value);
+      newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+  
+      //create a SequenceMatcher instance that diffs the two sets of lines
+      sm = new difflib.SequenceMatcher(base, newtxt);
+  
+      // get the opcodes from the SequenceMatcher instance
+      // opcodes is a list of 3-tuples describing what changes should be made to the base text
+      // in order to yield the new text
+      opcodes = sm.get_opcodes();
+      diffoutputdiv = $("#"+div_id);
+      while(diffoutputdiv.firstChild)
+        diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+  
+      //console.log opcodes
+  
+      $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+    }
 
-    //create a SequenceMatcher instance that diffs the two sets of lines
-    sm = new difflib.SequenceMatcher(base, newtxt);
-
-    // get the opcodes from the SequenceMatcher instance
-    // opcodes is a list of 3-tuples describing what changes should be made to the base text
-    // in order to yield the new text
-    opcodes = sm.get_opcodes();
-    diffoutputdiv = $("#"+div_id);
-    while(diffoutputdiv.firstChild)
-      diffoutputdiv.removeChild(diffoutputdiv.firstChild);
-
-    //console.log opcodes
-
-    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
-  }
-// Carrega tags
-$.ajax({
-  url: "/dashboard/tags/show",
-  type: "get",
-  data: {answer_id:"<%= @answer.id %>"},
-  dataType: "script",
-  success: function(){
-    console.log("OK");
-  }
-});
-
-$("span.label").tooltip();
-$('.change_correctness').popover({html:true});
-
-resizeApp();
-prettyPrint();
-
-
-$("div.output").each(function(){
-  diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
-});
+    // Carrega tags
+    $.ajax({
+      url: "/dashboard/tags/show",
+      type: "get",
+      data: {answer_id:"<%= @answer.id %>"},
+      dataType: "script",
+      success: function(){
+        console.log("OK");
+      }
+    });
+    
+    $("span.label").tooltip();
+    $('.change_correctness').popover({html:true});
+    
+    resizeApp();
+    prettyPrint();
+    
+    
+    $("div.output").each(function(){
+      diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
+    });
   </script>
 <% end %>
 
@@ -67,16 +64,15 @@ $("div.output").each(function(){
   <!-- Content Header (Page header) -->
   <section class="content-header">
       <h1>
-          <%= @lo.name %> - Aluno <%= @user.name %>
-          <small>Destalhes do aluno na turma <em><%= @team.name %></em></small>
+          <%= @question.title %> (#<%=@answer.try_number%>) - Aluno <%= @user.name %>
+          <small>Destalhes da tentativa #<%= @answer.try_number %> do aluno na questão "<%= @question.title %>"</small>
       </h1>
-      <br>
       <ol class="breadcrumb">
           <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
           <li><i class="fa fa-users"></i> <%= link_to "Turma \"#{@team.name}\"", panel_team_path(@team.id) %></li>
           <li><i class="fa fa-user"></i> <%= link_to @user.name, panel_team_user_path(@team.id,@user.id) %></li>
           <li><i class="fa fa-check"></i> <%= link_to @lo.name, panel_team_user_lo_path(@team.id,@user.id,@lo.id) %></li>
-          <li><i class="fa fa-check"></i> <%= link_to @question.title, panel_team_user_lo_question_path(@team.id,@user.id,@lo.id,@question.id) %></li>
+          <li><i class="fa fa-question"></i> <%= link_to @question.title, panel_team_user_lo_question_path(@team.id,@user.id,@lo.id,@question.id) %></li>
           <li><i class="fa fa-eye active"></i> Tentativa #<%= @answer.try_number %></li>
       </ol>
   </section>
@@ -180,6 +176,7 @@ $("div.output").each(function(){
                       Vizualizar resposta
                     </button>
 
+
                     <!-- Modal -->
                     <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-lg my-modal">
@@ -194,6 +191,7 @@ $("div.output").each(function(){
                         </div>
                       </div>
                     </div>
+
 
 <% if @answer.correct %>
 
@@ -363,7 +361,7 @@ $("div.output").each(function(){
           </section>
 
           <section class="col-lg-6">
-            <div class="box box-solid">
+            <div class="box box-info">
                 <div class="box-header">
                     <h3 class="box-title">Tags para esta resposta</h3>
                 </div><!-- /.box-header -->
@@ -379,7 +377,7 @@ $("div.output").each(function(){
                 </div>
             </div>
 
-            <div class="box box-solid">
+            <div class="box box-info">
                 <div class="box-header">
                     <h3 class="box-title">Resultado para casos de teste</h3>
                 </div><!-- /.box-header -->
@@ -409,6 +407,8 @@ $("div.output").each(function(){
                   <div class="box-tools pull-right">
 
                       <button data-toggle="modal" data-target="#testCaseModal-<%= k %>" class="diff-btn btn btn-default btn-sm" ><i class="fa fa-columns"></i> Diff</button>
+                      
+
                       <!-- Modal -->
                       <div class="modal fade" id="testCaseModal-<%= k %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg my-modal">
@@ -425,6 +425,7 @@ $("div.output").each(function(){
                           </div>
                         </div>
                       </div>
+
 
                   </div>
                 </div>
@@ -461,24 +462,26 @@ $("div.output").each(function(){
       <% end %>
                 </div>
             </div>
+
+
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Respostas semelhantes</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+                <% @answer.best_matches(5).each do |sa| %>
+                  <% c = @answer.connections.where(target_answer_id:sa.id).first %>
+                  <%= answer_link(sa,c) %>
+                <% end %>
+              </div>
+            </div>
+
+
+
           </section>
 
     </div>
 
   </section>
-
-
-
-<a href="#" class="question-content-link"><h3>Enunciado</h3></a>
-
-<div id="question-content" class="hide">
-<h4><%= @answer.exercise.title %></h4>
-<%= raw @answer.exercise.content %>
-<hr/>  
-<%= raw @answer.question.content %>
-</div>
-
-<h3>Tentativa #<%= @answer['try_number'] %> <small>Realizada em <%= @answer['created_at'].strftime("%d/%m/%Y às %H:%M:%S") %></small></h3>
-
-<%= render :partial => "panel/answer", :locals => {:answer => @answer, :previous_answers => @previous_answers} %>
 

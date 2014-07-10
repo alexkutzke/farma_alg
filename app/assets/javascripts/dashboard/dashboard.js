@@ -16,6 +16,12 @@
 //= require jquery.md5
 //= require AdminLTE/bootstrap
 //= require AdminLTE/AdminLTE/app
+//= require codemirror/lib/codemirror
+//= require codemirror/mode/pascal/pascal
+//= require codemirror/mode/ruby/ruby
+//= require codemirror/mode/clike/clike
+//= require prettify
+//= require run_prettify
 //= require_self
 
 var comecei = 0;

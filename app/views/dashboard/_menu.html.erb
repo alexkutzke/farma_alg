@@ -39,6 +39,12 @@
         <% end %>
     </li>
 
+    <li class="<%= raw "active" if controller.class == Dashboard::TeamsController %>">
+        <%= link_to dashboard_teams_available_path do %>
+            <i class="fa fa-users"></i> <span>Turmas Disponíveis</span>
+        <% end %>
+    </li>
+
     <% # sorry about the next few lines =/ %>
     <% my_teams = Team.where(owner_id: current_user.id).asc('name') %>
     <% teams = current_user.teams.asc('name') %>

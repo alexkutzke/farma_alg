@@ -89,19 +89,7 @@
           <% end %>
         <% end %>
       </div>
-
-
-                          <div class="progress xs" style="margin:10px 0;width:100%;">
-                            <% p = 100 * @user.progress_question(@team.id,q.id) %>
-                            <% if p == 100 %>
-                              <% style = "success" %>
-                            <% elsif p > 49 %>
-                              <% style = "yellow" %>
-                            <% else %>
-                              <% style = "danger" %>
-                            <% end %>
-                            <div class="progress-bar progress-bar-<%=style%>" style="width: <%= p %>%"></div>
-                          </div>
+      <%= render_progress(@user.progress_question(@team.id,q.id),"% concluído","margin:10px 0;width:100%;") %>
 
     </h4>
     <div>
@@ -158,24 +146,16 @@
           </section>
 
           <section class="col-lg-6">
+
+            <%= recent_activity(@recent_activity_data) %>
+            
             <div class="box box-solid">
                 <div class="box-header">
                     <h3 class="box-title">Últimas respostas neste O.A.</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <% @last_answers.each do |a| %>
-                    <% if a.correct %>
-                      <div class="callout callout-info">
-                    <% else %>
-                      <div class="callout callout-danger">
-                    <% end %>
-                      <h4>
-                        <%= link_to a.user.name + " @ " + a.question.title + " #" + a.try_number.to_s, panel_team_user_lo_question_answer_path(@team.id,@user.id,@lo.id,a.question_id,a.id) %>
-                        <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"> <i class='fa fa-eye'></i></span>
-                        <br>
-                        <small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words a.updated_at %></small>
-                      </h4>
-                    </div>
+                    <%= answer_link(a) %>
                   <% end %>
               </div>
             </div>

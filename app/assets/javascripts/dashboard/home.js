@@ -9,4 +9,16 @@ $(document).ready(function(){
       type: "get"    
     });
   });
+
+  $("body").on("click",".connection-btn",function(){
+    $.ajax({
+        url: "/dashboard/connections/show",
+        type: "get",
+        data: {id:$(this).data("id")},
+        success: function(){
+          //console.log("OK");
+        }
+    });
+  });
+
 });

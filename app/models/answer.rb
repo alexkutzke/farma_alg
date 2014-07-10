@@ -442,6 +442,23 @@ class Answer
     true
   end
 
+  def best_matches(n)
+    best = []
+    connections = []
+
+    self.similar_answers.each do |sa|
+      best << Answer.find(sa)
+    end
+
+    best.sort_by! do |element|
+      element.connections.where(target_answer_id:self.id).first.weight
+    end
+
+    best.reverse!
+
+    best[0..n-1]  
+  end
+
 private
 
   def register_last_answer
@@ -648,4 +665,6 @@ private
     timeline_items[last_new_date] << x if timeline_items.count > 0
     timeline_items
   end
+
+
 end

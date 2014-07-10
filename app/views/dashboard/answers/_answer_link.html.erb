@@ -13,4 +13,7 @@
     
   </h4>
   <%= answer_labels(answer) %>
+  <% unless c.nil? %>
+    <%= render_progress(c.weight,"% de similaridade") %>
+  <% end %>
 </div>

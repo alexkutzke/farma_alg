@@ -114,6 +114,11 @@ Carrie::Application.routes.draw do
     post "graph_answer_info"   
     post "graph_connection_info"
 
+    namespace :teams do
+      get "available"
+      post "enroll"
+    end
+
     namespace :answers do
       get "show"
     end

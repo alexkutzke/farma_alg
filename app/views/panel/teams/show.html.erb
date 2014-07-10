@@ -1,3 +1,96 @@
+<%= content_for :scripts do %>
+  <%= javascript_include_tag 'dashboard/resizeApp' %>
+  <%= javascript_include_tag 'difflib' %>
+  <%= javascript_include_tag 'diffview' %>
+  <%= javascript_include_tag 'dashboard/home' %>
+
+  <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.5.1.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+  <script src="http://cdn.oesmith.co.uk/morris-0.5.1.min.js"></script>
+
+  <script type="text/javascript">
+    function diffUsingJS(div_id,label1,txt1,label2,txt2){
+      // get the baseText and newText values from the two textboxes, and split them into lines
+      base = difflib.stringAsLines(txt1);//$("baseText").value);
+      newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+  
+      //create a SequenceMatcher instance that diffs the two sets of lines
+      sm = new difflib.SequenceMatcher(base, newtxt);
+  
+      // get the opcodes from the SequenceMatcher instance
+      // opcodes is a list of 3-tuples describing what changes should be made to the base text
+      // in order to yield the new text
+      opcodes = sm.get_opcodes();
+      diffoutputdiv = $("#"+div_id);
+      while(diffoutputdiv.firstChild)
+        diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+  
+      //console.log opcodes
+  
+      $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+    }
+
+
+/*
+    function switch_chart(){
+      $("#allTimeChart").toggle();
+      $("#recentChart").toggle();
+    }
+
+  $(document).ready(function(){
+    $("#allTimeBtn").click(function(){
+      $("#allTimeChart").show();
+      $("#recentChart").hide();
+    });
+
+    $("#recentBtn").click(function(){
+      $("#allTimeChart").hide();
+      $("#recentChart").show();
+    });
+
+        $("#allTimeChart").hide();
+  });
+    
+
+    Morris.Bar({
+      // ID of the element in which to draw the chart.
+      element: 'recentChart',
+      // Chart data records -- each entry in this array corresponds to a point on
+      // the chart.
+      data: <%#= raw @chart_data.last(10).to_json %>,
+      // The name of the data record attribute that contains x-values.
+      xkey: 'date',
+      // A list of names of data record attributes that contain y-values.
+      ykeys: ['value'],
+      // Labels for the ykeys -- will be displayed when you hover over the
+      // chart.
+      labels: ['Número de Tentativas'],
+      xLabels: 'week',
+      hideHover: 'auto'
+    });
+
+    Morris.Bar({
+      // ID of the element in which to draw the chart.
+      element: 'allTimeChart',
+      // Chart data records -- each entry in this array corresponds to a point on
+      // the chart.
+      data: <%#= raw @chart_data.to_json %>,
+      // The name of the data record attribute that contains x-values.
+      xkey: 'date',
+      // A list of names of data record attributes that contain y-values.
+      ykeys: ['value'],
+      // Labels for the ykeys -- will be displayed when you hover over the
+      // chart.
+      labels: ['Número de Tentativas'],
+      xLabels: 'week',
+      hideHover: 'auto'
+    });
+*/
+  </script>
+<% end %>
+<div id="answer-show">
+
+</div>
 <% if  current_user.admin? or current_user.id == @team.owner_id %>
 
   <!-- Content Header (Page header) -->
@@ -14,6 +107,7 @@
 
   <!-- Main content -->
   <section class="content">
+    
     <div class="row">
           <section class="col-lg-6">
             <div class="box box-solid">
@@ -37,9 +131,25 @@
                   <% end %>
               </div>
             </div>
+
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Últimas respostas nesta turma</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <% @answers.each do |a| %>
+                    <%= answer_link(a) %>
+                  <% end %>
+              </div>
+            </div>
+
           </section>
 
           <section class="col-lg-6">
+            
+            <%= recent_activity(@recent_activity_data) %>
+       
+
             <div class="box box-solid">
                 <div class="box-header">
                     <h3 class="box-title">Alunos matriculados nesta turma</h3>
@@ -55,48 +165,44 @@
                       <tr>
                         <td><%= link_to u.name, panel_team_user_path(@team, u)%> <small>(<%= u.email %>)</small> <small><%= "(Seu próprio usuário)" if u.id ==current_user.id %></small></td>
                         <td>
-                          <div class="progress xs" style="width:70px;">
-                            <% p = 100 * u.progress_team(@team.id) %>
-                            <% if p == 100 %>
-                              <% style = "success" %>
-                            <% elsif p > 49 %>
-                              <% style = "yellow" %>
-                            <% else %>
-                              <% style = "danger" %>
-                            <% end %>
-                            <div class="progress-bar progress-bar-<%=style%>" style="width: <%= p %>%"></div>
-                          </div>
+
+                          <%= render_progress(u.progress_team(@team.id),"% concluído","width:100%;") %>
+                          
                         </td>
                       </tr>
                     <% end %>
                   </table>
                 </div>
             </div>
+
+
+<!--
+            <div class="box box-info">
+                <div class="box-header">
+                    
+                    <div class="pull-right box-tools">
+                        <button class="btn btn-info btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+
+                        <div class="btn-group" data-toggle="btn-toggle">
+                            <button id="recentBtn" type="button" class="btn btn-default btn-sm active">Recente</button>
+                            <button id="allTimeBtn" type="button" class="btn btn-default btn-sm">All-Time</button>
+                        </div>
+                    </div>
+                    <i class="fa fa-exclamation"></i>
+
+                    <h3 class="box-title">Histórico de atividade da turma</h3>
+                </div>
+
+                <div class="box-body">
+                  
+    <div id="recentChart"></div>
+    <div id="allTimeChart"></div>
+                </div>
+            </div> /.box -->  
+
+
           </section>
       </div>
 
-      <div class="row">
-          <section class="col-lg-12">
-            <div class="box box-solid">
-                <div class="box-header">
-                    <h3 class="box-title">Últimas respostas nesta turma</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <% @answers.each do |a| %>
-                    <% if a.correct %>
-                      <div class="callout callout-info">
-                    <% else %>
-                      <div class="callout callout-danger">
-                    <% end %>
-                      <h4>
-                        <%= a.user.name + " @ " + a.question.title + " #" + a.try_number.to_s %> <small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words a.updated_at %></small>
-                        <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"> <i class='fa fa-eye'></i></span>
-                      </h4>
-                    </div>
-                  <% end %>
-              </div>
-            </div>
-          </section>
-      </div>
   </section>
 <% end %>

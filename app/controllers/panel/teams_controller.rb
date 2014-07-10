@@ -18,6 +18,9 @@ class Panel::TeamsController < ApplicationController
       redirect_to panel_team_user_path(@team, @current_user)
     end
 
+    #@chart_data = GraphDataGenerator::team_tries_x_time(@team.id,"daily")
+    @recent_activity_data = GraphDataGenerator::team_recent_activity(@team.id)
+
     @answers = Answer.where(team_id:@team.id).desc('created_at')[0..9]
 	end
 end

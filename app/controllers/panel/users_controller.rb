@@ -12,5 +12,9 @@ class Panel::UsersController < ApplicationController
 	end
 
 	def show
+    unless @team.users.include?(current_user)
+      redirect_to dashboard_home_path
+    end
+    @recent_activity_data = GraphDataGenerator::team_user_recent_activity(@team.id,@user.id)
 	end
 end

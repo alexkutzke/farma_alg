@@ -4,6 +4,9 @@ $("div.output").each(function(){
   diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
 });
 
+$("#farmaAlgShowModals").html("");
+$(".modal").appendTo($("#farmaAlgShowModals"));
+
 // Carrega tags
 $.ajax({
   url: "/dashboard/tags/show",

@@ -1,57 +1,72 @@
-<h3><%= @question.title %> <small><%= @answers.length%> tentativas do usuário <%= @user.name %></small></h3>
 
-<% @answers.each do |a| %>
+<%= content_for :scripts do %>
+  <%= javascript_include_tag 'dashboard/resizeApp' %>
+  <%= javascript_include_tag 'difflib' %>
+  <%= javascript_include_tag 'diffview' %>
+  <%= javascript_include_tag 'dashboard/home' %>
 
-<section class="well"><header class="clearfix">
-  <div class="left">
 
-
-
-	<h5>#<%= a['try_number'] %>, Em <%= a['created_at'].strftime("%d/%m/%Y às %H:%M:%S")%>
-
-      <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Linguagem utilizada na resposta"
-      class="label"><%= a.lang %></span>
-      <% if a.correct %>
-        <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta" class="label label-success">correta</span>
-      <% else %>
-        <% if a.compile_errors %>
-          <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de compilação" class="label label-warning">compilação</span>
-        <% else %>
-          <% a.results.each do |k,v| %>
-            <% if v['diff_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de saída para o caso de teste '<%= v['title'] %>'" class="label label-important">saída</span>
-            <% end %>
-            <% if v['time_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Tempo excedido para o caso de teste '<%= v['title'] %>'" class="label label-important">tempo</span>
-            <% end %>
-            <% if v['presentation_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de apresentação para o caso de teste '<%= v['title'] %>'" class="label label-important">apresentação</span>
-            <% end %>
-            <% if v['exec_error'] %>
-              <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Erro de execução para o caso de teste '<%= v['title'] %>'" class="label label-important">execução</span>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-		<% if a.correct %>
-			<small>Correta</small>
-		<% else %>
-			<small>Incorreta</small>	
-		<% end %>
-
-    <% if a.changed_correctness %>
-      <small> (Corrigido pelo professor)</small> 
-    <% end %>
-	</h5>
-	<%= link_to panel_team_user_lo_question_answer_path(@team,@user,@lo,@question,a) do %>
-		<% if a.correct %>
-<pre style="border: 2px green solid;">	
-		<% else %>
-<pre style="border: 2px red solid;">
-		<% end %>
-<%= truncate(a['response'],length:100) %></pre>
-	<% end %>
-    </div>
-</section>
+  <script type="text/javascript">
+    function diffUsingJS(div_id,label1,txt1,label2,txt2){
+      // get the baseText and newText values from the two textboxes, and split them into lines
+      base = difflib.stringAsLines(txt1);//$("baseText").value);
+      newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+  
+      //create a SequenceMatcher instance that diffs the two sets of lines
+      sm = new difflib.SequenceMatcher(base, newtxt);
+  
+      // get the opcodes from the SequenceMatcher instance
+      // opcodes is a list of 3-tuples describing what changes should be made to the base text
+      // in order to yield the new text
+      opcodes = sm.get_opcodes();
+      diffoutputdiv = $("#"+div_id);
+      while(diffoutputdiv.firstChild)
+        diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+  
+      //console.log opcodes
+  
+      $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+    }
+  </script>
 <% end %>
+  
+
+
+<div id="answer-show">
+
+</div>
+
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+      <h1>
+          Questão "<%=@question.title %>" - Aluno <%= @user.name %>
+          <small>Respostas do aluno para a questão, na turma <em><%= @team.name %></em></small>
+      </h1>
+      <ol class="breadcrumb">
+          <li><i class="fa fa-home"></i> <%= link_to "Home", dashboard_home_path %></li>
+          <li><i class="fa fa-users"></i> <%= link_to "Turma \"#{@team.name}\"", panel_team_path(@team.id) %></li>
+          <li><i class="fa fa-user"></i> <%= link_to @user.name, panel_team_user_path(@team.id,@user.id) %></li>
+          <li><i class="fa fa-check"></i> <%= link_to @lo.name, panel_team_user_lo_path(@team.id,@user.id,@lo.id) %></li>
+          <li><i class="fa fa-question"></i> <%= @question.title %></li>
+      </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+
+          <section class="col-lg-6">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">Respostas para a questão</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <% @answers.each do |a| %>
+                    <%= answer_link a %>
+                  <% end %>
+                  
+                </div>
+            </div>
+          </section>
+    </div>
+  </section>

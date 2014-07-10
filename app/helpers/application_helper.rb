@@ -10,6 +10,35 @@ module ApplicationHelper
         
   end
 
+  def render_progress(x,msg,css=nil)
+    if css.nil?
+      css = "width:70px;"
+    end
+
+    p = 100 * x
+    if p == 100 
+      style = "success" 
+    elsif p > 49 
+      style = "yellow"
+    else 
+      style = "danger"
+    end 
+
+    raw "<div class=\"progress xs\" style=\"#{css}\"><div rel=\"tooltip\" data-toggle=\"tooltip\" data-placement=\"top\" title data-original-title=\"#{p.round(0).to_s}#{msg}\" class=\"progress-bar progress-bar-#{style}\" style=\"width: #{p}%\"></div></div>"
+  end
+
+  def answer_link(answer,c=nil)
+    render(:partial => 'dashboard/answers/answer_link', :locals => {:answer => answer, :c => c})
+  end
+
+  def answer_labels(answer)
+    render(:partial => 'dashboard/answers/answer_labels', :locals => {:answer => answer})
+  end
+
+  def recent_activity(data)
+    render(:partial => 'dashboard/recent_activity', :locals => {:data => data})
+  end
+
   def test_case_title(id)
     t = TestCase.find_or_initialize_by({:id => id})
     if not t.new_record?
