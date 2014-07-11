@@ -52,8 +52,8 @@ Carrie::Application.routes.draw do
     end
   end
   
-  get "answers_panel/index"
-  get "answers_panel/answers"
+  #get "answers_panel/index"
+  #get "answers_panel/answers"
   
   namespace :newapi do
     resources :users, :only => [:index]
@@ -71,10 +71,10 @@ Carrie::Application.routes.draw do
   end
 
   namespace :panel do
-    get "retroaction/:answer_id", :action => :retroaction
-    get "index"
-    get "comments"
-    get "explorer"
+    #get "retroaction/:answer_id", :action => :retroaction
+    #get "index"
+    #get "comments"
+    #get "explorer"
     resources :teams, only: [:show] do
       resources :los, only: [] do
         get 'overview', on: :member
@@ -91,14 +91,14 @@ Carrie::Application.routes.draw do
     end
   end
 
-  namespace :explorer do
-    get "index"
-    get "load_users"
-    post "info_answer"
-    post "info_connection"
-    put "search"
-    put "fulltext_search"
-  end
+  #namespace :explorer do
+  #  get "index"
+  #  get "load_users"
+  #  post "info_answer"
+  #  post "info_connection"
+  #  put "search"
+  #  put "fulltext_search"
+  #end
 
   namespace :dashboard do
     get "home"
@@ -147,5 +147,5 @@ Carrie::Application.routes.draw do
 
   root to: "dashboard#home"
 
-  match '*path', to: 'dashboard#home'
+  match '*path', to: 'home#index'
 end
