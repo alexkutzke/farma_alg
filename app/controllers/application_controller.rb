@@ -5,6 +5,12 @@ class ApplicationController < ActionController::Base
   before_filter :get_messages
   layout :layout_to_resource
 
+  def verify_admin
+    unless current_user.admin?
+      render :file => "public/401.html", :status => :unauthorized
+    end
+  end
+
   def get_messages
     if user_signed_in?
       @messages_to_me_top = current_user.last_messages_to_me(4)

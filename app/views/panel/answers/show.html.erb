@@ -1,12 +1,8 @@
-<% retroaction ||= nil %>
-<% buttons = true if buttons.nil? %>
-
 <%= content_for :scripts do %>
   <%= javascript_include_tag 'dashboard/resizeApp' %>
   <%= javascript_include_tag 'difflib' %>
   <%= javascript_include_tag 'diffview' %>
   <%= javascript_include_tag 'dashboard/home' %>
-
 
   <script type="text/javascript">
     function diffUsingJS(div_id,label1,txt1,label2,txt2){
@@ -176,6 +172,14 @@
                       Vizualizar resposta
                     </button>
 
+                    <% if @user.id == current_user.id %>
+                      
+                        <% if Team.find(@answer.team_id).lo_ids.include?(@answer.lo_id) %>
+                          <a href="<%= current_user.link_to_question(Question.find(@answer.question_id)) %>" class="btn btn-primary btn-block">Responder novamente</a>
+                        <% end %>
+                      
+                    <% end %>
+
 
                     <!-- Modal -->
                     <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -195,8 +199,7 @@
 
 <% if @answer.correct %>
 
-    <% unless retroaction %>
-      <% if current_user.admin? || current_user.id == @answer.team.owner_id %>
+          <% if current_user.admin? || current_user.id == @answer.team.owner_id %>
         <button class="btn btn-block btn-danger change_correctness" type="button"
           data-toggle="popover"
           data-content='
@@ -212,10 +215,10 @@
           data-original-title="Deixe um comentário que explique a troca"
         >Tornar incorreta</button>
       <% end %>
-    <% end %>
+
 <% else %>
 
-    <% unless retroaction %>
+    
       <% if current_user.admin? || current_user.id == @answer.team.owner_id %>
         <button class="btn btn-block btn-success change_correctness" type="button"
           data-toggle="popover"
@@ -232,7 +235,7 @@
           data-original-title="Deixe um comentário"
         >Tornar correta</button>
       <% end %>
-    <% end %>
+    
 <% end %>
                   </div>
                 </div>

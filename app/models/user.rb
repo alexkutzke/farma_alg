@@ -182,6 +182,10 @@ class User
       end
     end
 
+    unless n != 0
+      return 0.0
+    end
+
     progress/n
   end
 
@@ -193,6 +197,10 @@ class User
     team.los.each do |lo|
       progress = progress + self.progress_lo(team_id,lo.id)
       n = n+1
+    end
+
+    unless n != 0
+      return 0.0
     end
 
     progress/n

@@ -24,6 +24,11 @@
                 <div class="box-body">
                     <div class="row">
                     <div class="col-lg-8">
+                      <% if current_user.admin?  %>
+                        <i class="fa fa-plus"></i> <%= link_to "Nova turma", new_dashboard_team_path %>
+                      <% end %>
+
+
                     <% @teams.sort_by{|x|x.name}.each do |t| %>
                     
                         <% if t.users.include?(current_user) %>

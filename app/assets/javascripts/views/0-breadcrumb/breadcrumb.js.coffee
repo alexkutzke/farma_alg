@@ -3,12 +3,6 @@ class Carrie.Views.Breadcrumb extends Backbone.Marionette.ItemView
   tagName: 'ul'
   className: 'breadcrumb'
 
-  onRender: ->
-    if Carrie.currentUser
-      @add('Home', '/welcome', true)
-    else
-      @add('Home', '/', true)
-
   events:
     'click li a': 'showView'
 

@@ -114,6 +114,7 @@ Carrie::Application.routes.draw do
     post "graph_answer_info"   
     post "graph_connection_info"
 
+    resources :teams, :only => [:new,:create]
     namespace :teams do
       get "available"
       post "enroll"
@@ -144,7 +145,7 @@ Carrie::Application.routes.draw do
     put "tags_search"
   end
 
-  root to: "home#index"
+  root to: "dashboard#home"
 
-  match '*path', to: 'home#index'
+  match '*path', to: 'dashboard#home'
 end

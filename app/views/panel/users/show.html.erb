@@ -25,14 +25,16 @@
                     <tr>
                       <th>O.A.</th>
                       <th>Progresso</th>
+                      <th></th>
                     </tr>
                     <% @los.sort_by{|x| x.name.downcase}.each do |lo| %>
 
                       <tr>
-                        <td><%= link_to lo.name, panel_team_user_lo_path(@team, @user,lo)%></td>
+                        <td><%= link_to lo.name, "/published/teams/#{@team.id.to_s}/los/#{lo.id.to_s}", :target => "_blank"%></td>
                         <td style="text-align:center;">
                           <%= render_progress(@user.progress_lo(@team.id,lo.id),"% concluído","width:100%;") %>
                         </td>
+                        <td><%= link_to "Detalhes", panel_team_user_lo_path(@team, @user,lo)%></td>
                       </tr>
                     <% end %>
                   </table>
