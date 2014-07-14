@@ -71,7 +71,7 @@ namespace :deploy do
   end
 
   desc "Start the process queue"
-  task :start_process_queue
+  task :start_process_queue do
     pids = read_pids
 
     if pids.empty?
@@ -91,15 +91,7 @@ namespace :deploy do
       Process.detach(pid)
       pids << pid
     end
-  end
 
-  #namespace :assets do
-  #  desc "Precompile assets on local machine and upload them to the server."
-  #  task :precompile, roles: :web, except: {no_release: true} do
-      #run_locally "bundle exec rake assets:precompile"
-      #find_servers_for_task(current_task).each do |server|
-      #  run_locally "rsync -vr --exclude='.DS_Store' public/assets #{user}@#{server.host}:#{shared_path}/"
-      #end
-  #  end
-  #end
+    store_pids(pids,:append)
+  end
 end
