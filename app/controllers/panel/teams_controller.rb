@@ -20,6 +20,7 @@ class Panel::TeamsController < ApplicationController
 
     #@chart_data = GraphDataGenerator::team_tries_x_time(@team.id,"daily")
     @recent_activity_data = GraphDataGenerator::team_recent_activity(@team.id)
+    @team_lo_tries = GraphDataGenerator::team_lo_tries(@team.id)
 
     @answers = Answer.where(team_id:@team.id).desc('created_at')[0..9]
 	end

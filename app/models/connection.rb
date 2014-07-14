@@ -35,6 +35,13 @@ class Connection
     nc.confirmed = self.confirmed
 
   	nc.save!
+
+    a = Answer.find(self.answer_id)
+    b = Answer.find(self.target_answer_id)
+
+    Answer.propagate_properties_to_neigh(a,b.id)
+    Answer.propagate_properties_to_neigh(b,a.id)  
+
   	Connection.set_callback("save", :after, :dup)
   end
 

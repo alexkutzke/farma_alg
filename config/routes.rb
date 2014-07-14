@@ -51,10 +51,10 @@ Carrie::Application.routes.draw do
       end
     end
   end
-  
+
   #get "answers_panel/index"
   #get "answers_panel/answers"
-  
+
   namespace :newapi do
     resources :users, :only => [:index]
     resources :answers, :only => [:show] do
@@ -102,7 +102,7 @@ Carrie::Application.routes.draw do
 
   namespace :dashboard do
     get "home"
-    
+
     get "timeline"
     put "timeline_search"
 
@@ -110,11 +110,13 @@ Carrie::Application.routes.draw do
     put "fulltext_search"
 
     get "graph"
-    put "graph_search" 
-    post "graph_answer_info"   
+    put "graph_search"
+    post "graph_answer_info"
     post "graph_connection_info"
 
-    resources :teams, :only => [:new,:create]
+    resources :teams, :only => [:new,:create,:destroy] do
+      post :unenroll, on: :member
+    end
     namespace :teams do
       get "available"
       post "enroll"

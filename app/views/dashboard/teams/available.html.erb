@@ -16,7 +16,7 @@
 <!-- Main content -->
 <section class="content">
     <div class="row">
-        <div class="col-md-12">    
+        <div class="col-md-12">
             <div class="box box-solid">
                 <div class="box-header">
                   <h3 class="box-title">Todas as turmas</h3>
@@ -30,39 +30,53 @@
 
 
                     <% @teams.sort_by{|x|x.name}.each do |t| %>
-                    
+
                         <% if t.users.include?(current_user) %>
                             <div class="input-group" style="margin: 10px;">
                                 <span class="input-group-addon"><%= link_to t.name,panel_team_path(t) %></span>
-                                <span class="input-group-addon"> 
-                                    <span class="label label-success">Matriculado!</span>
-                                </span>
-                            
+                                <div class="input-group-btn">
+                                  <%= button_tag "Matriculado!", :class => "btn btn-success btn-flat", :disabled => "disabled" %>
+                                  <%= link_to unenroll_dashboard_team_path(t), :method => :post, :data => {confirm: "Você tem certeza? Suas respostas serão mantidas. Você poderá se rematricular enquanto a turma existir."} do %>
+                                    <%= button_tag "Desmatricular-se", :class => "btn btn-warning btn-flat" %>
+                                  <% end %>
+                                </div><!-- /btn-group -->
+
                         </div>
                         <% else %>
                             <%= form_tag dashboard_teams_enroll_path, :method => :post, :id => "enroll-form", :class => "form" do %>
                             <div class="input-group <%= raw "has-error" if @wrong_code_team_id == t.id %>" style="margin: 10px;">
                                     <span class="input-group-addon"><%= t.name %></span>
                                     <input type="hidden" name="team[id]" value="<%= t.id %>">
-                                    <% if @wrong_code_team_id != t.id %>
-                                        <% placeholder = "Senha para matrícula ..." %>
-                                    <% else %>
-                                        <% placeholder = "Senha incorreta!" %>
-                                    <% end %>
-                                    <%= password_field_tag(:password,nil, :class => "form-control" , :placeholder => placeholder) %>
-                                    <div class="input-group-btn">
+                                    
+                                    <% if t.owner_id != current_user.id %>
+                                      <% if @wrong_code_team_id != t.id %>
+                                          <% placeholder = "Senha para matrícula ..." %>
+                                      <% else %>
+                                          <% placeholder = "Senha incorreta!" %>
+                                      <% end %>
+                                      <%= password_field_tag(:password,nil, :class => "form-control" , :placeholder => placeholder) %>
+                                      
+                                      <div class="input-group-btn">
                                         <%= button_tag "Matricular-se", :type => :submit, :class => "btn btn-info" %>
-                                    </div><!-- /btn-group -->
+                                      </div><!-- /btn-group -->
+                                      
+                                    <% else %>
+                                      <%= link_to dashboard_team_path(t), :method => :delete, :data => {confirm: "Você tem certeza? Os alunos não terão mais acesso a esta turma, mas suas respostas ainda serão mantidas."} do %>
+                                        <div class="input-group-btn">
+                                          <%= button_tag "Apagar", :class => "btn btn-danger" %>
+                                        </div><!-- /btn-group -->
+                                      <% end %>
+                                    <% end %>
                                 </div>
                                 <% end %>
-                            
+
                         <% end %>
-                        
+
                     <% end %>
                     </div>
                     </div>
                  </div><!-- /.box-body -->
-            </div>    
+            </div>
         </div>
     </div>
 </section>

@@ -44,6 +44,7 @@ group :assets do
 end
 
 group :development, :test do
+  gem 'awesome_print'
   gem 'pry-rails'
   gem 'thin'
   gem 'rspec-rails', '~> 2.0'

@@ -106,4 +106,25 @@ module GraphDataGenerator
                     end
     final
   end
+
+  def self.team_lo_tries(team_id)
+    final = []
+
+    Team.find(team_id).lo_ids.each do |lo_id|
+      tries = Answer.where(team_id:team_id,lo_id:lo_id).count
+      final << {lo_name:Lo.find(lo_id).name,tries:tries, subs: [{a:"a",v:10},{a:"b",v:20}]}
+    end
+    final
+  end
+
+  def self.team_lo_tries(team_id)
+    final = []
+
+    Team.find(team_id).lo_ids.each do |lo_id|
+      tries = Answer.where(team_id:team_id,lo_id:lo_id).count
+      name = Lo.find(lo_id).name
+      final << {name:name, short_name:"..."+name.last(8),y:tries}
+    end
+    final
+  end
 end

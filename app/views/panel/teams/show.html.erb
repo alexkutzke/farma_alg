@@ -3,6 +3,7 @@
   <%= javascript_include_tag 'difflib' %>
   <%= javascript_include_tag 'diffview' %>
   <%= javascript_include_tag 'dashboard/home' %>
+  <%= javascript_include_tag 'highcharts/highcharts' %>
 
   <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.5.1.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
@@ -31,6 +32,42 @@
     }
 
 
+
+
+$(function () {
+    $('#pie2').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,//null,
+            plotShadow: true
+        },
+        title: {
+            text: null
+        },
+        tooltip: {
+          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.short_name}</b>',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Número de tentativas por O.A.',
+            data: <%= raw @team_lo_tries.to_json %>
+        }]
+    });
+});
+    
 /*
     function switch_chart(){
       $("#allTimeChart").toggle();
@@ -175,6 +212,16 @@
                 </div>
             </div>
 
+<div class="box box-info">
+                <div class="box-header">
+                    <i class="fa fa-exclamation"></i>
+                    <h3 class="box-title">Número de tentativas por O.A.</h3>
+                </div>
+
+                <div class="box-body">
+<div id="pie2"></div>
+                </div>
+            </div>
 
 <!--
             <div class="box box-info">
@@ -203,6 +250,8 @@
 
           </section>
       </div>
+
+      
 
   </section>
 <% end %>
