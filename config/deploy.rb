@@ -39,13 +39,13 @@ def store_pids(pids, mode)
   pids_to_store += read_pids if mode == :append
 
   # Make sure the pid file is writable.    
-  File.open(File.expand_path('tmp/pids/process_queue.pid', Rails.root), 'w') do |f|
+  File.open('#{release_path}/tmp/pids/process_queue.pid', 'w') do |f|
     f <<  pids_to_store.join(',')
   end
 end
 
 def read_pids
-  pid_file_path = File.expand_path('tmp/pids/proccess_queue.pid', Rails.root)
+  pid_file_path = File.open('#{release_path}/tmp/pids/process_queue.pid')
   return []  if ! File.exists?(pid_file_path)
   
   File.open(pid_file_path, 'r') do |f| 
