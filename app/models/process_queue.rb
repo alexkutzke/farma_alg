@@ -42,7 +42,6 @@ class ProcessQueue
   			p = ProcessQueue.asc(:priority,:created_at).first
   			p.do_process
   		end
-  		puts "sleeping ..."
   		sleep 1
   	end
   end

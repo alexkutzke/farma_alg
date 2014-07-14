@@ -1,0 +1,45 @@
+def store_pids(pids, mode)
+  pids_to_store = pids
+  pids_to_store += read_pids if mode == :append
+
+  # Make sure the pid file is writable.    
+  File.open(File.expand_path('tmp/pids/process_queue.pid', Rails.root), 'w') do |f|
+    f <<  pids_to_store.join(',')
+  end
+end
+
+def read_pids
+  pid_file_path = File.open(File.expand_path('tmp/pids/process_queue.pid', Rails.root))
+  return []  if ! File.exists?(pid_file_path)
+  
+  File.open(pid_file_path, 'r') do |f| 
+    f.read 
+  end.split(',').collect {|p| p.to_i }
+end
+
+namespace :process_queue  do
+	task :start => :environment do
+    pids = read_pids
+
+    if pids.empty?
+      puts "Process Queue was not running."
+    else
+      syscmd = "kill -s QUIT #{pids.join(' ')}"
+      puts "$ #{syscmd}"
+      `#{syscmd}`
+      store_pids([], :write)
+    end
+
+    pids = read_pids
+    5.times do
+          ops = {:err => [(Rails.root + "log/process_queue_err").to_s, "a"], 
+                 :out => [(Rails.root + "log/process_queue_stdout").to_s, "a"]}
+
+      pid = spawn({}, "rails runner --environment=production 'ProcessQueue::start'", ops)
+      Process.detach(pid)
+      pids << pid
+    end
+
+    store_pids(pids,:append)
+	end	
+end
