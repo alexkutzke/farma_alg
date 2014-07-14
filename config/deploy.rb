@@ -11,8 +11,8 @@ server "192.241.202.98:2358", :web, :app, :db, primary: true
 #server "107.170.214.146:2358", :web, :app, :db
 
 set :user, "alex"
-set :application, "farma-alg"
-set :deploy_to, "/home/#{user}/dev/#{application}"
+set :application, "farma-alg"/home/#{user}/dev/#{applicatio
+set :deploy_to, "n}"
 #set :deploy_via, :remote_cache
 set :use_sudo, false
 
@@ -39,13 +39,13 @@ def store_pids(pids, mode)
   pids_to_store += read_pids if mode == :append
 
   # Make sure the pid file is writable.    
-  File.open('#{release_path}/tmp/pids/process_queue.pid', 'w') do |f|
+  File.open("#{release_path}/tmp/pids/process_queue.pid", 'w') do |f|
     f <<  pids_to_store.join(',')
   end
 end
 
 def read_pids
-  pid_file_path = File.open('#{release_path}/tmp/pids/process_queue.pid')
+  pid_file_path = File.open("#{release_path}/tmp/pids/process_queue.pid")
   return []  if ! File.exists?(pid_file_path)
   
   File.open(pid_file_path, 'r') do |f| 
