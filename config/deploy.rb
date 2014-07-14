@@ -11,7 +11,7 @@ server "192.241.202.98:2358", :web, :app, :db, primary: true
 #server "107.170.214.146:2358", :web, :app, :db
 
 set :user, "alex"
-set :application, "farma-alg"/home/#{user}/dev/#{applicatio
+set :application, "farma-alg"
 set :deploy_to, "/home/#{user}/dev/#{application}"
 #set :deploy_via, :remote_cache
 set :use_sudo, false
