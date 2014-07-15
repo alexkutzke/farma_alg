@@ -18,7 +18,11 @@ module SimilarityMachine
     File.open("/tmp/#{tmp}-#{b.id}-response.#{b.lang}", 'w') {|f| f.write(b.response) }
 
     # code similarity
-    code_similarity = `/Users/alexkutzke/Downloads/sim/sim_pasc -e -s -p /tmp/#{tmp}-#{a.id}-response.#{a.lang} /tmp/#{tmp}-#{b.id}-response.#{b.lang} | grep consists | grep '^/tmp/#{tmp}-#{a.id}-response.#{a.lang}' | cut -d " " -f4`.to_f / 100.0
+    if Rails.env.production?
+      code_similarity = `/usr/bin/sim_pasc -e -s -p /tmp/#{tmp}-#{a.id}-response.#{a.lang} /tmp/#{tmp}-#{b.id}-response.#{b.lang} | grep consists | grep '^/tmp/#{tmp}-#{a.id}-response.#{a.lang}' | cut -d " " -f4`.to_f / 100.0
+    else
+      code_similarity = `/Users/alexkutzke/Downloads/sim/sim_pasc -e -s -p /tmp/#{tmp}-#{a.id}-response.#{a.lang} /tmp/#{tmp}-#{b.id}-response.#{b.lang} | grep consists | grep '^/tmp/#{tmp}-#{a.id}-response.#{a.lang}' | cut -d " " -f4`.to_f / 100.0
+    end
 
     File.delete("/tmp/#{tmp}-#{a.id}-response.#{a.lang}")
     File.delete("/tmp/#{tmp}-#{b.id}-response.#{b.lang}")
