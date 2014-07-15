@@ -10,7 +10,7 @@
           <% label = "label-default" %>
         <% end %>
 
-        <span style="margin: 3px 3px;" rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="<%= t.description %>" class="label <%= label %>"> <%= t.id %>  <%= answer.id %><a href="#" class="remove_tag_link" data-id="<%= t.id %>" data-answer-id="<%= @answer.id %>"><i class='fa fa-times' style="color:black;"></i></a> </span> 
+        <span style="margin: 3px 3px;" rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="<%= t.description %>" class="label <%= label %>"> <%= t.name %><a href="#" class="remove_tag_link" data-id="<%= t.id %>" data-answer-id="<%= @answer.id %>"><i class='fa fa-times' style="color:black;"></i></a> </span> 
       <% end %>
       </div>
 
