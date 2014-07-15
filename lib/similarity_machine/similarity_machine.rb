@@ -170,6 +170,7 @@ module SimilarityMachine
       a=as[i]
       a.tag_ids = []
       a.automatically_assigned_tags = []
+      a.rejected_tags = []
       a.save!
     end
 
@@ -212,6 +213,8 @@ module SimilarityMachine
       end
       a.save!
     end
+
+    Connection.delete_all
 
     i=1
     puts "Criando conexoes"
