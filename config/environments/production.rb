@@ -1,3 +1,27 @@
+
+#def compile?(full_path)
+#  if full_path.include?("app/assets/javascripts")
+#    return true
+#  end
+#
+#  false
+#end
+#
+#def compile_asset?(path)
+#
+#  full_path = Rails.application.assets.resolve(path).slice(Rails.root.to_s)
+#
+#  # ignores any filename that begins with '_' (e.g. sass partials)
+#  # all other css/js/sass/image files are processed
+#  if File.basename(path) =~ /^[^_].*\.\w+$/ #or compile?(full_path)
+#    puts "Compiling: #{full_path}"
+#    true
+#  else
+#    puts "Ignoring: #{full_path}"
+#    false
+#  end
+#end
+
 Carrie::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -52,8 +76,29 @@ Carrie::Application.configure do
   # config.assets.precompile += %w( search.js )
   #config.assets.precompile += %w( application2.js panel/*.js panel.js login.js dashboard/*.js )
   #config.assets.precompile += Ckeditor.assets
-  config.assets.precompile = ['*.js', '*.css']
+  #config.assets.precompile = ['*.js', '*.css']
   config.assets.paths << "#{Rails}/vendor/assets/fonts"
+ 
+  #config.assets.precompile = [ method(:compile_asset?).to_proc ]
+
+  config.assets.precompile << Proc.new { |path|
+    if path =~ /\.(css|js)\z/
+      full_path = Rails.application.assets.resolve(path).to_path
+      app_assets_path = Rails.root.join('app', 'assets').to_path
+      vendor_assets_path = Rails.root.join('vendor', 'assets').to_path
+
+      if ((full_path.starts_with? app_assets_path) || (full_path.starts_with? vendor_assets_path)) && (!path.starts_with? '_') && (!path.include?("AdminLTE/plugins/ckeditor"))
+        puts "\t" + full_path.slice(Rails.root.to_path.size..-1)
+        true
+      else
+        false
+      end
+    else
+      false
+    end
+  }
+
+  #config.assets.precompile += ['app/assets/javascripts/*.js']
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false

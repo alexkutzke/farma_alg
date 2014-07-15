@@ -61,7 +61,6 @@ namespace :deploy do
   # end
   #end
 
-namespace :deploy do
   namespace :assets do
     desc 'Run the precompile task locally and rsync with shared'
     task :precompile, :roles => :web, :except => { :no_release => true } do
@@ -75,7 +74,6 @@ namespace :deploy do
       end
     end
   end
-end 
 
   desc "Create ckeditor link"
   task :ckeditor_link do

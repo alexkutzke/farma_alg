@@ -16,7 +16,8 @@ function visualStuff(){
 
 function bindClicks(){
 	// tag buttons
-	$(".tags").click(function(){
+	$(".tags").click(function(ev){
+    ev.preventDefault();
 		$("#search_result").html("Carregando ...");
 
 		$(".tags").css("border","");
