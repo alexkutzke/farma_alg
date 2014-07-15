@@ -72,8 +72,6 @@ namespace :deploy do
 
   desc "Start the process queue"
   task :start_process_queue do
-    cmd = "cd #{fetch(:latest_release)} && mkdir tmp/pids"
-    run cmd
     run_remote_rake "process_queue:start"
   end
 end
