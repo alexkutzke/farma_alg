@@ -53,6 +53,7 @@ Carrie::Application.configure do
   #config.assets.precompile += %w( application2.js panel/*.js panel.js login.js dashboard/*.js )
   #config.assets.precompile += Ckeditor.assets
   config.assets.precompile = ['*.js', '*.css']
+  config.assets.paths << "#{Rails}/vendor/assets/fonts"
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
