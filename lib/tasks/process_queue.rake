@@ -9,7 +9,7 @@ def store_pids(pids, mode)
 end
 
 def read_pids
-  pid_file_path = File.open(File.expand_path('tmp/pids/process_queue.pid', Rails.root))
+  pid_file_path = File.open(File.expand_path('tmp/pids/process_queue.pid', Rails.root),'a')
   return []  if ! File.exists?(pid_file_path)
   
   File.open(pid_file_path, 'r') do |f| 
