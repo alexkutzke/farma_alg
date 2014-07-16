@@ -31,7 +31,7 @@ namespace :process_queue  do
     end
 
     pids = read_pids
-    5.times do
+    1.times do
           ops = {:err => [(Rails.root + "log/process_queue_err").to_s, "a"], 
                  :out => [(Rails.root + "log/process_queue_stdout").to_s, "a"]}
 
