@@ -9,7 +9,6 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require diffview
- *= require jquery.ui.all
  *= require bootstrap-modal
  *= require AdminLTE/bootstrap
  *= require AdminLTE/font-awesome
@@ -106,7 +105,7 @@ svg.graph
   position: absolute;
   top: 0;
   width: 0px;
-  left: 49px; 
+  left: 49px;
   overflow-x:hidden;
   pointer-events:none;
 }
@@ -177,12 +176,12 @@ box-shadow:         0px 0px 30px 0px rgba(50, 50, 50, 0.73);
   pointer-events:initial;
 }
 
-.modal.fade 
+.modal.fade
 {
   top:0;
 }
 
-.modal.fade.in 
+.modal.fade.in
 {
   top: 0;
 }
@@ -206,7 +205,7 @@ box-shadow:         0px 0px 30px 0px rgba(50, 50, 50, 0.73);
 {
  -webkit-box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.73) !important;
   -moz-box-shadow:    0px 0px 30px 0px rgba(50, 50, 50, 0.73) !important;
-  box-shadow:         0px 0px 30px 0px rgba(50, 50, 50, 0.73) !important; 
+  box-shadow:         0px 0px 30px 0px rgba(50, 50, 50, 0.73) !important;
 }
 
 .timeline hr

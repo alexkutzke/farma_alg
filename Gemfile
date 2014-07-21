@@ -1,10 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.14'
+gem 'rails', '3.2.19'
 
-gem 'mongoid', '~> 3.1.0'
+gem 'mongoid'#, '~> 3.1.0'
 gem 'mongoid_search'
 
+gem 'turbo-sprockets-rails3'
 #gem 'airbrake'
 
 gem 'jquery-rails', '~> 2.3.0'
@@ -53,7 +54,6 @@ group :development, :test do
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
-  gem 'thin'
   gem 'growl'
   gem 'faker'
 end

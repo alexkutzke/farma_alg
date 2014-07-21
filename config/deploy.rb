@@ -50,16 +50,30 @@ namespace :deploy do
 
   task :stop do ; end
 
-  namespace :assets do
-    task :precompile, :roles => :web, :except => { :no_release => true } do
-       from = source.next_revision(current_revision)
-       if releases.length <= 1 || capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
-         run %Q{cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile}
-       else
-         logger.info "Skipping asset pre-compilation because there were no asset changes"
-       end
-   end
+namespace :assets do
+  desc "Precompile assets locally and then rsync to app servers"
+  task :precompile, :only => { :primary => true } do
+    run_locally "mkdir -p public/__assets; mv public/__assets public/assets;"
+    run_locally "bundle exec rake assets:clean_expired; RAILS_ENV=production bundle exec rake assets:precompile;"
+    servers = find_servers :roles => [:app], :except => { :no_release => true }
+    servers.each do |server|
+      run_locally "rsync -av ./public/assets/ #{user}@#{server}:#{current_path}/public/assets/;"
+    end
+    run_locally "mv public/assets public/__assets"
   end
+end
+
+
+  # namespace :assets do
+    # task :precompile, :roles => :web, :except => { :no_release => true } do
+      #  from = source.next_revision(current_revision)
+      #  if releases.length <= 1 || capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
+        #  run %Q{cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile}
+      #  else
+        #  logger.info "Skipping asset pre-compilation because there were no asset changes"
+      #  end
+  #  end
+  # end
 
   desc "Create ckeditor link"
   task :ckeditor_link do
