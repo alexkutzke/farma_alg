@@ -22,10 +22,10 @@
 //= require underscore
 //= require underscore.string
 //= require backbone
+//= require backbone.marionette
 //= require backbone-relational
 //= require backbone.sync.rails
 //= require Backbone.ModelBinder
-//= require backbone.marionette
 //= require twitter/bootstrap
 //= require bootstrap-modalmanager
 //= require bootstrap-modal

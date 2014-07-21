@@ -10,7 +10,7 @@ gem 'turbo-sprockets-rails3'
 
 gem 'jquery-rails', '~> 2.3.0'
 gem 'jquery-ui-rails'
-gem 'backbone-on-rails', '0.9.2.1'
+gem 'backbone-on-rails', '1.0.0.1'
 gem 'rabl'
 gem 'yajl-ruby'
 
@@ -33,18 +33,19 @@ gem 'whenever', require: false
 gem 'text'
 gem 'amatch'
 gem 'tins'
-group :assets do
-  gem 'sass-rails',   '~> 3.2.5'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'uglifier', '>= 1.0.3'
-  #gem 'anjlab-bootstrap-rails', '>= 2.0', :require => 'bootstrap-rails' #, :git => 'git://github.com/anjlab/bootstrap-rails.git'
-  gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
-                                :git => 'https://github.com/dmarczal/bootstrap-rails.git'
-                                #:git => 'git://github.com/anjlab/bootstrap-rails.git'
-  gem 'font-awesome-sass-rails'
-  gem 'handlebars_assets'
-  gem 'marionette-rails'
-end
+
+gem 'sass-rails',   '~> 3.2.5'
+gem 'coffee-rails', '~> 3.2.1'
+gem 'uglifier', '>= 1.0.3'
+#gem 'anjlab-bootstrap-rails', '>= 2.0', :require => 'bootstrap-rails' #, :git => 'git://github.com/anjlab/bootstrap-rails.git'
+gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
+                              :git => 'https://github.com/dmarczal/bootstrap-rails.git'
+                              #:git => 'git://github.com/anjlab/bootstrap-rails.git'
+gem 'font-awesome-sass-rails'
+gem 'handlebars_assets'
+gem 'marionette-rails', '1.1.0'
+
+gem 'nokogiri', '1.6.0'
 
 group :development, :test do
   gem 'awesome_print'

@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require diffview
+ *= require jquery-ui
  *= require bootstrap-modal
  *= require AdminLTE/bootstrap
  *= require AdminLTE/font-awesome
