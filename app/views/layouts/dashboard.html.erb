@@ -7,6 +7,9 @@
 
         <%= stylesheet_link_tag    'dashboard/dashboard', :media => 'all' %>
         <%= yield :stylesheets %>
+
+        <%= javascript_include_tag 'dashboard/dashboard' %>
+        <%= yield :scripts %>
   			<%= csrf_meta_tags %>
 
 
@@ -217,8 +220,8 @@
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
 
-    <%= javascript_include_tag 'dashboard/dashboard' %>
-    <%= yield :scripts %>
+
+
 
     </body>
 </html>

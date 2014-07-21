@@ -5,9 +5,11 @@ gem 'rails', '3.2.14'
 gem 'mongoid', '~> 3.1.0'
 gem 'mongoid_search'
 
+#gem 'airbrake'
+
 gem 'jquery-rails', '~> 2.3.0'
 gem 'jquery-ui-rails'
-gem 'backbone-on-rails'#, '0.9.2.1'
+gem 'backbone-on-rails', '0.9.2.1'
 gem 'rabl'
 gem 'yajl-ruby'
 

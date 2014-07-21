@@ -11,3 +11,7 @@ public/ckeditor_assets/*
 public/assets
 .rvmrc
 db/dump
+.ruby-gemset
+.ruby-version
+log/process_queue_err
+log/process_queue_stdout

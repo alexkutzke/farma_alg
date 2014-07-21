@@ -9,10 +9,10 @@
       // get the baseText and newText values from the two textboxes, and split them into lines
       base = difflib.stringAsLines(txt1);//$("baseText").value);
       newtxt = difflib.stringAsLines(txt2);//$("newText").value);
-  
+
       //create a SequenceMatcher instance that diffs the two sets of lines
       sm = new difflib.SequenceMatcher(base, newtxt);
-  
+
       // get the opcodes from the SequenceMatcher instance
       // opcodes is a list of 3-tuples describing what changes should be made to the base text
       // in order to yield the new text
@@ -20,9 +20,9 @@
       diffoutputdiv = $("#"+div_id);
       while(diffoutputdiv.firstChild)
         diffoutputdiv.removeChild(diffoutputdiv.firstChild);
-  
+
       //console.log opcodes
-  
+
       $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
     }
 
@@ -36,16 +36,17 @@
         console.log("OK");
       }
     });
-    
+
     $("span.label").tooltip();
-    $('.change_correctness').popover({html:true});
-    
+
     resizeApp();
-    prettyPrint();
-    
-    
+
     $("div.output").each(function(){
       diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
+    });
+
+    $(document).ready(function(){
+      $('.change_correctness').popover({ html : true });
     });
   </script>
 <% end %>
@@ -79,11 +80,11 @@
 
           <section class="col-lg-6">
             <% if @answer.correct %>
-              <div class="box box-success">  
+              <div class="box box-success">
             <% else %>
               <div class="box box-danger">
             <% end %>
-            
+
                 <div class="box-header">
                     <h3 class="box-title">Detalhes da tentativa #<%= @answer['try_number'] %> <small>Realizada em <%= @answer['created_at'].strftime("%d/%m/%Y às %H:%M:%S") %></small></h3>
                 </div><!-- /.box-header -->
@@ -100,7 +101,7 @@
 <% end %>
 
       <% if @answer.changed_correctness %>
-      <p><strong>Corrigido pelo professor</strong></p> 
+      <p><strong>Corrigido pelo professor</strong></p>
       <% if not @answer.changed_correctness_reason.nil? && @answer.changed_correctness_reason != "" %>
         <p>
           <%= simple_format @answer.changed_correctness_reason %>
@@ -109,7 +110,7 @@
     <% end %>
 
   </div>
-        
+
                 <div class="row">
                   <div class="col-xs-12">
 
@@ -173,11 +174,11 @@
                     </button>
 
                     <% if @user.id == current_user.id %>
-                      
+
                         <% if Team.find(@answer.team_id).lo_ids.include?(@answer.lo_id) %>
                           <a href="<%= current_user.link_to_question(Question.find(@answer.question_id)) %>" class="btn btn-primary btn-block">Responder novamente</a>
                         <% end %>
-                      
+
                     <% end %>
 
 
@@ -211,14 +212,14 @@
               <div class="actions">
                 <%= f.submit "Salvar", :class => "btn btn-primary" %>
               </div>
-              <% end %>' 
+              <% end %>'
           data-original-title="Deixe um comentário que explique a troca"
         >Tornar incorreta</button>
       <% end %>
 
 <% else %>
 
-    
+
       <% if current_user.admin? || current_user.id == @answer.team.owner_id %>
         <button class="btn btn-block btn-success change_correctness" type="button"
           data-toggle="popover"
@@ -231,11 +232,11 @@
               <div class="actions">
                 <%= f.submit "Salvar", :class => "btn btn-primary" %>
               </div>
-              <% end %>' 
+              <% end %>'
           data-original-title="Deixe um comentário"
         >Tornar correta</button>
       <% end %>
-    
+
 <% end %>
                   </div>
                 </div>
@@ -263,7 +264,7 @@
                             <h3 class="box-title" style="width:100%;">
                               <div class="pull-left image">
                                   <img src="http://www.gravatar.com/avatar/<%= c.user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
-                              </div> 
+                              </div>
                               <%= c.user.name %>
 
                               <% if c.can_destroy?(current_user) %>
@@ -271,9 +272,9 @@
                                   <%= link_to [@answer,c], method: :delete, data: { confirm: 'Você tem certeza?' },:remote => true do %>
                                     <%= button_tag "Apagar", :class => "btn btn-sm btn-danger" %>
                                   <% end %>
-                                </div>  
+                                </div>
                               <% end %>
-                              
+
 
 
 
@@ -296,7 +297,7 @@
                               Novo comentário de
                               <div class="pull-left image">
                                   <img src="http://www.gravatar.com/avatar/<%= current_user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
-                              </div> 
+                              </div>
                               <%= current_user.name %>
                             </h3>
                         </div>
@@ -357,7 +358,7 @@
                         </div>
                       </div>
                 </div><!-- /.box-body -->
-            </div><!-- /.box --> 
+            </div><!-- /.box -->
 
 
 
@@ -392,25 +393,25 @@
       </div>
     <% else %>
 
-    
+
       <% @answer.results.each do |k,v| %>
-        
+
 
           <div class="row">
             <div class="col-xs-12">
               <% if v['diff_error'] or v['time_error'] or v['exec_error'] or v['presentation_error'] %>
                 <div class="box box-danger">
-              <% else %>  
-                <div class="box box-success">  
+              <% else %>
+                <div class="box box-success">
               <% end %>
                 <div class="box-header">
                   <h3 class="box-title">
-                    <%= v['title'] %>    
+                    <%= v['title'] %>
                   </h3>
                   <div class="box-tools pull-right">
 
                       <button data-toggle="modal" data-target="#testCaseModal-<%= k %>" class="diff-btn btn btn-default btn-sm" ><i class="fa fa-columns"></i> Diff</button>
-                      
+
 
                       <!-- Modal -->
                       <div class="modal fade" id="testCaseModal-<%= k %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -459,8 +460,8 @@
             </div>
           </div>
 
-        
-        
+
+
       <% end %>
       <% end %>
                 </div>
@@ -487,4 +488,3 @@
     </div>
 
   </section>
-
