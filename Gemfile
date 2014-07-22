@@ -11,7 +11,7 @@ gem 'turbo-sprockets-rails3'
 gem 'jquery-rails', '~> 2.3.0'
 gem 'jquery-ui-rails'
 gem 'backbone-on-rails', '1.0.0.1'
-gem 'rabl'
+gem 'rabl', '0.8.6'
 gem 'yajl-ruby'
 
 gem 'delayed_job_mongoid'

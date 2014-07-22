@@ -19,8 +19,10 @@ module Carrie
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
     config.time_zone = "Brasilia"
-    config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.yml").to_s]
-    config.i18n.default_locale = "pt-br"
+
+    config.i18n.enforce_available_locales = false
+    config.i18n.available_locales = ["pt-BR"]
+    config.i18n.default_locale = :'pt-BR'
 
     config.encoding = "utf-8"
 

@@ -14,12 +14,12 @@ node :last_answer, if: lambda {|question| ( current_user && question.last_answer
 end
 
 node :last_answers do |question|
-  las = Answer.where(user_id: current_user.id, question_id: question.id).desc(:created_at)[0..4]  
+  las = Answer.where(user_id: current_user.id, question_id: question.id).desc(:created_at)[0..4]
   result = {}
   i = 0
   if las.length > 1
     las[0..-2].each do |la|
-      result[i.to_s] = 
+      result[i.to_s] =
       {
         id: las[i].id,
         response: las[i].response,
@@ -34,7 +34,7 @@ node :last_answers do |question|
     end
   else
     las.each do |la|
-      result[i.to_s] = 
+      result[i.to_s] =
       {
         id: las[i].id,
         response: las[i].response,

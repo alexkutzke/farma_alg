@@ -1,4 +1,4 @@
-"pt-br":
+pt-BR:
   views:
     pagination:
       first: "&laquo; Primeiro"
@@ -21,7 +21,7 @@
     select:
       prompt: "Selecione"
 
-  autho:
+  author:
     student: "Estudante"
     professor: "Professor"
 
@@ -203,4 +203,3 @@
         odd: "precisa ser ímpar"
         even: "precisa ser par"
         record_invalid: "possui erros: %{errors}"
-

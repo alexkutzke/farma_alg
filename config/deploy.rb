@@ -4,10 +4,13 @@ require "rvm/capistrano"
 
 set :log_level, :debug
 
+set :ssh_options, {
+  port: 2358
+}
 
 #set :whenever_command, "bundle exec whenever"
 #require "whenever/capistrano"
-server "192.241.202.98:2358", :web, :app, :db, primary: true
+server "192.241.202.98", :web, :app, :db, primary: true
 #server "107.170.214.146:2358", :web, :app, :db
 
 set :user, "alex"
@@ -57,7 +60,7 @@ namespace :assets do
     run_locally "bundle exec rake assets:clean_expired; RAILS_ENV=production bundle exec rake assets:precompile;"
     servers = find_servers :roles => [:app], :except => { :no_release => true }
     servers.each do |server|
-      run_locally "rsync -av ./public/assets/ #{user}@#{server}:#{current_path}/public/assets/;"
+      run_locally "rsync -av --progress --inplace --rsh='ssh -p2358' ./public/assets/ #{user}@#{server}:#{current_path}/public/assets/;"
     end
     run_locally "mv public/assets public/__assets"
   end

@@ -1,4 +1,4 @@
-pt-br:
+pt-BR:
   errors:
     messages:
       expired: "sessão expirada"
@@ -23,6 +23,7 @@ pt-br:
       invalid_token: 'Token de autenticação inválido.'
       timeout: 'Sua sessão expirou, faça login novamente para continuar.'
       inactive: 'Sua conta ainda não foi ativada.'
+      not_found_in_database: 'Usuário não encontrado.'
     sessions:
       signed_in: 'Fez login com sucesso.'
       signed_out: 'Fez logout com sucesso.'

@@ -215,7 +215,7 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.2)
       pry (>= 0.9.10)
-    rabl (0.10.1)
+    rabl (0.8.6)
       activesupport (>= 2.3.14)
     rack (1.4.5)
     rack-cache (1.2)
@@ -346,7 +346,7 @@ DEPENDENCIES
   mongoid_search
   nokogiri (= 1.6.0)
   pry-rails
-  rabl
+  rabl (= 0.8.6)
   rails (= 3.2.19)
   redcarpet
   rspec-rails (~> 2.0)

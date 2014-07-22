@@ -1,4 +1,4 @@
-pt-br:
+pt-BR:
   devise:
     sessions:
       signed_in: 'Você está logado agora'
