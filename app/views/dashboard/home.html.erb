@@ -51,9 +51,7 @@
 <section class="content">
 
   <div class="row">
-    <% if current_user.admin? %>
-      
-    
+
     <% @boxes.each do |box| %>
       <div class="col-lg-3 col-xs-6">
           <!-- small box -->
@@ -69,26 +67,27 @@
               <div class="icon">
                   <i class="<%= box[:icon] %>"></i>
               </div>
-              <% if box[:has_link] %>
-                <a href="#" class="small-box-footer">
-                  More info <i class="fa fa-arrow-circle-right"></i>
-                </a>
+              <% if box[:has_link?] %>
+                <%= link_to box[:link], :class => "small-box-footer" do %>
+                  Ver detalhes <i class="fa fa-arrow-circle-right"></i>
+                <% end %>
               <% else %>
-                <div class="small-box-footer">
+                <div class="small-box-footer" style="background: rgba(0,0,0,0.0);">
                 </div>
               <% end %>
-
           </div>
       </div><!-- ./col -->
     <% end %>
   </div>
+
+
 
     <!-- Main row -->
     <div class="row">
         <!-- Left col -->
         <section class="col-lg-6">
 
-
+            <% if current_user.admin? %>
             <!-- Box (with bar chart) -->
             <div class="box box-info">
                 <div class="box-header">
@@ -109,12 +108,12 @@
                             <h3 class="box-title" style="width:80%;">
                               <div class="pull-left image">
                                   <img src="http://www.gravatar.com/avatar/<%= c.user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
-                              </div> 
+                              </div>
                               <%= c.user.name %>
                               <br><small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words c.created_at %></small>
                               <br>
                               <small>
-                                na resposta à 
+                                na resposta à
                                 <%= link_to panel_team_user_lo_question_answer_path(c.team_id,c.target_user_id,c.answer.lo_id,c.question_id,c.answer_id) do %>
                                   questão <strong><%= Question.find(c.question_id).title %></strong> na turma <strong><%= Team.find(c.team_id).name %></strong>
                                 <% end %>
@@ -129,9 +128,10 @@
                    <% end %>
                  <% end %>
                 </div><!-- /.box-body -->
-            </div><!-- /.box -->        
+            </div><!-- /.box -->
+            <% end %>
 
-
+            <% if current_user.admin? %>
             <!-- Box (with bar chart) -->
             <div class="box box-info">
                 <div class="box-header">
@@ -149,11 +149,13 @@
                     <%= answer_link(a) %>
                   <% end %>
                 </div><!-- /.box-body -->
-            </div><!-- /.box -->        
+            </div><!-- /.box -->
+            <% end %>
         </section><!-- /.Left col -->
 
         <!-- right col (We are only adding the ID to make the widgets sortable)-->
         <section class="col-lg-6">
+            <% if current_user.admin? %>
             <!-- Box (with bar chart) -->
             <div class="box box-info">
                 <div class="box-header">
@@ -181,13 +183,65 @@
                         </div>
                     </div>
                 </div>-->
-            </div><!-- /.box -->     
+            </div><!-- /.box -->
+            <% end %>
 
-        
+            <!-- Box (with bar chart) -->
+            <div class="box box-info">
+                <div class="box-header">
+                    <!-- tools box -->
+                    <div class="pull-right box-tools">
+                        <button class="btn btn-info btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /. tools -->
+                    <i class="fa fa-check"></i>
+
+                    <h3 class="box-title">Últimas mensagens para você</h3>
+                </div><!-- /.box-header -->
+
+                <div class="box-body">
+                  <% @last_messages.each do |m| %>
+
+
+                    <div class="box box-solid" style="border: 1px solid lightgray;">
+                      <div class="box-header">
+                          <h3 class="box-title" style="width:80%;">
+                            <div class="pull-left image">
+                                <img src="http://www.gravatar.com/avatar/<%= m.user.gravatar%>" class="img-circle" alt="Imagem do usuário" style="width:50px;margin-right:10px;"/>
+                            </div>
+                            <% if m.has_recommendation? %>
+                              <span><i class="fa fa-paperclip"></i> </span>
+                            <% end %>
+                            <a href="<%= dashboard_message_path(m) %>">
+                            <%= m.subject.truncate(30) %>
+                          </a>
+                            <br>
+                            <small>
+                            De: <%= m.user.name %>
+                          </small>
+                          <br>
+                            <small>
+                              <% if current_user.is_message_new?(m) %>
+                                <span class="badge bg-green">nova</span>
+                              <% end %>
+
+                              <i class="fa fa-clock-o"></i> <%= time_ago_in_words m.updated_at %>
+                            </small>
+                          </h3>
+                      </div>
+                      <div class="box-body">
+                          <%= m.content.truncate(100) %>
+                      </div><!-- /.box-body -->
+                    </div>
+                  
+
+                <% end %>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+
+
 
         </section><!-- right col -->
-        <% else %>
-        <% end %>
+
     </div><!-- /.row (main row) -->
 
 

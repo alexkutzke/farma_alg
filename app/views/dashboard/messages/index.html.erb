@@ -21,8 +21,8 @@
     <% if current_user.admin? %>
 
     <div class="row">
-        <div class="col-md-12">    
-            
+        <div class="col-md-12">
+
             <%= link_to new_dashboard_message_path do %>
                 <%= button_tag raw("<i class='fa fa-plus'></i> Nova mensagem"), :class => "btn btn-sm btn-primary" %>
             <% end %>
@@ -37,6 +37,7 @@
                     <th></th>
                     <th></th>
                 </tr>
+                
                 <% @messages.each do |m| %>
                     <tr>
                         <td>
@@ -88,7 +89,7 @@
                             <% end %>
                             <% if m.new_flag_user_ids.include?(current_user.id.to_s) %>
                                 <small class="badge bg-green">nova</small>
-                            <% end %>                            
+                            <% end %>
                             <%= truncate(m.subject) %>
                         </td>
                         <td><%= truncate(m.content) %></td>

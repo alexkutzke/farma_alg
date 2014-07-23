@@ -7,7 +7,7 @@ module ApplicationHelper
   end
 
   def similarity_in_words(sim)
-        
+
   end
 
   def render_progress(x,msg,css=nil)
@@ -16,13 +16,13 @@ module ApplicationHelper
     end
 
     p = 100 * x
-    if p == 100 
-      style = "success" 
-    elsif p > 49 
+    if p == 100
+      style = "success"
+    elsif p > 49
       style = "yellow"
-    else 
+    else
       style = "danger"
-    end 
+    end
 
     raw "<div class=\"progress xs\" style=\"#{css}\"><div rel=\"tooltip\" data-toggle=\"tooltip\" data-placement=\"top\" title data-original-title=\"#{p.round(0).to_s}#{msg}\" class=\"progress-bar progress-bar-#{style}\" style=\"width: #{p}%\"></div></div>"
   end
@@ -38,6 +38,11 @@ module ApplicationHelper
   def recent_activity(data)
     render(:partial => 'dashboard/recent_activity', :locals => {:data => data})
   end
+
+  def pie_chart(data, title)
+    render(:partial => 'dashboard/pie_chart', :locals => {:data => data, :title => title})
+  end
+
 
   def test_case_title(id)
     t = TestCase.find_or_initialize_by({:id => id})
@@ -70,7 +75,7 @@ module ApplicationHelper
           output = output + "Pelo menos uma das respostas <span class=\"label label-danger\">falhou</span> no caso de teste <b>" + t.title + "</b>."
         end
       else
-        output = output + "As duas respostas foram <span class=\"label label-success\">corretas</span> no caso de teste <b>" + t.title + "</b>"      
+        output = output + "As duas respostas foram <span class=\"label label-success\">corretas</span> no caso de teste <b>" + t.title + "</b>"
       end
 
       output = output + " Suas saídas para este caso de teste são " + (tcs['output_similarity']*100.0).to_s + "% similares, e o grau de diferença entre a saída esperada é de " + (tcs['diff_to_expected_output']*100.0).to_s + "%."
@@ -86,7 +91,7 @@ module ApplicationHelper
      label = "label-danger"
     elsif t.type == 2
       label = "label-warning"
-    else 
+    else
       label = "label-default"
     end
 

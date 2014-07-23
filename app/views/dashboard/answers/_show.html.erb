@@ -1,15 +1,17 @@
         <div class="box box-solid" id="box-answer-info">
 
-        
+
 <div class="box-header">
   <h3 class="box-title">
     <table>
         <tr>
+            <% unless answer.filter_names %>
+              <td>
+                  <img src="http://www.gravatar.com/avatar/<%= answer.user.gravatar %>?s=35" class="img-circle" alt="Imagem do Usuário" />
+              </td>
+            <% end %>
             <td>
-                <img src="http://www.gravatar.com/avatar/<%= answer.user.gravatar %>?s=35" class="img-circle" alt="Imagem do Usuário" />
-            </td>
-            <td>
-              <%= answer.user.name %> - <%= answer.question.title.truncate(10) %>
+              <%= answer.filter_names ? "Nome omitido" : answer.user.name %> - <%= answer.question.title.truncate(10) %>
             </td>
         </tr>
     </table>
@@ -34,7 +36,7 @@
 
       <table class="table table-bordered" style="margin-bottom:5px;">
         <tr>
-          <td><b>Aluno</b></td><td><%= @answer.user.name %></td>
+          <td><b>Aluno</b></td><td><%= answer.filter_names ? "Omitido" : @answer.user.name %></td>
         </tr>
         <tr>
           <td><b>Questão</b></td>
@@ -42,7 +44,7 @@
         </tr>
         <tr>
           <td><b>Turma</b></td>
-          <td><%= @answer.team.name %></td>
+          <td><%= answer.filter_names ? "Omitido" : @answer.team.name %></td>
         </tr>
         <tr>
           <td><b>O.A.</b></td>
@@ -50,7 +52,7 @@
         </tr>
         <tr>
           <td><b>Tentativa</b></td>
-          <td>#<%= @answer.try_number %></td>
+          <td>#<%= answer.filter_names ? "Omitido" : @answer.try_number %></td>
         </tr>
         <tr>
           <td><b>Resultados</b></td>
@@ -110,6 +112,7 @@
     </div>
   </div>
 
+<% if current_user.admin? %>
   <div class="row">
     <div class="col-xs-12">
 
@@ -120,7 +123,7 @@
   </div>
 
   </div>
-
+<% end %>
 <div class="row">
   <div class="col-xs-12">
 
@@ -134,20 +137,20 @@
     <hr />
     <h4>Resultado dos casos de teste</h4>
 
-    
+
       <% answer.results.each do |k,v| %>
-        
+
 
           <div class="row">
             <div class="col-xs-12">
               <% if v['diff_error'] or v['time_error'] or v['exec_error'] or v['presentation_error'] %>
                 <div class="box box-danger">
-              <% else %>  
-                <div class="box box-success">  
+              <% else %>
+                <div class="box box-success">
               <% end %>
                 <div class="box-header">
                   <h3 class="box-title">
-                    <%= v['title'] %>    
+                    <%= v['title'] %>
                   </h3>
                   <div class="box-tools pull-right">
 
@@ -200,11 +203,11 @@
             </div>
           </div>
 
-        
-        
+
+
       <% end %>
       <% end %>
-    
+
     </div>
 </div>
 </div>

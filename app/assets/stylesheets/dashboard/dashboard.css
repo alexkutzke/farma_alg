@@ -20,6 +20,10 @@
  *= require AdminLTE/timepicker/bootstrap-timepicker.min
 */
 
+.small-box-footer
+{
+  height:25px;
+}
 
 #cal-heatmap
 {

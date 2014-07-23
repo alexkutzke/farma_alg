@@ -19,33 +19,44 @@ class DashboardController < ApplicationController
   end
 
 	def home
-
-    @recommendations = Recommendation.where(user_id:current_user.id.to_s).all.entries
     @boxes = []
-
-    num_students = 0
-    num_students_correct_answers = 0
-    num_students_wrong_answers = 0
-    team_ids = Team.where(owner_id:current_user.id.to_s).pluck(:id)
-    team_ids.each do |team_id|
-      t = Team.find(team_id.to_s)
-      num_students = num_students + t.user_ids.count
-      num_students_correct_answers = num_students_correct_answers + Answer.where(:team_id => t.id.to_s, :correct => true).count
-      num_students_wrong_answers = num_students_wrong_answers + Answer.where(:team_id => t.id.to_s, :correct => false).count
-    end
-
-    num_wrong_answers = Answer.where(user_id: current_user.id,:correct => false).count
-    num_correct_answers = Answer.where(user_id: current_user.id,:correct => true).count
+		@last_messages = current_user.last_messages_to_me(4)
 
     if current_user.admin?
+			@recommendations = Recommendation.where(user_id:current_user.id.to_s).all.entries
+
+			num_students = 0
+			num_students_correct_answers = 0
+			num_students_wrong_answers = 0
+			team_ids = Team.where(owner_id:current_user.id.to_s).pluck(:id)
+			team_ids.each do |team_id|
+				t = Team.find(team_id.to_s)
+				num_students = num_students + t.user_ids.count
+				num_students_correct_answers = num_students_correct_answers + Answer.where(:team_id => t.id.to_s, :correct => true).count
+				num_students_wrong_answers = num_students_wrong_answers + Answer.where(:team_id => t.id.to_s, :correct => false).count
+			end
+
+			num_wrong_answers = Answer.where(user_id: current_user.id,:correct => false).count
+			num_correct_answers = Answer.where(user_id: current_user.id,:correct => true).count
+
       @boxes << {:color => "bg-orange", :value => team_ids.count, :title => "Número de turmas", :has_link? => false, :icon => "fa fa-book"}
       @boxes << {:color => "bg-aqua", :value => num_students, :title => "Número de alunos", :has_link? => false, :icon => "fa fa-users"}
       @boxes << {:color => "bg-red", :value => num_students_wrong_answers, :title => "Número de respostas incorretas", :has_link? => false, :icon => "fa fa-times"}
       @boxes << {:color => "bg-green", :value => num_students_correct_answers, :title => "Número de respostas corretas", :has_link? => false, :icon => "fa fa-check"}
-    end
 
-    @last_answers = Answer.in(team_id: team_ids).desc(:created_at)[0..4]
-    @last_comments = Comment.in(team_id: team_ids).desc('created_at')[0..4]
+			@last_answers = Answer.in(team_id: team_ids).desc(:created_at)[0..4]
+			@last_comments = Comment.in(team_id: team_ids).desc('created_at')[0..4]
+		else
+			last_try = current_user.last_try
+			num_wrong_answers = Answer.where(:user_id => current_user.id, :correct => false).count
+			num_correct_answers = Answer.where(:user_id => current_user.id, :correct => true).count
+			num_questions_without_tries = current_user.questions_without_tries.count
+
+			@boxes << {:color => "bg-red", :value => num_wrong_answers, :title => "Número de respostas incorretas", :has_link? => false, :icon => "fa fa-times"}
+			@boxes << {:color => "bg-green", :value => num_correct_answers, :title => "Número de respostas corretas", :has_link? => false, :icon => "fa fa-check"}
+			@boxes << {:color => "bg-orange", :value => num_questions_without_tries, :title => "Número de questões sem tentativas", :has_link? => false, :icon => "fa fa-warning"}
+			@boxes << {:color => ( last_try.correct ? "bg-green" : "bg-red"), :value => last_try.question.title.truncate(10), :title => "Última tentativa", :has_link? => true, :icon => "fa " + ( last_try.correct ? "fa-check" : "fa-times"), :link => panel_team_user_lo_question_answer_path(last_try.team_id,last_try.user_id,last_try.lo_id,last_try.question_id,last_try.id) }
+    end
 	end
 
   def timeline
@@ -70,7 +81,7 @@ class DashboardController < ApplicationController
   def tags_search
     @as = Answer.search(params,current_user)
     @as_aat = Answer.search_aat(params,current_user)
-    
+
     render 'tags_search_result'
   end
 
@@ -78,17 +89,17 @@ class DashboardController < ApplicationController
     @as = Answer.search(params,current_user)
     @button_add = true
     @button_add = false unless params.has_key?(:button_add)
-    
+
     render 'search_result'
   end
-  
+
   def graph
     init_search
   end
 
   def graph_search
     @as = Answer.search(params,current_user)
-    
+
     render 'graph_search_result'
   end
 

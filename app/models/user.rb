@@ -91,7 +91,7 @@ class User
         end
       end
 
-      questions = questions + Question.find(question_ids) 
+      questions = questions + Question.find(question_ids)
       questions.uniq{|x| x.id}
     end
   end
@@ -109,7 +109,7 @@ class User
           los = los + (Lo.find(lo_ids) | team.los)
         end
       end
-      
+
       los.uniq{|x| x.id}
     end
   end
@@ -162,7 +162,7 @@ class User
         end
       end
     end
-    return nil    
+    return nil
   end
 
 
@@ -191,7 +191,7 @@ class User
 
   def progress_team(team_id)
     team = Team.find(team_id)
-    
+
     progress = 0.0
     n = 0
     team.los.each do |lo|
@@ -204,5 +204,26 @@ class User
     end
 
     progress/n
+  end
+
+  def last_try
+    Answer.where(:user_id => self.id).desc(:updated_at).first
+  end
+
+  def questions_without_tries()
+    questions = []
+
+    self.teams.each do |t|
+      t.los.each do |lo|
+        lo.exercises.each do |ex|
+          ex.questions.each do |q|
+            if self.progress_question(t.id,q.id) == 0.0
+              questions << [t,q]
+            end
+          end
+        end
+      end
+    end
+    questions
   end
 end

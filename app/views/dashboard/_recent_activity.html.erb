@@ -5,29 +5,32 @@
 
   <script type="text/javascript">
     var cal = new CalHeatMap();
-	  cal.init({
-	    data:  <%= raw data.to_json %>,
-	    start: moment().subtract("months",5).toDate(),
-	    range:12,
-	    id: "cal-heatmap",
-	    domain : "month",     // Group data by month
-	    subDomain : "day",
-	    scale: [1,10,20,30],
-	    cellLabel: {
-	      empty: "Nenhuma tentativa em {date}",
-	      filled: "{count} tentativa(s) em {date}"
-	    },
-	    format: {
-	      date: "%d/%m/%Y",
-	      connector: "em",
-	      legend: "%m/%Y"
-	    },
-	    browsingOptions:{
-	      previousLabel: "<i class='fa fa-angle-double-left'></i>",
-	      nextLabel: "<i class='fa fa-angle-double-right'></i>"
-	    },
-	    browsing: true
-	  });
+    $(document).ready(function(){
+        cal.init({
+          data:  <%= raw data.to_json %>,
+          start: moment().subtract("months",5).toDate(),
+          range:12,
+          id: "cal-heatmap",
+          domain : "month",     // Group data by month
+          subDomain : "day",
+          scale: [1,10,20,30],
+          cellLabel: {
+            empty: "Nenhuma tentativa em {date}",
+            filled: "{count} tentativa(s) em {date}"
+          },
+          format: {
+            date: "%d/%m/%Y",
+            connector: "em",
+            legend: "%m/%Y"
+          },
+          browsingOptions:{
+            previousLabel: "<i class='fa fa-angle-double-left'></i>",
+            nextLabel: "<i class='fa fa-angle-double-right'></i>"
+          },
+          browsing: true
+        });
+    });
+
   </script>
 <% end %>
 
@@ -40,11 +43,10 @@
     <div class="box-header">
         <h3 class="box-title">Atividade recente</h3>
         <div id="recentBtns" class="pull-right box-tools">
-            
+
         </div>
     </div><!-- /.box-header -->
     <div class="box-body">
         <div id="cal-heatmap"></div>
     </div>
 </div>
-

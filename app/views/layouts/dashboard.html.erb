@@ -26,7 +26,7 @@
       </div>
 
       <div id="farmaAlgShowModals">
-        
+
       </div>
 
         <!-- header logo: style can be found in header.less -->
@@ -49,9 +49,9 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-envelope"></i>
                                 <% unless  @n_new_messages == 0 %>
-                                  <span class="label label-success"><%= @n_new_messages %></span>  
+                                  <span class="label label-success"><%= @n_new_messages %></span>
                                 <% end %>
-                                
+
                             </a>
                             <ul class="dropdown-menu">
                                 <% unless  @n_new_messages == 0 %>
@@ -67,7 +67,7 @@
                                                     <img src="http://www.gravatar.com/avatar/<%= m.user.gravatar%>" class="img-circle" alt="Imagem do usuário"/>
                                                 </div>
                                                 <h4>
-                                                    <%= truncate(m.subject) %>                                                 
+                                                    <%= truncate(m.subject) %>
                                                 </h4>
                                                 <p><%= truncate(m.content) %></p>
                                                 <h4>
@@ -160,7 +160,7 @@
                                         <small>Último acesso em <%= current_user.last_sign_in_at.strftime("%d/%m/%Y às %H:%M:%S") %></small>
                                     </p>
                                 </li>
-                                
+
                                 <li class="user-footer">
                                     <div class="pull-left">
                                         <a href="/users/edit" class="btn btn-default btn-flat">Meus dados</a>
@@ -170,7 +170,7 @@
                                     </div>
                                 </li>
                             </ul>
-                        </li>                  
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -179,7 +179,7 @@
 
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
-            <aside class="left-side sidebar-offcanvas">                
+            <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
 
@@ -215,7 +215,7 @@
             </aside>
 
             <!-- Right side column. Contains the navbar and content of the page -->
-            <aside class="right-side">                
+            <aside class="right-side">
               <%= yield %>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
@@ -225,4 +225,3 @@
 
     </body>
 </html>
-

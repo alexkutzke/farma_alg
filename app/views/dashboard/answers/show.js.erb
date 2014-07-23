@@ -1,12 +1,9 @@
 $("#answer-show").html("<%= escape_javascript(render(:partial => 'show', :locals => {:answer => @answer}))%>");
 
-$("div.output").each(function(){
-  diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
-});
-
 $("#farmaAlgShowModals").html("");
 $(".modal").appendTo($("#farmaAlgShowModals"));
 
+<% if current_user.admin? %>
 // Carrega tags
 $.ajax({
   url: "/dashboard/tags/show",
@@ -17,11 +14,16 @@ $.ajax({
     console.log("OK");
   }
 });
+<% end %>
 
 $("span.label").tooltip();
 
 resizeApp();
 prettyPrint();
 
-if(answerShowCallback)
-	answerShowCallback();
+//if(answerShowCallback)
+//	answerShowCallback();
+
+$("div.output").each(function(){
+  diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
+});

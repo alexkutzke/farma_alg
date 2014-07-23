@@ -21,7 +21,7 @@ module GraphDataGenerator
     else
       date_string = "%Y"
     end
-    
+
     as = answers.group_by{|a| a.created_at.strftime(date_string)}
     as.each do |k,v|
       final << {"y" => k,"#{id}" => v.count}
@@ -31,12 +31,12 @@ module GraphDataGenerator
   end
 
   def self.question_tries_x_time(team_id,question_id, method)
-    answers = Answer.where(team_id:team_id, question_id:question_id)                  
+    answers = Answer.where(team_id:team_id, question_id:question_id)
                     .asc("created_at")
                     .chunk{|n| n.created_at.strftime(self.date_string(method))}
                     .to_a
   end
-  
+
   def self.team_tries_x_time(team_id, lo_id, method)
     answers = Answer.where(team_id:team_id, lo_id:lo_id)
                     .asc("created_at")
@@ -107,21 +107,33 @@ module GraphDataGenerator
     final
   end
 
+  # def self.team_lo_tries(team_id)
+  #   final = []
+  #
+  #   Team.find(team_id).lo_ids.each do |lo_id|
+  #     tries = Answer.where(team_id:team_id,lo_id:lo_id).count
+  #     final << {lo_name:Lo.find(lo_id).name,tries:tries, subs: [{a:"a",v:10},{a:"b",v:20}]}
+  #   end
+  #   final
+  # end
+
   def self.team_lo_tries(team_id)
     final = []
 
     Team.find(team_id).lo_ids.each do |lo_id|
       tries = Answer.where(team_id:team_id,lo_id:lo_id).count
-      final << {lo_name:Lo.find(lo_id).name,tries:tries, subs: [{a:"a",v:10},{a:"b",v:20}]}
+      name = Lo.find(lo_id).name
+      final << {name:name, short_name:"..."+name.last(8),y:tries}
     end
     final
   end
 
-  def self.team_lo_tries(team_id)
+
+  def self.team_user_lo_tries(team_id,user_id)
     final = []
 
     Team.find(team_id).lo_ids.each do |lo_id|
-      tries = Answer.where(team_id:team_id,lo_id:lo_id).count
+      tries = Answer.where(team_id:team_id,lo_id:lo_id,user_id:user_id).count
       name = Lo.find(lo_id).name
       final << {name:name, short_name:"..."+name.last(8),y:tries}
     end

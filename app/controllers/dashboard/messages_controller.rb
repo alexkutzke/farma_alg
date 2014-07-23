@@ -26,7 +26,7 @@ class Dashboard::MessagesController < ApplicationController
       @available_users << a
     end
   end
-  
+
   def init_search
     @teams = current_user.all_teams
     @questions = current_user.all_questions
@@ -36,7 +36,7 @@ class Dashboard::MessagesController < ApplicationController
   end
 
   def index
-    @messages = current_user.messages.sort{|x,y| x.updated_at <=> y.updated_at}
+    @messages = User.find(current_user.id).messages
 
     @messages_to_me = Message.any_of(:target_user_ids => current_user.id.to_s).desc(:updated_at)
   end
