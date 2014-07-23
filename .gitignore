@@ -15,3 +15,4 @@ db/dump
 .ruby-version
 log/process_queue_err
 log/process_queue_stdout
+public/__assets
