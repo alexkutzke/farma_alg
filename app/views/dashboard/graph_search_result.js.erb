@@ -18,15 +18,22 @@ $("td .add-answer").click(function(e){
 });
 
 $("#add-all").click(function(){
+	var answer_ids = [];
+
+	$("#search-result-container").hide();
   $("tr.answer").each(function(e){
-    addAnswer($(this).data("answer-id"));
+    answer_ids.push($(this).data("answer-id"));
   });
+
+	addGroup(answer_ids);
 });
 
 $("td .add-connected-component").click(function(){
+	$("#search-result-container").hide();
 	addConnectedComponent($(this).data("id"));
 });
 
 $("td .add-similar").click(function(){
+	$("#search-result-container").hide();
 	addSimilar($(this).data("id"));
 });

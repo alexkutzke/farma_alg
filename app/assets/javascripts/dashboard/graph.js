@@ -395,27 +395,68 @@ function addEdge(node1_id,node2_id)
   });
 }
 
+function addGroupLinks(data){
+  var i;
+
+  for(i=0;i<data.length;i++)
+  {
+    if(nodes.indexOf(data[i].target_answer_id) != -1)
+      //if(data[i].weight > 0.7)
+        graph.addLink(data[i].answer_id, data[i].target_answer_id, {id: data[i].id, weight : data[i].weight});
+  }
+  bootbox.hideAll();
+}
+
+function addGroupNodes(data){
+  var i;
+  var ids;
+  ids = [];
+
+  console.log(data);
+
+  for(i=0;i<data.length;i++){
+    graph.addNode(data[i].id,data[i]);
+    nodes.push(data[i].id);
+    ids.push(data[i].id)
+  }
+
+  $.ajax({
+    url: "/newapi/answers/connections",
+    type: "post",
+    data: {answer_ids: ids},
+    success: addGroupLinks
+  });
+}
+
+function show_bootbox(msg){
+  bootbox.dialog({title:"Processando", message: msg, backdrop:'static',onEscape:false,closeButton:false});
+}
+
+function addGroup(answer_ids){
+  show_bootbox("Carregando respostas...");
+  $.ajax({
+    url: "/newapi/answers/group",
+    type: "post",
+    data: {answer_ids: answer_ids},
+    success: addGroupNodes
+  });
+}
+
 function addConnectedComponent(id){
+  show_bootbox("Calculando componente conexa e carregando respostas...");
   $.ajax({
     url: "/newapi/answers/"+id+"/connected_component",
     type: "get",
-    success: function(data){
-      var i;
-      for(i=0;i<data.length;i++)
-        addAnswer(data[i]);
-    }
+    success: addGroupNodes
   });
 }
 
 function addSimilar(id){
+  show_bootbox("Carregando respostas...");
   $.ajax({
     url: "/newapi/answers/"+id+"/similar",
     type: "get",
-    success: function(data){
-      var i;
-      for(i=0;i<data.length;i++)
-        addAnswer(data[i]);
-    }
+    success: addGroupNodes
   });
 }
 
@@ -435,16 +476,20 @@ $(document).ready(function(){
   //$("#answer-show").css("top",($('.header').height()+$('.content-header').height()+48)+"px")
 
   var k,i;
+  var answer_ids=[];
   for (k in $_GET){
     for(i=0;i<$_GET[k].length;i++){
       if(k == "answer_id")
-        addAnswer($_GET[k][i]);
+        answer_ids.push($_GET[k][i]);
       else if(k == "connected_component")
         addConnectedComponent($_GET[k][i]);
       else if(k == "similar")
         addSimilar($_GET[k][i]);
     }
   }
+
+  if(answer_ids.length > 0)
+    addGroup(answer_ids);
 
   $.widget( "ui.autocomplete", $.ui.autocomplete, {
     _renderItem: function(ul,item) {

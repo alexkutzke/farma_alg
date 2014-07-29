@@ -14,6 +14,7 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require jquery.md5
+//= require bootbox4.min
 //= require AdminLTE/bootstrap
 //= require AdminLTE/AdminLTE/app
 //= require codemirror/lib/codemirror

@@ -19,14 +19,23 @@ class Newapi::AnswersController < ApplicationController
     @connections = @answer.connections
   end
 
+	def group_connections
+		@connections = Connection.in(target_answer_id: params[:answer_ids]).in(answer_id:params[:answer_ids])
+		render "connections"
+	end
+
+	def group
+		@answers = Answer.find(params[:answer_ids])
+	end
+
 	def connected_component
-		@connected_component = Answer.find(params[:id]).connected_component
-		render :json => @connected_component
+		@answers = Answer.find(Answer.find(params[:id]).connected_component)
+		render "group"
 	end
 
 	def similar
-		@similar = Answer.find(params[:id]).similar_answers
-		render :json => @similar
+		@answers = Answer.find(Answer.find(params[:id]).similar_answers)
+		render "group"
 	end
 
 end

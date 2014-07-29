@@ -44,12 +44,12 @@ class Answer
 
   attr_accessible :id, :response, :user_id, :team_id, :lo_id, :exercise_id, :question_id, :for_test, :try_number, :results, :lang, :retroaction
 
-  belongs_to :user
+  belongs_to :user, index: true
   has_one :last_answer
   #embeds_many :comments, :as => :commentable
   has_many :comments
   has_many :connections, dependent: :delete
-  has_and_belongs_to_many :tags
+  has_and_belongs_to_many :tags, index: true
 
   #default_scope desc(:created_at)
 
