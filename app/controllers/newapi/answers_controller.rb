@@ -24,4 +24,9 @@ class Newapi::AnswersController < ApplicationController
 		render :json => @connected_component
 	end
 
+	def similar
+		@similar = Answer.find(params[:id]).similar_answers
+		render :json => @similar
+	end
+
 end

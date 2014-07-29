@@ -61,6 +61,7 @@ Carrie::Application.routes.draw do
       member do
         get "connections"
         get "connected_component"
+        get "similar"
       end
     end
     resources :connections, :only => [:create] do

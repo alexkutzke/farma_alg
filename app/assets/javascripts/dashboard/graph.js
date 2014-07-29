@@ -139,7 +139,7 @@ function nodeDraw(node){
       }, 500);
 */
       $.ajax({
-        url: "/dashboard/answers/show",
+        url: "/dashboard/answers/show?graph=true",
         type: "get",
         data: {id:node.id},
         dataType: "script",
@@ -407,6 +407,18 @@ function addConnectedComponent(id){
   });
 }
 
+function addSimilar(id){
+  $.ajax({
+    url: "/newapi/answers/"+id+"/similar",
+    type: "get",
+    success: function(data){
+      var i;
+      for(i=0;i<data.length;i++)
+        addAnswer(data[i]);
+    }
+  });
+}
+
 // ===========================================================
 // DOCUMENT READY
 var mouse_x,mouse_y;
@@ -429,6 +441,8 @@ $(document).ready(function(){
         addAnswer($_GET[k][i]);
       else if(k == "connected_component")
         addConnectedComponent($_GET[k][i]);
+      else if(k == "similar")
+        addSimilar($_GET[k][i]);
     }
   }
 
@@ -571,8 +585,8 @@ $(document).ready(function(){
       graph.removeNode(node.id);
     });
 
-    renderer.stop();
-    renderer.start();
+//    renderer.stop();
+//    renderer.start();
   });
 
   // Other stuff

@@ -99,12 +99,25 @@
         </button>
       <% end %>
 
-      <%= link_to dashboard_graph_path + "?connected_component=" + answer.id.to_s, :target => "_blank" do %>
-        <button class="btn btn-warning btn-block">
-          Visualizar componente conexa no grafo
+      <% if not answer.from_graph %>
+        <%= link_to dashboard_graph_path + "?connected_component=" + answer.id.to_s, :target => "_blank" do %>
+          <button class="btn btn-warning btn-block">
+            Visualizar componente conexa no grafo
+          </button>
+        <% end %>
+        <%= link_to dashboard_graph_path + "?similar=" + answer.id.to_s, :target => "_blank" do %>
+          <button class="btn btn-warning btn-block">
+            Visualizar respostas semelhantes no grafo
+          </button>
+        <% end %>
+      <% else %>
+        <button class="btn btn-primary btn-block" id="add-connected-component" data-id="<%= answer.id %>">
+          Adicionar componente conexa ao grafo
+        </button>
+        <button class="btn btn-primary btn-block" id="add-similar" data-id="<%= answer.id %>">
+          Adicionar respostas semelhantes ao grafo
         </button>
       <% end %>
-
 
       <!-- Modal -->
       <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

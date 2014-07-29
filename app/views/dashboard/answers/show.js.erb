@@ -29,3 +29,14 @@ if(answerShowCallback && typeof(answerShowCallback) == "function")
 $("div.output").each(function(){
   diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
 });
+
+// graph only events
+<% if @answer.from_graph %>
+  $("#add-connected-component").click(function(){
+    addConnectedComponent($(this).data("id"));
+  });
+
+  $("#add-similar").click(function(){
+    addSimilar($(this).data("id"));
+  });
+<% end %>

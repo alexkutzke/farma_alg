@@ -55,7 +55,7 @@
           <td><%= answer2.question.title %></td>
         <% end %>
       </tr>
-      
+
       <tr>
         <td><b>Turma</b></td>
         <% if answer1.team_id == answer2.team_id %>
@@ -65,7 +65,7 @@
           <td><%= answer2.team.name %></td>
         <% end %>
       </tr>
-      
+
       <tr>
         <td><b>O.A.</b></td>
         <% if answer1.lo_id == answer2.lo_id %>
@@ -75,7 +75,7 @@
           <td><%= answer2.lo.name %></td>
         <% end %>
       </tr>
-      
+
       <tr>
         <td><b>Tentativa</b></td>
         <% if answer1.try_number == answer2.try_number %>
@@ -104,8 +104,8 @@
               <button id="confirm-accept-edge" type="button" class="btn btn-success">Confirmar</button>
               <button id="cancel-accept-edge" type="button" class="btn btn-default">Cancelar</button>
             </p>
-          </div>   
-    <% end %>   
+          </div>
+    <% end %>
 
       <button class="btn btn-danger btn-block" id="reject-edge" style="margin-top:5px;">
         Rejeitar similaridade
@@ -118,8 +118,8 @@
               <button id="confirm-reject-edge" type="button" class="btn btn-danger">Confirmar</button>
               <button id="cancel-reject-edge" type="button" class="btn btn-default">Cancelar</button>
             </p>
-          </div>      
-    
+          </div>
+
     </div>
 </div>
 
@@ -128,10 +128,13 @@
 <div class="row">
   <div class="col-xs-12">
 
+  <% if answer1.question_id.to_s == answer2.question_id.to_s %>
+
+
     <hr />
     <h4>Comparação dos casos de teste</h4>
 
-    
+
       <% connection.test_case_similarity.each do |k,v| %>
         <% t = test_case_title(k) %>
         <% unless t.nil? %>
@@ -139,12 +142,12 @@
             <div class="col-xs-12">
               <% if v['error'] != 1 %>
                 <div class="box box-success collapsed-box">
-              <% else %>  
+              <% else %>
                 <div class="box box-danger collapsed-box">
               <% end %>
                 <div class="box-header">
                   <h3 class="box-title">
-                    <%= t %>    
+                    <%= t %>
                   </h3>
                   <div class="box-tools pull-right">
 
@@ -172,13 +175,14 @@
                   </div>
                 </div>
                 <div class="box-body" style="display: none;">
-                  <%= raw test_case_similarity_in_words(k,v) %>            
+                  <%= raw test_case_similarity_in_words(k,v) %>
                 </div><!-- /.box-body -->
 
               </div>
             </div>
           </div>
         <% end %>
+    <% end %>
     <% end %>
     </div>
 </div>

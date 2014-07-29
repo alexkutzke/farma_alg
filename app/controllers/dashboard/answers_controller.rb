@@ -38,6 +38,15 @@ class Dashboard::AnswersController < ApplicationController
 
   def show
     @available_tags = @answer.available_tags
+    @answer.class_eval do
+      attr_accessor :from_graph
+    end
+
+    if params.has_key?(:graph)
+      @answer.from_graph = true
+    else
+      @answer.from_graph = false
+    end
   end
 
 end

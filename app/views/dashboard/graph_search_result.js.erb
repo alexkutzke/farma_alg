@@ -13,8 +13,8 @@ $('.answer').each(function() {
   $(this).delay((i++)*50).fadeIn();
 });
 
-$("tr.answer").click(function(e){
-  addAnswer($(this).data("answer-id"));
+$("td .add-answer").click(function(e){
+  addAnswer($(this).data("id"));
 });
 
 $("#add-all").click(function(){
@@ -23,6 +23,10 @@ $("#add-all").click(function(){
   });
 });
 
-$(".add-connected-component").click(function(){
+$("td .add-connected-component").click(function(){
 	addConnectedComponent($(this).data("id"));
+});
+
+$("td .add-similar").click(function(){
+	addSimilar($(this).data("id"));
 });
