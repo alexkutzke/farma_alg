@@ -106,7 +106,7 @@ class Answer
       end
     end
 
-    p    
+    p
   end
 
   def similar_answers
@@ -115,6 +115,31 @@ class Answer
       sa << c.target_answer_id
     end
 
+    sa
+  end
+
+  def connected_component
+    sa = []
+    queue = []
+    visited = []
+
+    queue.push self.id
+    visited.push self.id
+
+    while not queue.empty?
+      answer_id = queue.shift
+
+      answer = Answer.find(answer_id)
+      sa << answer_id
+
+      for similar_answer in answer.similar_answers do
+        unless visited.include?(similar_answer)
+          queue.push similar_answer
+          visited.push similar_answer
+        end
+
+      end
+    end
     sa
   end
 
@@ -189,11 +214,11 @@ class Answer
 
     if compile_result[0] != 0
       self.compile_errors = compile_result[1]
-      self.correct = false      
+      self.correct = false
     else
 
       correct = Judge::test(lang,compile_result[1],question.test_cases,tmp)
-      
+
       self.results = Hash.new
       self.correct = true
       correct.each do |id,r|
@@ -217,7 +242,7 @@ class Answer
         self.results[id][:output] = r[1][2]
         self.results[id][:id] = id
 
-        if r[0] == 3 
+        if r[0] == 3
           self.correct = false
           self.results[id][:error] = true
           self.results[id][:diff_error] = true
@@ -255,7 +280,7 @@ class Answer
   end
 
   def verify_response
-    
+
     self.exec
 
     unless self.for_test
@@ -319,7 +344,7 @@ class Answer
           if t[1] < weight
             t[1] = weight
           end
-        # passed by this answers  
+        # passed by this answers
         else
           # update anyway
           t[1] = weight
@@ -349,7 +374,7 @@ class Answer
           if t[1] < weight*atag[1]
             t[1] = weight*atag[1]
           end
-        # passed by this answers  
+        # passed by this answers
         else
           # update anyway
           t[1] = atag[1] * weight
@@ -368,7 +393,7 @@ class Answer
       end
     end
 
-    neigh.save!    
+    neigh.save!
   end
 
   def propagate_properties
@@ -389,23 +414,23 @@ class Answer
           visited.push similar_answer
         end
 
-        Answer.propagate_properties_to_neigh(answer,similar_answer)        
+        Answer.propagate_properties_to_neigh(answer,similar_answer)
       end
     end
     true
   end
 
   def schedule_process_connections
-    ProcessQueue.create(:type => "make_inner_connections", 
+    ProcessQueue.create(:type => "make_inner_connections",
                         :priority => 2,
                         :params => [self.id])
-    ProcessQueue.create(:type => "make_outer_connections", 
+    ProcessQueue.create(:type => "make_outer_connections",
                         :priority => 5,
                         :params => [self.id])
   end
 
   def schedule_process_propagate
-    ProcessQueue.create(:type => "propagate_properties", 
+    ProcessQueue.create(:type => "propagate_properties",
                         :priority => 2,
                         :params => [self.id])
   end
@@ -416,7 +441,7 @@ class Answer
     inner_neigh = Answer.where(:question_id => self.question_id)
 
     0.step(inner_neigh.count, per_batch) do |offset|
-      inner_neigh.limit(per_batch).skip(offset).each do |a| 
+      inner_neigh.limit(per_batch).skip(offset).each do |a|
         if self.id != a.id
           SimilarityMachine::create_connection(self,a)
         end
@@ -432,7 +457,7 @@ class Answer
     outer_neigh = Answer.where(:question_id.ne => self.question_id)
 
     0.step(outer_neigh.count, per_batch) do |offset|
-      outer_neigh.limit(per_batch).skip(offset).each do |a| 
+      outer_neigh.limit(per_batch).skip(offset).each do |a|
         if self.id != a.id
           SimilarityMachine::create_connection(self,a)
         end
@@ -456,7 +481,7 @@ class Answer
 
     best.reverse!
 
-    best[0..n-1]  
+    best[0..n-1]
   end
 
 private
@@ -574,7 +599,7 @@ private
         user_ids << u.id
       end
       as = as.in(user_id: user_ids)
-      
+
       team_ids = []
       for t in user.all_teams do
         team_ids << t.id
@@ -629,7 +654,7 @@ private
     as.sort!{|x,y| y.created_at <=> x.created_at}
 
     i=0
-    last = nil 
+    last = nil
 
     n = as.count
 
@@ -653,7 +678,7 @@ private
         c = Connection.find_or_initialize_by(:target_answer_id => as[last].id.to_s, :answer_id => as[current].id.to_s)
         unless c.new_record?
           timeline_items << ["comparison",[last,current,c]]
-        end  
+        end
       end
 
       timeline_items << ["answer",[current]]

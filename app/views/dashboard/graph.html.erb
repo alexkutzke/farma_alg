@@ -8,7 +8,7 @@
   <%= javascript_include_tag 'codemirror/mode/pascal/pascal' %>
   <%= javascript_include_tag 'codemirror/mode/ruby/ruby' %>
   <%= javascript_include_tag 'codemirror/mode/clike/clike' %>
-  <%= javascript_include_tag 'prettify' %>  
+  <%= javascript_include_tag 'prettify' %>
   <%= javascript_include_tag 'run_prettify' %>
 
 <script type="text/javascript">
@@ -35,6 +35,10 @@
   </script>
 <% end %>
 
+<div id="answer-show"> <!-- class="resize" style="right:10px;left:initial;position:absolute;"> -->
+
+</div>
+
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
@@ -54,17 +58,16 @@
 
     <div class="row">
 
-
-<div id="answer-show" class="resize" style="right:10px;left:initial;position:absolute;">
-
+<!--
+<div id="answer-show"> class="resize" style="right:10px;left:initial;position:absolute;">
 </div>
-
+-->
     </div>
 
 
     <div class="row">
         <div id="toolbar" class="col-md-1">
-            
+
             <div class="row toolbar-item">
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
@@ -84,116 +87,116 @@
                             </div>
                         </div>
                     </div>
-                </div>                    
+                </div>
                 <div class="toolbar-btn text-center">
                     <%= button_tag raw("<i class='fa fa-plus-circle'></i>"), :class => "btn btn-flat btn-default",:id => "add-node" %>
                 </div>
             </div>
 
-            <div class="row toolbar-item">      
+            <div class="row toolbar-item">
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
                         <span class="input-group-addon" >Remover respostas do grafo</span>
                     </div>
-                </div> 
+                </div>
                 <div class="toolbar-btn-element">
                     <div class="col-md-10">
                         <span class="input-group-addon" >Clique nas respostas que deseja retirar do grafo<br />
                         Pressione ESC para terminar</span>
                     </div>
-                </div>                 
+                </div>
                 <div class="toolbar-btn text-center">
                     <%= button_tag raw("<i class='fa fa-minus-circle''></i>"), :class => "btn btn-flat btn-default", :id => "remove-answer" %>
                 </div>
             </div>
 
-            <div class="row toolbar-item">                
+            <div class="row toolbar-item">
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
                         <span class="input-group-addon" >Adicionar uma aresta</span>
                     </div>
-                </div>    
+                </div>
                 <div class="toolbar-btn-element">
                     <div class="col-md-10">
                         <span class="input-group-addon" >Selecione duas respostas no grafo para adicionar uma aresta<br />
                         Pressione ESC para terminar</span>
                     </div>
-                </div>           
+                </div>
                 <div class="toolbar-btn text-center">
                     <%= button_tag raw("<i class='fa fa-code-fork''></i>"), :class => "btn btn-flat btn-default", :id => "add-edge"  %>
                 </div>
             </div>
 
-            <div class="row toolbar-item">                
+            <div class="row toolbar-item">
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
                         <span class="input-group-addon">Configurações do grafo</span>
                     </div>
-                </div>               
+                </div>
                 <div class="toolbar-btn text-center">
                     <%= button_tag raw("<i class='fa fa-wrench'></i>"), :class => "btn btn-flat btn-default" %>
                 </div>
             </div>
 
-            <div class="row toolbar-item">                
+            <div class="row toolbar-item">
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
                         <span class="input-group-addon">Pausa/Recomeça o movimento do grafo</span>
                     </div>
-                </div>               
+                </div>
                 <div class="toolbar-btn text-center">
                     <%= button_tag raw("<i class='fa fa-pause'></i>"), :class => "btn btn-flat btn-default", :id => "pause-btn" %>
                 </div>
             </div>
 
-            <div class="row toolbar-item">                
+            <div class="row toolbar-item">
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
                         <span class="input-group-addon">Retornar ao centro do grafo</span>
                     </div>
-                </div>               
+                </div>
                 <div class="toolbar-btn text-center">
                     <%= button_tag raw("<i class='fa fa-map-marker'></i>"), :class => "btn btn-flat btn-default", :id => "reset-btn" %>
                 </div>
             </div>
 
-            <div class="row toolbar-item">                
+            <div class="row toolbar-item">
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
                         <span class="input-group-addon">Remover todas as repostas do grafo</span>
                     </div>
-                </div>               
+                </div>
                 <div class="toolbar-btn text-center">
                     <%= button_tag raw("<i class='fa fa-trash-o'></i>"), :class => "btn btn-flat btn-default", :id => "clean-btn" %>
                 </div>
             </div>
 
-            <div class="row toolbar-item">                
+            <div class="row toolbar-item">
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
                         <span class="input-group-addon" >Link para este grafo</span>
                     </div>
-                </div>  
+                </div>
                 <div class="toolbar-btn-element">
                     <div class="col-md-10">
                         <textarea class="form-control" id="link-span" rows="3" style="pointer-events:initial;"></textarea>
                     </div>
-                </div>               
+                </div>
                 <div class="toolbar-btn text-center">
                     <%= button_tag raw("<i class='fa fa-link'></i>"), :class => "btn btn-flat btn-default", :id => "link-btn" %>
                 </div>
-            </div>           
-            
-            <div class="row toolbar-item">                
+            </div>
+
+            <div class="row toolbar-item">
                 <div class="toolbar-btn-label">
                     <div class="col-md-10">
                         <span class="input-group-addon" >Instruções de uso</span>
                     </div>
-                </div>  
+                </div>
                 <div class="toolbar-btn text-center">
                     <%= button_tag raw("<i class='fa fa-question'></i>"), :class => "btn btn-flat btn-default" %>
                 </div>
-            </div>    
+            </div>
 
 
         </div>

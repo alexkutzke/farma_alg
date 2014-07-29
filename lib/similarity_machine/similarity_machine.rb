@@ -21,7 +21,7 @@ module SimilarityMachine
     if Rails.env.production?
       code_similarity = `/usr/bin/sim_pasc -e -s -p /tmp/#{tmp}-#{a.id}-response.#{a.lang} /tmp/#{tmp}-#{b.id}-response.#{b.lang} | grep consists | grep '^/tmp/#{tmp}-#{a.id}-response.#{a.lang}' | cut -d " " -f4`.to_f / 100.0
     else
-      code_similarity = `/Users/alexkutzke/Downloads/sim/sim_pasc -e -s -p /tmp/#{tmp}-#{a.id}-response.#{a.lang} /tmp/#{tmp}-#{b.id}-response.#{b.lang} | grep consists | grep '^/tmp/#{tmp}-#{a.id}-response.#{a.lang}' | cut -d " " -f4`.to_f / 100.0
+      code_similarity = `/opt/similarity-tester/sim_pasc -e -s -p /tmp/#{tmp}-#{a.id}-response.#{a.lang} /tmp/#{tmp}-#{b.id}-response.#{b.lang} | grep consists | grep '^/tmp/#{tmp}-#{a.id}-response.#{a.lang}' | cut -d " " -f4`.to_f / 100.0
     end
 
     File.delete("/tmp/#{tmp}-#{a.id}-response.#{a.lang}")
@@ -51,7 +51,7 @@ module SimilarityMachine
           unless result_b.nil?
             test_case_similarity[id]['error'] = result_a['error'] || result_b['error'] ? 1 : 0
             test_case_similarity[id]['both_error'] = result_a['error'] && result_b['error'] ? 1 : 0
-          
+
             test_case_similarity[id]['same_error'] = (result_a['diff_error'] && result_b['diff_error']) ||
                                                       (result_a['time_error'] && result_b['time_error']) ||
                                                       (result_a['exec_error'] && result_b['exec_error']) ||
@@ -70,14 +70,14 @@ module SimilarityMachine
           end
           test_case_similarity_final = test_case_similarity_final + tmp
         end
-        if a.results.count > 0 
+        if a.results.count > 0
           test_case_similarity_final = test_case_similarity_final / a.results.count
         end
       end
     end
 
     result = Hash.new
-    
+
     #puts "code_similarity: " + code_similarity.to_s
     #puts "both_compile_errors: " + both_compile_errors.to_s
     #puts "compile_errors_similarity: " + compile_errors_similarity.to_s
@@ -95,7 +95,7 @@ module SimilarityMachine
         #puts "diff_to_expected_output: " + test_case_similarity[id]['diff_to_expected_output'].to_s
       end
     end
-    
+
     final_similarity = (code_similarity + (both_compile_errors * compile_errors_similarity) + (1.0 - both_compile_errors) * (same_question*test_case_similarity_final/4.0)) /2.0
     #puts "final_similarity: " + final_similarity.to_s
 
@@ -112,11 +112,11 @@ module SimilarityMachine
     result
   end
 
-  def self.create_connection(a,b)    
+  def self.create_connection(a,b)
     c = nil
     result = similarity(a,b)
     c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
-    
+
     if result['final_similarity'] > 0.4
       c.code_similarity = result['code_similarity']
       c.both_compile_errors = result['both_compile_errors']
@@ -135,7 +135,7 @@ module SimilarityMachine
     per_batch = 1000
 
     0.step(Answer.count, per_batch) do |offset|
-      Answer.limit(per_batch).skip(offset).each do |a| 
+      Answer.limit(per_batch).skip(offset).each do |a|
         if a.id != answer.id
           create_connection(answer,a)
         end
@@ -150,14 +150,14 @@ module SimilarityMachine
     i = 0.0
     t = Answer.count**2.0
     0.step(Answer.count, per_batch) do |offset|
-      Answer.limit(per_batch).skip(offset).each do |a| 
+      Answer.limit(per_batch).skip(offset).each do |a|
         0.step(Answer.count, per_batch) do |offset2|
-          Answer.limit(per_batch).skip(offset2).each do |b| 
+          Answer.limit(per_batch).skip(offset2).each do |b|
             i = i + 1.0
             puts (i*100.0)/t
             if a.id != b.id
-              puts a.id.to_s + " " + b.id.to_s 
-              create_connection(a,b)      
+              puts a.id.to_s + " " + b.id.to_s
+              create_connection(a,b)
             end
           end
         end
@@ -169,7 +169,7 @@ module SimilarityMachine
     puts "Limpando tags..."
     as = Answer.all
     t = as.count
-    for i in 0..as.count-1 do 
+    for i in 0..as.count-1 do
       print i.to_s + "/" + t.to_s + "\r"
       a=as[i]
       a.tag_ids = []
@@ -197,7 +197,7 @@ module SimilarityMachine
                             :name => "Apresentação")
 
     puts "Atribuindo tags..."
-    for i in 0..as.count-1 do 
+    for i in 0..as.count-1 do
       print i.to_s + "/" + t.to_s + "\r"
       a=as[i]
       if a.compile_errors

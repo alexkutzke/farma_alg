@@ -8,7 +8,7 @@ function getQueryParams(qs) {
     while (tokens = re.exec(qs)) {
       if(!params[decodeURIComponent(tokens[1])])
         params[decodeURIComponent(tokens[1])] = []
-      
+
       params[decodeURIComponent(tokens[1])].push(decodeURIComponent(tokens[2]));
     }
 
@@ -73,9 +73,9 @@ function paintNode(n){
     color = "green";
   else if (node.data.compile_errors)
     color = "orange";
-  else 
+  else
     color = "black";
-    
+
   $("#node-"+n).css('fill',color);
 }
 
@@ -86,20 +86,20 @@ function nodeDraw(node){
     color = "green";
   else if (node.data.compile_errors)
     color = "orange";
-  else 
+  else
     color = "black";
 
     var ui = Viva.Graph.svg('g'),
                   // Create SVG text element with user id as content
                   svgText = Viva.Graph.svg('text').attr('y', '-50px').attr('width','20');
 
-    var 
+    var
     txt = Viva.Graph.svg('tspan').attr("x","-25px").attr("dy","1.2em").text(node.data.user.name+" @"+node.data.question.title+"#"+node.data.try_number);
     svgText.append(txt);
-   
+
     var circle = Viva.Graph.svg('circle').attr('r', nodeSize/2)
                                          .attr('fill', color)
-                                         .attr('id',"node-"+node.id);    
+                                         .attr('id',"node-"+node.id);
 
     ui.append(svgText);
     ui.append(circle);
@@ -144,7 +144,7 @@ function nodeDraw(node){
         data: {id:node.id},
         dataType: "script",
         success: function(){
-          console.log("OK");
+        //  console.log("OK");
         }
       });
     });
@@ -190,7 +190,7 @@ function nodeDraw(node){
 function paintEdge(e){
   var color;
 
-  color = 'rgb('+Math.floor(255*parseFloat($("#edge-"+e).data("weight")))+',0,0)';   
+  color = 'rgb('+Math.floor(255*parseFloat($("#edge-"+e).data("weight")))+',0,0)';
 
   $("#edge-"+e).attr('stroke',color);
 }
@@ -282,7 +282,7 @@ function draw()
   graphics = Viva.Graph.View.svgGraphics();
 
   var layout = Viva.Graph.Layout.forceDirected(graph, {
-    springLength: 200 
+    springLength: 200
   });
 
   // Configuracao inicial do grafo
@@ -300,7 +300,7 @@ function draw()
 
   // Desenha o vertice
   graphics.node(nodeDraw);
-  
+
   // Define a posição do vertice
   graphics.placeNode(function(nodeUI, pos){
     //nodeUI.attr( "cx", pos.x).attr("cy", pos.y);
@@ -363,7 +363,7 @@ function getLinksSuccess(data)
   for(i=0;i<data.length;i++)
   {
     if(nodes.indexOf(data[i].target_answer_id) != -1)
-      if(data[i].weight > 0.7)
+      //if(data[i].weight > 0.7)
         graph.addLink(data[i].answer_id, data[i].target_answer_id, {id: data[i].id, weight : data[i].weight});
   }
 }
@@ -395,6 +395,18 @@ function addEdge(node1_id,node2_id)
   });
 }
 
+function addConnectedComponent(id){
+  $.ajax({
+    url: "/newapi/answers/"+id+"/connected_component",
+    type: "get",
+    success: function(data){
+      var i;
+      for(i=0;i<data.length;i++)
+        addAnswer(data[i]);
+    }
+  });
+}
+
 // ===========================================================
 // DOCUMENT READY
 var mouse_x,mouse_y;
@@ -408,13 +420,15 @@ $(document).ready(function(){
   //$("#answer-info").height(0);
   //$("#answer-info").hide(0);
 
-  $("#answer-show").css("top",($('.header').height()+$('.content-header').height()+48)+"px")
+  //$("#answer-show").css("top",($('.header').height()+$('.content-header').height()+48)+"px")
 
   var k,i;
   for (k in $_GET){
     for(i=0;i<$_GET[k].length;i++){
       if(k == "answer_id")
         addAnswer($_GET[k][i]);
+      else if(k == "connected_component")
+        addConnectedComponent($_GET[k][i]);
     }
   }
 
@@ -439,7 +453,7 @@ $(document).ready(function(){
     }
     else{
       bar.removeClass("open");
-      bar.animate({width: 0},500) 
+      bar.animate({width: 0},500)
     }
   })
 
@@ -529,7 +543,7 @@ $(document).ready(function(){
     else{
       $(this).find(".toolbar-btn").css("top",0);
       $(this).find(".toolbar-btn-element").css("top",0);
-      $(this).find(".toolbar-btn-label").css("top",0); 
+      $(this).find(".toolbar-btn-label").css("top",0);
     }
   });
 

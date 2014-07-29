@@ -16,12 +16,12 @@ $(".answer-btn").click(function(){
     data: {
       id: $(this).data("id")
     },
-    type: "get"    
+    type: "get"
   });
 });
 
 
 $("span.label").tooltip();
 
-if(searchResultCallback)
+if(searchResultCallback && typeof(searchResultCallback) == "function")
   searchResultCallback();

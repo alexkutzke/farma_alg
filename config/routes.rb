@@ -60,6 +60,7 @@ Carrie::Application.routes.draw do
     resources :answers, :only => [:show] do
       member do
         get "connections"
+        get "connected_component"
       end
     end
     resources :connections, :only => [:create] do

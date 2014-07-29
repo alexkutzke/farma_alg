@@ -93,6 +93,18 @@
         Vizualizar resposta
       </button>
 
+      <%= link_to panel_team_user_lo_question_answer_path(answer.team_id,answer.user_id,answer.lo_id,answer.question_id,answer.id), :target => "_blank"  do %>
+        <button class="btn btn-warning btn-block">
+          Mais detalhes
+        </button>
+      <% end %>
+
+      <%= link_to dashboard_graph_path + "?connected_component=" + answer.id.to_s, :target => "_blank" do %>
+        <button class="btn btn-warning btn-block">
+          Visualizar componente conexa no grafo
+        </button>
+      <% end %>
+
 
       <!-- Modal -->
       <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

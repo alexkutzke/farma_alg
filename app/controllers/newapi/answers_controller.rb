@@ -19,4 +19,9 @@ class Newapi::AnswersController < ApplicationController
     @connections = @answer.connections
   end
 
+	def connected_component
+		@connected_component = Answer.find(params[:id]).connected_component
+		render :json => @connected_component
+	end
+
 end

@@ -8,12 +8,12 @@ $(".answer-btn").click(function(){
     data: {
       id: $(this).data("id")
     },
-    type: "get"    
+    type: "get"
   });
 });
 
 $(".accept_tag_link").click(function(){
-  
+
   var answer_id = $(this).data("answer-id");
   $.ajax({
     url: "/dashboard/tags/accept_tag",
@@ -31,7 +31,7 @@ $(".accept_tag_link").click(function(){
 });
 
 $(".reject_tag_link").click(function(){
-  
+
   var answer_id = $(this).data("answer-id");
   $.ajax({
     url: "/dashboard/tags/reject_tag",
@@ -49,5 +49,5 @@ $(".reject_tag_link").click(function(){
 $("span.label").tooltip();
 $("button[rel='tooltip']").tooltip();
 
-if(searchResultCallback)
+if(searchResultCallback && typeof(searchResultCallback) == "function")
   searchResultCallback();

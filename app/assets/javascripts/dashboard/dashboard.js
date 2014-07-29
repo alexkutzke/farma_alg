@@ -24,6 +24,10 @@
 //= require run_prettify
 //= require_self
 
+
+answerShowCallback = null;
+searchResultCallback = null;
+
 var comecei = 0;
   $(document).ajaxSend(function(){
     comecei +=1;

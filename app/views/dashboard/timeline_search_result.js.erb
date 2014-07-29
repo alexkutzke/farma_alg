@@ -6,7 +6,7 @@ $(".answer-btn").click(function(){
     data: {
       id: $(this).data("id")
     },
-    type: "get"    
+    type: "get"
   });
 });
 
@@ -16,7 +16,7 @@ $(".connection-btn").click(function(){
     data: {
       id: $(this).data("id")
     },
-    type: "get"    
+    type: "get"
   });
 });
 
@@ -29,5 +29,5 @@ $(".time-label-btn").click(function(){
   $("."+date).toggle();
 });
 
-if(searchResultCallback)
+if(searchResultCallback && typeof(searchResultCallback) == "function")
   searchResultCallback();

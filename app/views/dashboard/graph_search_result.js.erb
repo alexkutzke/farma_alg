@@ -19,6 +19,10 @@ $("tr.answer").click(function(e){
 
 $("#add-all").click(function(){
   $("tr.answer").each(function(e){
-    addAnswer($(this).data("answer-id")); 
+    addAnswer($(this).data("answer-id"));
   });
+});
+
+$(".add-connected-component").click(function(){
+	addConnectedComponent($(this).data("id"));
 });

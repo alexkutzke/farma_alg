@@ -20,6 +20,11 @@
  *= require AdminLTE/timepicker/bootstrap-timepicker.min
 */
 
+.btn-block
+{
+  margin-top:5px;
+}
+
 .small-box-footer
 {
   height:25px;
@@ -140,6 +145,7 @@ svg.graph
 #graph svg
 {
   height: 100%;
+  width: 100%;
 }
 
 #answer-info

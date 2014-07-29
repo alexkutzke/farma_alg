@@ -1,4 +1,6 @@
 $("#answer-show").html("<%= escape_javascript(render(:partial => 'show', :locals => {:connection => @connection, :notice => @notice, :answer1 => @answer1, :answer2 => @answer2}))%>");
+$("#answer-show").draggable({ axis: "x", scroll:false });
+
 $("span.label").tooltip();
 
 $("#reject-edge").click(function(){
@@ -28,14 +30,14 @@ function confirmRejectEdge(data){
       {
         graph.removeLink(link);
       }
-    });    
+    });
   }
   else{
     $(".time-comparison[data-id='<%= @connection.id %>']").parent().fadeOut(function(){
       $(this).remove();
     })
   }
-  
+
   $("#close-answer-info").click();
 }
 
