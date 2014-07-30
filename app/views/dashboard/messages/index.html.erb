@@ -6,7 +6,7 @@
 <section class="content-header">
     <h1>
         Mensagens
-        <% if current_user.admin? %>
+        <% if current_user.prof? %>
             <small>envie mensagens com recomendações para alunos</small>
         <% end %>
     </h1>
@@ -18,7 +18,7 @@
 
 <!-- Main content -->
 <section class="content">
-    <% if current_user.admin? %>
+    <% if current_user.prof? %>
 
     <div class="row">
         <div class="col-md-12">
@@ -37,7 +37,7 @@
                     <th></th>
                     <th></th>
                 </tr>
-                
+
                 <% @messages.each do |m| %>
                     <tr>
                         <td>

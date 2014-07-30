@@ -20,6 +20,24 @@
  *= require AdminLTE/timepicker/bootstrap-timepicker.min
 */
 
+.shorted-box-body
+{
+  max-height: 200px;
+  overflow: hidden;
+}
+
+.shorted-box-footer
+{
+  background-color: lightyellow !important;
+  border-top: 1px solid lightgray !important;
+  padding: 2px !important;
+}
+
+.shorted-box-footer:hover
+{
+  background-color: rgb(231, 231, 200) !important;
+}
+
 .wrapper
 {
   background: lightgray;

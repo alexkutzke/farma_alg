@@ -1,12 +1,12 @@
 class Dashboard::TeamsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :verify_admin, :only =>[:new, :update, :edit, :create,:destroy]
+  before_filter :verify_prof, :only =>[:new, :update, :edit, :create,:destroy]
   before_filter :can_edit?, :only =>[:update, :edit, :destroy]
 
   layout "dashboard"
 
   def can_edit?
-    unless current_user.lo_ids.include?(params[:id]) || current_user.admin?
+    unless current_user.id.to_s == Team.find(params[:id]).owner_id.to_s || current_user.admin?
       render :file => "public/401.html", :status => :unauthorized
     end
   end

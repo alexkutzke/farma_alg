@@ -255,7 +255,7 @@
                     <h3 class="box-title">Comentários</h3>
                 </div><!-- /.box-header -->
 
-                <div class="box-body">
+                <div class="box-body shorted-box">
                   <div class="comments-list">
                   <% @answer.comments.each do |c| %>
                     <% unless c.created_at.nil? %>
@@ -369,7 +369,7 @@
                 <div class="box-header">
                     <h3 class="box-title">Tags para esta resposta</h3>
                 </div><!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body shorted-box">
                   <% unless @notice.nil? %>
                     <div class="alert alert-success">
                       <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -385,7 +385,7 @@
                 <div class="box-header">
                     <h3 class="box-title">Resultado para casos de teste</h3>
                 </div><!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body shorted-box">
                   <% if @answer.compile_errors %>
       <div class="callout callout-warning" style="margin-top:10px;">
         <h4>Erro de compilação</h4>
@@ -472,7 +472,7 @@
                 <div class="box-header">
                     <h3 class="box-title">Respostas semelhantes</h3>
                 </div><!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body shorted-box">
 
                 <% @answer.best_matches(5).each do |sa| %>
                   <% c = @answer.connections.where(target_answer_id:sa.id).first %>

@@ -43,7 +43,6 @@
                 </a>
                 <div class="navbar-right">
                     <ul class="nav navbar-nav">
-
                         <!-- Messages: style can be found in dropdown.less-->
                         <li class="dropdown messages-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -156,7 +155,7 @@
                                 <li class="user-header bg-light-blue">
                                     <img src="http://www.gravatar.com/avatar/<%= current_user.gravatar%>" class="img-circle" alt="User Image" />
                                     <p>
-                                        <%= current_user.name %> <%= raw "Administrador" if current_user.admin? %>
+                                        <%= current_user.name %> <%= raw "Administrador" if current_user.admin? %> <%= raw "Professor" if current_user.prof? && !current_user.admin?%>
                                         <small>Último acesso em <%= current_user.last_sign_in_at.strftime("%d/%m/%Y às %H:%M:%S") %></small>
                                     </p>
                                 </li>

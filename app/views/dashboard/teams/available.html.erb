@@ -24,7 +24,7 @@
                 <div class="box-body">
                     <div class="row">
                     <div class="col-lg-8">
-                      <% if current_user.admin?  %>
+                      <% if current_user.prof?  %>
                         <i class="fa fa-plus"></i> <%= link_to "Nova turma", new_dashboard_team_path %>
                       <% end %>
 

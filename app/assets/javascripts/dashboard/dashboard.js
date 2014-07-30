@@ -30,24 +30,42 @@ var answerShowCallback = null;
 var searchResultCallback = null;
 
 var comecei = 0;
-  $(document).ajaxSend(function(){
-    comecei +=1;
-    if(comecei == 1)
-    {
-      $("body").addClass("pace-running");
-      $("body").removeClass("pace-done");
-      $(".pace").removeClass("pace-inactive");
-      $(".pace").addClass("pace-active");
+$(document).ajaxSend(function(){
+  comecei +=1;
+  if(comecei == 1)
+  {
+    $("body").addClass("pace-running");
+    $("body").removeClass("pace-done");
+    $(".pace").removeClass("pace-inactive");
+    $(".pace").addClass("pace-active");
+  }
+});
+
+$(document).ajaxComplete(function(){
+  comecei -=1;
+  if(!comecei)
+  {
+    $("body").removeClass("pace-running");
+    $("body").addClass("pace-done");
+    $(".pace").addClass("pace-inactive");
+    $(".pace").removeClass("pace-active");
+  }
+});
+
+$(document).ready(function(){
+  $('.shorted-box').each(function(){
+    if($(this).height() > 200){
+      $(this).addClass("shorted-box-body");
+      $(this).parent().append("<a href='#' class='show-box'><div class='box-footer shorted-box-footer text-center'><b>Mostrar mais ...</b></div></a>");
     }
   });
 
-  $(document).ajaxComplete(function(){
-    comecei -=1;
-    if(!comecei)
-    {
-      $("body").removeClass("pace-running");
-      $("body").addClass("pace-done");
-      $(".pace").addClass("pace-inactive");
-      $(".pace").removeClass("pace-active");
-    }
+  $(".content").on('click',".show-box", function(ev){
+    ev.preventDefault();
+    var box = $(this).parent();
+
+    $(box).find(".shorted-box-body").removeClass("shorted-box-body");
+    $(box).find(".box-footer").remove();
   });
+
+});

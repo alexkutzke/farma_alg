@@ -2,13 +2,7 @@ class Dashboard::MessagesController < ApplicationController
   layout "dashboard"
 
   before_filter :authenticate_user!
-  before_filter :verify_admin, :except => [:index,:show]
-
-  def verify_admin
-    unless current_user.admin?
-      render :file => "public/401.html", :status => :unauthorized
-    end
-  end
+  before_filter :verify_prof, :except => [:index,:show]
 
   def get_available_users
     @available_users = []

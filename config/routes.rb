@@ -109,6 +109,9 @@ Carrie::Application.routes.draw do
   namespace :dashboard do
     get "home"
 
+    get "help"
+    get "hide_help"
+
     get "timeline"
     put "timeline_search"
 

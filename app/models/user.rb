@@ -29,8 +29,10 @@ class User
   field :name, :type => String
   field :gravatar
   field :admin, :type => Boolean, default: false
+  field :prof, :type => Boolean, default: false
   field :super_admin, :type => Boolean, default: false
   field :guest, :type => Boolean, default: false
+  field :show_help, :type => Boolean, default: true
 
   attr_accessible :id, :name, :email, :password, :password_confirmation, :remember_me, :guest
 
@@ -225,5 +227,26 @@ class User
       end
     end
     questions
+  end
+
+  def super_admin?
+    if self.super_admin
+      return true
+    end
+    return false
+  end
+
+  def admin?
+    if self.super_admin or self.admin
+      return true
+    end
+    return false
+  end
+
+  def prof?
+    if self.super_admin or self.admin or self.prof
+      return true
+    end
+    return false
   end
 end

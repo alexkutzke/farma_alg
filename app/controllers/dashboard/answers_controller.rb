@@ -31,6 +31,13 @@ class Dashboard::AnswersController < ApplicationController
       can = true
     end
 
+    if current_user.prof?
+      if current_user.id.to_s == @answer.team.owner_id.to_s
+        can = true
+      end
+    end
+    
+
     unless can
       render :file => "public/401.html", :status => :unauthorized
     end

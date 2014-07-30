@@ -2,10 +2,10 @@ class DashboardController < ApplicationController
 	layout "dashboard"
 
   before_filter :authenticate_user!
-  before_filter :verify_admin, :only =>[:graph,:graph_search,:graph_answer_info,:graph_search_result,:graph_connection_info,:graph_add_tag,:graph_new_tag,:graph_create_tag]
+  before_filter :verify_prof, :only =>[:graph,:graph_search,:graph_answer_info,:graph_search_result,:graph_connection_info,:graph_add_tag,:graph_new_tag,:graph_create_tag]
 
-  def verify_admin
-    unless current_user.admin?
+  def verify_prof
+    unless current_user.prof?
       redirect_to root_url
     end
   end
@@ -22,7 +22,7 @@ class DashboardController < ApplicationController
     @boxes = []
 		@last_messages = current_user.last_messages_to_me(4)
 
-    if current_user.admin?
+    if current_user.prof?
 			@recommendations = Recommendation.where(user_id:current_user.id.to_s).all.entries
 
 			num_students = 0
@@ -47,15 +47,20 @@ class DashboardController < ApplicationController
 			@last_answers = Answer.in(team_id: team_ids).desc(:created_at)[0..4]
 			@last_comments = Comment.in(team_id: team_ids).desc('created_at')[0..4]
 		else
+			@last_answers = Answer.where(User_id: current_user.id).desc(:created_at)[0..4]
 			last_try = current_user.last_try
 			num_wrong_answers = Answer.where(:user_id => current_user.id, :correct => false).count
 			num_correct_answers = Answer.where(:user_id => current_user.id, :correct => true).count
 			num_questions_without_tries = current_user.questions_without_tries.count
+			num_teams = current_user.teams.count
 
 			@boxes << {:color => "bg-red", :value => num_wrong_answers, :title => "Número de respostas incorretas", :has_link? => false, :icon => "fa fa-times"}
 			@boxes << {:color => "bg-green", :value => num_correct_answers, :title => "Número de respostas corretas", :has_link? => false, :icon => "fa fa-check"}
 			@boxes << {:color => "bg-orange", :value => num_questions_without_tries, :title => "Número de questões sem tentativas", :has_link? => false, :icon => "fa fa-warning"}
-			@boxes << {:color => ( last_try.correct ? "bg-green" : "bg-red"), :value => last_try.question.title.truncate(10), :title => "Última tentativa", :has_link? => true, :icon => "fa " + ( last_try.correct ? "fa-check" : "fa-times"), :link => panel_team_user_lo_question_answer_path(last_try.team_id,last_try.user_id,last_try.lo_id,last_try.question_id,last_try.id) }
+			@boxes << {:color => "bg-blue", :value => num_teams, :title => "Número de turmas matriculadas", :has_link? => false, :icon => "fa fa-book"}
+			unless last_try.nil?
+				@boxes << {:color => ( last_try.correct ? "bg-green" : "bg-red"), :value => last_try.question.title.truncate(10), :title => "Última tentativa", :has_link? => true, :icon => "fa " + (last_try.correct ? "fa-check" : "fa-times"), :link => panel_team_user_lo_question_answer_path(last_try.team_id,last_try.user_id,last_try.lo_id,last_try.question_id,last_try.id) }
+			end
     end
 	end
 
@@ -106,5 +111,13 @@ class DashboardController < ApplicationController
 
     render 'graph_search_result'
   end
+
+	def hide_help
+		current_user.show_help = false
+		current_user.save
+	end
+
+	def help
+	end
 
 end

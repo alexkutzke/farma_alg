@@ -95,7 +95,7 @@
                       <% i = 1 %>
                       <% a = Answer.find(answer_id) %>
                       <li data-id="answer_id-<%=answer_id%>">
-                        <% if current_user.admin? %>
+                        <% if current_user.prof? %>
                             <%= a.user.name + " @ " + a.question.title + " #"+ a.try_number.to_s %>
                         <% else %>
                             Resposta <%= raw i.to_s %>

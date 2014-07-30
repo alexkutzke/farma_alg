@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
   respond_to :json,:html
 
   def index
-    if current_user.admin?
+    if current_user.super_admin?
       teams = Team.where(owner_id:current_user.id).entries
       @comments = Comment.in(team_id:teams).desc('created_at')[0..9]
     else

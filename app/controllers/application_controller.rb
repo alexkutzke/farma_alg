@@ -5,8 +5,24 @@ class ApplicationController < ActionController::Base
   before_filter :get_messages
   layout :layout_to_resource
 
+  def render_401
+    render :file => "public/401.html", :status => :unauthorized
+  end
+
   def verify_admin
     unless current_user.admin?
+      render :file => "public/401.html", :status => :unauthorized
+    end
+  end
+
+  def verify_prof
+    unless current_user.prof?
+      render :file => "public/401.html", :status => :unauthorized
+    end
+  end
+
+  def verify_super_admin
+    unless current_user.super_admin?
       render :file => "public/401.html", :status => :unauthorized
     end
   end

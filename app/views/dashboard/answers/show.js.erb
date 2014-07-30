@@ -5,7 +5,7 @@ $("#answer-show").draggable({ axis: "x", scroll:false });
 $("#farmaAlgShowModals").html("");
 $(".modal").appendTo($("#farmaAlgShowModals"));
 
-<% if current_user.admin? %>
+<% if current_user.prof? %>
 // Carrega tags
 $.ajax({
   url: "/dashboard/tags/show",

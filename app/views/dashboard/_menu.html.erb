@@ -7,7 +7,7 @@
         <% end %>
     </li>
 
-<% if current_user.admin? %>
+<% if current_user.prof? %>
     <li class="<%= raw "active" if controller.class == DashboardController && controller.action_name == "graph" %>">
         <%= link_to dashboard_graph_path do %>
           <i class="fa fa-code-fork"></i> <span>Grafo de Manipulação</span>
@@ -39,7 +39,7 @@
         <% end %>
     </li>
 
-  <% if current_user.admin? %>
+  <% if current_user.prof? %>
     <li>
         <a href="/los" target="_blank"><i class="fa fa-pencil-square-o"></i> <span>Meus O.A.'s</span></a>
     </li>
@@ -65,7 +65,7 @@
             <span>Minhas Turmas</span>
             <i class="fa fa-angle-left pull-right"></i>
         </a>
-        
+
         <ul class="treeview-menu">
           <% my_teams.each do |t| %>
             <li><%= link_to t.name, panel_team_path(t.id), :style=>"margin-left:10px;" %></li>
@@ -82,7 +82,7 @@
             <span>Outras Turmas</span>
             <i class="fa fa-angle-left pull-right"></i>
         </a>
-        
+
         <ul class="treeview-menu">
           <% others.each do |t| %>
             <li>
@@ -102,12 +102,18 @@
           <span>Turmas Matriculadas</span>
           <i class="fa fa-angle-left pull-right"></i>
       </a>
-        
+
       <ul class="treeview-menu">
         <% teams.each do |t| %>
           <li><%= link_to t.name, panel_team_path(t.id), :style=>"margin-left:10px;" %></li>
         <% end %>
       </ul>
+    </li>
+
+    <li class="<%= raw "active" if controller.class == DashboardController && controller.action_name == "help" %>">
+      <%= link_to dashboard_help_path do %>
+        <i class="fa fa-question-circle"></i> Ajuda
+      <% end %>
     </li>
 
 

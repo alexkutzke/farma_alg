@@ -2,10 +2,8 @@ class Dashboard::TagsController < ApplicationController
   respond_to :json
 
   before_filter :authenticate_user!
-  before_filter :verify_admin
+  before_filter :verify_prof
 
-
-  
   # ================================================================
   # ================================================================
   # TAGS MANIPULATION
@@ -26,7 +24,7 @@ class Dashboard::TagsController < ApplicationController
       @answer.schedule_process_propagate
 
       @available_tags = @answer.available_tags
-      render :show  
+      render :show
     else
       @tag = Tag.new
       @tag.name = params[:query]
@@ -84,7 +82,7 @@ class Dashboard::TagsController < ApplicationController
     i = @answer.automatically_assigned_tags.index{ |x| x[0].to_s == @tag.id.to_s }
     @answer.automatically_assigned_tags.delete_at(i)
     @answer.rejected_tags << @tag.id.to_s
-    @answer.save!    
+    @answer.save!
     @available_tags = @answer.available_tags
     render :show
   end
