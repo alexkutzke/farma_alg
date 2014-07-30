@@ -20,6 +20,16 @@
  *= require AdminLTE/timepicker/bootstrap-timepicker.min
 */
 
+.wrapper
+{
+  background: lightgray;
+}
+
+section.content
+{
+  background: lightgray;
+}
+
 .btn-block
 {
   margin-top:5px;
@@ -221,7 +231,7 @@ box-shadow:         0px 0px 30px 0px rgba(50, 50, 50, 0.73);
 
 .timeline hr
 {
-border: 2px solid lightgray;
+border: 2px solid white;
 margin-top: 12px;
 margin-left: 33px;
 width: 50px;

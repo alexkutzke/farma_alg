@@ -1,0 +1,36 @@
+<%= simple_form_for([:dashboard,@team]) do |f|   %>
+  <% if @team.errors.any? %>
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        Não pode ser salvo devido à <%= pluralize(@team.errors.count, "erro")
+      %>:
+      </div>
+
+      <div class="panel-body">
+        <ul>
+        <% @team.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label "Nome" %><br />
+    <%= f.text_field :name,:class => "form-control input-sm" %>
+  </div>
+  <div class="form-group">
+    <%= f.label "Senha para matrícula" %><br />
+    <%= f.text_field :code,:class => "form-control input-sm"%>
+  </div>
+  <div class="form-group">
+    <%= f.association :los, collection: current_user.all_los, as: :check_boxes, label: "Objetos de Aprendizagem disponíveis para esta turma" %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Salvar", :class => "btn btn-primary" %>
+    <%= link_to dashboard_teams_available_path do %>
+      <%= button_tag "Cancelar", :type => "button", :class => "btn btn-info" %>
+    <% end %>
+  </div>
+<% end %>

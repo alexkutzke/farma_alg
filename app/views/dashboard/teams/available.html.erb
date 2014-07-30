@@ -47,7 +47,7 @@
                             <div class="input-group <%= raw "has-error" if @wrong_code_team_id == t.id %>" style="margin: 10px;">
                                     <span class="input-group-addon"><%= t.name %></span>
                                     <input type="hidden" name="team[id]" value="<%= t.id %>">
-                                    
+
                                     <% if t.owner_id != current_user.id %>
                                       <% if @wrong_code_team_id != t.id %>
                                           <% placeholder = "Senha para matrícula ..." %>
@@ -55,17 +55,17 @@
                                           <% placeholder = "Senha incorreta!" %>
                                       <% end %>
                                       <%= password_field_tag(:password,nil, :class => "form-control" , :placeholder => placeholder) %>
-                                      
+
                                       <div class="input-group-btn">
                                         <%= button_tag "Matricular-se", :type => :submit, :class => "btn btn-info" %>
                                       </div><!-- /btn-group -->
-                                      
+
                                     <% else %>
-                                      <%= link_to dashboard_team_path(t), :method => :delete, :data => {confirm: "Você tem certeza? Os alunos não terão mais acesso a esta turma, mas suas respostas ainda serão mantidas."} do %>
-                                        <div class="input-group-btn">
-                                          <%= button_tag "Apagar", :class => "btn btn-danger" %>
-                                        </div><!-- /btn-group -->
-                                      <% end %>
+                                      <div class="input-group-btn">
+                                        <%= link_to "Mostrar",panel_team_path(t), class: 'btn btn-primary' %>
+                                        <%= link_to "Editar",edit_dashboard_team_path(t), class: 'btn btn-warning' %>
+                                        <%= link_to "Apagar",dashboard_team_path(t), :class => "btn btn-danger", :method => :delete, :data => {confirm: "Você tem certeza? Os alunos não terão mais acesso a esta turma, mas suas respostas ainda serão mantidas."} %>
+                                      </div><!-- /btn-group -->
                                     <% end %>
                                 </div>
                                 <% end %>

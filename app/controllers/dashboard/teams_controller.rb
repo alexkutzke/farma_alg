@@ -1,8 +1,15 @@
 class Dashboard::TeamsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :verify_admin, :only =>[:new, :create,:destroy]
+  before_filter :verify_admin, :only =>[:new, :update, :edit, :create,:destroy]
+  before_filter :can_edit?, :only =>[:update, :edit, :destroy]
 
   layout "dashboard"
+
+  def can_edit?
+    unless current_user.lo_ids.include?(params[:id]) || current_user.admin?
+      render :file => "public/401.html", :status => :unauthorized
+    end
+  end
 
   def new
     @team = Team.new
@@ -16,6 +23,22 @@ class Dashboard::TeamsController < ApplicationController
         format.html { redirect_to dashboard_teams_available_path, notice: 'Turma criada com sucesso.' }
       else
         format.html { render action: "new" }
+      end
+    end
+  end
+
+  def edit
+    @team = Team.find(params[:id])
+  end
+
+  def update
+    @team = Team.find(params[:id])
+
+    respond_to do |format|
+      if @team.update_attributes(params[:team])
+        format.html { redirect_to panel_team_path(@team.id), notice: 'Turma atualizada com sucesso.' }
+      else
+        format.html { render action: "edit" }
       end
     end
   end

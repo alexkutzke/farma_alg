@@ -120,7 +120,7 @@ Carrie::Application.routes.draw do
     post "graph_answer_info"
     post "graph_connection_info"
 
-    resources :teams, :only => [:new,:create,:destroy] do
+    resources :teams, :only => [:new,:edit,:update,:create,:destroy] do
       post :unenroll, on: :member
     end
     namespace :teams do

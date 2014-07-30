@@ -35,7 +35,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
       <h1>
-          Turma
+          Turma - <%= @team.name %>
           <small>Analise o desempenho da sua turma</small>
       </h1>
       <ol class="breadcrumb">
@@ -51,9 +51,39 @@
           <section class="col-lg-6">
             <div class="box box-solid">
                 <div class="box-header">
-                    <h3 class="box-title">Objetos de aprendizagem já utilizados nesta turma</h3>
+                    <h3 class="box-title">Objetos de aprendizagem atualmente disponíveis para esta turma</h3>
+                    <div class="box-tools pull-right">
+                      <%= link_to edit_dashboard_team_path(@team) do %>
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Editar</button>
+                      <% end %>
+                    </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
+                  <% @team.los.each do |lo| %>
+                    <section class="well">
+                      <header class="clearfix">
+                        <div class="left">
+                          <h4><%= link_to lo.name, overview_panel_team_lo_path(@team, lo)%>
+                            <% unless @team.lo_ids.include?(lo.id) %>
+                              <span class="date-info">(atualmente não disponível para os alunos)</span>
+                            <% end %>
+                          </h4>
+                        </div>
+                      </header>
+                    </section>
+
+                  <% end %>
+              </div>
+            </div>
+
+            <div class="box box-solid collapsed-box">
+                <div class="box-header">
+                    <h3 class="box-title">Objetos de aprendizagem já utilizados nesta turma</h3>
+                    <div class="box-tools pull-right">
+                      <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body" style="display:none;">
                   <% @los.each do |lo| %>
                     <section class="well">
                       <header class="clearfix">
