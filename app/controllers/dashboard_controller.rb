@@ -66,6 +66,7 @@ class DashboardController < ApplicationController
   def timeline_search
     @as = Answer.search(params,current_user).entries
     @timeline_items = Answer.make_timeline(@as)
+		@params =params
 
     render 'timeline_search_result'
   end
@@ -81,6 +82,7 @@ class DashboardController < ApplicationController
   def tags_search
     @as = Answer.search(params,current_user)
     @as_aat = Answer.search_aat(params,current_user)
+		@params =params
 
     render 'tags_search_result'
   end
@@ -89,6 +91,7 @@ class DashboardController < ApplicationController
     @as = Answer.search(params,current_user)
     @button_add = true
     @button_add = false unless params.has_key?(:button_add)
+		@params =params
 
     render 'search_result'
   end
@@ -99,6 +102,7 @@ class DashboardController < ApplicationController
 
   def graph_search
     @as = Answer.search(params,current_user)
+		@params =params
 
     render 'graph_search_result'
   end

@@ -26,8 +26,8 @@
 //= require_self
 
 
-answerShowCallback = null;
-searchResultCallback = null;
+var answerShowCallback = null;
+var searchResultCallback = null;
 
 var comecei = 0;
   $(document).ajaxSend(function(){

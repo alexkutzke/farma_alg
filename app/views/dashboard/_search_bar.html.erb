@@ -1,7 +1,13 @@
 <%= content_for :scripts do %>
   <%= javascript_include_tag 'dashboard/search' %>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      resizeApp();
+    });
+  </script>
 <% end %>
-            
+
 <%= form_tag path, :remote => true, :method => :put, :id => form_id, :class => "search-bar" do %>
     <div class="row" style="margin-right: -17px;">
         <div class="col-md-12">

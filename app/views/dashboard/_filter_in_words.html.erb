@@ -1,0 +1,55 @@
+<p>
+<% if params.has_key?(:query) and not params[:query].empty? %>
+  <b>Palavra-chave:</b>
+    "<%= params[:query] %>";
+<% end %>
+
+<% if params.has_key?(:daterange) and not params[:daterange].empty? %>
+  <% start_date = DateTime.strptime(params[:daterange].split(" - ").first,"%d/%m/%Y %H:%M").change(:offset => "-0300")  %>
+  <% end_date = DateTime.strptime(params[:daterange].split(" - ").last,"%d/%m/%Y %H:%M").change(:offset => "-0300") %>
+<b>Data início: </b>
+    <%= start_date %>
+<b>Data final: </b>
+    <%= end_date %>;
+<% end %>
+
+<% if params.has_key?(:user_ids) %>
+  <b>Usuários: </b> [
+  <% User.find(params[:user_ids]).each do |u| %>
+    "<%= u.name %>",
+  <% end %>
+  ];
+<% end %>
+
+<% if params.has_key?(:team_ids) %>
+  <b>Turmas: </b> [
+    <% Team.find(params[:team_ids]).each do |t| %>
+    "<%= t.name %>",
+    <% end %>
+    ];
+<% end %>
+
+<% if params.has_key?(:lo_ids) %>
+<b>O.A.'s: </b> [
+  <% Lo.find(params[:lo_ids]).each do |lo| %>
+  "<%= lo.name %>",
+  <% end %>
+  ];
+<% end %>
+
+<% if params.has_key?(:question_ids) %>
+  <b>Questões: </b> [
+    <% Question.find(params[:question_ids]).each do |q| %>
+    "<%= q.title %>",
+    <% end %>
+    ];
+<% end %>
+
+<% if params.has_key?(:tag_ids) %>
+  <b>Categorias: </b> [
+    <% Tag.find(params[:tag_ids]).each do |t| %>
+    "<%= t.name %>",
+    <% end %>
+    ];
+<% end %>
+</p>

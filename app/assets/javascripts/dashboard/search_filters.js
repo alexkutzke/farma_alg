@@ -1,10 +1,10 @@
 function correctFiltersPosition(){
   if(! $(".right-side-body").hasClass("open")){
-    $(".right-side-body").animate({right: -$(".right-side-body").width()-2},500); 
+    $(".right-side-body").animate({right: -$(".right-side-body").width()-2},500);
     $(".right-side-button").css("right",0);
   }
   else{
-    $(".right-side-body").animate({right: 0},500); 
+    $(".right-side-body").animate({right: 0},500);
     $(".right-side-button").css("right",$(".right-side-body").width());
   }
 }
@@ -24,8 +24,8 @@ $(document).ready(function(){
                   monthNames: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
                   firstDay: 0
               },
-              timePicker: true, 
-              timePickerIncrement: 10, 
+              timePicker: true,
+              timePickerIncrement: 10,
               format: 'DD/MM/YYYY HH:mm',
               ranges: {
                   'Hoje': [moment().startOf('day'), moment().endOf('day')],
@@ -49,12 +49,12 @@ $(document).ready(function(){
     ev.preventDefault();
     if(! $(".right-side-body").hasClass("open")){
       $(".right-side-body").addClass("open")
-      $(".right-side-body").animate({right: 0},500); 
+      $(".right-side-body").animate({right: 0},500);
       $(".right-side-button").css("right",$(".right-side-body").width());
     }
     else{
       $(".right-side-body").removeClass("open")
-      $(".right-side-body").animate({right: -$(".right-side-body").width()-2},500); 
+      $(".right-side-body").animate({right: -$(".right-side-body").width()-2},500);
       $(".right-side-button").css("right",0);
     }
   });
@@ -73,8 +73,62 @@ $(document).ready(function(){
   $("#filters").on("click","#filters-close-btn",function(){
     if($(".right-side-body").hasClass("open")){
       $(".right-side-body").removeClass("open")
-      $(".right-side-body").animate({right: -$(".right-side-body").width()-2},500); 
+      $(".right-side-body").animate({right: -$(".right-side-body").width()-2},500);
       $(".right-side-button").css("right",0);
     }
   });
 });
+
+
+var trapScroll;
+
+(function($){
+
+trapScroll = function(opt){
+
+var trapElement;
+var scrollableDist;
+var trapClassName = 'trapScroll-enabled';
+var trapSelector = '.trapScroll';
+
+
+var trapWheel = function(e){
+
+  if (!$('body').hasClass(trapClassName)) return;
+  else {
+    var curScrollPos = trapElement.scrollTop();
+    var wheelEvent = e.originalEvent;
+    var dY = wheelEvent.deltaY;
+
+    // only trap events once we've scrolled to the end
+    // or beginning
+    if ((dY>0 && curScrollPos >= scrollableDist) ||
+        (dY<0 && curScrollPos <= 0)) {
+
+      opt.onScrollEnd();
+      return false;
+    }
+  }
+}
+
+$(document)
+  .on('wheel', trapWheel)
+  .on('mouseleave', trapSelector, function(){
+
+    $('body').removeClass(trapClassName);
+  })
+  .on('mouseenter', trapSelector, function(){
+    trapElement = $(this);
+    var containerHeight = trapElement.outerHeight();
+    var contentHeight = trapElement[0].scrollHeight; // height of scrollable content
+    scrollableDist = contentHeight - containerHeight;
+
+    if (contentHeight>containerHeight)
+      $('body').addClass(trapClassName);
+  });
+}
+})($);
+
+$(document).ready(function(){
+    trapScroll({ onScrollEnd: function(){} });
+})

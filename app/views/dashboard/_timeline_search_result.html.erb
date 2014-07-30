@@ -1,6 +1,7 @@
 <div class="row">
   <div id="search-result-count" class="col-md-12 text-center" style="margin-bottom:20px;">
     <%= as.count %> respostas encontradas.
+    <%= filter_in_words(@params) %>
   </div>
 </div>
 <div class="row">
@@ -37,16 +38,16 @@
               <img src="http://www.gravatar.com/avatar/<%= a.user.gravatar %>?s=35" class="img-circle" alt="Imagem do Usuário" /> <%= a.user.name %> - <%= a.question.title %> - <%= a.team.name %> - <%= a.lo.name %>
             </h4>
 
-            
+
 
             </div>
                         <!--
             <div class='timeline-footer'>
-              
+
             </div>-->
         </div>
     </li>
-  
+
 
   <% when "comparison" %>
     <!-- /.timeline-label -->
@@ -57,7 +58,7 @@
           <i class="comparison fa fa-arrows-v bg-orange"></i>
 
         <div class="time-btn time-comparison timeline-item connection-btn" data-id="<%= item[1][2].id %>">
-            
+
             <div class="timeline-body">
             <h4>
               Respostas similares.
@@ -70,8 +71,8 @@
     </li>
 
   <% end %>
-              
-              
+
+
 <% end %>
 
 <li>

@@ -68,7 +68,7 @@ class User
 
   def all_teams
     if self.admin?
-      Team.all
+      Team.all.asc(:name)
     else
       teams = Team.where(owner_id: self.id).asc('name') + self.teams.asc('name')
     end
@@ -76,7 +76,7 @@ class User
 
   def all_questions
     if self.admin?
-      Question.all
+      Question.all.asc(:title)
     else
       answered_questions = Answer.where(user_id:self.id).desc("question_id").distinct("question_id")
       questions = []
@@ -92,13 +92,13 @@ class User
       end
 
       questions = questions + Question.find(question_ids)
-      questions.uniq{|x| x.id}
+      questions.uniq{|x| x.id}.sort_by{:title}
     end
   end
 
   def all_los
     if self.admin?
-      Lo.all
+      Lo.all.asc(:name)
     else
       los = Array.new
       for team in self.all_teams do
@@ -110,28 +110,28 @@ class User
         end
       end
 
-      los.uniq{|x| x.id}
+      los.uniq{|x| x.id}.sort_by{:name}
     end
   end
 
   def all_students
     if self.admin?
-      User.all
+      User.all.asc(:name)
     else
       users = [self]
       for team in Team.where(owner_id: self.id).asc('name') do
         users = users + team.users
       end
 
-      users.uniq{|x| x.id}
+      users.uniq{|x| x.id}.sort_by{:name}
     end
   end
 
   def all_tags
     if self.admin?
-      Tag.all
+      Tag.all.asc(:name)
     else
-      self.tags
+      self.tags.asc(:name)
     end
   end
 

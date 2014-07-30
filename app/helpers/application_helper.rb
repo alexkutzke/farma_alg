@@ -43,6 +43,9 @@ module ApplicationHelper
     render(:partial => 'dashboard/pie_chart', :locals => {:data => data, :title => title})
   end
 
+  def filter_in_words(params)
+    render(:partial => 'dashboard/filter_in_words', :locals => {:params => params})
+  end
 
   def test_case_title(id)
     t = TestCase.find_or_initialize_by({:id => id})
