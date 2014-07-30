@@ -33,7 +33,7 @@ class Newapi::AnswersController < ApplicationController
 		if current_user.admin?
 			@answers = Answer.find(params[:answer_ids])
 		else
-			@answers = Answer.find(params[:answer_ids]).where('team.owner_id' => current_user.id.to_s)
+			@answers = Answer.in(_id:params[:answer_ids]).where('team.owner_id' => current_user.id)
 		end
 	end
 
@@ -41,7 +41,7 @@ class Newapi::AnswersController < ApplicationController
 		if current_user.admin?
 			@answers = Answer.find(Answer.find(params[:id]).connected_component)
 		else
-			@answers = Answer.find(Answer.find(params[:id]).connected_component).where('team.owner_id' => current_user.id.to_s)
+			@answers = Answer.in(_id: Answer.find(params[:id]).connected_component).where('team.owner_id' => current_user.id)
 		end
 		render "group"
 	end
@@ -50,7 +50,7 @@ class Newapi::AnswersController < ApplicationController
 		if current_user.admin?
 			@answers = Answer.find(Answer.find(params[:id]).similar_answers)
 		else
-			@answers = Answer.find(Answer.find(params[:id]).similar_answers).where('team.owner_id' => current_user.id.to_s)
+			@answers = Answer.in(_id: Answer.find(params[:id]).similar_answers).where('team.owner_id' => current_user.id)
 		end
 		render "group"
 	end

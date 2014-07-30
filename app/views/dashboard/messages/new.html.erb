@@ -58,13 +58,18 @@
     <div class="row">
         <div class="col-md-12">
 
+<div class="box box-solid">
+  <div class="box-header">
+      <h3 class="box-title">Nova mensagem</h3>
+  </div>
+  <div class="box-body">
           <%= form_tag @path, :method => @method, :id => "message-form" do %>
             <% if @message.errors.any? %>
               <div class="panel panel-danger">
                 <div class="panel-heading">
                   Não pode ser salvo devido à <%= pluralize(@message.errors.count, "erro")%>:
                 </div>
-        
+
                 <div class="panel-body">
                   <ul>
                   <% @message.errors.messages.each do |msg| %>
@@ -87,7 +92,7 @@
                     <% @message.user_ids.each do |user_id| %>
                       <li data-id="user_id-<%=user_id%>"><%= User.find(user_id).name %> <span class='label label-danger remove-item' style='cursor:pointer;'><i class='fa fa-times'></i></span></li>
                       <input type="hidden" name="message[user_ids][]" value="<%= user_id %>" form="message-form" id="user_id-<%= user_id %>">
-                    <% end %>  
+                    <% end %>
                   <% end %>
                   <% unless @message.team_ids.nil? %>
                     <% @message.team_ids.each do |team_id| %>
@@ -105,12 +110,12 @@
                     <% @message.answer_ids.each do |answer_id| %>
                       <% a = Answer.find(answer_id) %>
                       <li data-id="answer_id-<%=answer_id%>">
-                        <%= a.user.name + " @ " + a.question.title + " #"+ a.try_number.to_s %> 
+                        <%= a.user.name + " @ " + a.question.title + " #"+ a.try_number.to_s %>
                         <span class='label label-danger remove-item' style='cursor:pointer;'><i class='fa fa-times'></i></span>
                         <span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a.id %>"><i class='fa fa-eye'></i></span>
                       </li>
                       <input type="hidden" name="message[answer_ids][]" value="<%= answer_id %>" form="message-form" id="answer_id-<%= answer_id %>">
-                    <% end %>  
+                    <% end %>
                   <% end %>
               </ul>
             </div>
@@ -130,8 +135,7 @@
               <button id="open-questions-btn" class="btn btn-info btn-sm"><i class="fa fa-plus"></i> Adicionar questões</button>
             </div>
           <% end %>
-        </div>
-    </div>
+
 
     <div id="add-answers" class="row row_inner_shadow top_bottom_borders">
       <div style="margin-bottom:20px; margin-top:20px" class="col-md-10 col-md-offset-1">
@@ -192,10 +196,11 @@
             <div class="form-group">
               <%= label_tag "Mensagem" %><br />
               <%= text_area_tag "message[content]", @message.content, :class => "form-control input", :placeholder => "Mensagem para os alunos ...", :rows => "8", :form => "message-form" %>
-            </div> 
+            </div>
             <div class="form-group">
               <%= button_tag "Enviar", :type => :submit, :class => "btn btm-sm btn-primary", :form => "message-form" %>
             </div>
       </div>
     </div>
+  </div></div>
 </section>

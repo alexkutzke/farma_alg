@@ -58,7 +58,7 @@
                       <% end %>
                     </div>
                 </div><!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body shorted-box">
                   <% @team.los.each do |lo| %>
                     <section class="well">
                       <header class="clearfix">
@@ -105,7 +105,7 @@
                 <div class="box-header">
                     <h3 class="box-title">Últimas respostas nesta turma</h3>
                 </div><!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body shorted-box">
                   <% @answers.each do |a| %>
                     <%= answer_link(a) %>
                   <% end %>
@@ -123,7 +123,7 @@
                 <div class="box-header">
                     <h3 class="box-title">Alunos matriculados nesta turma</h3>
                 </div><!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body shorted-box">
                   <table class="table table-hover table-bordered">
                     <tr>
                       <th>Nome</th>

@@ -368,6 +368,23 @@ function getLinksSuccess(data)
   }
 }
 
+function  removeEdges(data){
+
+  graph.forEachLink(function(link){
+    if(link.data.id == data[0].id)
+    {
+      graph.removeLink(link);
+    }
+  });
+
+  graph.forEachLink(function(link){
+    if(link.data.id == data[1].id )
+    {
+      graph.removeLink(link);
+    }
+  });
+}
+
 function addAnswer(id)
 {
   getAnswer(id,defaultBeforeSend,getAnswerSuccess);

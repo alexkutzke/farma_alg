@@ -22,19 +22,20 @@
 
     <div class="row">
         <div class="col-md-12">
+          <div class="box box-solid">
+            <div class="box-header">
+                <h3 class="box-title">Mensagens enviadas por mim</h3>
+            </div>
+            <div class="box-body">
 
             <%= link_to new_dashboard_message_path do %>
                 <%= button_tag raw("<i class='fa fa-plus'></i> Nova mensagem"), :class => "btn btn-sm btn-primary" %>
             <% end %>
 
-            <h3>Mensagens enviadas por mim</h3>
-
-            <table class="table">
+            <table class="table" style="margin-top:10px;">
                 <tr>
                     <th>Assunto</th>
                     <th>Mensagem</th>
-                    <th></th>
-                    <th></th>
                     <th></th>
                 </tr>
 
@@ -51,29 +52,35 @@
                         </td>
                         <td><%= truncate(m.content) %></td>
                         <td>
+                          <div class="btn-group">
                             <%= link_to dashboard_message_path(m) do %>
                                 <%= button_tag "Ver", :class => "btn btn-sm btn-success" %>
                             <% end %>
-                        </td>
-                        <td>
+
                             <%= link_to edit_dashboard_message_path(m) do %>
                                 <%= button_tag "Editar", :class => "btn btn-sm btn-info" %>
                             <% end %>
-                        </td>
-                        <td>
                             <%= link_to dashboard_message_path(m), method: :delete,data: { confirm: 'Você tem certeza que deseja apagar esta mensagem?'} do %>
                                 <%= button_tag "Apagar", :class => "btn btn-sm btn-danger" %>
                             <% end %>
-                        </td>
+                        </div>
+                      </td>
                     </tr>
                 <% end %>
             </table>
         </div>
     </div>
+  </div>
+</div>
     <% end %>
     <div class="row">
         <div class="col-md-12">
-            <h3>Mensagens enviadas para mim</h3>
+          <div class="box box-solid">
+            <div class="box-header">
+                <h3 class="box-title">Mensagens enviadas para mim</h3>
+            </div>
+            <div class="box-body">
+
 
             <table class="table">
                 <tr>
@@ -102,5 +109,5 @@
                 <% end %>
             </table>
         </div>
-    </div>
+    </div></div></div>
 </section>

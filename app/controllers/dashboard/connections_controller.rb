@@ -21,13 +21,13 @@ class Dashboard::ConnectionsController < ApplicationController
     end
 
     if current_user.prof?
-      if @answer1.team.owner_id.to_s == current_user.id.to_s && @answer2.team.owner_id.to_s == current_user.i.to_s
+      if @answer1.team.owner_id.to_s == current_user.id.to_s && @answer2.team.owner_id.to_s == current_user.id.to_s
         can = true
-      end 
+      end
     end
 
     unless can
-      render :file => "public/401.html", :status => :unauthorized
+      render_401
     end
   end
 

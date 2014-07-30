@@ -365,6 +365,9 @@
           </section>
 
           <section class="col-lg-6">
+            <% if current_user.prof? %>
+
+
             <div class="box box-info">
                 <div class="box-header">
                     <h3 class="box-title">Tags para esta resposta</h3>
@@ -380,7 +383,7 @@
                   </div>
                 </div>
             </div>
-
+<% end %>
             <div class="box box-info">
                 <div class="box-header">
                     <h3 class="box-title">Resultado para casos de teste</h3>

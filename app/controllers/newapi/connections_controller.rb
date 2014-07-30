@@ -28,6 +28,8 @@ class Newapi::ConnectionsController < ApplicationController
 	end
 
   def accept_connection
+		@connection = Connection.find(params[:id])
+
 		a = Answer.find(@connection.answer_id)
 		b = Answer.find(@connection.target_answer_id)
 
@@ -39,7 +41,7 @@ class Newapi::ConnectionsController < ApplicationController
 			end
 		end
 
-    @connection = Connection.find(params[:id])
+
     @connection.weight = 1.0
     @connection.confirmed = true
     @connection.save!
@@ -52,6 +54,8 @@ class Newapi::ConnectionsController < ApplicationController
   end
 
   def reject_connection
+    @connection = Connection.find(params[:id])
+    @connection2 = Connection.find_or_initialize_by(target_answer_id:@connection.answer_id, answer_id:@connection.target_answer_id)
 
     a = Answer.find(@connection.answer_id)
     b = Answer.find(@connection.target_answer_id)
@@ -64,14 +68,10 @@ class Newapi::ConnectionsController < ApplicationController
 			end
 		end
 
-
-    @connection = Connection.find(params[:id])
-    @connection2 = Connection.find_or_initialize_by(target_answer_id:@connection.answer_id, answer_id:@connection.target_answer_id)
+		@connections = [@connection,@connection2]
 
     @connection.delete
     @connection2.delete
-
-    @connections = [@connection,@connection2]
 
     aat_a = a.automatically_assigned_tags
     while not (i = aat_a.index{ |x| x[2].to_s == b.id.to_s }).nil?

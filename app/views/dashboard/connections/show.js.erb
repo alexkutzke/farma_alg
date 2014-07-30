@@ -25,12 +25,9 @@ $("div.output").each(function(){
 
 function confirmRejectEdge(data){
   if(graph){
-    graph.forEachLink(function(link){
-      if(link.data.id == data[0].id || link.data.id == data[1].id )
-      {
-        graph.removeLink(link);
-      }
-    });
+
+      removeEdges(data);
+    
   }
   else{
     $(".time-comparison[data-id='<%= @connection.id %>']").parent().fadeOut(function(){

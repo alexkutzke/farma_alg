@@ -112,6 +112,10 @@ class User
         end
       end
 
+      if self.prof?
+        los += self.los
+      end
+
       los.uniq{|x| x.id}.sort_by{:name}
     end
   end
@@ -159,7 +163,7 @@ class User
         for i in 0..lo.exercises.length-1 do
           e = lo.exercises[i]
           if e.question_ids.include?(q.id)
-            return "/published/teams/#{t.id}/los/#{lo.id}/pages/#{i+1}"
+            return "/published/teams/#{t.id}/los/#{lo.id}/pages/#{i+1+lo.introductions.count}"
           end
         end
       end
