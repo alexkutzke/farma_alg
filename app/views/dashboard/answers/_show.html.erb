@@ -131,7 +131,20 @@
               <h4 class="modal-title" id="myModalLabel">Resposta</h4>
             </div>
             <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
-              <pre class="prettyprint lang-pascal" style="width:100%;overflow:scroll;margin:auto;"><%= @answer.response %></pre>
+              <% i=1 %>
+              <% resp = "" %>
+              <% lines = @answer.response.lines %>
+              <% n = lines.count %>
+              <% y = 1 %>
+              <% while n / 10 > 0 do %>
+                <% y += 1 %>
+                <% n = n / 10 %>
+              <% end %>
+              <% lines.each  do |x| %>
+                <% resp += i.to_s.rjust(y, "0") + ". " + x.to_s %>
+                <% i+=1 %>
+              <% end %>
+              <pre class="prettyprint lang-pascal" style="width:100%;overflow:scroll;margin:auto;"><%= resp %></pre>
             </div>
           </div>
         </div>

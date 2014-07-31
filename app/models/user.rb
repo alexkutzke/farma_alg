@@ -102,7 +102,7 @@ class User
       end
 
       questions = questions + Question.find(question_ids)
-      questions.uniq{|x| x.id}.sort_by{:title}
+      questions.uniq{|x| x.id}.sort_by{|x| x.title}
     end
   end
 
