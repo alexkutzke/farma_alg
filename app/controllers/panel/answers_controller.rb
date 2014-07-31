@@ -10,21 +10,26 @@ class Panel::AnswersController < ApplicationController
 		@question = Question.find(params[:question_id])
 		@answer = Answer.find(params[:id])
 
-		if current_user.student?
-			unless current_user.team_ids.include?(@team.id)
-				render_401
-			end
-			unless current_user.team_ids.include?(@team.id)
-				render_401
-			end
-			unless current_user.id == @answer.user_id
-				render_401
-			end
-		end
 
 		if current_user.prof? && (not current_user.admin?)
 			unless current_user.all_team_ids.include?(@answer.team_id)
 				render_401
+				return false
+			end
+		end
+
+		unless current_user.prof?
+			unless current_user.team_ids.include?(@team.id)
+				render_401
+				return false
+			end
+			unless current_user.team_ids.include?(@team.id)
+				render_401
+				return false
+			end
+			unless current_user.id == @answer.user_id
+				render_401
+				return false
 			end
 		end
 
