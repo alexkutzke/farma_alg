@@ -481,7 +481,7 @@ class Answer
 
     best.reverse!
 
-    if user.student?
+    if user.student? && (not current_user.admin?)
       best[0..n-1].keep_if { |a| a.user_id == user.id }
     else
       best[0..n-1]
