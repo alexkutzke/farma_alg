@@ -1,3 +1,5 @@
+
+<% unless answer.team_id.nil? %>
 <% if answer.correct %>
   <div class="callout callout-info">
 <% else %>
@@ -10,10 +12,11 @@
       <span class='label label-default connection-btn' style='cursor:pointer;' data-id="<%= c.id %>"> <i class='fa fa-link'></i></span>
     <% end %>
     <br><small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words answer.updated_at %></small>
-    
+
   </h4>
   <%= answer_labels(answer) %>
   <% unless c.nil? %>
     <%= render_progress(c.weight,"% de similaridade") %>
   <% end %>
 </div>
+<% end %>
