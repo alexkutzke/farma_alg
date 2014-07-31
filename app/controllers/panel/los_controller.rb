@@ -7,6 +7,21 @@ class Panel::LosController < ApplicationController
 		@team = Team.find(params[:team_id])
 		@user = User.find(params[:user_id])
 		@lo = Lo.find(params[:id])
+
+		if current_user.student?
+			unless current_user.team_ids.include?(@team.id)
+				render_401
+			end
+			unless current_user.id == @user.id
+				render_401
+			end
+		end
+
+		if current_user.prof? && (not current_user.admin?)
+			unless current_user.all_team_ids.include?(@team.id)
+				render_401
+			end
+		end
 	end
 
 	def show
@@ -31,7 +46,7 @@ class Panel::LosController < ApplicationController
   def overview
     @team = Team.find(params[:team_id])
     @lo = Lo.find(params[:id])
-    @exercises = @lo.exercises    
+    @exercises = @lo.exercises
 
     if not current_user.admin? and @team.owner_id != current_user.id
       redirect_to panel_index_path

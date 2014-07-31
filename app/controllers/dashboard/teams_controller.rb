@@ -7,7 +7,7 @@ class Dashboard::TeamsController < ApplicationController
 
   def can_edit?
     unless current_user.id.to_s == Team.find(params[:id]).owner_id.to_s || current_user.admin?
-      render :file => "public/401.html", :status => :unauthorized
+      render_401
     end
   end
 

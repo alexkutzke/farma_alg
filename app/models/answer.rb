@@ -17,7 +17,7 @@ class Answer
   field :changed_correctness_reason
   field :correct, type: Boolean
   field :results, type: Hash
-  field :for_test, type: Boolean
+  field :for_test, type: Boolean, default: false
   field :retroaction, type: Boolean, default: false
   field :compile_errors
   field :try_number, type: Integer
@@ -492,12 +492,16 @@ class Answer
 private
 
   def register_last_answer
+    puts "------------------------------------------------------------1"
     unless self.for_test
+      puts "------------------------------------------------------------2"
       la = LastAnswer.find_or_create_by(:user_id => self.user.id, :question_id => self.question.id)
       la.answer = self
-      la.question = self.question
-      la.user = self.user
+      la.question_id = self.question_id
+      la.user_id = self.user_id
       la.save!
+      puts "------------------------------------------------------------3"
+      puts la
     end
   end
 

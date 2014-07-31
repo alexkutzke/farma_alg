@@ -9,6 +9,25 @@ class Panel::AnswersController < ApplicationController
 		@lo = Lo.find(params[:lo_id])
 		@question = Question.find(params[:question_id])
 		@answer = Answer.find(params[:id])
+
+		if current_user.student?
+			unless current_user.team_ids.include?(@team.id)
+				render_401
+			end
+			unless current_user.team_ids.include?(@team.id)
+				render_401
+			end
+			unless current_user.id == @answer.user_id
+				render_401
+			end
+		end
+
+		if current_user.prof? && (not current_user.admin?)
+			unless current_user.all_team_ids.include?(@answer.team_id)
+				render_401
+			end
+		end
+
 	end
 
 	def show
@@ -24,7 +43,7 @@ class Panel::AnswersController < ApplicationController
       options = {:hard_wrap => true, :filter_html => true, :autolink => true,
                :no_intraemphasis => true, :fenced_code => true, :gh_blockcode => true}
       markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, options)
-      @answer.changed_correctness_reason = markdown.render(params[:answer][:changed_correctness_reason]).html_safe.gsub(/"/,'&quot').gsub(/\n/,'') 
+      @answer.changed_correctness_reason = markdown.render(params[:answer][:changed_correctness_reason]).html_safe.gsub(/"/,'&quot').gsub(/\n/,'')
       if @answer.correct
         @answer.correct = false
       else

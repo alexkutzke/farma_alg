@@ -47,7 +47,7 @@ class DashboardController < ApplicationController
 			@last_answers = Answer.in(team_id: team_ids).desc(:created_at)[0..4]
 			@last_comments = Comment.in(team_id: team_ids).desc('created_at')[0..4]
 		else
-			@last_answers = Answer.where(User_id: current_user.id).desc(:created_at)[0..4]
+			@last_answers = Answer.where(user_id: current_user.id).desc(:created_at)[0..4]
 			last_try = current_user.last_try
 			num_wrong_answers = Answer.where(:user_id => current_user.id, :correct => false).count
 			num_correct_answers = Answer.where(:user_id => current_user.id, :correct => true).count
@@ -62,6 +62,8 @@ class DashboardController < ApplicationController
 				@boxes << {:color => ( last_try.correct ? "bg-green" : "bg-red"), :value => last_try.question.title.truncate(10), :title => "Última tentativa", :has_link? => true, :icon => "fa " + (last_try.correct ? "fa-check" : "fa-times"), :link => panel_team_user_lo_question_answer_path(last_try.team_id,last_try.user_id,last_try.lo_id,last_try.question_id,last_try.id) }
 			end
     end
+
+		@boxes.shuffle!
 	end
 
   def timeline

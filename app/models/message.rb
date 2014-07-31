@@ -5,6 +5,7 @@ class Message
 
   field :subject
   field :content
+  field :new_flag_user_id, type: Boolean, default: false
   field :target_user_ids, type: Array
   field :user_ids, type: Array
   field :new_flag_user_ids, type: Array
@@ -20,7 +21,7 @@ class Message
   has_many :replies, dependent: :delete
 
   def has_recommendation?
-    ((not self.answer_ids.nil?) and (not self.answer_ids.empty?)) || ((not self.question_ids.nil?) and (not self.question_ids.empty?)) 
+    ((not self.answer_ids.nil?) and (not self.answer_ids.empty?)) || ((not self.question_ids.nil?) and (not self.question_ids.empty?))
   end
 
   def can_post?(user)

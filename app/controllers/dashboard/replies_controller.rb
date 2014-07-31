@@ -12,13 +12,13 @@ class Dashboard::RepliesController < ApplicationController
 
   def can_post
     if (not @message.user_id == current_user.id) and (not @message.target_user_ids.include?(current_user.id.to_s))
-      render :file => "public/401.html", :status => :unauthorized
+      render_401
     end
   end
 
   def can_delete
-    if (not @message.user_id == current_user.id)
-      render :file => "public/401.html", :status => :unauthorized
+    unless @message.user_id == current_user.id
+      render_401
     end
   end
 

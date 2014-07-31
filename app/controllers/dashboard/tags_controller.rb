@@ -4,6 +4,14 @@ class Dashboard::TagsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :verify_prof
 
+  def verify_answer(a)
+    if params.has_key?(:answer_id)
+      unless current_user.all_team_ids.include?(Answer.find(params[:answer_id]).team_id)
+        render_401
+      end
+    end
+  end
+
   # ================================================================
   # ================================================================
   # TAGS MANIPULATION

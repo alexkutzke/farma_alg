@@ -38,6 +38,9 @@ class Dashboard::MessagesController < ApplicationController
   def show
     @message = Message.find(params[:id])
     @message.new_flag_user_ids.delete(current_user.id.to_s)
+    if current_user.id == @message.user.id
+      @message.new_flag_user_id = false
+    end
     @message.save!
     @reply = Reply.new
     get_messages

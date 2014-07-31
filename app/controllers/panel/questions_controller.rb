@@ -8,6 +8,21 @@ class Panel::QuestionsController < ApplicationController
 		@user = User.find(params[:user_id])
 		@lo = Lo.find(params[:lo_id])
 		@question = Question.find(params[:id])
+
+		if current_user.student?
+			unless current_user.team_ids.include?(@team.id)
+				render_401
+			end
+			unless current_user.id == @user.id
+				render_401
+			end
+		end
+
+		if current_user.prof? && (not current_user.admin?)
+			unless current_user.all_team_ids.include?(@team.id)
+				render_401
+			end
+		end
 	end
 
 	def show

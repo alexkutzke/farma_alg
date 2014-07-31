@@ -11,6 +11,18 @@ class Panel::TeamsController < ApplicationController
     else
       @los = Lo.find(lo_ids) | @team.los
     end
+		
+		if current_user.student?
+			unless current_user.team_ids.include?(@team.id)
+				render_401
+			end
+		end
+
+		if current_user.prof? && (not current_user.admin?)
+			unless current_user.all_team_ids.include?(@team.id)
+				render_401
+			end
+		end
 	end
 
 	def show

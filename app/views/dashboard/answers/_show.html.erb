@@ -93,12 +93,13 @@
         Vizualizar resposta
       </button>
 
+    <% unless answer.filter_names %>
       <%= link_to panel_team_user_lo_question_answer_path(answer.team_id,answer.user_id,answer.lo_id,answer.question_id,answer.id), :target => "_blank"  do %>
         <button class="btn btn-info btn-block">
           Mais detalhes
         </button>
       <% end %>
-
+    <% end %>
       <% if current_user.prof? %>
         <% if not answer.from_graph %>
           <%= link_to dashboard_graph_path + "?connected_component=" + answer.id.to_s, :target => "_blank" do %>

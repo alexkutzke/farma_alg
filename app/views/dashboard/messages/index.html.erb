@@ -73,7 +73,7 @@
                             <% if m.has_recommendation? %>
                                 <span><i class="fa fa-paperclip"></i> </span>
                             <% end %>
-                            <% if m.new_flag_user_ids.include?(current_user.id.to_s) %>
+                            <% if m.new_flag_user_id %>
                                 <small class="badge bg-green">nova</small>
                             <% end %>
                             <%= truncate(m.subject) %>

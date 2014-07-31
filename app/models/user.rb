@@ -150,7 +150,7 @@ class User
   end
 
   def number_of_new_messages
-    Message.any_of(:new_flag_user_ids => self.id.to_s).count
+    Message.any_of(:new_flag_user_ids => self.id.to_s).count + self.messages.keep_if {|x| x['new_flag_user_id'] }.count
   end
 
   def messages_to_me
@@ -158,11 +158,12 @@ class User
   end
 
   def last_messages_to_me(n)
-    @messages = Message.any_of(:target_user_ids => self.id.to_s).desc(:updated_at)[0..n]
+    @messages = Message.any_of(:target_user_ids => self.id.to_s).desc(:updated_at).to_a + self.messages.keep_if {|x| x['new_flag_user_id'] }
+    @messages.sort { |x,y| y.updated_at <=> x.updated_at}
   end
 
   def is_message_new?(m)
-    m.new_flag_user_ids.include?(self.id.to_s)
+    m.new_flag_user_ids.include?(self.id.to_s) || (m.user_id.to_s == self.id.to_s && m.new_flag_user_id)
   end
 
   def link_to_question(q)
