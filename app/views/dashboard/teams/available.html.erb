@@ -25,14 +25,35 @@
                     <div class="row">
                     <div class="col-lg-8">
                       <% if current_user.prof?  %>
-                        <i class="fa fa-plus"></i> <%= link_to "Nova turma", new_dashboard_team_path %>
+                        <%= link_to new_dashboard_team_path, class: "btn btn-primary" do %>
+                          <i class="fa fa-plus"></i> Nova turma
+                        <% end %>
+                        <% @teams.sort_by{|x|x.name}.each do |t| %>
+                            <% if t.owner_id == current_user.id %>
+
+                            <div class="input-group" style="margin: 10px;">
+                              <span class="input-group-addon"><%= t.name %></span>
+                              <input type="hidden" name="team[id]" value="<%= t.id %>">
+
+
+                              <div class="input-group-btn">
+                                <%= link_to "Mostrar",panel_team_path(t), class: 'btn btn-primary' %>
+                                <%= link_to "Editar",edit_dashboard_team_path(t), class: 'btn btn-warning' %>
+                                <%= link_to "Apagar",dashboard_team_path(t), :class => "btn btn-danger", :method => :delete, :data => {confirm: "Você tem certeza? Os alunos não terão mais acesso a esta turma, mas suas respostas ainda serão mantidas."} %>
+                              </div><!-- /btn-group -->
+                            </div>
+                            <% end %>
+                        <% end %>
                       <% end %>
 
+                      <% if current_user.student? %>
 
-                    <% @teams.sort_by{|x|x.name}.each do |t| %>
 
+                      <% @teams.sort_by{|x|x.name}.each do |t| %>
                         <% if t.users.include?(current_user) %>
+                          <b>Prof(a): <%= User.find(t.owner_id).name %></b>
                             <div class="input-group" style="margin: 10px;">
+
                                 <span class="input-group-addon"><%= link_to t.name,panel_team_path(t) %></span>
                                 <div class="input-group-btn">
                                   <%= button_tag "Matriculado!", :class => "btn btn-success btn-flat", :disabled => "disabled" %>
@@ -43,13 +64,15 @@
 
                         </div>
                         <% else %>
+                          <% if t.owner_id != current_user.id %>
                             <%= form_tag dashboard_teams_enroll_path, :method => :post, :id => "enroll-form", :class => "form" do %>
+                            <b>Prof(a): <%= User.find(t.owner_id).name %></b>
                             <div class="input-group <%= raw "has-error" if @wrong_code_team_id == t.id %>" style="margin: 10px;">
                                     <span class="input-group-addon"><%= t.name %></span>
                                     <input type="hidden" name="team[id]" value="<%= t.id %>">
 
-                                    <% if t.owner_id != current_user.id %>
-                                      <% if @wrong_code_team_id != t.id %>
+
+                                      <% if @wrong_code_team_id.to_s != t.id.to_s %>
                                           <% placeholder = "Senha para matrícula ..." %>
                                       <% else %>
                                           <% placeholder = "Senha incorreta!" %>
@@ -60,18 +83,12 @@
                                         <%= button_tag "Matricular-se", :type => :submit, :class => "btn btn-info" %>
                                       </div><!-- /btn-group -->
 
-                                    <% else %>
-                                      <div class="input-group-btn">
-                                        <%= link_to "Mostrar",panel_team_path(t), class: 'btn btn-primary' %>
-                                        <%= link_to "Editar",edit_dashboard_team_path(t), class: 'btn btn-warning' %>
-                                        <%= link_to "Apagar",dashboard_team_path(t), :class => "btn btn-danger", :method => :delete, :data => {confirm: "Você tem certeza? Os alunos não terão mais acesso a esta turma, mas suas respostas ainda serão mantidas."} %>
-                                      </div><!-- /btn-group -->
-                                    <% end %>
                                 </div>
                                 <% end %>
-
+                              <% end %>
                         <% end %>
 
+                    <% end %>
                     <% end %>
                     </div>
                     </div>

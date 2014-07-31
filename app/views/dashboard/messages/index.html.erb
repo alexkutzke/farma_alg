@@ -34,13 +34,41 @@
 
             <table class="table" style="margin-top:10px;">
                 <tr>
+                    <th>Para</th>
                     <th>Assunto</th>
                     <th>Mensagem</th>
+                    <th>Em</th>
                     <th></th>
                 </tr>
 
                 <% @messages.each do |m| %>
                     <tr>
+                      <td>
+                        <% unless m.user_ids.blank? %>
+                          <% n = m.user_ids.count %>
+                          <% if n == 2 %>
+                            <%= User.find(m.user_ids.first).name.truncate(50) + " e " + User.find(m.user_ids.last).name.truncate(50) %>
+                          <% elsif n > 2 %>
+                            <%= User.find(m.user_ids.first).name.truncate(50) + " e outros " + (n-1).to_s + " alunos. "%>
+                          <% else %>
+                            <%= User.find(m.user_ids.first).name.truncate(50) %>
+                          <% end %>
+                        <% end %>
+
+                        <% unless m.team_ids.blank? %>
+                          <% unless m.user_ids.blank? %>
+                            <br>
+                          <% end %>
+                          <% n = m.team_ids.count %>
+                          <% if n == 2 %>
+                            <%= Team.find(m.team_ids.first).name.truncate(50) + " e " + User.find(m.user_ids.last).name.truncate(50) %>
+                          <% elsif n > 2 %>
+                            <%= Team.find(m.team_ids.first).name.truncate(50) + " e outras " + (n-1).to_s + " turmas. " %>
+                          <% else %>
+                            <%= Team.find(m.team_ids.first).name.truncate(50) %>
+                          <% end %>
+                        <% end %>
+                      </td>
                         <td>
                             <% if m.has_recommendation? %>
                                 <span><i class="fa fa-paperclip"></i> </span>
@@ -51,6 +79,9 @@
                             <%= truncate(m.subject) %>
                         </td>
                         <td><%= truncate(m.content) %></td>
+                        <td>
+                          <%= m.updated_at.strftime("%d/%m/%Y às %H:%M:%S") %>
+                        </td>
                         <td>
                           <div class="btn-group">
                             <%= link_to dashboard_message_path(m) do %>
@@ -84,12 +115,21 @@
 
             <table class="table">
                 <tr>
+                    <th>
+                      De
+                    </th>
                     <th>Assunto</th>
                     <th>Mensagem</th>
+                    <th>
+                      Em
+                    </th>
                     <th></th>
                 </tr>
                 <% @messages_to_me.each do |m| %>
                     <tr>
+                      <td>
+                        <%= m.user.name.truncate(50) %>
+                      </td>
                         <td>
                             <% if m.has_recommendation? %>
                                 <span><i class="fa fa-paperclip"></i> </span>
@@ -100,6 +140,9 @@
                             <%= truncate(m.subject) %>
                         </td>
                         <td><%= truncate(m.content) %></td>
+                        <td>
+                          <%= m.updated_at.strftime("%d/%m/%Y às %H:%M:%S") %>
+                        </td>
                         <td>
                             <%= link_to dashboard_message_path(m) do %>
                                 <%= button_tag "Ver", :class => "btn btn-sm btn-success" %>

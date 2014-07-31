@@ -48,6 +48,7 @@ class Dashboard::TeamsController < ApplicationController
     unless t.users.include?(current_user)
       if t.code == params[:password]
         t.users << current_user
+
         t.save!
       else
         @wrong_code_team_id = t.id
@@ -55,7 +56,7 @@ class Dashboard::TeamsController < ApplicationController
     end
     @teams = Team.all
 
-    redirect_to dashboard_teams_available_path
+    render "available"
   end
 
   def unenroll

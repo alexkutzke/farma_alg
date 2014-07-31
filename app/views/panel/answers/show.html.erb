@@ -477,7 +477,7 @@
                 </div><!-- /.box-header -->
                 <div class="box-body shorted-box">
 
-                <% @answer.best_matches(5).each do |sa| %>
+                <% @answer.best_matches(5,current_user).each do |sa| %>
                   <% c = @answer.connections.where(target_answer_id:sa.id).first %>
                   <%= answer_link(sa,c) %>
                 <% end %>

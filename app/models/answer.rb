@@ -467,7 +467,7 @@ class Answer
     true
   end
 
-  def best_matches(n)
+  def best_matches(n,user)
     best = []
     connections = []
 
@@ -481,7 +481,12 @@ class Answer
 
     best.reverse!
 
-    best[0..n-1]
+    if user.student?
+      best[0..n-1].keep_if { |a| a.user_id == user.id }
+    else
+      best[0..n-1]
+    end
+
   end
 
 private
@@ -503,17 +508,17 @@ private
       as = as.entries.keep_if { |a| not (a.automatically_assigned_tags.collect{|x| x[0].to_s} & params[:tag_ids]).empty? }
     end
 
-    unless user.admin?
-      if params.has_key?(:tag_ids)
-        tag_ids = []
-        for t in user.all_tags do
-          if params[:tag_ids].include?(t.id.to_s)
-            tag_ids << t.id.to_s
-          end
-        end
-        as = as.entries.keep_if { |a| not (a.automatically_assigned_tags.collect{|x| x[0].to_s} & tag_ids).empty? }
-      end
-    end
+    # unless user.admin?
+    #   if params.has_key?(:tag_ids)
+    #     tag_ids = []
+    #     for t in user.all_tags do
+    #       if params[:tag_ids].include?(t.id.to_s)
+    #         tag_ids << t.id.to_s
+    #       end
+    #     end
+    #     as = as.entries.keep_if { |a| not (a.automatically_assigned_tags.collect{|x| x[0].to_s} & tag_ids).empty? }
+    #   end
+    # end
 
     as
   end
@@ -522,23 +527,22 @@ private
   def self.search(params,user)
     as = Answer.search_without_tags(params,user)
 
-
     if params.has_key?(:tag_ids)
       as = as.entries.keep_if { |a| not (a.tag_ids & params[:tag_ids]).empty? }
     end
 
-
-    unless user.admin?
-      if params.has_key?(:tag_ids)
-        tag_ids = []
-        for t in user.all_tags do
-          if params[:tag_ids].include?(t.id.to_s)
-            tag_ids << t.id.to_s
-          end
-        end
-        as.entries.keep_if! { |a| not (a.tag_ids & tag_ids).empty? }
-      end
-    end
+    # only answers with tags from this user
+    # unless user.admin?
+    #   if params.has_key?(:tag_ids)
+    #     tag_ids = []
+    #     for t in user.all_tags do
+    #       if params[:tag_ids].include?(t.id.to_s)
+    #         tag_ids << t.id.to_s
+    #       end
+    #     end
+    #     as.entries.keep_if! { |a| not (a.tag_ids & tag_ids).empty? }
+    #   end
+    # end
 
     as
   end
@@ -618,13 +622,20 @@ private
       end
       as = as.in(question_id: question_ids)
 
-      if params.has_key?(:tag_ids)
-        tag_ids = []
-        for t in user.all_tags do
-          tag_ids << t.id
-        end
-        as = as.in(tag_ids: tag_ids)
+      # if params.has_key?(:tag_ids)
+      #   tag_ids = []
+      #   for t in user.all_tags do
+      #     tag_ids << t.id
+      #   end
+      #   as = as.in(tag_ids: tag_ids)
+      # end
+
+      if user.prof?
+        as = as.in(team_id: user.all_team_ids)
+      else
+        as = as.where(user_id: user.id)
       end
+
     end
 
     as

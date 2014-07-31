@@ -26,12 +26,13 @@
             <i class="fa fa-search"></i> <span>Busca</span>
         <% end %>
     </li>
-
+<% if current_user.prof? %>
     <li class="<%= raw "active" if controller.class == DashboardController && controller.action_name == "tags" %>">
         <%= link_to dashboard_tags_path do %>
             <i class="fa fa-tags"></i> <span>Categorias</span>
         <% end %>
     </li>
+<% end %>
 
     <li class="<%= raw "active" if controller.class == Dashboard::MessagesController %>">
         <%= link_to dashboard_messages_path do %>
@@ -45,11 +46,20 @@
     </li>
   <% end %>
 
+<% if current_user.prof? %>
+  <li class="<%= raw "active" if controller.class == Dashboard::TeamsController %>">
+      <%= link_to dashboard_teams_available_path do %>
+          <i class="fa fa-users"></i> <span>Turmas</span>
+      <% end %>
+  </li>
+<% else %>
     <li class="<%= raw "active" if controller.class == Dashboard::TeamsController %>">
         <%= link_to dashboard_teams_available_path do %>
             <i class="fa fa-users"></i> <span>Turmas Disponíveis</span>
         <% end %>
     </li>
+<% end %>
+
     <% # sorry about the next few lines =/ %>
     <% my_teams = Team.where(owner_id: current_user.id).asc('name') %>
     <% teams = current_user.teams.asc('name') %>
@@ -74,7 +84,7 @@
       </li>
     <% end %>
 
-
+<% if current_user.admin? %>
     <% unless others.empty? %>
       <li class="treeview">
         <a href="#">
@@ -94,8 +104,9 @@
         </ul>
       </li>
     <% end %>
+<% end %>
 
-
+<% if current_user.student? %>
     <li class="treeview">
       <a href="#">
           <i class="fa fa-check-square-o"></i>
@@ -109,6 +120,7 @@
         <% end %>
       </ul>
     </li>
+<% end %>
 
     <li class="<%= raw "active" if controller.class == DashboardController && controller.action_name == "help" %>">
       <%= link_to dashboard_help_path do %>

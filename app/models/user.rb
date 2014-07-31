@@ -34,7 +34,7 @@ class User
   field :guest, :type => Boolean, default: false
   field :show_help, :type => Boolean, default: true
 
-  attr_accessible :id, :name, :email, :password, :password_confirmation, :remember_me, :guest
+  attr_accessible :id, :name, :email, :password, :password_confirmation, :remember_me, :guest, :prof
 
   validates_presence_of :name
 
@@ -73,6 +73,14 @@ class User
       Team.all.asc(:name)
     else
       teams = Team.where(owner_id: self.id).asc('name') + self.teams.asc('name')
+    end
+  end
+
+  def all_team_ids
+    if self.admin?
+      Team.all.pluck(:id)
+    else
+      teams = Team.where(owner_id: self.id).pluck(:id)
     end
   end
 
@@ -134,11 +142,11 @@ class User
   end
 
   def all_tags
-    if self.admin?
+    #if self.admin?
       Tag.all.asc(:name)
-    else
-      self.tags.asc(:name)
-    end
+    #else
+    #  self.tags.asc(:name)
+    #end
   end
 
   def number_of_new_messages
@@ -252,5 +260,12 @@ class User
       return true
     end
     return false
+  end
+
+  def student?
+    if self.prof? && (not self.admin?)
+      return false
+    end
+    return true
   end
 end

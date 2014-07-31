@@ -47,10 +47,13 @@ class Newapi::AnswersController < ApplicationController
 	end
 
 	def similar
+		answer = Answer.find(params[:id])
+		ids = [answer.id] + answer.similar_answers
+
 		if current_user.admin?
-			@answers = Answer.find(Answer.find(params[:id]).similar_answers)
+			@answers = Answer.find(ids)
 		else
-			@answers = Answer.in(_id: Answer.find(params[:id]).similar_answers).where('team.owner_id' => current_user.id)
+			@answers = Answer.in(_id: ids).where('team.owner_id' => current_user.id)
 		end
 		render "group"
 	end

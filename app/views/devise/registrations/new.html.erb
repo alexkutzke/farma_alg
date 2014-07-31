@@ -12,13 +12,21 @@
   <div class="field"><%= f.label :email ,"E-mail:" %>
   <%= f.email_field :email %></div>
 
+  <div class="field">Tipo de usuário:<br>
+  <%= f.radio_button :prof, 'false', :checked => true %>
+  <%= f.label :prof_false, 'Aluno' %>
+  <%= f.radio_button :prof, 'true' %>
+  <%= f.label :prof_true, 'Professor' %>
+  </div>
+  <br>
+
   <div class="field"><%= f.label :password, "Senha:" %>
   <%= f.password_field :password %></div>
 
   <div class="field"><%= f.label :password_confirmation, "Confirme senha:" %>
     <%= f.password_field :password_confirmation %>
   </div>
-  
+
   <div class="form-actions">
     <div><%= f.submit "Submeter", :class => "btn btn-primary"  %></div>
   </div>

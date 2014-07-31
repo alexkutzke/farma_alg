@@ -92,6 +92,9 @@
       Comparar respostas
     </button>
 
+    <% if current_user.prof? %>
+
+
     <% unless connection.confirmed %>
       <button class="btn btn-success btn-block" id="accept-edge">
         Confirmar similaridade
@@ -119,7 +122,7 @@
               <button id="cancel-reject-edge" type="button" class="btn btn-default">Cancelar</button>
             </p>
           </div>
-
+    <% end %>
     </div>
 </div>
 
