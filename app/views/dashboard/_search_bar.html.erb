@@ -8,7 +8,7 @@
   </script>
 <% end %>
 
-<%= form_tag path, :remote => true, :method => :put, :id => form_id, :class => "search-bar" do %>
+<%= form_tag path, :remote => true, :method => :put, :id => form_id, :class => "search-bar", :'data-original-path' => path do %>
     <div class="row" style="margin-right: -17px;">
         <div class="col-md-12">
             <div class="input-group">

@@ -1,0 +1,11 @@
+<% if !as.blank? %>
+  <% for i in 1..as.num_pages %>
+    <% if i == as.current_page %>
+      <%= " #{i.to_s} " %>
+    <% else %>
+      <a href="#" class="search-page" data-path="<%= dashboard_fulltext_search_path(page: i)%>"><%= " #{i.to_s} " %></a>
+    <% end %>
+  <% end %>
+<% else %>
+
+<% end %>

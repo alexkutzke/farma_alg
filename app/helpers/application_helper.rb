@@ -27,6 +27,10 @@ module ApplicationHelper
     raw "<div class=\"progress xs\" style=\"#{css}\"><div rel=\"tooltip\" data-toggle=\"tooltip\" data-placement=\"top\" title data-original-title=\"#{p.round(0).to_s}#{msg}\" class=\"progress-bar progress-bar-#{style}\" style=\"width: #{p}%\"></div></div>"
   end
 
+  def paginate(as)
+    render(:partial => 'dashboard/paginator', :locals => {:as => as})
+  end
+
   def answer_link(answer,c=nil)
     render(:partial => 'dashboard/answers/answer_link', :locals => {:answer => answer, :c => c})
   end

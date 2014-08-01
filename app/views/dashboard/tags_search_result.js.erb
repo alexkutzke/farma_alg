@@ -1,4 +1,6 @@
-aa = "<%= escape_javascript(render(:partial => 'tags_search_result', :locals => {:as => @as, :as_aat => @as_aat}))%>";
+aa = "<%= escape_javascript(render(:partial => 'tags_search_result', :locals => {:as => @as, :total => @total}))%>";
+
+$("form.search-bar").attr("action",$("form.search-bar").data("original-path"));
 
 $("#search_result").html(aa);
 
@@ -9,40 +11,6 @@ $(".answer-btn").click(function(){
       id: $(this).data("id")
     },
     type: "get"
-  });
-});
-
-$(".accept_tag_link").click(function(){
-
-  var answer_id = $(this).data("answer-id");
-  $.ajax({
-    url: "/dashboard/tags/accept_tag",
-    data: {
-      id: selectedTagId,
-      answer_id: answer_id
-    },
-    type: "put",
-    success: function(){
-      $("#"+answer_id).appendTo("#confirmed-tags")
-      $("#"+answer_id+" button.accept_tag_link").remove()
-      $("#"+answer_id+" button.reject_tag_link").remove()
-    }
-  });
-});
-
-$(".reject_tag_link").click(function(){
-
-  var answer_id = $(this).data("answer-id");
-  $.ajax({
-    url: "/dashboard/tags/reject_tag",
-    data: {
-      id: selectedTagId,
-      answer_id: answer_id
-    },
-    type: "put",
-    success: function(){
-      $("#"+answer_id).remove();
-    }
   });
 });
 

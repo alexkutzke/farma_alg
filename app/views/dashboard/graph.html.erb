@@ -78,7 +78,7 @@
                     <div class="col-md-10">
                         <div class="row" style="pointer-events: initial;">
                             <div class="col-md-12 no-padding">
-                                <%= render(:partial => 'search_bar', :locals => { :form_id => "search-form", :path => dashboard_graph_search_path }) %>
+                                <%= render(:partial => 'search_bar', :locals => { :form_id => "search-form", :path => dashboard_graph_search_path(page:1) }) %>
                                 <%= render(:partial => 'search_filters', :locals => { :form_id => "search-form", :users => @users, :teams => @teams, :los => @los, :questions => @questions, :tags => @tags }) %>
                             </div>
                         </div>

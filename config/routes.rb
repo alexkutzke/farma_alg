@@ -112,16 +112,19 @@ Carrie::Application.routes.draw do
     get "help"
     get "hide_help"
 
-    get "timeline"
-    put "timeline_search"
-
-    get "search"
-    put "fulltext_search"
-
-    get "graph"
-    put "graph_search"
     post "graph_answer_info"
     post "graph_connection_info"
+
+    get "search"
+    get "timeline"
+    get "graph"
+    get "tags"
+
+    put "fulltext_search/page/:page", action: "fulltext_search", as: "fulltext_search"
+    put "timeline_search/page/:page", action: "timeline_search", as: "timeline_search"
+    put "graph_search/page/:page", action: "graph_search", as: "graph_search"
+    put "tags_search/page/:page", action: "tags_search", as: "tags_search"
+    put "tags_search_aat", action: "tags_search_aat", as: "tags_search_aat"
 
     resources :teams, :only => [:new,:edit,:update,:create,:destroy] do
       post :unenroll, on: :member
@@ -151,9 +154,6 @@ Carrie::Application.routes.draw do
       put "accept_tag"
       put "reject_tag"
     end
-
-    get "tags"
-    put "tags_search"
   end
 
   root to: "dashboard#home"

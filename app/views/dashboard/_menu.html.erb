@@ -29,7 +29,7 @@
 <% if current_user.prof? %>
     <li class="<%= raw "active" if controller.class == DashboardController && controller.action_name == "tags" %>">
         <%= link_to dashboard_tags_path do %>
-            <i class="fa fa-tags"></i> <span>Categorias</span>
+            <i class="fa fa-tags"></i> <span>Tags</span>
         <% end %>
     </li>
 <% end %>

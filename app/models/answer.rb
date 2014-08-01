@@ -35,6 +35,7 @@ class Answer
   field :lo_id, type: Moped::BSON::ObjectId
   field :exercise_id, type: Moped::BSON::ObjectId
   field :question_id, type: Moped::BSON::ObjectId
+  field :tag_ids, type: Array
 
 
   search_in :response, :compile_errors, :user => :name, :question => :title, :question => :content
@@ -53,6 +54,7 @@ class Answer
 
   #default_scope desc(:created_at)
 
+  scope :has_tag, lambda { |tag_id| where(:tag_ids.in => [tag_id])}
   scope :wrong, where(correct: false, :team_id.ne => nil, :for_test.ne => true)
   scope :corrects, where(correct: true, :team_id.ne => nil, :for_test.ne => true)
   scope :every, excludes(team_id: nil, for_test: true)
@@ -508,8 +510,10 @@ private
   def self.search_aat(params,user)
     as = Answer.search_without_tags(params,user)
 
-    if params.has_key?(:tag_ids)
-      as = as.entries.keep_if { |a| not (a.automatically_assigned_tags.collect{|x| x[0].to_s} & params[:tag_ids]).empty? }
+    if user.prof?
+      if params.has_key?(:tag_ids)
+        as = as.entries.keep_if { |a| not (a.automatically_assigned_tags.collect{|x| x[0].to_s} & params[:tag_ids]).empty? }
+      end
     end
 
     # unless user.admin?
@@ -524,15 +528,23 @@ private
     #   end
     # end
 
-    as
+    as.first(50)
   end
 
 
-  def self.search(params,user)
+  def self.search(params,user,page=false)
     as = Answer.search_without_tags(params,user)
 
-    if params.has_key?(:tag_ids)
-      as = as.entries.keep_if { |a| not (a.tag_ids & params[:tag_ids]).empty? }
+    if user.prof?
+      if params.has_key?(:tag_ids)
+        answer_ids = []
+        Tag.find(params[:tag_ids]).each do |t|
+          answer_ids += t.answer_ids
+        end
+
+        as = as.in(:id.in => answer_ids)
+      #  as = Kaminari.paginate_array(as.entries.keep_if { |a| not (a.tag_ids & params[:tag_ids]).empty? })
+      end
     end
 
     # only answers with tags from this user
@@ -548,7 +560,15 @@ private
     #   end
     # end
 
-    as
+    if as.blank?
+      []
+    else
+      if page != false
+        as.page(page).per(20)
+      else
+        as
+      end
+    end
   end
 
   def self.search_without_tags(params,user)
@@ -565,8 +585,7 @@ private
       end
     end
 
-
-    as = Answer.excludes(team_id: nil, for_test: true)
+    as = Answer.excludes(team_id: nil, for_test: true).desc(:created_at)
 
     if params.has_key?(:query) and not params[:query].empty?
       as = as.full_text_search(params[:query], match: :all)
@@ -579,7 +598,6 @@ private
       as = as.gte(:created_at => start_date)
       as = as.lte(:created_at => end_date)
     end
-
     if params.has_key?(:user_ids)
       as = as.in(user_id: params[:user_ids])
     end
@@ -599,7 +617,6 @@ private
     if params.has_key?(:answer_ids)
       as = as.in(id: params[:answer_ids])
     end
-
 
     unless user.admin?
       user_ids = []
@@ -666,7 +683,7 @@ private
   def self.make_timeline(as)
     timeline_items = []
 
-    as.sort!{|x,y| y.created_at <=> x.created_at}
+    #as.sort!{|x,y| y.created_at <=> x.created_at}
 
     i=0
     last = nil

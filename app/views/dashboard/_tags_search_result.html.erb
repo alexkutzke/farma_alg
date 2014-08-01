@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-md-12" style="margin-bottom:20px;">
-    <h3>Confirmadas<small> <%= as.count %> respostas encontradas</small></h3>
+    <h3>Confirmadas<small> <%= total %> respostas encontradas <%= raw " (Mostrando apenas as 50 mais recentes)" if total > 50 %>.</small></h3>
     <%= filter_in_words(@params) %>
   </div>
 </div>
@@ -15,12 +15,18 @@
 
 <div class="row">
   <div class="col-md-12" style="margin-bottom:20px;">
-    <h3>Atribuídas automaticamente<small> <%= as_aat.count %> respostas encontradas</small></h3>
+    <h3>Atribuídas automaticamente</h3>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-12" style="margin-bottom:20px;">
-    <%= render :partial => "dashboard/answers/answer_card", :locals => {:answers => as_aat, :button_tag => true, :n => 3} %>
+
+    <%= link_to "Atualizar", dashboard_tags_search_aat_path(@params), :class=>"btn btn-default", :remote => true, :method => :put %>
+
+    <div id="aat">
+
+    </div>
+
   </div>
 </div>

@@ -24,6 +24,16 @@
 
     $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
   }
+
+
+  $(document).ready(function(){
+    $(".content").on('click',".search-page", function(ev){
+      ev.preventDefault();
+      $("form.search-bar").attr("action",$(this).data("path"));
+      $("form.search-bar").submit();
+    });
+  });
+
   </script>
 <% end %>
 
@@ -48,7 +58,7 @@
 
     <div class="row">
         <div style="margin-bottom:20px;" class="col-md-10 col-md-offset-1">
-           <%= render(:partial => 'search_bar', :locals => { :form_id => "search-form", :path => dashboard_fulltext_search_path }) %>
+           <%= render(:partial => 'search_bar', :locals => { :form_id => "search-form", :path => dashboard_fulltext_search_path(page: 1) }) %>
            <%= render(:partial => 'search_filters', :locals => { :form_id => "search-form", :users => @users, :teams => @teams, :los => @los, :questions => @questions, :tags => @tags }) %>
         </div>
     </div>

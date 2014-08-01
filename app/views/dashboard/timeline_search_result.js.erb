@@ -1,4 +1,6 @@
-$("#timelinee").html("<%= escape_javascript(render(:partial => 'timeline_search_result', :locals => {:as => @as,:timeline_items => @timeline_items}))%>");
+$("#timelinee").html("<%= escape_javascript(render(:partial => 'timeline_search_result', :locals => {:as => @as,:timeline_items => @timeline_items, :total => @total}))%>");
+
+$("form.search-bar").attr("action",$("form.search-bar").data("original-path"));
 
 $(".answer-btn").click(function(){
   $.ajax({

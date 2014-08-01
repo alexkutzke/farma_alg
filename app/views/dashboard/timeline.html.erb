@@ -50,15 +50,15 @@
 
     <div class="row">
         <div style="margin-bottom:20px;" class="col-md-10 col-md-offset-1">
-           <%= render(:partial => 'search_bar', :locals => { :form_id => "search-form", :path => dashboard_timeline_search_path }) %>
+           <%= render(:partial => 'search_bar', :locals => { :form_id => "search-form", :path => dashboard_timeline_search_path(page:1) }) %>
            <%= render(:partial => 'search_filters', :locals => { :form_id => "search-form", :users => @users, :teams => @teams, :los => @los, :questions => @questions, :tags => @tags }) %>
         </div>
     </div>
 
 	<!-- row -->
-	<div class="row">                        
+	<div class="row">
 	    <div id="timelinee" class="col-md-12">
-	        
+
 	    </div><!-- /.col -->
 	</div><!-- /.row -->
 </section><!-- /.content -->

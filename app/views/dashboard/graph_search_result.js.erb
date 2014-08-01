@@ -1,5 +1,7 @@
 
-$("#graph-search-result").html("<%= escape_javascript(render(:partial => 'graph_search_result', :locals => {:as => @as}))%>");
+$("#graph-search-result").html("<%= escape_javascript(render(:partial => 'graph_search_result', :locals => {:as => @as, :total => @total}))%>");
+
+$("form.search-bar").attr("action",$("form.search-bar").data("original-path"));
 
 $("#search-result-container").show();
 

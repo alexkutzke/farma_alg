@@ -46,7 +46,7 @@
 <% end %>
 
 <% if params.has_key?(:tag_ids) %>
-  <b>Categorias: </b> [
+  <b>Tags: </b> [
     <% Tag.find(params[:tag_ids]).each do |t| %>
     "<%= t.name %>",
     <% end %>

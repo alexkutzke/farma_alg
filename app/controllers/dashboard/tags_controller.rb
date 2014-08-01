@@ -79,7 +79,12 @@ class Dashboard::TagsController < ApplicationController
     @answer.automatically_assigned_tags.delete_at(i)
     @answer.save!
     @available_tags = @answer.available_tags
-    render :show
+
+    if params.has_key?(:not_render)
+      render :nothing => true
+    else
+      render :show
+    end
   end
 
   def reject_tag
@@ -92,7 +97,12 @@ class Dashboard::TagsController < ApplicationController
     @answer.rejected_tags << @tag.id.to_s
     @answer.save!
     @available_tags = @answer.available_tags
-    render :show
+
+    if params.has_key?(:not_render)
+      render :nothing => true
+    else
+      render :show
+    end
   end
   # ================================================================
   # ================================================================

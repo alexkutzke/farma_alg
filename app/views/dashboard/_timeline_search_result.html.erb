@@ -1,6 +1,9 @@
 <div class="row">
   <div id="search-result-count" class="col-md-12 text-center" style="margin-bottom:20px;">
-    <%= as.count %> respostas encontradas.
+    <%= total %> respostas encontradas.
+    <% if total > 50 %>
+      Mostrando apenas as 50 mais recentes.
+    <% end %>
     <%= filter_in_words(@params) %>
   </div>
 </div>

@@ -4,6 +4,7 @@ gem 'rails', '3.2.19'
 
 gem 'mongoid'#, '~> 3.1.0'
 gem 'mongoid_search'
+gem 'kaminari'
 
 gem 'turbo-sprockets-rails3'
 #gem 'airbrake'
@@ -24,7 +25,6 @@ gem 'therubyracer'
 
 gem "ckeditor", '~> 4.0.4'
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
-gem 'kaminari', "~> 0.14.1"
 
 gem 'math_engine', git: 'https://github.com/dmarczal/math_engine.git' #, branch: 'original'
 
