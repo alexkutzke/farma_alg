@@ -27,6 +27,15 @@
 
   var availableUsers = <%= raw @available_users.to_json %>;
 
+
+  $(document).ready(function(){
+    $(".content").on('click',".search-page", function(ev){
+      ev.preventDefault();
+      $("form.search-bar").attr("action",$(this).data("path"));
+      $("form.search-bar").submit();
+    });
+  });
+
   </script>
   <%= javascript_include_tag 'dashboard/messages' %>
 <% end %>
@@ -150,7 +159,7 @@
         </div>
         <div class="row">
           <div style="margin-bottom:20px" class="col-md-10 col-md-offset-1">
-            <%= render(:partial => 'dashboard/search_bar', :locals => { :form_id => "search-form", :path => dashboard_fulltext_search_path }) %>
+            <%= render(:partial => 'dashboard/search_bar', :locals => { :form_id => "search-form", :path => dashboard_fulltext_search_path(page:1) }) %>
             <%= render(:partial => 'dashboard/search_filters', :locals => { :form_id => "search-form", :users => @users, :teams => @teams, :los => @los, :questions => @questions, :tags => @tags }) %>
             <input type="hidden" name="button_add" value="1" form="search-form">
           </div>

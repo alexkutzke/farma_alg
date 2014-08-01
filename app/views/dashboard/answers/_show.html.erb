@@ -89,7 +89,7 @@
 
   <div class="row">
     <div class="col-xs-12">
-      <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#responseModal">
+      <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#responseModal-answer-show">
         Vizualizar resposta
       </button>
 
@@ -123,7 +123,7 @@
       <% end %>
 
       <!-- Modal -->
-      <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal fade" id="responseModal-answer-show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg my-modal">
           <div class="modal-content">
             <div class="modal-header">
@@ -133,7 +133,7 @@
             <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
               <% i=1 %>
               <% resp = "" %>
-              <% lines = @answer.response.lines %>
+              <% lines = answer.response.lines %>
               <% n = lines.count %>
               <% y = 1 %>
               <% while n / 10 > 0 do %>
@@ -195,10 +195,10 @@
                   </h3>
                   <div class="box-tools pull-right">
 
-                      <button data-toggle="modal" data-target="#testCaseModal-<%= k %>" class="diff-btn btn btn-default btn-sm" ><i class="fa fa-columns"></i> Diff</button>
+                      <button data-toggle="modal" data-target="#testCaseModal-<%= k %>-answer-show" class="diff-btn btn btn-default btn-sm" ><i class="fa fa-columns"></i> Diff</button>
 
                       <!-- Modal -->
-                      <div class="modal fade" id="testCaseModal-<%= k %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal fade" id="testCaseModal-<%= k %>-answer-show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg my-modal">
                           <div class="modal-content">
                             <div class="modal-header">

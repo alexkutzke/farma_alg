@@ -8,7 +8,7 @@ class Panel::LosController < ApplicationController
 		@user = User.find(params[:user_id])
 		@lo = Lo.find(params[:id])
 
-		unless current_user.prof
+		unless current_user.prof?
 			unless current_user.team_ids.include?(@team.id)
 				render_401
 				return false

@@ -3,7 +3,7 @@ $("#answer-show").html("<%= escape_javascript(render(:partial => 'show', :locals
 $("#answer-show").draggable({ axis: "x", scroll:false });
 
 $("#farmaAlgShowModals").html("");
-$(".modal").appendTo($("#farmaAlgShowModals"));
+$("#answer-show").find(".modal").appendTo($("#farmaAlgShowModals"));
 
 <% if current_user.prof? %>
 // Carrega tags
@@ -26,7 +26,7 @@ prettyPrint();
 if(answerShowCallback && typeof(answerShowCallback) == "function")
 	answerShowCallback();
 
-$("div.output").each(function(){
+$("#farmaAlgShowModals").find("div.output").each(function(){
   diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
 });
 

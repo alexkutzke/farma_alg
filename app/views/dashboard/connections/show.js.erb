@@ -1,3 +1,4 @@
+
 $("#answer-show").html("<%= escape_javascript(render(:partial => 'show', :locals => {:connection => @connection, :notice => @notice, :answer1 => @answer1, :answer2 => @answer2}))%>");
 $("#answer-show").draggable({ axis: "x", scroll:false });
 
@@ -12,38 +13,10 @@ $("#cancel-reject-edge").click(function(){
 });
 
 $("#farmaAlgShowModals").html("");
-$(".modal").appendTo($("#farmaAlgShowModals"));
+$("#answer-show").find(".modal").appendTo($("#farmaAlgShowModals"));
 
-$("div.response").each(function(){
+$("#farmaAlgShowModals").find("div.response").each(function(){
   diffUsingJS("response-"+$(this).data("id"),"<%= @answer1.user.name + " @ " + @answer1.question.title + " #" + @answer1.try_number.to_s %>",$(this).attr("data-response"),"<%= @answer2.user.name + " @ " + @answer2.question.title + " #" + @answer2.try_number.to_s %>",$(this).attr("data-previous"));
-});
-
-$("div.output").each(function(){
-  diffUsingJS("output-"+$(this).data("id"),"Saída A",$(this).attr("data-output-a"),"Saída B",$(this).attr("data-output-b"));
-});
-
-
-function confirmRejectEdge(data){
-  if(graph){
-
-      removeEdges(data);
-    
-  }
-  else{
-    $(".time-comparison[data-id='<%= @connection.id %>']").parent().fadeOut(function(){
-      $(this).remove();
-    })
-  }
-
-  $("#close-answer-info").click();
-}
-
-$("#confirm-reject-edge").click(function(){
-  $.ajax({
-    url: "/newapi/connections/<%= @connection.id %>/reject_connection",
-    type: "delete",
-    success: confirmRejectEdge
-  });
 });
 
 $("#accept-edge").click(function(){
@@ -54,24 +27,44 @@ $("#cancel-accept-edge").click(function(){
   $("#alert-accept-edge").fadeToggle();
 });
 
-function confirmAcceptEdge(data){
-  if(graph){
-    $("#edge-"+data.id).dblclick();
-  }
-  else{
-    $("#search-form").submit();
-  }
+$("#farmaAlgShowModals").find("div.output").each(function(){
+  diffUsingJS("output-"+$(this).data("id"),"Saída A",$(this).attr("data-output-a"),"Saída B",$(this).attr("data-output-b"));
+});
 
-  $("#close-answer-info").click();
-}
+resizeApp();
+
+$("#confirm-reject-edge").click(function(){
+  $.ajax({
+    url: "/newapi/connections/<%= @connection.id %>/reject_connection",
+    type: "delete",
+    success: function(data){
+      if(graph){
+          removeEdges(data);
+      }
+      else if(timeline){
+        $(".time-comparison[data-id='<%= @connection.id %>']").parent().fadeOut(function(){
+          $(this).remove();
+        });
+      }
+
+      $("#close-answer-info").click();
+    }
+  });
+});
 
 $("#confirm-accept-edge").click(function(){
   $.ajax({
     url: "/newapi/connections/<%= @connection.id %>/accept_connection",
     type: "put",
-    success: confirmAcceptEdge
+    success: function(data){
+      if(graph){
+        $("#edge-"+data.id).dblclick();
+      }
+      else if(timeline){
+        $("#search-form").submit();
+      }
+
+      $("#close-answer-info").click();
+    }
   });
 });
-
-resizeApp();
-prettyPrint();

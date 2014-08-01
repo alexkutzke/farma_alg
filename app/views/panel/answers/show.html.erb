@@ -37,17 +37,19 @@
       }
     });
 
-    $("span.label").tooltip();
-
-    resizeApp();
-
-    $("div.output").each(function(){
-      diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
-    });
-
     $(document).ready(function(){
       $('.change_correctness').popover({ html : true });
+      $("span.label").tooltip();
+
+      resizeApp();
+
+      $("div.output").each(function(){
+        diffUsingJS("output-"+$(this).data("id"),"Saída da resposta",$(this).attr("data-output"),"Saída esperada",$(this).attr("data-expected-output"));
+      });
     });
+
+    var graph=false;
+    var timeline=false;
   </script>
 <% end %>
 
@@ -191,7 +193,20 @@
                             <h4 class="modal-title" id="myModalLabel">Resposta</h4>
                           </div>
                           <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
-                            <pre class="prettyprint lang-pascal" style="width:100%;overflow:scroll;margin:auto;"><%= @answer.response %></pre>
+                            <% i=1 %>
+                            <% resp = "" %>
+                            <% lines = @answer.response.lines %>
+                            <% n = lines.count %>
+                            <% y = 1 %>
+                            <% while n / 10 > 0 do %>
+                              <% y += 1 %>
+                              <% n = n / 10 %>
+                            <% end %>
+                            <% lines.each  do |x| %>
+                              <% resp += i.to_s.rjust(y, "0") + ". " + x.to_s %>
+                              <% i+=1 %>
+                            <% end %>
+                            <pre class="prettyprint lang-pascal" style="width:100%;overflow:scroll;margin:auto;"><%= resp %></pre>
                           </div>
                         </div>
                       </div>
