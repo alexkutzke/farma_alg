@@ -30,6 +30,10 @@ namespace :process_queue  do
       store_pids([], :write)
     end
 
+    clean = "kill -9 `ps x | grep ProcessQueue | cut -d " "  -f1` && pkill cpulimit"
+    puts "$ #{clean}"
+    `#{clean}`
+
     pids = read_pids
     1.times do
           ops = {:err => [(Rails.root + "log/process_queue_err").to_s, "a"],
@@ -38,11 +42,13 @@ namespace :process_queue  do
       pid = spawn({}, "rails runner --environment=production 'ProcessQueue::start'", ops)
       Process.detach(pid)
       pids << pid
-      cpulimit = "cpulimit -p #{pid} -l 25 -b"
+      cpulimit = "cpulimit -p #{pid} -l 50 -b"
 
-      puts "$ #{cpulimit}"
+      puts "$ #{cpulimiti}"
       `#{cpulimit}`
     end
+
+
 
     store_pids(pids,:append)
 	end
