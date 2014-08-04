@@ -30,7 +30,7 @@ namespace :process_queue  do
       store_pids([], :write)
     end
 
-    clean = "kill -9 `ps x | grep ProcessQueue | cut -d " "  -f1` && pkill cpulimit"
+    clean = "kill -9 `ps x | grep ProcessQueue | cut -d ' ' -f1` && pkill cpulimit"
     puts "$ #{clean}"
     `#{clean}`
 
