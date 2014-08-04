@@ -104,7 +104,115 @@
               </div><!-- /.box-header -->
 
               <div class="box-body">
-                Ajuda ...
+                  <p>
+                    O objetivo deste sistema é permitir o acesso e a mediação dos registros de respostas por professores e alunos.
+                  </p>
+
+                <% if current_user.prof? %>
+                  <p>
+                    Você está cadastrado como <b>Professor</b>. Caso isto esteja incorreto, por favor, entre em contato por <a href="mailto:alexander@inf.ufpr.br">email</a> solicitando a alteração.
+                  </p>
+
+                  <p>
+                    Por meio deste sistema, você pode criar Objetos de Aprendizagem (O.A.s) para o ensino de programação de computadores
+                    e disponibilizá-los para seus alunos.
+                  </p>
+
+                  <p>
+                    Você pode criar seus O.A.s pela opção <b><i class="fa fa-pencil-square-o"></i> <span>Meus O.A.'s</span></b> no menu
+                    esquerdo. Feito isso, crie suas turmas por meio da opção <b><i class="fa fa-users"></i> <span>Turmas</span></b>.
+                  </p>
+                <% end %>
+
+                  <p>
+                    As opções disponíveis para você são:
+                  </p>
+
+                  <dl class="dl-horizontal">
+                    <% if current_user.prof? %>
+                    <dt>
+                      <i class="fa fa-code-fork"></i> <span><b>Grafo de Manipulação</b></span>
+                    </dt>
+                    <dd>
+                      visualize e manipule as respostas de seus alunos através das visualização do grafo de repostas. Aqui, o sistema analisa a semelhança entre as respostas de seus alunos e as exibe em forma de rede, ou seja, com as respostas concetadas entre si.
+                    </dd>
+                    <% end %>
+                    <dt>
+                      <b><i class="fa fa-clock-o"></i> <span>Linha do Tempo</span></b>
+                    </dt>
+                    <dd>
+                      visualize as respostas seguindo sua ordem cronológica.
+                    </dd>
+                    <dt>
+                      <b><i class="fa fa-search"></i> <span>Busca</span></b>
+                    </dt>
+                    <dd>
+                      Procure por registros de respostas.
+                    </dd>
+                    <% if current_user.prof? %>
+                    <dt>
+                      <b><i class="fa fa-tags"></i> <span>Tags</span></b>
+                    </dt>
+                    <dd>
+                      Crie tags e classifique as respostas que desejar. Consulte, também, a classificação semi-automática de respostas, realizada pelo sistema.
+                    </dd>
+                    <% end %>
+                    <% if current_user.prof? %>
+                    <dt>
+                      <b><i class="fa fa-envelope"></i> <span>Mensagens</span></b>
+                    </dt>
+                    <dd>
+                      Envie mensagens e recomendações de respostas e questões para seus alunos e grupos de alunos.
+                    </dd>
+                    <% else %>
+
+                    <dt>
+                      <b><i class="fa fa-envelope"></i> <span>Mensagens</span></b>
+                    </dt>
+                    <dd>
+                      Verifique mensagens e recomendações enviadas por seus professores.
+                    </dd>
+                    <% end %>
+                    <% if current_user.prof? %>
+                    <dt>
+                      <b><i class="fa fa-pencil-square-o"></i> <span>Meus O.A.'s</span></b>
+                    </dt>
+                    <dd>
+                      Manipule seus Objetos de Aprendizagem.
+                    </dd>
+                    <dt>
+                      <b><i class="fa fa-users"></i> <span>Turmas</span></b>
+                    </dt>
+                    <dd>
+                      Crie, edite ou apague suas turmas.
+                    </dd>
+                    <% else %>
+                    <dt>
+                      <b><i class="fa fa-users"></i> <span>Turmas Disponíveis</span></b>
+                    </dt>
+                    <dd>
+                      Lista de turmas disponíveis para matrícula.
+                    </dd>
+                    <% end %>
+                    <% if current_user.prof? %>
+                    <dt>
+                      <b><i class="fa fa-users"></i> <span>Minhas Turmas</span></b>
+                    </dt>
+                    <dd>
+                      Consulte mais detalhes sobre cada uma de suas turmas.
+                    </dd>
+                    <% else %>
+
+                    <dt>
+                      <b><i class="fa fa-pencil-square-o"></i> <span>Turmas Matriculadas</span></b>
+                    </dt>
+                    <dd>
+                      Acesse os O.A.s disponibilizados em cada uma das turmas em que você está matriculado. Acesse, também, mais informações sobre seu progresso nos O.A.s e suas respostas.
+                    </dd>
+                    <% end %>
+
+                  </dl>
+
               </div><!-- /.box-body -->
           </div><!-- /.box  -->
           <% end %>

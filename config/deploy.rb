@@ -87,8 +87,8 @@ end
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
 
-  desc "Start the process queue"
-  task :start_process_queue do
-    run_remote_rake "process_queue:start"
-  end
+#  desc "Start the process queue"
+#  task :start_process_queue do
+#    run_remote_rake "process_queue:start"
+#  end
 end

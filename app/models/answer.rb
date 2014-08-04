@@ -52,7 +52,7 @@ class Answer
   has_many :connections, dependent: :delete
   has_and_belongs_to_many :tags, index: true
 
-  #default_scope desc(:created_at)
+  default_scope excludes(team_id:nil)
 
   scope :has_tag, lambda { |tag_id| where(:tag_ids.in => [tag_id])}
   scope :wrong, where(correct: false, :team_id.ne => nil, :for_test.ne => true)

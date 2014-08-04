@@ -19,17 +19,73 @@
 
     <div class="row">
         <!-- Left col -->
-        <section class="col-lg-8 col-lg-offset-2">
+        <section class="col-lg-8">
 
           <div class="box box-info">
               <div class="box-header">
                   <i class="fa fa-question-circle"></i>
 
-                  <h3 class="box-title">Ajuda do Farma-alg</h3>
+                  <h3 class="box-title">Ajuda do Farma-ALG</h3>
               </div><!-- /.box-header -->
 
               <div class="box-body">
-                Ajuda em construção ...
+                <p>
+                  Bem-vindo ao Farma-ALG!
+                </p>
+
+                <p>
+                  O objetivo deste sistema é permitir o acesso e a mediação dos registros de respostas por professores e alunos.
+                </p>
+
+                <% if current_user.prof? %>
+                  <p>
+                    Você, enquanto professor, pode criar Objetos de Aprendizagem (O.A.s) para o ensino de programação de computadores
+                    e disponibilizá-los para seus alunos.
+                  </p>
+
+                  <p>
+                    A medida que seus alunos se matriculam em suas turmas e trabalham com os O.A.s criados por você, as respostas dos alunos são
+                    armazenadas.
+                  </p>
+
+                  <p>
+                    Nenhuma resposta, de nenhum aluno é ignorada. Todas são armazenadas e disponibilidas para você e para o aluno.
+                  </p>
+
+                  <p>
+                    Por meio de suas funcionalidades, este sistema possibilita a manipulação dos resgistros de respostas armazenados. Tal manipulação
+                    consiste:
+                  </p>
+
+                  <ul>
+                    <li>na recuperação facilitada dos registros (<i class="fa fa-search"></i>);</li>
+                    <li>na visualização dos registros (<i class="fa fa-search"></i>, <i class="fa fa-clock-o"></i>, <i class="fa fa-code-fork"></i>);</li>
+                    <li>na classificação semi-automática dos registros (<i class="fa fa-tags"></i>);</li>
+                    <li>na recomendação automática de respostas relevantes para serem trabalhadas com alunos (<i class="fa fa-envelope"></i>).</li>
+                  </ul>
+
+                <% else %>
+                  <p>
+                    Você, enquanto aluno, pode se matricular nas turmas criadas por seus professores.
+                  </p>
+
+                  <p>
+                    Por meio do sistema, você terá acesso aos Objetos de Aprendizagem (O.A.s) disponibilizados por seus professores. Um O.A. nada mais é, neste sistema,
+                    do que um conjunto de instruções e exercícios de programação.
+                  </p>
+
+                  <p>
+                    A medida que você responde aos exercícios criados por seus professores, suas respostas são armazenadas pelo sistema.
+                    Assim, tanto você, quanto seu professor, possuem acesso a esses resgistros de respostas. O sistema permite, também, que o professor
+                    trabalhe com tais registros, permitindo uma melhor mediação para o seu aprendizado.
+                  </p>
+
+                  <p>
+                    Fique atento ao sinal <i class="fa fa-envelope"></i> no canto superior direito da tela. Seu professor pode tentar se comunicar
+                    com você através de mensagens dentro do sistema.
+                  </p>
+
+                <% end %>
               </div><!-- /.box-body -->
           </div><!-- /.box -->
 
