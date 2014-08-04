@@ -44,7 +44,7 @@ namespace :process_queue  do
       pids << pid
       cpulimit = "cpulimit -p #{pid} -l 50 -b"
 
-      puts "$ #{cpulimiti}"
+      puts "$ #{cpulimit}"
       `#{cpulimit}`
     end
 
