@@ -2,7 +2,7 @@ def store_pids(pids, mode)
   pids_to_store = pids
   pids_to_store += read_pids if mode == :append
 
-  # Make sure the pid file is writable.    
+  # Make sure the pid file is writable.
   File.open(File.expand_path('tmp/pids/process_queue.pid', Rails.root), 'w') do |f|
     f <<  pids_to_store.join(',')
   end
@@ -11,9 +11,9 @@ end
 def read_pids
   pid_file_path = File.open(File.expand_path('tmp/pids/process_queue.pid', Rails.root),'a')
   return []  if ! File.exists?(pid_file_path)
-  
-  File.open(pid_file_path, 'r') do |f| 
-    f.read 
+
+  File.open(pid_file_path, 'r') do |f|
+    f.read
   end.split(',').collect {|p| p.to_i }
 end
 
@@ -32,14 +32,18 @@ namespace :process_queue  do
 
     pids = read_pids
     1.times do
-          ops = {:err => [(Rails.root + "log/process_queue_err").to_s, "a"], 
+          ops = {:err => [(Rails.root + "log/process_queue_err").to_s, "a"],
                  :out => [(Rails.root + "log/process_queue_stdout").to_s, "a"]}
 
       pid = spawn({}, "rails runner --environment=production 'ProcessQueue::start'", ops)
       Process.detach(pid)
       pids << pid
+      cpulimit = "cpulimit -p #{pid} -l 25 -b"
+
+      puts "$ #{cpulimit}"
+      `#{cpulimit}`
     end
 
     store_pids(pids,:append)
-	end	
+	end
 end

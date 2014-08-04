@@ -6,10 +6,20 @@ class ProcessQueue
   field :priority, type: Integer, default: 9
   field :params, type: Array, default: []
 
+  before_create :verify_repeat
+
+  def verify_repeat
+    unless ProcessQueue.where(type: self.type, params: self.params).count == 0
+      return false
+    end
+    return true
+  end
 
   def do_process
   	p = self
- 
+
+    self.delete
+
   	case p.type
 
    	when "make_inner_connections"
@@ -30,8 +40,6 @@ class ProcessQueue
   		puts "Process type unknown."
   		return false
   	end
-
-  	self.delete
 
   	return true
   end

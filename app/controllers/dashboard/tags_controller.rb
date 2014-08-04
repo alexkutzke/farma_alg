@@ -96,6 +96,7 @@ class Dashboard::TagsController < ApplicationController
     @answer.automatically_assigned_tags.delete_at(i)
     @answer.rejected_tags << @tag.id.to_s
     @answer.save!
+    @answer.schedule_process_propagate
     @available_tags = @answer.available_tags
 
     if params.has_key?(:not_render)

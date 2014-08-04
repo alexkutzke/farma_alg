@@ -456,7 +456,7 @@ class Answer
   def make_outer_connections
     per_batch = 1000
 
-    outer_neigh = Answer.where(:question_id.ne => self.question_id)
+    outer_neigh = Answer.where(:question_id.ne => self.question_id, :team_id => self.team_id)
 
     0.step(outer_neigh.count, per_batch) do |offset|
       outer_neigh.limit(per_batch).skip(offset).each do |a|
@@ -494,16 +494,12 @@ class Answer
 private
 
   def register_last_answer
-    puts "------------------------------------------------------------1"
     unless self.for_test
-      puts "------------------------------------------------------------2"
       la = LastAnswer.find_or_create_by(:user_id => self.user.id, :question_id => self.question.id)
       la.answer = self
       la.question_id = self.question_id
       la.user_id = self.user_id
       la.save!
-      puts "------------------------------------------------------------3"
-      puts la
     end
   end
 
