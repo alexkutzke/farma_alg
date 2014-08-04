@@ -1,43 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>FARMA-ALG</title>
-    <%= stylesheet_link_tag    "application", :media => "all" %>
-    <%= javascript_include_tag "login" %>
-    <%= csrf_meta_tags %>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
-  <body>
+    <head>
+        <meta charset="UTF-8">
+        <title>FARMA-ALG</title>
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
-    <div class="container">
+        <%= stylesheet_link_tag    'dashboard/dashboard', :media => 'all' %>
+        <%= yield :stylesheets %>
 
-          <div class="row-fluid">
-            <div class="span4 offset4">
-          
-          <div class="page-header text-center">
-            <h2>FARMA-ALG</h2>
-          </div>
+        <%= javascript_include_tag 'dashboard/dashboard' %>
+        <%= yield :scripts %>
+        <%= csrf_meta_tags %>
+
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body class="bg-light-gray">
+
 
           <!-- Main component for a primary marketing message or call to action -->
           <% if not notice.nil? %>
-              <p id="notice" class="text-center alert alert-info"><%= notice %></p>
+              <p id="notice" style="padding-left: 0;margin-left: 0;position: relative;" class="text-center alert alert-info"><%= notice %></p>
           <% end %>
           <% if not alert.nil? %>
-            <p id="alert" class="text-center alert alert-danger"><%= alert %></p>
+            <p id="alert" style="padding-left: 0;margin-left: 0;position: relative;" class="text-center alert alert-danger"><%= alert %></p>
           <% end %>
 
            <%= yield %>
 
-        <hr />
-        <p class="text-center"><a href="http://www.inf.ufpr.br/alexander">UFPR 2014</a></p>
-        </div>
-            </div>
-      </div> <!-- /container -->
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-  </body>
+    </body>
 </html>

@@ -1,0 +1,153 @@
+<html lang="pt-br"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FARMA-ALG</title>
+
+    <%= stylesheet_link_tag    'welcome/welcome', :media => 'all' %>
+
+    <%= javascript_include_tag 'welcome/welcome' %>
+
+    <%= csrf_meta_tags %>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">FARMA-ALG</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><%= link_to "Entrar", new_user_session_path %></li>
+			      <li><%= link_to "Registrar-se", new_user_registration_path %></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+	<div id="header">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<h1>FARMA-ALG</h1>
+					<h2 class="subtitle"><b>Crie</b> e <b>disponibilize</b> objetos de aprendizagem para o ensino de programação de computadores.</h2>
+          <h2 class="subtitle"><b>Manipule</b>, <b>classifique</b> e <b>entenda</b> as relações entre as repostas de seus alunos.</h2>
+          <%= link_to "Entrar", new_user_session_path, class: "btn btn-default" %>
+          <%= link_to "Registrar-se", new_user_registration_path, class: "btn btn-primary" %>
+        </div>
+				<div class="col-lg-5">
+					<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+					  <ol class="carousel-indicators">
+						<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+						<li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
+						<li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+					  </ol>
+					  <!-- slides -->
+					  <div class="carousel-inner">
+						<div class="item active">
+						  <img style="border: 1px solid black;" src="<%= image_path 'slide1.png' %>" alt="">
+              <h2 class="subtitle text-center">Manipulação das respostas</h2>
+						</div>
+						<div class="item">
+						  <img style="border: 1px solid black;" src="<%= image_path 'slide.png' %>" alt="">
+              <h2 class="subtitle text-center">Recomendações automáticas para análise de respostas relevantes</h2>
+						</div>
+						<div class="item">
+						  <img style="border: 1px solid black;" src="<%= image_path 'slide3.png' %>" alt="">
+              <h2 class="subtitle text-center">Diferentes visualizações das respostas</h2>
+						</div>
+					  </div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+<!--
+  <div id="body">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <h3 class="page-header text-center"><i class="glyphicon glyphicon-ok"></i> Turmas</h3>
+          <p class="text-center">
+            <img src="<%= image_path 'slide1.png' %>" alt="" width="90%" style="border:1px solid gray">
+          </p>
+
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget ornare tellus. Ut tortor enim, rutrum a massa id, facilisis luctus leo. Fusce ac massa vestibulum, pellentesque nunc vitae, iaculis urna. Duis consequat laoreet feugiat. Donec ipsum dui, sollicitudin nec fringilla in, laoreet et nisl. Maecenas ut diam blandit, laoreet.
+          </p>
+
+        </div>
+        <div class="col-lg-4">
+          <h3 class="page-header text-center"><i class="glyphicon glyphicon-ok"></i> Casos de Teste</h3>
+<p class="text-center">
+  <img src="<%= image_path 'slide1.png' %>" alt="" width="90%" style="border:1px solid gray">
+</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget ornare tellus. Ut tortor enim, rutrum a massa id, facilisis luctus leo. Fusce ac massa vestibulum, pellentesque nunc vitae, iaculis urna. Duis consequat laoreet feugiat. Donec ipsum dui, sollicitudin nec fringilla in, laoreet et nisl. Maecenas ut diam blandit, laoreet.
+          </p>
+        </div>
+        <div class="col-lg-4">
+          <h3 class="page-header text-center"><i class="glyphicon glyphicon-ok"></i> Manipulação de Respostas</h3>
+<p class="text-center">
+  <img src="<%= image_path 'slide1.png' %>" alt="" width="90%" style="border:1px solid gray">
+</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget ornare tellus. Ut tortor enim, rutrum a massa id, facilisis luctus leo. Fusce ac massa vestibulum, pellentesque nunc vitae, iaculis urna. Duis consequat laoreet feugiat. Donec ipsum dui, sollicitudin nec fringilla in, laoreet et nisl. Maecenas ut diam blandit, laoreet.
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <h3 class="page-header text-center"><i class="glyphicon glyphicon-ok"></i> Busca</h3>
+<p class="text-center">
+  <img src="<%= image_path 'slide1.png' %>" alt="" width="90%" style="border:1px solid gray">
+</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget ornare tellus. Ut tortor enim, rutrum a massa id, facilisis luctus leo. Fusce ac massa vestibulum, pellentesque nunc vitae, iaculis urna. Duis consequat laoreet feugiat. Donec ipsum dui, sollicitudin nec fringilla in, laoreet et nisl. Maecenas ut diam blandit, laoreet.
+          </p>
+        </div>
+        <div class="col-lg-4">
+          <h3 class="page-header text-center"><i class="glyphicon glyphicon-ok"></i> Recomendação Automática</h3>
+<p class="text-center">
+  <img src="<%= image_path 'slide1.png' %>" alt="" width="90%" style="border:1px solid gray">
+</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget ornare tellus. Ut tortor enim, rutrum a massa id, facilisis luctus leo. Fusce ac massa vestibulum, pellentesque nunc vitae, iaculis urna. Duis consequat laoreet feugiat. Donec ipsum dui, sollicitudin nec fringilla in, laoreet et nisl. Maecenas ut diam blandit, laoreet.
+          </p>
+        </div>
+        <div class="col-lg-4">
+          <h3 class="page-header text-center"><i class="glyphicon glyphicon-ok"></i> Análise Individual e da Turma</h3>
+<p class="text-center">
+  <img src="<%= image_path 'slide1.png' %>" alt="" width="90%" style="border:1px solid gray">
+</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget ornare tellus. Ut tortor enim, rutrum a massa id, facilisis luctus leo. Fusce ac massa vestibulum, pellentesque nunc vitae, iaculis urna. Duis consequat laoreet feugiat. Donec ipsum dui, sollicitudin nec fringilla in, laoreet et nisl. Maecenas ut diam blandit, laoreet.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>-->
+	<div id="footer">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-lg-offset-3">
+					<p class="copyright">Copyright © 2014 - <a href="http://alex.kutzke.com.br">Alex Kutzke</a> - <a href="http://www.inf.ufpr.br">UFPR</a></p>
+			</div>
+		</div>
+	</div>
+	</div>
+</body></html>

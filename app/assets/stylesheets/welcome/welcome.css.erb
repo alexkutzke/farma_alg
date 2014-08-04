@@ -1,0 +1,213 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require AdminLTE/bootstrap
+*/
+
+/* ==== Google font ==== */
+@import url('http://fonts.googleapis.com/css?family=Lato:400,300,700,900');
+
+body {
+  background-color: lightgray; /*#f2f2f2;*/
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    color: #444;
+    line-height: 1.6em;
+    -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    color: #444;
+}
+
+h1 {
+	font-size: 40px;
+}
+
+h3 {
+	font-weight: 400;
+}
+
+h4 {
+	font-weight: 400;
+	font-size: 20px;
+}
+
+p {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+
+a {
+    color: #d6ee18;
+    word-wrap: break-word;
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+a:hover,
+a:focus {
+    color: #b7cb1b;
+    text-decoration: none;
+    outline: 0;
+}
+
+a:before,
+a:after {
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+.navbar-inverse .navbar-nav > li > a {
+    color: #c6d550;
+}
+
+.alignleft {
+    text-align: left;
+}
+.alignright {
+    text-align: right;
+}
+
+.aligncenter {
+    text-align: center;
+}
+
+.btn-theme  {
+  color: #fff;
+  background-color: #fd680e;
+  border-color: #fd680e;
+}
+.btn-theme:hover  {
+  color: #fff;
+  background-color: #444;
+  border-color: #444;
+}
+form.signup {
+	margin-top: 30px;
+}
+form.signup button.btn {
+	text-transform: uppercase;
+	font-weight: 700;
+}
+form.signup input.form-control:focus {
+	border-color: #fd680e;
+}
+
+
+/* Nav */
+
+a.navbar-brand {
+	color: #fff !important;
+	font-weight: 900;
+	text-transform: uppercase;
+}
+a.navbar-brand:hover {
+    color: #ddd !important;
+}
+
+/* Header */
+
+#header {
+	background-color: #444;
+	background: url(<%= image_path 'welcome-bg.jpg' %>) no-repeat center top;
+	margin-top: -20px;
+	padding-top: 150px;
+	background-attachment: relative;
+	background-position: center center;
+	min-height: 650px;
+	width: 100%;
+
+    -webkit-background-size: 100%;
+    -moz-background-size: 100%;
+    -o-background-size: 100%;
+    background-size: 100%;
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    border-bottom: 1px solid black;
+}
+
+
+
+#header h1 {
+	margin-top: 60px;
+	margin-bottom: 15px;
+	color: #fff;
+	font-size: 45px;
+	font-weight: 900;
+	letter-spacing: -1px;
+}
+
+h2.subtitle {
+	color: #fff;
+	font-size: 20px;
+}
+
+/* slide */
+.carousel-indicators {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  z-index: 15;
+  width: 60%;
+  padding-left: 0;
+  /*margin-left: -50%;*/
+  text-align: center;
+  list-style: none;
+}
+.carousel-indicators li {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 1px;
+  text-indent: -999px;
+  cursor: pointer;
+  background-color: #000 \9;
+  background-color: #fff;
+  border: 1px solid #fff;
+  border-radius: 10px;
+}
+.carousel-indicators .active {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  background-color: #b7cb1b;
+}
+
+/* footer */
+#footer {
+  border-top:1px solid black;
+  margin-top: 20px;
+	background: gray;
+	padding: 20px 0 5px;
+}
+
+p.copyright {
+	color: #fff;
+	text-align: center;
+}
+
+#body
+{
+  background: lightgray;
+}

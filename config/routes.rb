@@ -156,7 +156,7 @@ Carrie::Application.routes.draw do
     end
   end
 
-  root to: "dashboard#home"
+  root to: "welcome#index"
 
   match '*path', to: 'home#index'
 end
