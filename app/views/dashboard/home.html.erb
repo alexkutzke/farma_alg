@@ -319,7 +319,7 @@
                  <% end %>
                 </div><!-- /.box-body -->
             </div><!-- /.box  -->
-            
+
 
             <% if current_user.prof? %>
             <!-- box  (with bar chart) -->
@@ -345,31 +345,8 @@
                   <% end %>
                 </div><!-- /.box-body -->
             </div><!-- /.box  -->
-            <% else %>
-              <!-- box  (with bar chart) -->
-              <div class="box  box-info">
-                  <div class="box-header">
-                      <!-- tools box  -->
-                      <div class="pull-right box-tools">
-                          <button class="btn btn-info btn-sm" data-widget='collapse' ><i class="fa fa-minus"></i></button>
-                      </div><!-- /. tools -->
-                      <i class="fa fa-check"></i>
-
-                      <h3 class="box-title">Minhas últimas respostas</h3>
-                  </div><!-- /.box-header -->
-
-                  <div class="box-body shorted-box">
-                    <% if @last_answers.empty? %>
-                      <p class="text-center">
-                        Nenhuma resposta.
-                      </p>
-                    <% end %>
-                    <% @last_answers.each do |a| %>
-                      <%= answer_link(a) %>
-                    <% end %>
-                  </div><!-- /.box-body -->
-              </div><!-- /.box  -->
             <% end %>
+
         </section><!-- /.Left col -->
 
         <!-- right col (We are only adding the ID to make the widgets sortable)-->
@@ -432,6 +409,34 @@
                 <% end %>
                 </div><!-- /.box-body -->
             </div><!-- /.box  -->
+
+            <% unless current_user.prof? %>
+
+
+              <!-- box  (with bar chart) -->
+              <div class="box  box-info">
+                  <div class="box-header">
+                      <!-- tools box  -->
+                      <div class="pull-right box-tools">
+                          <button class="btn btn-info btn-sm" data-widget='collapse' ><i class="fa fa-minus"></i></button>
+                      </div><!-- /. tools -->
+                      <i class="fa fa-check"></i>
+
+                      <h3 class="box-title">Minhas últimas respostas</h3>
+                  </div><!-- /.box-header -->
+
+                  <div class="box-body shorted-box">
+                    <% if @last_answers.empty? %>
+                      <p class="text-center">
+                        Nenhuma resposta.
+                      </p>
+                    <% end %>
+                    <% @last_answers.each do |a| %>
+                      <%= answer_link(a) %>
+                    <% end %>
+                  </div><!-- /.box-body -->
+              </div><!-- /.box  -->
+            <% end %>
 
             <% if current_user.prof? %>
             <!-- box  (with bar chart) -->
