@@ -61,6 +61,7 @@ class DashboardController < ApplicationController
 			unless last_try.nil?
 				@boxes << {:color => ( last_try.correct ? "bg-green" : "bg-red"), :value => last_try.question.title.truncate(10), :title => "Última tentativa", :has_link? => true, :icon => "fa " + (last_try.correct ? "fa-check" : "fa-times"), :link => panel_team_user_lo_question_answer_path(last_try.team_id,last_try.user_id,last_try.lo_id,last_try.question_id,last_try.id) }
 			end
+			@last_comments = Comment.where(target_user_id: current_user.id ).desc('created_at')[0..4]
     end
 
 		@boxes.shuffle!

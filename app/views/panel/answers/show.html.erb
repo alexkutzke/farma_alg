@@ -80,6 +80,12 @@
   <section class="content">
     <div class="row">
 
+          <% if @correct %>
+            <div class="alert alert-success">
+              Este aluno já respondeu corretamente esta questão.
+            </div>
+          <% end %>
+
           <section class="col-lg-6">
             <% if @answer.correct %>
               <div class="box box-success">

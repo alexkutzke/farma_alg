@@ -122,6 +122,16 @@
                     Você pode criar seus O.A.s pela opção <b><i class="fa fa-pencil-square-o"></i> <span>Meus O.A.'s</span></b> no menu
                     esquerdo. Feito isso, crie suas turmas por meio da opção <b><i class="fa fa-users"></i> <span>Turmas</span></b>.
                   </p>
+                <% else %>
+                  <p>
+                    Você está cadastrado como <b>Aluno</b>. Caso isto esteja incorreto, por favor, entre em contato por <a href="mailto:alexander@inf.ufpr.br">email</a> solicitando a alteração.
+                  </p>
+
+                  <p>
+                    Por meio deste sistema, você pode responder os exercícios passados por seus professores. Suas respostas
+                    ficarão armazenadas e disponíveis para você e para seu professor.
+                  </p>
+
                 <% end %>
 
                   <p>
@@ -226,7 +236,40 @@
         <!-- Left col -->
         <section class="col-lg-6">
 
-            <% if current_user.prof? %>
+          <% unless current_user.prof? %>
+            <!-- box  (with bar chart) -->
+            <div class="box  box-info">
+                <div class="box-header">
+                    <!-- tools box  -->
+                    <div class="pull-right box-tools">
+                        <button class="btn btn-info btn-sm" data-widget='collapse' ><i class="fa fa-minus"></i></button>
+                    </div><!-- /. tools -->
+                    <i class="fa fa-check"></i>
+
+                    <h3 class="box-title">Turmas em que estou matriculado</h3>
+                </div><!-- /.box-header -->
+
+                <div class="box-body shorted-box">
+                  <% if current_user.teams.empty? %>
+                    <p class="text-center">
+                      Nenhuma resposta.
+                    </p>
+                  <% end %>
+                  <% current_user.teams.each do |t| %>
+                    <section class="well">
+                      <header class="clearfix">
+                        <div class="left">
+                          <h4><%= link_to t.name,panel_team_user_path(t,current_user)%></h4>
+                            <span class="date-info">(Prof(a). <%= User.find(t.owner_id).name %>)</span>
+                        </div>
+                      </header>
+                    </section>
+                  <% end %>
+                </div><!-- /.box-body -->
+            </div><!-- /.box  -->
+          <% end %>
+
+
             <!-- box  (with bar chart) -->
             <div class="box  box-info">
                 <div class="box-header">
@@ -235,8 +278,11 @@
                         <button class="btn btn-info btn-sm" data-widget='collapse' ><i class="fa fa-minus"></i></button>
                     </div><!-- /. tools -->
                     <i class="fa fa-comments"></i>
-
-                    <h3 class="box-title">Últimos comentários nas suas turmas</h3>
+                    <% if current_user.prof? %>
+                      <h3 class="box-title">Últimos comentários nas suas turmas</h3>
+                    <% else %>
+                      <h3 class="box-title">Últimos comentários nas suas respostas</h3>
+                    <% end %>
                 </div><!-- /.box-header -->
 
                 <div class="box-body shorted-box">
@@ -273,7 +319,7 @@
                  <% end %>
                 </div><!-- /.box-body -->
             </div><!-- /.box  -->
-            <% end %>
+            
 
             <% if current_user.prof? %>
             <!-- box  (with bar chart) -->

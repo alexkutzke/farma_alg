@@ -40,6 +40,7 @@ class Panel::AnswersController < ApplicationController
 		@comment.answer = @answer
 		@comment.user_id = current_user.id
 		@previous_answers = @answer.previous(5)
+		@correct = Answer.where(user_id: params[:user_id], question_id: params[:question_id], correct: true).count > 0 ? true : false
 	end
 
   def change_correctness
