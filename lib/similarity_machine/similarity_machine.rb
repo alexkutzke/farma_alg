@@ -127,6 +127,9 @@ module SimilarityMachine
       c.test_case_similarity_final = result['test_case_similarity_final']
       c.weight = result['final_similarity']
       c.save!
+
+      a.schedule_process_propagate(6)
+      b.schedule_process_propagate(6)
     end
     c
   end
@@ -166,7 +169,7 @@ module SimilarityMachine
   end
 
   def self.start
-    puts "Limpando tags..."
+    puts "Corrigindo tags..."
     as = Answer.all
     t = as.count
     for i in 0..as.count-1 do
@@ -176,46 +179,7 @@ module SimilarityMachine
       a.automatically_assigned_tags = []
       a.rejected_tags = []
       a.save!
-    end
-
-    Tag.delete_all
-
-    compile_error = Tag.create(:description => "Erro de compilação - Identificado automaticamente",
-                            :type => 2,
-                            :name => "Compilação")
-    diff_error = Tag.create(:description => "Erro de saída - Identificado automaticamente",
-                            :type => 1,
-                            :name => "Saída")
-    time_error = Tag.create(:description => "Tempo excedido - Identificado automaticamente",
-                            :type => 1,
-                            :name => "Tempo")
-    exec_error = Tag.create(:description => "Erro de execução - Identificado automaticamente",
-                            :type => 1,
-                            :name => "Execução")
-    presentation_error = Tag.create(:description => "Erro de apresentação - Identificado automaticamente",
-                            :type => 1,
-                            :name => "Apresentação")
-
-    puts "Atribuindo tags..."
-    for i in 0..as.count-1 do
-      print i.to_s + "/" + t.to_s + "\r"
-      a=as[i]
-      if a.compile_errors
-        a.tag_ids << compile_error.id.to_s
-      else
-        a.results.each do |k,v|
-          if  v['diff_error']
-            a.tag_ids << diff_error.id.to_s
-          elsif v['time_error']
-            a.tag_ids << time_error.id.to_s
-          elsif v['exec_error']
-            a.tag_ids << exec_error.id.to_s
-          elsif v['presentation_error']
-            a.tag_ids << presentation_error.id.to_s
-          end
-        end
-      end
-      a.save!
+      Tag.apply_primary(a)
     end
 
     Connection.delete_all

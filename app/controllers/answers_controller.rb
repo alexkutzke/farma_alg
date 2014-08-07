@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  include ActionView::Helpers::DateHelper 
+  include ActionView::Helpers::DateHelper
   before_filter :authenticate_user!, except: :create
   respond_to :json
   before_filter :team_ids, only: :index
@@ -15,7 +15,7 @@ class AnswersController < ApplicationController
   end
 
   def create
-    last = LastAnswer.where(user_id: current_or_guest_user.id, question_id: params[:answer][:question_id]).try(:first)
+    #last = LastAnswer.where(user_id: current_or_guest_user.id, question_id: params[:answer][:question_id]).try(:first)
 
 #    if (last && last.answer && (last.answer.response == params[:answer][:response]))
 #      @answer = last.answer

@@ -9,7 +9,7 @@ class ProcessQueue
   before_create :verify_repeat
 
   def verify_repeat
-    unless ProcessQueue.where(type: self.type, params: self.params).count == 0
+    unless ProcessQueue.where(type: self.type, params: self.params, priority: self.priority).count == 0
       return false
     end
     return true
@@ -21,6 +21,11 @@ class ProcessQueue
     self.delete
 
   	case p.type
+
+    when "apply_primary_tags"
+       puts "Process: apply_primary_tags(#{p.params[0]}) started ..."
+       Answer.find(p.params[0]).apply_primary_tags
+       puts "Process: apply_primary_tags(#{p.params[0]}) ended ..."
 
    	when "make_inner_connections"
   		puts "Process: make_inner_connections(#{p.params[0]}) started ..."

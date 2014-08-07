@@ -20,11 +20,12 @@ class Answer
   field :for_test, type: Boolean, default: false
   field :retroaction, type: Boolean, default: false
   field :compile_errors
-  field :try_number, type: Integer
+  field :try_number, type: Integer, default: 1
   field :lang
 
   field :automatically_assigned_tags, type: Array, default: []
   field :rejected_tags, type: Array, default: []
+  field :primary_applied, type: Boolean, default: false
 
   field :lo, type: Hash
   field :exercise, type: Hash
@@ -59,25 +60,23 @@ class Answer
   scope :corrects, where(correct: true, :team_id.ne => nil, :for_test.ne => true)
   scope :every, excludes(team_id: nil, for_test: true)
 
-  #before_save :verify_response, :store_datas
-  before_create :verify_response, :store_datas
-  after_create :register_last_answer,:updateStats,:schedule_process_connections,:update_progress #, :update_questions_with_last_answer
+  before_create :verify_response,:store_datas
+  after_create :register_last_answer,:updateStats,:schedule_process_connections,:update_progress
 
-  #def self.search(page, params = nil, team_ids = nil)
-  #  if team_ids
-  #    if params
-  #      Answer.excludes(team_id: nil, for_test: true).where(params).in(team_id: team_ids).page(page).per(20)
-  #    else
-  #      Answer.excludes(team_id: nil, for_test: true).in(team_id: team_ids).page(page).per(20)
-  #    end
-  #  else
-  #    if params
-  #      Answer.excludes(team_id: nil, for_test: true).where(params).page(page).per(20)
-  #    else
-  #      Answer.excludes(team_id: nil, for_test: true).page(page).per(20)
-  #    end
-  #  end
-  #end
+
+
+  def apply_primary_tags
+    unless self.primary_applied
+      primary_tags = Tag.apply_primary(self)
+      primary_tags.each do |tag_id|
+        self.tag_ids << tag_id unless self.tag_ids.include?(tag_id)
+      end
+      self.primary_applied = true
+      self.save
+    end
+
+    true
+  end
 
   def update_progress
     p = Progress.find_or_initialize_by(team_id:self.team_id,user_id:self.user_id,question_id:self.question_id)
@@ -265,6 +264,7 @@ class Answer
         #self.results[id][:output2] = simple_format r[1][0]
       end
     end
+    true
   end
 
   def available_tags
@@ -284,16 +284,6 @@ class Answer
   def verify_response
 
     self.exec
-
-    unless self.for_test
-      la = LastAnswer.find_or_create_by(:user_id => self.user_id, :question_id => self.question_id)
-      self.try_number = 1
-      if not la.answer_id.nil?
-        self.try_number = la.answer.try_number + 1
-      else
-        la.delete
-      end
-    end
   end
 
   def updateStats
@@ -334,28 +324,32 @@ class Answer
 
     # confirmed tags
     for tag in answer.tags do
-      # neigh already has this tag as confirmed
-      if neigh.tags.include?(tag)
-        # do nothing
-      # neigh already has this tag as automatically assigned
-      elsif not (i = naat.index{ |x| x[0].to_s == tag.id.to_s }).nil?
-        t = naat[i]
 
-        # passed by another answer
-        if t[2] != answer.id
-          if t[1] < weight
+      unless tag.primary
+
+        # neigh already has this tag as confirmed
+        if neigh.tags.include?(tag)
+          # do nothing
+        # neigh already has this tag as automatically assigned
+        elsif not (i = naat.index{ |x| x[0].to_s == tag.id.to_s }).nil?
+          t = naat[i]
+
+          # passed by another answer
+          if t[2] != answer.id
+            if t[1] < weight
+              t[1] = weight
+            end
+          # passed by this answers
+          else
+            # update anyway
             t[1] = weight
           end
-        # passed by this answers
+        # neigh does not have this tag
         else
-          # update anyway
-          t[1] = weight
-        end
-      # neigh does not have this tag
-      else
-        # was it rejected?
-        unless neigh.rejected_tags.include?(tag.id.to_s)
-          naat.push [tag.id,weight,answer.id]
+          # was it rejected?
+          unless neigh.rejected_tags.include?(tag.id.to_s)
+            naat.push [tag.id,weight,answer.id]
+          end
         end
       end
     end
@@ -364,34 +358,41 @@ class Answer
     for atag in answer.automatically_assigned_tags do
       tag = Tag.find(atag[0])
 
-      # neigh already has this tag as confirmed
-      if neigh.tags.include?(tag)
-        # do nothing
-      # neigh already has this tag as automatically assigned
-      elsif not (i = naat.index{ |x| x[0].to_s == tag.id.to_s }).nil?
-        t = naat[i]
+      unless tag.primary
 
-        # passed by another answer
-        if t[2] != answer.id
-          if t[1] < weight*atag[1]
-            t[1] = weight*atag[1]
+        # neigh already has this tag as confirmed
+        if neigh.tags.include?(tag)
+          # do nothing
+        # neigh already has this tag as automatically assigned
+        elsif not (i = naat.index{ |x| x[0].to_s == tag.id.to_s }).nil?
+          t = naat[i]
+
+          # passed by another answer
+          if t[2] != answer.id
+            if t[1] < weight*atag[1]
+              t[1] = weight*atag[1]
+            end
+          # passed by this answers
+          else
+            # update anyway
+            t[1] = atag[1] * weight
           end
-        # passed by this answers
+        # neigh does not have this tag
         else
-          # update anyway
-          t[1] = atag[1] * weight
-        end
-      # neigh does not have this tag
-      else
-        unless neigh.rejected_tags.include?(tag.id.to_s)
-          naat.push [tag.id,weight*atag[1],answer.id]
+          unless neigh.rejected_tags.include?(tag.id.to_s)
+            naat.push [tag.id,weight*atag[1],answer.id]
+          end
         end
       end
     end
 
     for rejected in answer.rejected_tags do
-      unless (i = naat.index{ |x| x[2].to_s == answer.id.to_s && x[0].to_s == rejected.to_s }).nil?
-        naat.delete_at(i)
+      tag = Tag.find(rejected)
+
+      unless tag.primary
+        unless (i = naat.index{ |x| x[2].to_s == answer.id.to_s && x[0].to_s == rejected.to_s }).nil?
+          naat.delete_at(i)
+        end
       end
     end
 
@@ -423,6 +424,9 @@ class Answer
   end
 
   def schedule_process_connections
+    ProcessQueue.create(:type => "apply_primary_tags",
+                        :priority => 1,
+                        :params => [self.id])
     ProcessQueue.create(:type => "make_inner_connections",
                         :priority => 2,
                         :params => [self.id])
@@ -431,9 +435,9 @@ class Answer
                         :params => [self.id])
   end
 
-  def schedule_process_propagate
+  def schedule_process_propagate(p = 3)
     ProcessQueue.create(:type => "propagate_properties",
-                        :priority => 2,
+                        :priority => p,
                         :params => [self.id])
   end
 
@@ -495,12 +499,26 @@ private
 
   def register_last_answer
     unless self.for_test
-      la = LastAnswer.find_or_create_by(:user_id => self.user.id, :question_id => self.question.id)
-      la.answer = self
-      la.question_id = self.question_id
-      la.user_id = self.user_id
+      la = LastAnswer.find_or_create_by(:user_id => self.user_id.to_s, :question_id => self.question_id.to_s)
+
+      self.last_answer = la
+      la.answer_id = self.id
+
+      unless la.answer_id.nil?
+        self.try_number = la.answer.try_number + 1
+      end
+
       la.save!
+
     end
+
+    #unless self.for_test
+    #  la = LastAnswer.find_or_create_by(:user_id => self.user.id, :question_id => self.question.id)
+    #  la.answer = self
+    #  la.question_id = self.question_id
+    #  la.user_id = self.user_id
+    #  la.save!
+    #end
   end
 
   def self.search_aat(params,user)
