@@ -39,10 +39,10 @@ namespace :process_queue  do
           ops = {:err => [(Rails.root + "log/process_queue_err").to_s, "a"],
                  :out => [(Rails.root + "log/process_queue_stdout").to_s, "a"]}
 
-      pid = spawn({}, "rake --environment=production process_queue:start", ops)
+      pid = spawn({}, "RAILS_ENV=production rake process_queue:start", ops)
       Process.detach(pid)
       pids << pid
-      cpulimit = "cpulimit -p #{pid} -l 50 -b"
+      cpulimit = "cpulimit -p #{pid.to_i + 1} -l 50 -b &"
 
       puts "$ #{cpulimit}"
       `#{cpulimit}`
