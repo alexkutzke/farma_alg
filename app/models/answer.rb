@@ -197,8 +197,7 @@ class Answer
     @_team ||= Team.new(super) rescue nil
   end
 
-# Need store all information for retroaction
-
+  # Need store all information for retroaction
   def store_datas
     question = Question.find(self.question_id)
     self.exercise = question.exercise.as_json(include: {questions: {include: :test_cases }})
@@ -317,10 +316,28 @@ class Answer
   end
 
   def self.propagate_properties_to_neigh(answer,neigh_id)
+    changed = false
     neigh = Answer.find(neigh_id)
     connections = neigh.connections
     weight = connections[connections.index{|x| x.target_answer_id.to_s == answer.id.to_s}].weight
     naat = neigh.automatically_assigned_tags
+
+    # clean any tag got from answer that answer does not have anymore
+    remove = []
+    i = 0
+    for t in naat do
+      if t[2] == answer.id && answer.rejected_tags.include?(t[0]) #(not answer.automatically_assigned_tags.include?(t[0]))
+        remove << t
+      end
+      i += 1
+    end
+
+    remove.each do |i|
+      naat.delete(i)
+      changed = true
+      tag = Tag.find(i[0])
+      puts "Answer(#{answer.id}).aat.#{tag.name} -> (removed) Answer(#{neigh_id}).aat"
+    end
 
     # confirmed tags
     for tag in answer.tags do
@@ -338,17 +355,26 @@ class Answer
           if t[2] != answer.id
             if t[1] < weight
               t[1] = weight
+              puts "Answer(#{answer.id}).#{tag.name} -> (substituted) Answer(#{neigh_id}).aat"
+              changed = true
             end
           # passed by this answers
           else
-            # update anyway
-            t[1] = weight
+            # update if any change
+            if t[1] != weight
+              t[1] = weight
+              puts "Answer(#{answer.id}).#{tag.name} -> (updated) Answer(#{neigh_id}).aat"
+              changed = true
+            end
           end
         # neigh does not have this tag
         else
           # was it rejected?
           unless neigh.rejected_tags.include?(tag.id.to_s)
+            # no
             naat.push [tag.id,weight,answer.id]
+            puts "Answer(#{answer.id}).#{tag.name} -> (new) Answer(#{neigh_id}).aat"
+            changed = true
           end
         end
       end
@@ -371,16 +397,24 @@ class Answer
           if t[2] != answer.id
             if t[1] < weight*atag[1]
               t[1] = weight*atag[1]
+              changed = true
+              puts "Answer(#{answer.id}).aat.#{tag.name} -> (substituted) Answer(#{neigh_id}).aat"
             end
           # passed by this answers
           else
-            # update anyway
-            t[1] = atag[1] * weight
+            # update if any change
+            if t[1] != atag[1] * weight
+              t[1] = atag[1] * weight
+              changed = true
+              puts "Answer(#{answer.id}).aat.#{tag.name} -> (updated) Answer(#{neigh_id}).aat"
+            end
           end
         # neigh does not have this tag
         else
           unless neigh.rejected_tags.include?(tag.id.to_s)
             naat.push [tag.id,weight*atag[1],answer.id]
+            changed = true
+            puts "Answer(#{answer.id}).aat.#{tag.name} -> (new) Answer(#{neigh_id}).aat"
           end
         end
       end
@@ -392,11 +426,19 @@ class Answer
       unless tag.primary
         unless (i = naat.index{ |x| x[2].to_s == answer.id.to_s && x[0].to_s == rejected.to_s }).nil?
           naat.delete_at(i)
+          puts "Answer(#{answer.id}).aat.#{tag.name} -> (removed) Answer(#{neigh_id}).aat"
+          changed = true
         end
       end
     end
 
     neigh.save!
+
+    unless changed
+      puts "Answer.(#{answer.id}) didn't change Answer(#{neigh_id})"
+    end
+
+    changed
   end
 
   def propagate_properties
@@ -404,7 +446,7 @@ class Answer
     visited = []
 
     queue.push self.id
-    visited.push self.id
+    #visited.push self.id
 
     while not queue.empty?
       answer_id = queue.shift
@@ -413,12 +455,13 @@ class Answer
 
       for similar_answer in answer.similar_answers do
         unless visited.include?(similar_answer)
-          queue.push similar_answer
-          visited.push similar_answer
+          changed = Answer.propagate_properties_to_neigh(answer,similar_answer)
+          if changed
+            queue.push similar_answer
+          end
         end
-
-        Answer.propagate_properties_to_neigh(answer,similar_answer)
       end
+      visited.push answer_id
     end
     true
   end
@@ -544,7 +587,6 @@ private
 
     as.first(50)
   end
-
 
   def self.search(params,user,page=false)
     as = Answer.search_without_tags(params,user)
@@ -736,6 +778,5 @@ private
     timeline_items[last_new_date] << x if timeline_items.count > 0
     timeline_items
   end
-
 
 end

@@ -18,7 +18,7 @@ def read_pids
 end
 
 namespace :process_queue  do
-	task :start => :environment do
+	task :start_server => :environment do
     pids = read_pids
 
     if pids.empty?
@@ -30,7 +30,7 @@ namespace :process_queue  do
       store_pids([], :write)
     end
 
-    clean = "kill -9 `ps x | grep ProcessQueue | cut -d ' ' -f1` && pkill cpulimit"
+    clean = "pkill cpulimit"
     puts "$ #{clean}"
     `#{clean}`
 
@@ -39,7 +39,7 @@ namespace :process_queue  do
           ops = {:err => [(Rails.root + "log/process_queue_err").to_s, "a"],
                  :out => [(Rails.root + "log/process_queue_stdout").to_s, "a"]}
 
-      pid = spawn({}, "rails runner --environment=production 'ProcessQueue::start'", ops)
+      pid = spawn({}, "rake --environment=production process_queue:start", ops)
       Process.detach(pid)
       pids << pid
       cpulimit = "cpulimit -p #{pid} -l 50 -b"
@@ -48,8 +48,11 @@ namespace :process_queue  do
       `#{cpulimit}`
     end
 
-
-
     store_pids(pids,:append)
 	end
+
+
+  task :start => :environment do
+    ProcessQueue::start
+  end
 end

@@ -170,16 +170,26 @@ module SimilarityMachine
 
   def self.start
     puts "Corrigindo tags..."
-    as = Answer.all
-    t = as.count
-    for i in 0..as.count-1 do
+
+    t = Answer.count
+    i = 1
+    Answer.all.no_timeout.each do |a|
       print i.to_s + "/" + t.to_s + "\r"
-      a=as[i]
+      i += 1
+      a.tags.destroy
       a.tag_ids = []
       a.automatically_assigned_tags = []
       a.rejected_tags = []
       a.save!
-      Tag.apply_primary(a)
+    end
+
+    Tag.delete_all
+
+    i=1
+    Answer.all.no_timeout.each do |a|
+      print i.to_s + "/" + t.to_s + "\r"
+      a.apply_primary_tags
+      i += 1
     end
 
     Connection.delete_all
@@ -187,10 +197,16 @@ module SimilarityMachine
     i=1
     puts "Criando conexoes"
     Answer.all.no_timeout.each do |a|
-      print i.to_s + "/" + t.to_s + "\r"
-      i = 1 + i
+
+      #print i.to_s + "/" + t.to_s + "\r"
+      print i.to_s + "/" + t.to_s
+      puts
+      puts a.id
+
       a.make_inner_connections
       a.make_outer_connections
+
+      i = 1 + i
     end
   end
 
