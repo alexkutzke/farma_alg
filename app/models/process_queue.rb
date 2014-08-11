@@ -18,7 +18,7 @@ class ProcessQueue
   def do_process
   	p = self
 
-    self.delete
+    #self.delete
 
   	case p.type
 
@@ -46,6 +46,8 @@ class ProcessQueue
   		return false
   	end
 
+    self.delete
+    
   	return true
   end
 

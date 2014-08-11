@@ -32,5 +32,6 @@ class Dashboard::ConnectionsController < ApplicationController
   end
 
   def show
+    Log.log_connection_view_simple(current_user.id,@connection.id)
   end
 end

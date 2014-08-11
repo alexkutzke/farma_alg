@@ -30,6 +30,7 @@ class Dashboard::TagsController < ApplicationController
       @answer.save!
 
       @answer.schedule_process_propagate
+      Log.log_add_tag(current_user.id,@answer.id,tag.id)
 
       @available_tags = @answer.available_tags
       render :show
@@ -52,6 +53,8 @@ class Dashboard::TagsController < ApplicationController
 
       @available_tags = @answer.available_tags
       @notice = "Tag #{@tag.name} criada com sucesso!"
+
+      Log.log_add_tag(current_user.id,@answer.id,@tag.id)
     end
 
     render :show
@@ -66,6 +69,8 @@ class Dashboard::TagsController < ApplicationController
     @answer.schedule_process_propagate
     @available_tags = @answer.available_tags
 
+    Log.log_remove_tag(current_user.id,@answer.id,params[:id])
+
     render :show
   end
 
@@ -79,6 +84,8 @@ class Dashboard::TagsController < ApplicationController
     @answer.automatically_assigned_tags.delete_at(i)
     @answer.save!
     @available_tags = @answer.available_tags
+
+    Log.log_accept_tag(current_user.id,@answer.id,@tag.id)
 
     if params.has_key?(:not_render)
       render :nothing => true
@@ -98,6 +105,8 @@ class Dashboard::TagsController < ApplicationController
     @answer.save!
     @answer.schedule_process_propagate
     @available_tags = @answer.available_tags
+
+    Log.log_reject_tag(current_user.id,@answer.id,@tag.id)
 
     if params.has_key?(:not_render)
       render :nothing => true

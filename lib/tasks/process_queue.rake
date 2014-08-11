@@ -24,7 +24,7 @@ namespace :process_queue  do
     if pids.empty?
       puts "Process Queue was not running."
     else
-      syscmd = "kill -s QUIT #{pids.join(' ')}"
+      syscmd = "kill -9 #{pids.join(' ')}"
       puts "$ #{syscmd}"
       `#{syscmd}`
       store_pids([], :write)

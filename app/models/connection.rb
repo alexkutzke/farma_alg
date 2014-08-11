@@ -39,8 +39,12 @@ class Connection
     a = Answer.find(self.answer_id)
     b = Answer.find(self.target_answer_id)
 
-    Answer.propagate_properties_to_neigh(a,b.id)
-    Answer.propagate_properties_to_neigh(b,a.id)  
+
+    a.schedule_process_propagate(6)
+    b.schedule_process_propagate(6)
+
+    #Answer.propagate_properties_to_neigh(a,b.id)
+    #Answer.propagate_properties_to_neigh(b,a.id)  
 
   	Connection.set_callback("save", :after, :dup)
   end

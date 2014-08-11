@@ -32,6 +32,8 @@ class Panel::TeamsController < ApplicationController
       redirect_to panel_team_user_path(@team, @current_user)
     end
 
+		Log.log_team_view(current_user.id,@team.id)
+
     #@chart_data = GraphDataGenerator::team_tries_x_time(@team.id,"daily")
     @recent_activity_data = GraphDataGenerator::team_recent_activity(@team.id)
     @team_lo_tries = GraphDataGenerator::team_lo_tries(@team.id)

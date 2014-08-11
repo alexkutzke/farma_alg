@@ -36,7 +36,7 @@ class Dashboard::AnswersController < ApplicationController
         can = true
       end
     end
-    
+
 
     unless can
       render :file => "public/401.html", :status => :unauthorized
@@ -54,6 +54,8 @@ class Dashboard::AnswersController < ApplicationController
     else
       @answer.from_graph = false
     end
+
+    Log.log_answer_view_simple(current_user.id,@answer.id)
   end
 
 end

@@ -30,5 +30,6 @@ class Panel::QuestionsController < ApplicationController
 
 	def show
 		@answers = Answer.where(user_id: @user.id, team_id: @team.id, question_id:@question.id).desc(:created_at)
+		Log.log_team_user_lo_question_view(current_user.id,@team.id,@user.id,@lo.id,@question.id)
 	end
 end

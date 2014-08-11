@@ -99,7 +99,7 @@ module ApplicationHelper
     elsif t.type == 2
       label = "label-warning"
     else
-      label = "label-default"
+      label = "label-success"
     end
 
     raw "<span data-id=\"#{t.id}\" style=\"margin: 3px 3px;\" rel=\"tooltip\" data-toggle=\"tooltip\" data-placement=\"top\" title data-original-title=\"#{t.description}\" class=\"#{"tags" if big} label #{label}\">#{t.name}</span>"

@@ -127,9 +127,6 @@ module SimilarityMachine
       c.test_case_similarity_final = result['test_case_similarity_final']
       c.weight = result['final_similarity']
       c.save!
-
-      a.schedule_process_propagate(6)
-      b.schedule_process_propagate(6)
     end
     c
   end
@@ -188,6 +185,7 @@ module SimilarityMachine
     i=1
     Answer.all.no_timeout.each do |a|
       print i.to_s + "/" + t.to_s + "\r"
+      a.primary_applied = false
       a.apply_primary_tags
       i += 1
     end

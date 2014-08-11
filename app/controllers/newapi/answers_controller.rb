@@ -11,6 +11,7 @@ class Newapi::AnswersController < ApplicationController
 				render_401
 			end
 		end
+		Log.log_graph_add(current_user.id,@answer.id)
 	end
 
   def connections
@@ -35,6 +36,8 @@ class Newapi::AnswersController < ApplicationController
 		else
 			@answers = Answer.in(_id:params[:answer_ids]).where('team.owner_id' => current_user.id)
 		end
+
+		Log.log_graph_add_group(current_user.id,params[:answer_ids])
 	end
 
 	def connected_component
@@ -43,6 +46,8 @@ class Newapi::AnswersController < ApplicationController
 		else
 			@answers = Answer.in(_id: Answer.find(params[:id]).connected_component).where('team.owner_id' => current_user.id)
 		end
+
+		Log.log_graph_add_connected_component(current_user.id,params[:id])
 		render "group"
 	end
 
@@ -55,6 +60,7 @@ class Newapi::AnswersController < ApplicationController
 		else
 			@answers = Answer.in(_id: ids).where('team.owner_id' => current_user.id)
 		end
+		Log.log_graph_add_similar(current_user.id,params[:id])
 		render "group"
 	end
 

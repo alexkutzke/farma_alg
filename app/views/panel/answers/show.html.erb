@@ -189,6 +189,19 @@
 
                     <% end %>
 
+                    <% if current_user.prof? %>
+                      <%= link_to dashboard_graph_path + "?connected_component=" + @answer.id.to_s, :target => "_blank" do %>
+                        <button class="btn btn-warning btn-block">
+                          Visualizar componente conexa no grafo
+                        </button>
+                      <% end %>
+                      <%= link_to dashboard_graph_path + "?similar=" + @answer.id.to_s, :target => "_blank" do %>
+                        <button class="btn btn-warning btn-block">
+                          Visualizar respostas semelhantes no grafo
+                        </button>
+                      <% end %>
+                    <% end %>
+
 
                     <!-- Modal -->
                     <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -37,6 +37,7 @@ class Dashboard::MessagesController < ApplicationController
 
   def show
     @message = Message.find(params[:id])
+    Log.log_message_view(current_user.id,@message.id)
     @message.new_flag_user_ids.delete(current_user.id.to_s)
     if current_user.id == @message.user.id
       @message.new_flag_user_id = false
@@ -52,6 +53,10 @@ class Dashboard::MessagesController < ApplicationController
     @method = :post
     @path = "/dashboard/messages"
     @message = Message.new(params[:message])
+
+    if params.has_key?(:recom)
+      Log.log_recommendation_click(current_user.id,params[:message])
+    end
   end
 
   def edit
@@ -85,6 +90,12 @@ class Dashboard::MessagesController < ApplicationController
 
     respond_to do |format|
       if @message.save
+        if @message.has_recommendation?
+          Log.log_message_sent_with_recommendation(current_user.id,@message.id)
+        else
+          Log.log_message_sent(current_user.id,@message.id)
+        end
+
         format.html { redirect_to dashboard_messages_path, notice: 'Mensagem criada com sucesso.' }
         format.json { render json: @message, status: :created, location: @message }
       else

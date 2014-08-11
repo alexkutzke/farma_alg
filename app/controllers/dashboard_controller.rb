@@ -78,6 +78,7 @@ class DashboardController < ApplicationController
     @timeline_items = Answer.make_timeline(@as)
 		@params=params
 
+		Log.log_search_timeline(current_user.id,params)
     render 'timeline_search_result'
   end
 
@@ -96,6 +97,7 @@ class DashboardController < ApplicationController
     #@as_aat = Answer.search_aat(params,current_user)
 		@params =params
 
+		Log.log_search_tag(current_user.id,params)
     render 'tags_search_result'
   end
 
@@ -117,11 +119,14 @@ class DashboardController < ApplicationController
     @button_add = false unless params.has_key?(:button_add)
 		@params =params
 
+		Log.log_search_simple(current_user.id,params)
+
     render 'search_result'
   end
 
   def graph
     init_search
+		Log.log_graph_view(current_user.id)
   end
 
   def graph_search
@@ -129,6 +134,8 @@ class DashboardController < ApplicationController
 		@total = @as.count
 		@as = @as.first(50)
 		@params =params
+
+		Log.log_search_graph(current_user.id,params)
 
     render 'graph_search_result'
   end

@@ -25,6 +25,8 @@ class Newapi::ConnectionsController < ApplicationController
     Answer.propagate_properties_to_neigh(b,a.id)
     a.schedule_process_propagate
     b.schedule_process_propagate
+
+		Log.log_connection_create(current_user.id,@connection.id)
 	end
 
   def accept_connection
@@ -51,6 +53,8 @@ class Newapi::ConnectionsController < ApplicationController
 
     a.schedule_process_propagate
     b.schedule_process_propagate
+
+		Log.log_connection_accept(current_user.id,@connection.id)
   end
 
   def reject_connection
@@ -82,6 +86,8 @@ class Newapi::ConnectionsController < ApplicationController
     while not (i = aat_b.index{ |x| x[2].to_s == a.id.to_s }).nil?
       aat_b.delete_at(i)
     end
+
+		Log.log_connection_reject(current_user.id,{answer_1_id:a.id,answer2_id:b.id})
 
     a.save!
     b.save!

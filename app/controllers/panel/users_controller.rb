@@ -33,6 +33,9 @@ class Panel::UsersController < ApplicationController
     unless @team.users.include?(current_user) || current_user.prof?
       redirect_to dashboard_home_path
     end
+
+		Log.log_team_user_view(current_user.id,@team.id,@user.id)
+
     @recent_activity_data = GraphDataGenerator::team_user_recent_activity(@team.id,@user.id)
 		@team_user_lo_tries = GraphDataGenerator::team_user_lo_tries(@team.id,@user.id)
 	end

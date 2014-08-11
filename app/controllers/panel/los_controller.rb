@@ -43,6 +43,8 @@ class Panel::LosController < ApplicationController
 
     @last_answers = Answer.where(user_id:@user.id,team_id:@team.id,lo_id:@lo.id).desc(:updated_at)[0..5]
 
+		Log.log_team_user_lo_view(current_user.id,@team.id,@user.id,@lo.id)
+
     @recent_activity_data = GraphDataGenerator::team_user_lo_recent_activity(@team.id,@user.id,@lo.id)
 	end
 
@@ -65,5 +67,7 @@ class Panel::LosController < ApplicationController
         @stats[ex.id][q.id] = Statistic.find_or_create_by(:question_id => q.id, :team_id => nil)
       end
     end
+
+		Log.log_team_lo_overview_view(current_user.id,@team.id,@lo.id)
   end
 end

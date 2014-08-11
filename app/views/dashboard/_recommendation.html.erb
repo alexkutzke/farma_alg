@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-md-12">
     <div class="box box-solid" style="border: 1px solid lightgray;">
-                                 
+
       <% case recommendation.type %>
       <% when "questao_com_mais_incorretas" %>
 
@@ -15,7 +15,7 @@
           <p>
             A questão <%= Question.find(recommendation.item['question_id']).title %> é uma das que possui mais tentativas incorretas na turma <%= Team.find(recommendation.item['team_id']).name %>.
           </p>
-          
+
           <p>
             Recomendamos a análise de alguma das seguintes respostas para os alunos desta turma:
 
@@ -133,7 +133,7 @@
           </ul>
 
           <p>
-            <%= link_to new_dashboard_message_path+build_message_link(recommendation) do %>
+            <%= link_to new_dashboard_message_path+build_message_link(recommendation)+"&recom=true" do %>
               <%= button_tag raw("<i class='fa fa-share'></i> Repassar recomendação aos alunos"), :class => "btn btn-primary" %>
             <% end %>
           </p>

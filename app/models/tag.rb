@@ -11,13 +11,40 @@ class Tag
   belongs_to :user
   has_and_belongs_to_many :answers
 
+  def self.create_primary
+    Tag.create(:primary => true,
+                            :description => "Erro de compilao - Identificado automaticamente",
+                            :type => 2,
+                            :name => "Compilao")
+    Tag.create(:primary => true,
+                            :description => "Erro de saída - Identificado automaticamente",
+                            :type => 1,
+                            :name => "Saída")
+    Tag.create(:primary => true,
+                            :description => "Tempo excedido - Identificado automaticamente",
+                            :type => 1,
+                            :name => "Tempo")
+    Tag.create(:primary => true,
+                            :description => "Erro de execução - Identificado automaticamente",
+                            :type => 1,
+                            :name => "Execução")
+    Tag.create(:primary => true,
+                            :description => "Erro de apresentação - Identificado automaticamente",
+                            :type => 1,
+                            :name => "Apresentação")
+    Tag.create(:primary => true,
+                            :description => "Resposta correta",
+                            :type => 3,
+                            :name => "Correta")
+  end
+
   def self.apply_primary(answer)
     output = []
     # get the primary tags
     compile_error = Tag.find_or_create_by(:primary => true,
-                            :description => "Erro de compilação - Identificado automaticamente",
+                            :description => "Erro de compilao - Identificado automaticamente",
                             :type => 2,
-                            :name => "Compilação")
+                            :name => "Compilao")
     diff_error = Tag.find_or_create_by(:primary => true,
                             :description => "Erro de saída - Identificado automaticamente",
                             :type => 1,

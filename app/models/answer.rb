@@ -322,11 +322,12 @@ class Answer
     weight = connections[connections.index{|x| x.target_answer_id.to_s == answer.id.to_s}].weight
     naat = neigh.automatically_assigned_tags
 
+
     # clean any tag got from answer that answer does not have anymore
     remove = []
     i = 0
     for t in naat do
-      if t[2] == answer.id && answer.rejected_tags.include?(t[0]) #(not answer.automatically_assigned_tags.include?(t[0]))
+      if t[2] == answer.id && ((not answer.automatically_assigned_tags.include?(t[0])) && (not answer.tag_ids.include?(t[0])))
         remove << t
       end
       i += 1
@@ -453,6 +454,8 @@ class Answer
 
       answer = Answer.find(answer_id)
 
+      puts ">>> #{answer.id}"
+
       for similar_answer in answer.similar_answers do
         unless visited.include?(similar_answer)
           changed = Answer.propagate_properties_to_neigh(answer,similar_answer)
@@ -462,6 +465,7 @@ class Answer
         end
       end
       visited.push answer_id
+      puts "<<< #{answer.id}"
     end
     true
   end
