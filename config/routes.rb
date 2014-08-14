@@ -90,6 +90,7 @@ Carrie::Application.routes.draw do
           resources :questions, only: [:show] do
             resources :answers, only: [:show] do
               post 'change_correctness', on: :member
+              get 'try_again', on: :member
             end
           end
         end

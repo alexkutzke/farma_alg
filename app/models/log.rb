@@ -5,10 +5,6 @@ class Log
 
   field :type
   field :user_id
-  field :team_id
-  field :lo_id
-  field :answer_id
-  field :question_id
   field :params, type: Hash
 
   # TYPES
@@ -35,11 +31,15 @@ class Log
   end
 
   def self.log_answer_view_simple(user_id,answer_id)
-    Log.create(type: "ANSWER_VIEW_SIMPLE", answer_id:answer_id, user_id: user_id)
+    Log.create(type: "ANSWER_VIEW_SIMPLE",params: {answer_id:answer_id}, user_id: user_id)
   end
 
   def self.log_answer_view(user_id,answer_id)
-    Log.create(type: "ANSWER_VIEW", answer_id:answer_id, user_id: user_id)
+    Log.create(type: "ANSWER_VIEW", params: {answer_id:answer_id}, user_id: user_id)
+  end
+
+  def self.log_answer_try_again_click(user_id,answer_id)
+    Log.create(type: "ANSWER_TRY_AGAIN_CLICK", params: {answer_id:answer_id}, user_id: user_id)
   end
 
   def self.log_connection_view_simple(user_id,connection_id)

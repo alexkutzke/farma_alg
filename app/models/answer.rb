@@ -545,7 +545,7 @@ class Answer
 private
 
   def register_last_answer
-    unless self.for_test
+    unless self.for_test || self.team_id.nil?
       la = LastAnswer.find_or_create_by(:user_id => self.user_id.to_s, :question_id => self.question_id.to_s)
 
       self.last_answer = la

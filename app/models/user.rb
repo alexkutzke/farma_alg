@@ -222,7 +222,7 @@ class User
   end
 
   def last_try
-    Answer.where(:user_id => self.id).desc(:updated_at).first
+    Answer.where(:user_id => self.id).desc(:created_at).first
   end
 
   def questions_without_tries()

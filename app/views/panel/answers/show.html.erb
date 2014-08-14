@@ -184,7 +184,12 @@
                     <% if @user.id == current_user.id %>
 
                         <% if Team.find(@answer.team_id).lo_ids.include?(@answer.lo_id) %>
-                          <a href="<%= current_user.link_to_question(Question.find(@answer.question_id)) %>" class="btn btn-primary btn-block">Responder novamente</a>
+                          <!--<a href="<%= current_user.link_to_question(Question.find(@answer.question_id)) %>" class="btn btn-primary btn-block">Responder novamente</a>-->
+                          <%= link_to try_again_panel_team_user_lo_question_answer_path(@team,@user,@lo,@question,@answer), :target => "_blank" do %>
+                            <button class="btn btn-success btn-block">
+                              Responder novamente
+                            </button>
+                          <% end %>
                         <% end %>
 
                     <% end %>

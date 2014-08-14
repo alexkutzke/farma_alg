@@ -11,7 +11,7 @@
     <% unless c.nil? %>
       <span class='label label-default connection-btn' style='cursor:pointer;' data-id="<%= c.id %>"> <i class='fa fa-link'></i></span>
     <% end %>
-    <br><small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words answer.updated_at %></small>
+    <br><small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words answer.created_at %></small>
 
   </h4>
   <%= answer_labels(answer) %>

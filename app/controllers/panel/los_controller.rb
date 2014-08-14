@@ -41,7 +41,7 @@ class Panel::LosController < ApplicationController
       end
     end
 
-    @last_answers = Answer.where(user_id:@user.id,team_id:@team.id,lo_id:@lo.id).desc(:updated_at)[0..5]
+    @last_answers = Answer.where(user_id:@user.id,team_id:@team.id,lo_id:@lo.id).desc(:created_at)[0..5]
 
 		Log.log_team_user_lo_view(current_user.id,@team.id,@user.id,@lo.id)
 

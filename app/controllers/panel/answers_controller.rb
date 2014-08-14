@@ -62,4 +62,16 @@ class Panel::AnswersController < ApplicationController
     redirect_to panel_team_user_lo_question_answer_path(@team,@user,@lo,@question,@answer)
   end
 
+	def try_again
+		if @user.id == current_user.id
+			if Team.find(@answer.team_id).lo_ids.include?(@answer.lo_id)
+				Log.log_answer_try_again_click(current_user.id,@answer.id)
+				redirect_to current_user.link_to_question(Question.find(@answer.question_id))
+				return
+			end
+		end
+
+		render_401
+	end
+
 end
