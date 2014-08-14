@@ -30,9 +30,9 @@ namespace :process_queue  do
       store_pids([], :write)
     end
 
-    clean = "pkill cpulimit"
-    puts "$ #{clean}"
-    `#{clean}`
+    #clean = "pkill cpulimit"
+    #puts "$ #{clean}"
+    #`#{clean}`
 
     pids = read_pids
     1.times do
@@ -42,10 +42,10 @@ namespace :process_queue  do
       pid = spawn({}, "RAILS_ENV=production rake process_queue:start", ops)
       Process.detach(pid)
       pids << pid
-      cpulimit = "cpulimit -p #{pid.to_i + 1} -l 50 -b &"
+      #cpulimit = "cpulimit -p #{pid.to_i + 1} -l 50 -b &"
 
-      puts "$ #{cpulimit}"
-      `#{cpulimit}`
+      #puts "$ #{cpulimit}"
+      #`#{cpulimit}`
     end
 
     store_pids(pids,:append)
