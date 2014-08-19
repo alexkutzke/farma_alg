@@ -27,7 +27,7 @@
         {{/if}}
       </div>
     </div>
-    
+
     <div class="control-group tip_group">
       <label class="control-label" for="tip">Dica</label>
       <div class="controls">
@@ -61,6 +61,21 @@
 22
       </pre>
 
+      <div>
+        <p>Para criar um caso de teste com mais de uma opção de saída para uma mesma entrada, adicione a tag <strong><--OU--></strong> para informar diferentes saídas. Por exemplo:</p>
+
+        <p><strong>Entrada</strong></p>
+        <pre>
+1
+        </pre>
+
+        <p><strong>Saída</strong></p>
+        <pre>
+0.62
+<--OU-->
+62.0 %
+        </pre>
+
     <div class="control-group input_group">
         <label class="control-label" for="input">Entrada</label>
         <div class="controls">
@@ -85,7 +100,7 @@
     <div class="control-group ignore_presentation_group">
       <div class="controls">
         <label class="checkbox">
-          <input type="checkbox" name='ignore_presentation'> Ignorar diferenças de tabulação 
+          <input type="checkbox" name='ignore_presentation'> Ignorar diferenças de tabulação
           <i rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Diferenças entre caracteres de espaços, quebras de linha, e outras tabulações serão ignoradas durante a comparação com a saída da resposta do aluno"  class="icon-question-sign"></i>
         </label>
       </div>
