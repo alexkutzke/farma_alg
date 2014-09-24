@@ -30,7 +30,7 @@ class Dashboard::TagsController < ApplicationController
       @answer.save!
 
       @answer.schedule_process_propagate
-      Log.log_add_tag(current_user.id,@answer.id,tag.id)
+      Log.log_add_tag(current_user.id,@answer.id,tag.first.id)
 
       @available_tags = @answer.available_tags
       render :show

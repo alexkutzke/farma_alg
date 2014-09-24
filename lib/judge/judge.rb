@@ -1,3 +1,4 @@
+require 'fileutils'
 module Judge
 
   CASE_TEST_END = "<--FIM-->\n"
@@ -62,9 +63,12 @@ module Judge
     if lang == "rb"
       filename = "ruby " + filename
     end
-    
+
     if Rails.env == "production"
-      user_command = "ssh -p 2358 exec@localhost"
+      if Rails.application.config.use_jailkit
+	       FileUtils.cp(filename,"/home/jail"+filename)
+      end
+      user_command = "ssh -p 2358 exec_jail@localhost"
     else
       user_command = ""
     end
@@ -75,11 +79,15 @@ module Judge
     Rails.logger.info $?.exitstatus
 
     # run ok
-    if $?.exitstatus == 0 || $?.exitstatus == 255 || lang == "c"
+    if $?.exitstatus == 0 || $?.exitstatus == 255 || ($?.exitstatus != 143 && lang == "c")
       result = 1
     # run fail
     else
       result = $?.exitstatus
+    end
+
+    if Rails.env == "production"
+	    `sudo pkill -9 -f #{filename}`
     end
 
     result
@@ -107,7 +115,7 @@ module Judge
   end
 
   def self.judge(output_file,output_response_file,ignore_presentation)
-    
+
 
       if ignore_presentation
 
@@ -120,7 +128,7 @@ module Judge
         else
 
           numdiff(output_response_file,output_file)
-          
+
           # numdiff ok
           if $?.exitstatus == 0
             result = 0
@@ -193,7 +201,7 @@ module Judge
               end
             end
           end
-        
+
           correct[t.id][2][i] = result
         else
           correct[t.id][2][i] = result_exec
