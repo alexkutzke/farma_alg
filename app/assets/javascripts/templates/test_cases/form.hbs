@@ -39,42 +39,63 @@
       </div>
     </div>
 
+    <div class="control-group number_of_tries_group">
+        <label class="control-label" for="number_of_tries">
+          Mostrar dica somente após
+          <input id="tip_limit" name="tip_limit" type="text" required="required" class='span1' />
+          tentativa(s) sem sucesso
+      </label>
+    </div>
 
-    <div>
-      <p>Para realizar mais de uma execução em um mesmo caso de teste, adicione a tag <strong><--FIM--></strong> para informar o fim de uma execução, tanto na entrada quanto na saída. Por exemplo, para três execuções:</p>
-
-      <p><strong>Entrada</strong></p>
-      <pre>
-1 2
-<--FIM-->
-4 2
-<--FIM-->
-3 3
-      </pre>
-
-      <p><strong>Saída</strong></p>
-      <pre>
-10
-<--FIM-->
-20
-<--FIM-->
-22
-      </pre>
-
-      <div>
-        <p>Para criar um caso de teste com mais de uma opção de saída para uma mesma entrada, adicione a tag <strong><--OU--></strong> para informar diferentes saídas. Por exemplo:</p>
+<div class="accordion" id="accordion1">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne-{{id}}">
+        Opções avançadas para casos de teste.
+      </a>
+    </div>
+    <div id="collapseOne-{{id}}" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <p>Para realizar mais de uma execução em um mesmo caso de teste, adicione a tag <strong><--FIM--></strong> para informar o fim de uma execução, tanto na entrada quanto na saída. Por exemplo, para três execuções:</p>
 
         <p><strong>Entrada</strong></p>
         <pre>
-1
+  1 2
+  <--FIM-->
+  4 2
+  <--FIM-->
+  3 3
         </pre>
 
         <p><strong>Saída</strong></p>
         <pre>
-0.62
-<--OU-->
-62.0 %
+  10
+  <--FIM-->
+  20
+  <--FIM-->
+  22
         </pre>
+
+        <div>
+          <p>Para criar um caso de teste com mais de uma opção de saída para uma mesma entrada, adicione a tag <strong><--OU--></strong> para informar diferentes saídas. Por exemplo:</p>
+
+          <p><strong>Entrada</strong></p>
+          <pre>
+  1
+          </pre>
+
+          <p><strong>Saída</strong></p>
+          <pre>
+  0.62
+  <--OU-->
+  62.0 %
+          </pre>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 
     <div class="control-group input_group">
         <label class="control-label" for="input">Entrada</label>

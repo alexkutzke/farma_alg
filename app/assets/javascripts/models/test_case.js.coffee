@@ -11,12 +11,14 @@ class Carrie.Models.TestCase extends Backbone.RelationalModel
     'input': ''
     'output': ''
     'timeout': '1'
+    'tip_limit': '1'
 
   toJSON: ->
     id: @get('id')
     title: @get('title')
     content: @get('content')
     tip: @get('tip')
+    tip_limit: @get('tip_limit')
     input: @get('input')
     output: @get('output')
     timeout: @get('timeout')

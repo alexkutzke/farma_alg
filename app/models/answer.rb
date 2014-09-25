@@ -230,7 +230,7 @@ class Answer
         self.results[id][:exec_error] = false
         self.results[id][:presentation_error] = false
         self.results[id][:content] = question.test_cases.find(id).content
-        self.results[id][:tip] = question.test_cases.find(id).tip
+
         self.results[id][:title] = question.test_cases.find(id).title
         self.results[id][:show_input_output] = question.test_cases.find(id).show_input_output
 
@@ -258,6 +258,10 @@ class Answer
           self.correct = false
           self.results[id][:error] = true
           self.results[id][:exec_error] = true
+        end
+
+        if Answer.where(user_id: self.user_id, question_id: self.question_id, correct: false, compile_errors: nil).count >= question.test_cases.find(id).tip_limit-1 || self.correct
+          self.results[id][:tip] = question.test_cases.find(id).tip
         end
 
         #self.results[id][:output2] = simple_format r[1][0]
