@@ -39,5 +39,7 @@ class Carrie.Models.Question extends Backbone.RelationalModel
     languages: @get('languages')
     lo_id: @get('exercise').get('lo').get('id')
     exercise_id: @get('exercise').get('id')
+    updated_at: @get('updated_at')
+    created_at: @get('created_at')
 
 Carrie.Models.Exercise.setup()

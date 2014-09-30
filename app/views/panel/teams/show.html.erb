@@ -48,6 +48,13 @@
   <section class="content">
 
     <div class="row">
+
+      <% unless @team.active %>
+        <div class="alert alert-danger">
+          Esta turma está desativada.
+        </div>
+      <% end %>
+
           <section class="col-lg-6">
             <div class="box box-solid">
                 <div class="box-header">

@@ -17,13 +17,18 @@
       {{/if}}
     </span>
     <h4 class='left'>{{title}}</h4>
-    <div class='right'>
+    <span  class='options-links'>
       <a href='' class='details-question-link' ><i class="icon-plus"></i> Detalhes </a> |
       <a href='' class='show-test_cases-link'><i class="icon-ok"></i> Casos de teste </a> |
       <a href='' class='edit-question-link' ><i class="icon-edit"></i> Editar </a> |
       <a href='' class='destroy-question-link' ><i class="icon-remove-circle"></i> Remover </a>
-    </div>
+    </span>
   </div>
+      <span class='date-info'>
+        Criado em {{created_at}}
+        Atualizado em {{updated_at}}
+      </span>
+
 </header>
 
 <div id="test_cases_modal_{{{id}}}" class="well hide" style="margin-top:10px; background-color: #ffffff;">
