@@ -81,7 +81,8 @@ class Dashboard::TeamsController < ApplicationController
   end
 
   def available
-    @teams = Team.all
+    @teams = Team.where(active: true)
+    @teams_unavailable = Team.where(active: false)
   end
 
 end

@@ -32,6 +32,8 @@ class Panel::TeamsController < ApplicationController
       redirect_to panel_team_user_path(@team, @current_user)
     end
 
+		@recommendations = Recommendation.all_from_team(current_user.id,@team.id)
+
 		Log.log_team_view(current_user.id,@team.id)
 
     #@chart_data = GraphDataGenerator::team_tries_x_time(@team.id,"daily")

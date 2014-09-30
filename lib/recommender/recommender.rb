@@ -25,7 +25,7 @@ module Recommender
           questions.each do |q|
             as1 = Answer.where(user_id:u1.to_s,question_id:q.to_s,correct: false).pluck(:id)
             as2 = Answer.where(user_id:u2.to_s,question_id:q.to_s,correct: false).pluck(:id)
-    
+
             if as1.count > 0 and as2.count > 0
               as1.each do |a1|
                 as2.each do |a2|
@@ -63,7 +63,7 @@ module Recommender
   end
 
   def self.connected_components(matched_students,thres)
-    
+
 
     not_visited = (0..matched_students.count-1).to_a
     components = []
@@ -73,7 +73,7 @@ module Recommender
       component = []
       while not queue.empty?
         visiting = queue.shift
-        
+
         component << matched_students[visiting][:user_id]
 
         visiting_neigh = matched_students[visiting][:neigh]
@@ -85,7 +85,7 @@ module Recommender
               queue.push(pos)
               not_visited.delete(pos)
             end
-            
+
           end
         end
       end
@@ -107,7 +107,7 @@ module Recommender
       end
     end
 
-    x = [] 
+    x = []
     questions.sort{|x,y| y[:question_id] <=> x[:question_id]}.chunk{|n| n[:question_id]}.each do |q,a|
       sum = 0.0
       a.each do |x|
@@ -174,12 +174,12 @@ module Recommender
     result = []
 
     ms = self.match_students(team_id.to_s)
-    
+
     n_thres = thres
     recommendation = []
     while recommendation.empty? and n_thres > 0.0
       connected_components = self.find_most_relevant_questions_in_team(ms,team_id,thres)
-      recommendation = []  
+      recommendation = []
       unless connected_components.empty?
         connected_components.each do |cc|
           cc[1].each do |question|
@@ -190,7 +190,7 @@ module Recommender
               answer_ids << i[0]
               answer_scores << i[1]
             end
-            
+
 
             recommendation << {:team_id => team_id, :user_ids => cc.first, :answer_ids => answer_ids,:answer_scores => answer_scores, :question_id => question[0], :question_references => question[1], :question_score => question[2]}
           end
@@ -211,7 +211,7 @@ module Recommender
 
     recommendations = []
     users.each do |u|
-      team_ids = Team.where(owner_id:u.id.to_s).pluck(:id)
+      team_ids = Team.where(owner_id:u.id.to_s, active:true).pluck(:id)
 
       team_ids.each do |team_id|
         recommendations << [team_id.to_s, self.build_team_recommendations(team_id.to_s,thres)]
@@ -223,10 +223,11 @@ module Recommender
   def self.create_recommendations(thres)
     user_ids = User.all.pluck(:id)
 
-    Recommendation.delete_all
+    #Recommendation.delete_all
+    Recommendation.delete_active
 
     user_ids.each do |user_id|
-      team_ids = Team.where(owner_id:user_id.to_s).pluck(:id)
+      team_ids = Team.where(owner_id:user_id.to_s, active: true).pluck(:id)
 
       team_ids.each do |team_id|
         recoms = self.build_team_recommendations(team_id.to_s,thres)
@@ -306,7 +307,7 @@ module Recommender
         puts "Para a turma '#{Team.find(r[0]).name}', recomendamos:"
         r[1].each do |recom|
           users = User.find(recom[:user_ids])
-          puts 
+          puts
           puts "\tPara o seguinte grupo de alunos:"
           users.each do |u|
             puts "\t - " + u.name + " (" + u.email + ")"

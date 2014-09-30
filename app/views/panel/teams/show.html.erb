@@ -112,6 +112,42 @@
               </div>
             </div>
 
+            <% if current_user.prof? %>
+            <!-- box  (with bar chart) -->
+            <div class="box  box-info">
+                <div class="box-header">
+                    <!-- tools box  -->
+                    <div class="pull-right box-tools">
+                        <button class="btn btn-info btn-sm" data-widget='collapse' ><i class="fa fa-minus"></i></button>
+                    </div><!-- /. tools -->
+                    <i class="fa fa-exclamation"></i>
+
+                    <h3 class="box-title">Recomendações automáticas para você</h3>
+                </div><!-- /.box-header -->
+
+                <div class="box-body shorted-box">
+                  <% if @recommendations.empty? %>
+                    <p class="text-center">
+                      Nenhuma recomendação no momento.
+                    </p>
+                  <% end %>
+                  <% unless @recommendations.empty? %>
+                    <% @recommendations.each do |recommendation| %>
+                      <%= render :partial => "dashboard/recommendation", :locals => {:recommendation => recommendation} %>
+                    <% end %>
+                  <% end %>
+                </div><!-- /.box-body -->
+<!--
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+
+                        </div>
+                    </div>
+                </div>-->
+            </div><!-- /.box  -->
+            <% end %>
+
           </section>
 
           <section class="col-lg-6">

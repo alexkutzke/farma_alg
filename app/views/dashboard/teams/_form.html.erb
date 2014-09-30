@@ -25,6 +25,10 @@
     <%= f.text_field :code,:class => "form-control input-sm"%>
   </div>
   <div class="form-group">
+    <%= f.input_field  :active, :as => :boolean, :class => "form-control input-sm", :boolean_style => :inline%>
+    <%= f.label "Ativa?" %>
+  </div>
+  <div class="form-group">
     <%= f.association :los, collection: current_user.all_los, as: :check_boxes, label: "Objetos de Aprendizagem disponíveis para esta turma" %>
   </div>
   <div class="actions">

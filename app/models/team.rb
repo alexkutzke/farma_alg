@@ -6,8 +6,9 @@ class Team
   field :code, :type => String
   field :name, :type => String
   field :owner_id, :type => Moped::BSON::ObjectId
+  field :active, :type => Boolean, :default => true
 
-  attr_accessible :name, :code, :owner_id, :lo_ids
+  attr_accessible :name, :code, :owner_id, :lo_ids, :active
 
   has_and_belongs_to_many :los
   has_and_belongs_to_many :users
