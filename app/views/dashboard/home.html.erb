@@ -83,6 +83,30 @@
 
     <!-- Main row -->
     <div class="row" id="help">
+      <% if current_user.student? and not current_user.prof? and not current_user.admin? %>
+        <section class="col-lg-12">
+          <div class="box  box-success">
+            <div class="box-header">
+                <!-- tools box  -->
+                <div class="pull-right box-tools">
+                  <button class="btn btn-danger btn-sm" data-widget='remove'><i class="fa fa-times"></i></button>
+                </div><!-- /. tools -->
+                <i class="fa fa-exclamation-circle"></i>
+
+                <h3 class="box-title">Pesquisa</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <p>
+                Por favor, nos ajude em nossa pesquisa respondendo um pequeno e rápido questionário.
+              <br>
+                Obrigado!
+              </p>
+              <a href="https://docs.google.com/forms/d/1RynIU6khH7CBnlg_ZH5CiiURpb6Wv2E69eWlgouxjkI/viewform?usp=send_form">
+                <button class="btn btn-success btn-sm"><i class="fa fa-check"> Responder questionário</i></button>
+              </a>
+            </div>
+        </section>
+      <% end %>
         <!-- Left col -->
         <section class="col-lg-8 col-lg-offset-2">
 
