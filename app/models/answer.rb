@@ -250,7 +250,7 @@ class Answer
           self.correct = false
           self.results[id][:error] = true
           self.results[id][:presentation_error] = true
-        elsif r[0] == 143
+        elsif r[0] == 143 || r[0] == 141
           self.correct = false
           self.results[id][:error] = true
           self.results[id][:time_error] = true
@@ -556,7 +556,11 @@ private
       la.answer_id = self.id
 
       unless la.answer_id.nil?
-        self.try_number = la.answer.try_number + 1
+        unless self.nil?
+          unless la.answer.nil?
+            self.try_number = la.answer.try_number + 1
+          end
+        end
       end
 
       la.save!

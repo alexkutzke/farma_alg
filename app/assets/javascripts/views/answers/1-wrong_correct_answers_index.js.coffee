@@ -85,15 +85,12 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
     return params
 
   updateLos: ->
-    alert("1")
     if @params['team_id']
       params = {team_id: @params['team_id']}
-      alert("2")
       @los.fetch
         async: false
         data: params
     else
-      alert("3")
       @los.fetch
         async: false
 
@@ -178,5 +175,3 @@ class Carrie.CompositeViews.WrongCorrectAnswersIndex extends Backbone.Marionette
               callback(@exercisesJSON)
              else
                #console.log('nothing')
-
-

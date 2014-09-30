@@ -6,7 +6,9 @@ Carrie.Helpers.Notifications.alert = (alertType, message) ->
     'message': message
 
 Carrie.Helpers.Notifications.error = (message)  ->
-  this.alert('error', message)
+  this.alert('error', 'Ocorreu um erro. A página será recarregada.')
+  window.location.reload(false)
+  #this.alert('error', message)
 
 Carrie.Helpers.Notifications.success = (message) ->
   this.alert('success', message)

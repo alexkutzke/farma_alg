@@ -69,17 +69,20 @@ module Judge
 	       FileUtils.cp(filename,"/home/jail"+filename)
       end
       user_command = "ssh -p 2358 exec_jail@localhost"
+      command = "bin/exec_production.sh #{timeout} #{filename} #{input_file} #{output_file}"
     else
       user_command = ""
+      command = "bin/exec_development.sh #{timeout} #{filename} #{input_file} #{output_file}"
     end
 
     Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-    `bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}`
-    Rails.logger.info "bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}"
+    `#{command}`
+    #{}`bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}`
+    Rails.logger.info command
     Rails.logger.info $?.exitstatus
 
     # run ok
-    if $?.exitstatus == 0 || $?.exitstatus == 255 || ($?.exitstatus != 143 && lang == "c")
+    if $?.exitstatus == 0 || $?.exitstatus == 255 || ($?.exitstatus != 143 && $?.exitstatus != 141 && lang == "c")
       result = 1
     # run fail
     else
