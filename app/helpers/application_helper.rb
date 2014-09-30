@@ -60,6 +60,15 @@ module ApplicationHelper
     end
   end
 
+  def test_case_input(id)
+    t = TestCase.find_or_initialize_by({:id => id})
+    if not t.new_record?
+      t.input
+    else
+      nil
+    end
+  end
+
   def test_case_similarity_in_words(id,tcs)
     t = TestCase.find_or_initialize_by({:id => id})
 

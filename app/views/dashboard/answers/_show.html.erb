@@ -206,8 +206,15 @@
                               <h4 class="modal-title" id="myModalLabel">Comparação de saídas</h4>
                             </div>
                             <div class="modal-body resize" data-resize-operation-height="$(window).height()*0.8" style="overflow:auto;">
+
                               <div id="output-<%= k %>">
                                 <div class="output" data-output="<%= v['output'] %>" data-expected-output="<%= v['output_expected'] %>" data-id="<%= k %>"></div>
+                              </div>
+                              <h4>Entrada utilizada</h4>
+                              <div>
+                                <pre>
+<%= v['input'] %>
+                                </pre>
                               </div>
                             </div>
                           </div>
