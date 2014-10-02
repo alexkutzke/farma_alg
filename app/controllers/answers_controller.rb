@@ -20,7 +20,9 @@ class AnswersController < ApplicationController
 #    if (last && last.answer && (last.answer.response == params[:answer][:response]))
 #      @answer = last.answer
 #    else
-      @answer = current_or_guest_user.answers.create(params[:answer])
+      @answer = current_or_guest_user.answers.with(safe: true).create(params[:answer])
+#      @answer = Answer.with(safe: true).create(params[:answer])
+	
       @last_answers = Answer.where(user_id: current_or_guest_user.id, question_id: params[:answer][:question_id]).desc(:created_at)[0..4]
 #    end
 

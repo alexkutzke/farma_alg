@@ -77,7 +77,7 @@ module Judge
 
     Rails.logger.info ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     `#{command}`
-    #{}`bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}`
+    #`bin/timeout3 -t #{timeout} #{user_command} #{filename} < #{input_file} > #{output_file}`
     Rails.logger.info command
     Rails.logger.info $?.exitstatus
 

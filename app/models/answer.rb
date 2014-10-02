@@ -204,6 +204,7 @@ class Answer
     self.lo = question.exercise.lo.as_json
     self.question = question.as_json(include: :test_cases)
     self.team = Team.find(self.team_id).as_json if self.team_id
+	true
   end
 
   def exec
@@ -552,19 +553,30 @@ private
     unless self.for_test || self.team_id.nil?
       la = LastAnswer.find_or_create_by(:user_id => self.user_id.to_s, :question_id => self.question_id.to_s)
 
+      unless la.answer_id.nil? || la.answer.nil?
+        self.try_number = la.answer.try_number + 1
+      end
+
+
+
       self.last_answer = la
       la.answer_id = self.id
 
-      unless la.answer_id.nil?
-        unless self.nil?
-          unless la.answer.nil?
-            self.try_number = la.answer.try_number + 1
-          end
+	    if la.answer.nil?
+	      answers = Answer.where(user_id:la.user_id.to_s, question_id: la.question_id.to_S).desc(:created_at)
+        if answers.count > 0
+          la.answer_id = answers.first.id
+          la.save!
+        else
+	        la.delete
         end
+      else
+        la.save!
       end
 
-      la.save!
+      self.save
 
+      true
     end
 
     #unless self.for_test

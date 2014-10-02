@@ -54,7 +54,8 @@ class Dashboard::TeamsController < ApplicationController
         @wrong_code_team_id = t.id
       end
     end
-    @teams = Team.all
+    #@teams = Team.all
+    @teams = Team.where(active: true)
 
     render "available"
   end

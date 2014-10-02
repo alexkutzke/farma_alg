@@ -13,9 +13,9 @@ class Tag
 
   def self.create_primary
     Tag.create(:primary => true,
-                            :description => "Erro de compilao - Identificado automaticamente",
+                            :description => "Erro de compilação - Identificado automaticamente",
                             :type => 2,
-                            :name => "Compilao")
+                            :name => "Compilação")
     Tag.create(:primary => true,
                             :description => "Erro de saída - Identificado automaticamente",
                             :type => 1,
@@ -42,9 +42,9 @@ class Tag
     output = []
     # get the primary tags
     compile_error = Tag.find_or_create_by(:primary => true,
-                            :description => "Erro de compilao - Identificado automaticamente",
+                            :description => "Erro de compilação - Identificado automaticamente",
                             :type => 2,
-                            :name => "Compilao")
+                            :name => "Compilação")
     diff_error = Tag.find_or_create_by(:primary => true,
                             :description => "Erro de saída - Identificado automaticamente",
                             :type => 1,
@@ -87,4 +87,15 @@ class Tag
     end
     output
   end
+
+def self.correct
+    compile_error = Tag.where(:primary => true,
+                            :description => "Erro de compilao - Identificado automaticamente",
+                            :type => 2,
+                            :name => "Compilao").first
+compile_error.name = "Compilação"
+compile_error.description = "Erro de compilação - Identificado automaticamente"
+compile_error.save!
+end
+
 end

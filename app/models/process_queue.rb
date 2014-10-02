@@ -24,22 +24,25 @@ class ProcessQueue
 
     when "apply_primary_tags"
        puts "Process: apply_primary_tags(#{p.params[0]}) started ..."
-       Answer.find(p.params[0]).apply_primary_tags
+       Answer.find(p.params[0]).apply_primary_tags if Answer.where(id: p.params[0]).any?
        puts "Process: apply_primary_tags(#{p.params[0]}) ended ..."
 
    	when "make_inner_connections"
   		puts "Process: make_inner_connections(#{p.params[0]}) started ..."
-  		Answer.find(p.params[0]).make_inner_connections
+  		Answer.find(p.params[0]).make_inner_connections if Answer.where(id: p.params[0]).any?
+
   		puts "Process: make_inner_connections(#{p.params[0]}) ended ..."
 
   	when "make_outer_connections"
   		puts "Process: make_outer_connections(#{p.params[0]}) started ..."
-  		Answer.find(p.params[0]).make_outer_connections
+  		Answer.find(p.params[0]).make_outer_connections if Answer.where(id: p.params[0]).any?
+
   		puts "Process: make_outer_connections(#{p.params[0]}) ended ..."
 
   	when "propagate_properties"
   		puts "Process: propagate_properties(#{p.params[0]}) started ..."
-  		Answer.find(p.params[0]).propagate_properties
+  		Answer.find(p.params[0]).propagate_properties if Answer.where(id: p.params[0]).any?
+
   		puts "Process: propagate_properties(#{p.params[0]}) ended ..."
   	else
   		puts "Process type unknown."
