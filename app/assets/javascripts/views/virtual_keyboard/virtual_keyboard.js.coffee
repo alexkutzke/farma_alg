@@ -1,15 +1,15 @@
 class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
   template: 'virtual_keyboard/show'
-  className: 'virtual-keyboard modal'
+  className: 'virtual-keyboard'
 
   events:
     'click a' : 'setInput'
-    
+
   initialize: ->
     @callback = @options.callback || ->
     $(@el).on 'destroy', =>
       @remove()
- 
+
   onRender: ->
     @input = $($(@el).find('.keyboard-input').first())
     @input.attr('value', @options.currentResp)
@@ -44,7 +44,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     @c = $(@el).find('#code')
     @code = CodeMirror(@c[0], { mode: mode,  tabSize:2, lineNumbers: true })
     @code.setValue(@options.currentResp)
-    
+
     c = @code
     $(@el).find("select#languages").change( ->
       if $(this).val() == "c"
@@ -57,16 +57,16 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     @el
 
     #editAreaLoader.init
-    #  id: "code_text",          
+    #  id: "code_text",
     #  syntax: "ruby",
     #  start_highlight: true,
-    #  show_line_colors: true, 
+    #  show_line_colors: true,
     #  replace_tab_by_spaces: 2,
     #  allow_toggle: false,
     #  toolbar: "",
     #  begin_toolbar: "",
     #  end_toolbar : ""
-    
+
 
   setInput: (ev) ->
     ev.preventDefault()
@@ -76,7 +76,8 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
 
     switch value
       when 'cancel'
-        $(@el).modal('hide')
+        #$(@el).modal('hide')
+        $(@el).remove()
         @remove()
       when 'clean'
         @code.setValue('')
@@ -90,9 +91,10 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
           @send()
 
   send: ->
-    $(@el).modal('hide')
+    #$(@el).modal('hide')
+    $(@el).remove()
     val = @code.getValue()
-    
+
     @callback val,$(@el).find("select#languages").val()
 
   inputFocus: ->

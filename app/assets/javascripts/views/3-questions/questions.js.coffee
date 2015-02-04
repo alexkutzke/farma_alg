@@ -9,7 +9,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
   initialize: ->
     @collection = @model.get('test_cases')
-    
+
   events:
     'click .destroy-question-link' : 'destroy'
     'click .edit-question-link' : 'edit'
@@ -27,7 +27,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
     $(@el).find('span i').tooltip()
     #console.log $(@el).find('.new-test_case-link22')
     x = this
-    $(@el).find('.new-test_case-link22').on('click', (ev) -> 
+    $(@el).find('.new-test_case-link22').on('click', (ev) ->
       ev.preventDefault()
       x.addTestCase(ev)
     )
@@ -58,10 +58,9 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
       callback: (val,lang) =>
         @sendAnswer(val,lang)
 
-    $(keyboard.render().el).modal('show').css({'margin-top':  -> 
-      -($(this).height() / 2)
-    });
-       
+    x = keyboard.render().el
+    $(@el).append(x)
+
   sendAnswer: (resp,lang) ->
     bootbox.modal("Compilando e executando ...",{backdrop:'static',keyboard:false})
     answer = new Carrie.Models.Answer
@@ -73,7 +72,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
 
     answer.save answer.attributes,
       wait: true
-      success: (model, response) =>     
+      success: (model, response) =>
         @view = new Carrie.Views.Answer model: Carrie.Models.AnswerShow.findOrCreate(model.attributes)
         $(@el).find('.answer-group').html @view.render().el
         prettyPrint()
@@ -100,7 +99,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
       $(x.el).html form.render().el
       $(x.el).slideDown()
     )
-    
+
 
   destroy: (ev) ->
     ev.preventDefault()

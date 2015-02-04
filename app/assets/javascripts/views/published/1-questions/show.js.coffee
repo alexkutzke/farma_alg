@@ -33,10 +33,12 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
       languages: @model.get('languages')
       callback: (val,lang) =>
         @sendAnswer(val,lang)
-        
-     $(keyboard.render().el).modal({show: true}).css({'margin-top':  -> 
-      -($(this).height() / 2)
-    });
+
+     #$(keyboard.render().el).modal({show: true}).css({'margin-top':  ->
+    #  -($(this).height() / 2)
+    #});
+    x = keyboard.render().el
+    $(@el).append(x)
 
   verify_answer: (ev) ->
     ev.preventDefault()
@@ -46,10 +48,12 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
       languages: @model.get('languages')
       callback: (val,lang) =>
         @sendAnswer(val,lang)
-        
-     $(keyboard.render().el).modal({show: true}).css({'margin-top':  -> 
-      -($(this).height() / 2)
-    });
+
+     #$(keyboard.render().el).modal({show: true}).css({'margin-top':  ->
+    #  -($(this).height() / 2)
+    #});
+    x = keyboard.render().el
+    $(@el).append(x)
 
   sendAnswer: (resp,lang) ->
     bootbox.modal("Compilando e executando ...",{backdrop:'static',keyboard:false})
@@ -65,7 +69,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
 
     answer.save answer.attributes,
       wait: true
-      success: (model, response) =>     
+      success: (model, response) =>
         @view = new Carrie.Views.Answer model: Carrie.Models.AnswerShow.findOrCreate(model.attributes)
         @model.set('last_answers',model.get('last_answers'))
         $(@el).find('.answer-group').html @view.render().el
@@ -77,6 +81,3 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
 
   onRender: ->
     $(@el).find('.answer-group').html @view.render().el
-    
-
-

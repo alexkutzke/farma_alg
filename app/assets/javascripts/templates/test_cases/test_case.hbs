@@ -21,6 +21,9 @@
   {{#if show_input_output}}
   <p><span class="badge badge-warning">!</span> <strong>Este caso de teste irá apresentar entradas e saídas para os alunos</strong></p>
   {{/if}}
+  {{#if has_check_program}}
+  <p><span class="badge badge-warning">!</span> <strong>Este caso de teste irá verificar as respostas através do seguinte programa verificador:</strong></p>
+  {{/if}}
 
 </div>
 <div class="accordion" id="accordion1">
@@ -36,16 +39,29 @@
       </div>
     </div>
 
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo-{{id}}">
-        Saída
-      </a>
-    </div>
-    <div id="collapseTwo-{{id}}" class="accordion-body collapse">
-      <div class="accordion-inner">
-        <pre>{{safe output}}</pre>
+    {{#if has_check_program}}
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo-{{id}}">
+          Programa verificador
+        </a>
       </div>
-    </div>
+      <div id="collapseTwo-{{id}}" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <pre>{{safe check_program}}</pre>
+        </div>
+      </div>
+    {{else}}
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo-{{id}}">
+          Saída
+        </a>
+      </div>
+      <div id="collapseTwo-{{id}}" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <pre>{{safe output}}</pre>
+        </div>
+      </div>
+    {{/if}}
   </div>
 </div>
 </div>

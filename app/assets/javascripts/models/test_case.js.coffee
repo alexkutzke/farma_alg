@@ -23,6 +23,8 @@ class Carrie.Models.TestCase extends Backbone.RelationalModel
     output: @get('output')
     timeout: @get('timeout')
     ignore_presentation: @get('ignore_presentation')
+    has_check_program: @get('has_check_program')
+    check_program: @get('check_program')
     show_input_output: @get('show_input_output')
     lo_id: @get('question').get('exercise').get('lo').get('id')
     exercise_id: @get('question').get('exercise').get('id')

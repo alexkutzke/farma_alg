@@ -104,6 +104,22 @@
         </div>
     </div>
 
+    <div class="control-group has_check_program_group">
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" name='has_check_program' class="has_check_program"> Possui programa avaliador de saída? (linguagem C) <strong>EXPERIMENTAL</strong>
+          <i rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Você pode escrever um programa em linguagem C capaz de avaliar se a saída obtida está correta ou não."  class="icon-question-sign"></i>
+        </label>
+      </div>
+    </div>
+
+    <div class="control-group check_program_group">
+        <label class="control-label" for="input">Código do programa avaliador de saída (linguagem C)</label>
+        <div class="controls">
+          <textarea style="width:100%; height:150px;" id="check_program" name="check_program"></textarea>
+        </div>
+    </div>
+
     <div class="control-group output_group">
         <label class="control-label" for="output">Saída</label>
         <div class="controls">

@@ -9,7 +9,8 @@ development:
       #database: farma_alg-13-06-14
       #database: farma_development_alg_ufpr_05-05-14-0931
       #ufpr-13-06-14_2
-      database: farma_alg-07-08-14
+      #database: farma_alg-07-08-14
+      database: farma_alg-05-11-14
 
       #database: farma_development_alg
       # Provides the hosts the default session can connect to. Must be an array

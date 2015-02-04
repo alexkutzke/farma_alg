@@ -28,7 +28,7 @@
   </div>
   <% if q.id == @answer.question_id %>
   	<div id="<%= @answer.id %>">
-  		<%= render :partial => "panel/answer", :locals => {:answer => @answer, :previous_answers => @answer.previous(5), :retroaction => true } %>	
+  		<%= render :partial => "panel/answer", :locals => {:answer => @answer, :previous_answers => @answer.previous(5), :retroaction => true } %>
   	</div>
   <% else %>
   	<% unless @other_answers[q.id][:answer].nil?  %>
@@ -45,9 +45,9 @@
       <div class="well">
         <div id="code"></div>
            <div>
-            <a href="#display" class="send btn  btn-primary" data-value="send" title="Enviar" data-id="<%= @answer.id %>" id="send_answer">Enviar</a> 
+            <a href="#display" class="send btn  btn-primary" data-value="send" title="Enviar" data-id="<%= @answer.id %>" id="send_answer">Enviar</a>
             <a style="margin-left:15px;" href="#display" class="clean btn" data-value="clean" title="Limpar">Limpar</a>
-            <a href="#display" class="cancel btn" data-value="cancel" title="Cancelar">Cancelar</a>   
+            <a href="#display" class="cancel btn" data-value="cancel" title="Cancelar">Cancelar</a>
            </div>
          </div>
       </div>

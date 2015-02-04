@@ -1,8 +1,13 @@
 module Recommender
 
-  def self.match_students(team_id)
+  def self.match_students(team_id,thres)
     users = User.any_of(team_ids: team_id).pluck(:id)
-    questions = Question.all.pluck(:id)
+    #questions = Question.all.pluck(:id)
+
+    questions = []
+    Team.find(team_id).questions.each do |q|
+      questions << q.id
+    end
     final = []
 
     for i in 0..users.count-1 do
@@ -46,9 +51,10 @@ module Recommender
 
           unless question_rank.empty?
             avg = avg/question_rank.count
+            #avg = avg/questions.count
           end
           question_rank.sort!{|x,y| y[:score] <=> x[:score]}
-          if avg > 0.0
+          if avg > thres
             f_u1[:neigh] << {user_id: u2.to_s, avg: avg, question_scores: question_rank}
             f_u2[:neigh] << {user_id: u1.to_s, avg: avg, question_scores: question_rank}
           end
@@ -173,15 +179,19 @@ module Recommender
   def self.build_team_recommendations(team_id,thres)
     result = []
 
-    ms = self.match_students(team_id.to_s)
+    ms = self.match_students(team_id.to_s,thres)
 
     n_thres = thres
     recommendation = []
-    while recommendation.empty? and n_thres > 0.0
+    #while recommendation.empty? and n_thres > 0.0
       connected_components = self.find_most_relevant_questions_in_team(ms,team_id,thres)
       recommendation = []
+      puts "Team: " + team_id.to_s + " (" + Team.find(team_id).users.count.to_s + " users)"
+      puts "\tConnected Components: " + connected_components.count.to_s
       unless connected_components.empty?
         connected_components.each do |cc|
+          puts "\t - " + cc.first.count.to_s + " users"
+          n = 0
           cc[1].each do |question|
             a = self.find_most_relevant_answers(cc.first,question[0])
             answer_ids = []
@@ -191,9 +201,10 @@ module Recommender
               answer_scores << i[1]
             end
 
-
+            n += 1
             recommendation << {:team_id => team_id, :user_ids => cc.first, :answer_ids => answer_ids,:answer_scores => answer_scores, :question_id => question[0], :question_references => question[1], :question_score => question[2]}
           end
+          puts "\t\t - " + n.to_s + " recommendations"
         end
       end
 
@@ -201,7 +212,7 @@ module Recommender
       if n_thres < 0.0
         n_thres = 0.0
       end
-    end
+    #end
 
     recommendation
   end
@@ -223,11 +234,12 @@ module Recommender
   def self.create_recommendations(thres)
     user_ids = User.all.pluck(:id)
 
-    #Recommendation.delete_all
-    Recommendation.delete_active
+    Recommendation.delete_all
+    #Recommendation.delete_active
 
     user_ids.each do |user_id|
-      team_ids = Team.where(owner_id:user_id.to_s, active: true).pluck(:id)
+      #team_ids = Team.where(owner_id:user_id.to_s, active: true).pluck(:id)
+      team_ids = Team.where(owner_id:user_id.to_s).pluck(:id)
 
       team_ids.each do |team_id|
         recoms = self.build_team_recommendations(team_id.to_s,thres)

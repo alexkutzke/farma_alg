@@ -27,8 +27,8 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
       currentResp: @view.resp()
       callback: (val) =>
         @sendAnswer(val)
-        
-    $(keyboard.render().el).modal('show')
+
+    $(keyboard.render().el).show()#modal('show')
 
   sendAnswer: (resp) ->
     answer = new Carrie.Models.RetroactionAnswer

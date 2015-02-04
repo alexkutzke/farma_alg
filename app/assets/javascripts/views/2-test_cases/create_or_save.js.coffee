@@ -4,6 +4,7 @@ class Carrie.Views.CreateOrSaveTestCase extends Backbone.Marionette.ItemView
   events:
     'submit form': 'create'
     'click .btn-cancel': 'cancel'
+    'click .has_check_program': 'check_program'
 
   initialize: ->
     if not @model
@@ -63,7 +64,7 @@ class Carrie.Views.CreateOrSaveTestCase extends Backbone.Marionette.ItemView
           @options.view.render()
         else
           $(@el).parent().html('')
-          @options.x.render()          
+          @options.x.render()
           $(@options.x.el).find('#'+"test_cases_modal_"+@options.x.model.get('id')).slideDown()
 
         $('.new-test_case-link').show()
@@ -93,3 +94,13 @@ class Carrie.Views.CreateOrSaveTestCase extends Backbone.Marionette.ItemView
     Carrie.CKEDITOR.show "\##{@cked2}"
     $(@el).find('i.icon-question-sign').tooltip()
 
+    if @model.get('has_check_program')
+      $(@el).find('.output_group').hide()
+      console.log("fechou")
+    else
+      $(@el).find('.check_program_group').hide()
+
+
+  check_program: ->
+    $(@el).find('.check_program_group').toggle()
+    $(@el).find('.output_group').toggle()

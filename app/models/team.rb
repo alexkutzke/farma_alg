@@ -42,4 +42,18 @@ class Team
       return false
     end
   end
+
+  def questions
+    questions = []
+    unless self.los.empty?
+      self.los.each do |lo|
+        unless lo.exercises.empty?
+          lo.exercises.each do |ex|
+            questions += ex.questions
+          end
+        end
+      end
+    end
+    questions    
+  end
 end

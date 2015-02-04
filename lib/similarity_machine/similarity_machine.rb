@@ -5,7 +5,8 @@ module SimilarityMachine
     if a.nil? || b.nil?
       0.0
     else
-      a.pair_distance_similar(b)
+      #a.pair_distance_similar(b)
+      a.levenshtein_similar(b)
     end
   end
 
@@ -96,7 +97,7 @@ module SimilarityMachine
       end
     end
 
-    final_similarity = (code_similarity + (both_compile_errors * compile_errors_similarity) + (1.0 - both_compile_errors) * (same_question*test_case_similarity_final/4.0)) /2.0
+    final_similarity = (0.3*code_similarity + 0.7*(both_compile_errors * compile_errors_similarity) + 0.7*(1.0 - both_compile_errors) * (same_question*test_case_similarity_final/4.0)) /2.0
     #puts "final_similarity: " + final_similarity.to_s
 
     result['code_similarity'] = code_similarity
@@ -146,23 +147,43 @@ module SimilarityMachine
   def self.match_all
     Connection.delete_all
 
-    per_batch = 1000
-    i = 0.0
-    t = Answer.count**2.0
-    0.step(Answer.count, per_batch) do |offset|
-      Answer.limit(per_batch).skip(offset).each do |a|
-        0.step(Answer.count, per_batch) do |offset2|
-          Answer.limit(per_batch).skip(offset2).each do |b|
-            i = i + 1.0
-            puts (i*100.0)/t
-            if a.id != b.id
+    # per_batch = 1000
+    # i = 0.0
+    # t = Answer.count**2.0
+    # 0.step(Answer.count, per_batch) do |offset|
+    #   Answer.limit(per_batch).skip(offset).each do |a|
+    #     0.step(Answer.count, per_batch) do |offset2|
+    #       Answer.limit(per_batch).skip(offset2).each do |b|
+    #         i = i + 1.0
+    #         puts (i*100.0)/t
+    #         if a.id != b.id
+    #           puts a.id.to_s + " " + b.id.to_s
+    #           create_connection(a,b)
+    #         end
+    #       end
+    #     end
+    #   end
+    # end
+
+    #Team.each do |team|
+    team = Team.find("530f7e003cc4501f13000010")
+      t = Answer.where(team_id: team.id).count
+      t *= t
+      i = 0.0
+      Answer.where(team_id: team.id).no_timeout.each do |a|
+        Answer.where(team_id: team.id).no_timeout.each do |b|
+          i = i + 1.0
+          puts (i*100.0)/t
+          if a.id != b.id and a.question_id == b.question_id
+            if a.user_id != b.user_id or (a.user_id == b.user_id and a.try_number == b.try_number + 1)
               puts a.id.to_s + " " + b.id.to_s
               create_connection(a,b)
             end
           end
         end
       end
-    end
+    #end
+    true
   end
 
   def self.start

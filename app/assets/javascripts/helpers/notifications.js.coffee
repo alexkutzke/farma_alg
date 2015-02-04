@@ -63,6 +63,7 @@ Carrie.Helpers.Notifications.Form =
     $(el).find('.control-group.error').removeClass('error')
 
   showErrors: (form_errors, el) ->
+    alert("Existem erros no formulário")
     _(form_errors).each (errors, field) ->
       $(".#{field}_group").addClass 'error'
       _(errors).each (error, i) ->
@@ -70,8 +71,8 @@ Carrie.Helpers.Notifications.Form =
 
   before: (txtMsg, el) ->
     el = 'form' unless el
-    msg = Carrie.Helpers.Notifications.error txtMsg
-    $(el).before(msg)
+    #msg = Carrie.Helpers.Notifications.error txtMsg
+    #$(el).before(msg)
 
   loadSubmit: (el) ->
     el = 'form' unless el

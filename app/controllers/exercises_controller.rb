@@ -5,7 +5,7 @@ class ExercisesController < ApplicationController
   before_filter :find_lo, except: :delete_last_answers
 
   def index
-    @exercises = @lo.exercises.order_by(:position => :desc)
+    @exercises = @lo.exercises.order_by(:position => :asc)
   end
 
   def create
@@ -50,7 +50,7 @@ class ExercisesController < ApplicationController
     size = params[:ids].size
     params[:ids].each_with_index do |id, index|
       intro = @lo.exercises.find(id)
-      intro.update_attribute(:position, size-index) if intro
+      intro.update_attribute(:position, index) if intro
     end
     render nothing: true
   end

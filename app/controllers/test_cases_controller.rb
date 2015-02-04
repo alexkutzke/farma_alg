@@ -9,15 +9,15 @@ class TestCasesController < ApplicationController
     input = @test_case.input.split("<--FIM-->")
     output = @test_case.output.split("<--FIM-->")
 
-    if input.count != output.count
-      respond_with(@lo, @exercise, @question, @test_case, status: 422)
-    else
+#    if input.count != output.count
+#      respond_with(@lo, @exercise, @question, @test_case, status: 422)
+#    else
       if @test_case.save
         respond_with(@lo, @exercise, @question, @test_case)
       else
         respond_with(@lo, @exercise, @question, @test_case, status: 422)
       end
-    end
+#    end
   end
 
   def show
