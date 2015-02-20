@@ -1,0 +1,9 @@
+Olá, <%= @user.name %>!<br>
+<br>
+Você recebeu um comentário em uma resposta no Farma-Alg.<br>
+Para visualizá-lo, clique no link abaixo ou acesse o Farma-Alg.<br>
+<br>
+<%= link_to panel_team_user_lo_question_answer_url(@answer.team_id,@answer.user_id,@answer.lo_id,@answer.question_id,@answer.id, only_path: false), panel_team_user_lo_question_answer_url(@answer.team_id,@answer.user_id,@answer.lo_id,@answer.question_id,@answer.id, only_path: false) %>
+<br>
+[]'s.<br>
+Equipe Farma-Alg.

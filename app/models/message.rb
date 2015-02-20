@@ -19,6 +19,7 @@ class Message
 
 	belongs_to :user
   has_many :replies, dependent: :delete
+  after_create :send_mail
 
   def has_recommendation?
     ((not self.answer_ids.nil?) and (not self.answer_ids.empty?)) || ((not self.question_ids.nil?) and (not self.question_ids.empty?))
@@ -26,5 +27,13 @@ class Message
 
   def can_post?(user)
     (self.user_id == user.id) or (self.target_user_ids.include?(user.id.to_s))
+  end
+
+  def send_mail
+    user_ids = self.user_ids
+
+    User.find(user_ids).each do |u|
+      MessageMailer.message_received(self,u).deliver
+    end
   end
 end

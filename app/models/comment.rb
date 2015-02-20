@@ -9,12 +9,14 @@ class Comment
   field :user_id, type: Moped::BSON::ObjectId
   field :team_id, type: Moped::BSON::ObjectId
   field :question_id, type: Moped::BSON::ObjectId
-  field :target_user_id, type: Moped::BSON::ObjectId  
+  field :target_user_id, type: Moped::BSON::ObjectId
 
   attr_accessible :text, :user_id, :created_at, :team_id, :question_id, :target_user_id
   validates_presence_of :text, :user_id
 
   default_scope order_by([:created_at, :asc])
+
+  after_create :send_mail
 
   def user
     @user ||= User.find(self.user_id)
@@ -22,5 +24,15 @@ class Comment
 
   def can_destroy?(user)
     self.created_at >= 15.minutes.ago && self.user_id == user.id
+  end
+
+  def send_mail
+    if self.user_id == self.answer.user_id
+      user_id = Team.find(self.answer.team_id).owner_id
+    else
+      user_id = self.answer.user_id
+    end
+
+    MessageMailer.comment_received(self,User.find(user_id)).deliver
   end
 end

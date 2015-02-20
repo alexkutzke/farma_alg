@@ -25,11 +25,7 @@ class TestCase
   validate :compile_check_program
 
   def compile_check_program
-      puts "------------------------------------------------------------"
-      puts "------------------------------------------------------------"
-      puts "------------------------------------------------------------"
-      puts "------------------------------------------------------------"
 
-      errors.add(:check_program, "check program está incorreto.")
+#      errors.add(:check_program, "check program está incorreto.")
   end
 end
