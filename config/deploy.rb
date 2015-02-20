@@ -1,23 +1,9 @@
-require "bundler/capistrano"
-set :rvm_ruby_string, 'ruby-2.0.0-p0@farma_alg'
-require "rvm/capistrano"
+# config valid only for Capistrano 3.1
+lock '3.2.1'
 
-set :log_level, :debug
-
-set :ssh_options, {
-  port: 2358
-}
-
-#set :whenever_command, "bundle exec whenever"
-#require "whenever/capistrano"
-server "192.241.202.98", :web, :app, :db, primary: true
-#server "107.170.214.146:2358", :web, :app, :db
-
-set :user, "alex"
-set :application, "farma-alg"
-set :deploy_to, "/home/#{user}/dev/#{application}"
-#set :deploy_via, :remote_cache
-set :use_sudo, false
+set :copy_exclude, %w(.git/* .svn/* log/* tmp/* .gitignore)
+set :linked_dirs, %w{ bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads }
+set :linked_files, %w{ config/mongoid.yml config/application.yml }
 
 set :scm, "git"
 set :repo_url, 'git@github.com:alexkutzke/farma_alg.git'
@@ -25,71 +11,96 @@ set :repository, 'git@github.com:alexkutzke/farma_alg.git'
 #set :local_repository, "#{user}@173.246.40.9:/home/#{user}/repos/#{application}.git"
 set :branch, "master"
 
-set :copy_exclude, %w(.git/* .svn/* log/* tmp/* .gitignore)
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads }
-set :linked_files, %w{ config/mongoid.yml }
-
-set :rails_env, "production"
-
-#default_run_options[:pty] = true
-ssh_options[:forward_agent] = true
-
-after "deploy", "deploy:cleanup" # keep only the last 5 releases
-after "deploy", "deploy:ckeditor_link", "deploy:start_process_queue"
-
-def run_remote_rake(rake_cmd)
-  rake_args = ENV['RAKE_ARGS'].to_s.split(',')
-
-  cmd = "cd #{fetch(:latest_release)} && #{fetch(:rake, "rake")} RAILS_ENV=#{fetch(:rails_env, "production")} #{rake_cmd}"
-  cmd += "['#{rake_args.join("','")}']" unless rake_args.empty?
-  run cmd
-  set :rakefile, nil if exists?(:rakefile)
-end
-
+set :rvm_ruby_version, 'ruby-2.0.0-p0@farma_alg'
 
 namespace :deploy do
-  task :start, :roles => :app do
-    run "touch #{current_path}/tmp/restart.txt"
-  end
 
-  task :stop do ; end
-
-namespace :assets do
-  desc "Precompile assets locally and then rsync to app servers"
-  task :precompile, :only => { :primary => true } do
-    run_locally "mkdir -p public/__assets; mv public/__assets public/assets;"
-    run_locally "bundle exec rake assets:clean_expired; RAILS_ENV=production bundle exec rake assets:precompile;"
-    servers = find_servers :roles => [:app], :except => { :no_release => true }
-    servers.each do |server|
-      run_locally "rsync -av --progress --inplace --rsh='ssh -p2358' ./public/assets/ #{user}@#{server}:#{current_path}/public/assets/;"
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      # Your restart mechanism here, for example:
+      execute :touch, release_path.join('tmp/restart.txt')
     end
-    run_locally "mv public/assets public/__assets"
-  end
-end
-
-
-  # namespace :assets do
-    # task :precompile, :roles => :web, :except => { :no_release => true } do
-      #  from = source.next_revision(current_revision)
-      #  if releases.length <= 1 || capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
-        #  run %Q{cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile}
-      #  else
-        #  logger.info "Skipping asset pre-compilation because there were no asset changes"
-      #  end
-  #  end
-  # end
-
-  desc "Create ckeditor link"
-  task :ckeditor_link do
-    run "ln -s #{deploy_to}/shared/ckeditor_assets #{release_path}/public/ckeditor_assets"
   end
 
-  task :restart, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-  end
-
-#  desc "Start the process queue"
-#  task :start_process_queue do
-#    run_remote_rake "process_queue:start_server"
+#  after :publishing, :restart
+#
+#  desc 'Migra todos dbs'
+#  task :apartment do
+#    on roles(:app) do
+#      execute "cd #{release_path} && RAILS_ENV=production ~/.rvm/bin/rvm ruby-2.1.1@sigpibid do bundle exec rake apartment:migrate"
+#    end
 #  end
+#
+#  desc 'Reinicia resque workers'
+#  task :restart_resque do
+#    on roles(:app) do
+#      execute "cd #{release_path} && RAILS_ENV=production ~/.rvm/bin/rvm ruby-2.1.1@sigpibid do bundle exec rake resque:restart_workers"
+#    end
+#  end
+#
+#  after :restart, "deploy:restart_resque"
+#
+#  after "deploy:migrate", "deploy:apartment"
+
+  namespace :assets do
+
+    Rake::Task['deploy:assets:precompile'].clear_actions
+
+    desc 'Precompile assets locally and upload to servers'
+    task :precompile do
+      on roles(fetch(:assets_roles)) do
+        run_locally do
+          with rails_env: fetch(:rails_env) do
+            execute 'bundle exec rake assets:precompile'
+            execute 'rm -f /tmp/farma-alg-assets.tgz'
+            execute 'tar cvzf /tmp/farma-alg-assets.tgz ./public/assets'
+          end
+        end
+
+        within release_path do
+          with rails_env: fetch(:rails_env) do
+            execute 'bundle exec rake assets:clean'
+            upload!('/tmp/farma-alg-assets.tgz', "#{shared_path}/")
+            execute "tar xvzf #{shared_path}/farma-alg-assets.tgz"
+            execute "rm -f #{shared_path}/farma-alg-assets.tgz"
+          end
+        end
+
+        #run_locally { execute 'rm -rf public/assets' }
+      end
+    end
+
+  end
+
 end
+
+# Default branch is :master
+# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+
+# Default deploy_to directory is /var/www/my_app
+# set :deploy_to, '/var/www/my_app'
+
+# Default value for :scm is :git
+# set :scm, :git
+
+# Default value for :format is :pretty
+# set :format, :pretty
+
+# Default value for :log_level is :debug
+# set :log_level, :debug
+
+# Default value for :pty is false
+# set :pty, true
+
+# Default value for :linked_files is []
+# set :linked_files, %w{config/database.yml}
+
+# Default value for linked_dirs is []
+# set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+
+# Default value for default_env is {}
+# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+
+# Default value for keep_releases is 5
+# set :keep_releases, 5

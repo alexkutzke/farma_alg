@@ -1,4 +1,5 @@
 Carrie::Application.configure do
+
   # Settings specified here will take precedence over those in config/application.rb
 
   # Code is not reloaded between requests
@@ -21,7 +22,7 @@ Carrie::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
-  config.action_mailer.default_url_options = { :host => 'farma-alg.dyndns.org' }
+  config.action_mailer.default_url_options = { :host => APP_CONFIG[:default_url_options][:host] }
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH

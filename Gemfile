@@ -60,6 +60,10 @@ group :development, :test do
   gem 'faker'
 end
 
+group :assets do
+  gem 'turbo-sprockets-rails3'
+end
+
 group :test do
   gem 'spork', '> 0.9.0.rc'
   gem 'guard-rspec'
@@ -76,8 +80,14 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 # gem ' icorn'
 
 # Deploy with Capistrano
-gem 'capistrano'
-gem 'rvm-capistrano'
+gem 'capistrano', '~> 3.2.0', require: false, group: :development
+gem 'capistrano-rvm'
+
+group :development do
+  gem 'debugger'
+  gem 'capistrano-rails',   '~> 1.1', require: false
+  gem 'capistrano-bundler', '~> 1.1', require: false
+end
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
