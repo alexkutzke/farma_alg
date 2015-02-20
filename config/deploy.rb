@@ -26,7 +26,7 @@ set :repository, 'git@github.com:alexkutzke/farma_alg.git'
 set :branch, "master"
 
 set :copy_exclude, %w(.git/* .svn/* log/* tmp/* .gitignore)
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads }
 set :linked_files, %w{ config/mongoid.yml }
 
 set :rails_env, "production"
