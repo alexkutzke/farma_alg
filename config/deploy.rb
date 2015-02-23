@@ -2,7 +2,7 @@
 lock '3.2.1'
 
 set :copy_exclude, %w(.git/* .svn/* log/* tmp/* .gitignore)
-set :linked_dirs, %w{ bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads }
+set :linked_dirs, %w{ bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads public/assets }
 set :linked_files, %w{ config/mongoid.yml config/application.yml }
 
 set :scm, "git"
@@ -23,7 +23,7 @@ namespace :deploy do
     end
   end
 
-#  after :publishing, :restart
+  after :publishing, :restart
 #
 #  desc 'Migra todos dbs'
 #  task :apartment do
@@ -52,7 +52,7 @@ namespace :deploy do
       on roles(fetch(:assets_roles)) do
         run_locally do
           with rails_env: fetch(:rails_env) do
-            execute 'bundle exec rake assets:precompile'
+            execute 'RAILS_ENV=production bundle exec rake assets:precompile'
             execute 'rm -f /tmp/farma-alg-assets.tgz'
             execute 'tar cvzf /tmp/farma-alg-assets.tgz ./public/assets'
           end
@@ -60,9 +60,9 @@ namespace :deploy do
 
         within release_path do
           with rails_env: fetch(:rails_env) do
-            execute 'bundle exec rake assets:clean'
+            #execute "rm -rf #{shared_path}/public/assets/*"
             upload!('/tmp/farma-alg-assets.tgz', "#{shared_path}/")
-            execute "tar xvzf #{shared_path}/farma-alg-assets.tgz"
+            execute "cd #{shared_path} && tar xvzf #{shared_path}/farma-alg-assets.tgz"
             execute "rm -f #{shared_path}/farma-alg-assets.tgz"
           end
         end

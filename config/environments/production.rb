@@ -58,7 +58,7 @@ Carrie::Application.configure do
   # config.assets.precompile += %w( search.js )
   #config.assets.precompile += %w( application2.js panel/*.js panel.js login.js dashboard/*.js )
   #config.assets.precompile += Ckeditor.assets
-  config.assets.precompile = ['*.js', '*.css', '*.png', '*.jpg']
+  config.assets.precompile = ['*.js', '*.css', '*.png', '*.jpg', '*.ttf', '*.eot', '*.svg', '*.woff']
   config.assets.paths << "#{Rails}/vendor/assets/fonts"
 
   #config.assets.precompile = [ method(:compile_asset?).to_proc ]

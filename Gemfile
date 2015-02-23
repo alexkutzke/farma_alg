@@ -6,7 +6,7 @@ gem 'mongoid'#, '~> 3.1.0'
 gem 'mongoid_search'
 gem 'kaminari'
 
-gem 'turbo-sprockets-rails3'
+#gem 'turbo-sprockets-rails3'
 #gem 'airbrake'
 
 gem 'jquery-rails', '~> 2.3.0'
