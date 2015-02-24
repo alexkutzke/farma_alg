@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>FARMA-ALG | Dashboard</title>
+        <title>FARMA-ALG <%= "(#{request.subdomain.upcase})" unless request.subdomain == "" %> | Dashboard</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
         <%= stylesheet_link_tag    'dashboard/dashboard', :media => 'all' %>
@@ -31,7 +31,9 @@
 
         <!-- header logo: style can be found in header.less -->
         <header class="header">
-            <%= link_to "FARMA-ALG", dashboard_home_path, :class => "logo" %>
+            <% name = "FARMA-ALG" %>
+            <% name = "FARMA-ALG <small style='font-size: 65%;'>(#{request.subdomain.upcase})</small>" unless request.subdomain == "" %>
+            <%= link_to raw(name), dashboard_home_path, :class => "logo" %>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top" role="navigation">
                 <!-- Sidebar toggle button-->

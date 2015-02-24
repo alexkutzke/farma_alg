@@ -1,4 +1,4 @@
-set :application, 'farma-alg'
+set :application, 'farma-alg-teste'
 set :deploy_to, "/home/alex/deploy/farma-alg-teste"
 
 # server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value

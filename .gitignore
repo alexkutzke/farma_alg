@@ -16,3 +16,4 @@ db/dump
 log/process_queue_err
 log/process_queue_stdout
 public/__assets
+config/mongoid.yml

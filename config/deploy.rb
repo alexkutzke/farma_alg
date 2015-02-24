@@ -23,14 +23,16 @@ namespace :deploy do
     end
   end
 
+  desc 'Inicia process queue'
+  task :start_process_queue do
+    on roles(:app) do
+      execute "/home/alex/dev/bin/exec_p_q.sh #{fetch(:application)}"
+    end
+  end
+
   after :publishing, :restart
-#
-#  desc 'Migra todos dbs'
-#  task :apartment do
-#    on roles(:app) do
-#      execute "cd #{release_path} && RAILS_ENV=production ~/.rvm/bin/rvm ruby-2.1.1@sigpibid do bundle exec rake apartment:migrate"
-#    end
-#  end
+  after :restart, :start_process_queue
+
 #
 #  desc 'Reinicia resque workers'
 #  task :restart_resque do
