@@ -27,7 +27,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.html">FARMA-ALG <%= "(#{request.subdomain.upcase})" unless request.subdomain == "" %></a>
+          <a class="navbar-brand" href="index.html">FARMA-ALG <%= "(#{request.subdomain.split('.').first.upcase})" unless request.subdomain == "" %></a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -42,7 +42,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6">
-					<h1>FARMA-ALG <small style="color: white;"><%= "(#{request.subdomain.upcase})" unless request.subdomain == "" %></small></h1>
+					<h1>FARMA-ALG <small style="color: white;"><%= "(#{request.subdomain.split('.').first.upcase})" unless request.subdomain == "" %></small></h1>
 					<h2 class="subtitle"><b>Crie</b> e <b>disponibilize</b> objetos de aprendizagem para o ensino de programação de computadores.</h2>
           <h2 class="subtitle"><b>Manipule</b>, <b>classifique</b> e <b>entenda</b> as relações entre as repostas de seus alunos.</h2>
           <%= link_to "Entrar", new_user_session_path, class: "btn btn-default" %>
