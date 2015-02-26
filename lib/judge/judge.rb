@@ -60,17 +60,19 @@ module Judge
 
   def self.exec_file(filename, lang, timeout, input_file, output_file)
 
-    if lang == "rb"
-      filename = "ruby " + filename
-    end
-
     if Rails.env == "production"
       if Rails.application.config.use_jailkit
 	       FileUtils.cp(filename,"/home/jail"+filename)
       end
+      if lang == "rb"
+        filename = "ruby " + filename
+      end
       user_command = "ssh -p 2358 exec_jail@localhost"
       command = "bin/exec_production.sh #{timeout} #{filename} #{input_file} #{output_file}"
     else
+      if lang == "rb"
+        filename = "ruby " + filename
+      end
       user_command = ""
       command = "bin/exec_development.sh #{timeout} #{filename} #{input_file} #{output_file}"
     end
