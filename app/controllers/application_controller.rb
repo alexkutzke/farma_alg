@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   def get_subdomain
     @subdomain = ""
-    @subdomain = @subdomain || request.subdomain == "farma-alg"
+    @subdomain = "(#{request.subdomain.split('.').first.upcase})" unless request.subdomain == "" || request.subdomain == "farma-alg"
   end
 
   def render_401

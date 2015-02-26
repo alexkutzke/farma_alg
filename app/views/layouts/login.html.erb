@@ -31,6 +31,15 @@
             <p id="alert" style="padding-left: 0;margin-left: 0;position: relative;" class="text-center alert alert-danger"><%= alert %></p>
           <% end %>
 
+          <div class="container">
+            <div class="row" style="margin-top:30px;">
+              <% if @subdomain == "(TESTE)" %>
+                <%= render partial: 'layouts/teste' %>
+              <% end %>
+
+            </div>
+          </div>
+
            <%= yield %>
 
 

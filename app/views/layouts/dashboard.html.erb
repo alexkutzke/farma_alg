@@ -31,9 +31,7 @@
 
         <!-- header logo: style can be found in header.less -->
         <header class="header">
-            <% name = "FARMA-ALG" %>
-            <% name = "FARMA-ALG <small style='font-size: 65%;'>(#{request.subdomain.split('.').first.upcase})</small>" unless request.subdomain == "" %>
-            <%= link_to raw(name), dashboard_home_path, :class => "logo" %>
+            <%= link_to raw("FARMA-ALG <small style='font-size: 65%;'>#{@subdomain}</small>"), dashboard_home_path, :class => "logo" %>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top" role="navigation">
                 <!-- Sidebar toggle button-->

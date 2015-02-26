@@ -38,10 +38,17 @@
       </div>
     </div>
 
+
 	<div id="header">
 		<div class="container">
+
+      <% if @subdomain == "(TESTE)" %>
+        <%= render partial: 'layouts/teste' %>
+      <% end %>
+
 			<div class="row">
 				<div class="col-lg-6">
+
 					<h1>FARMA-ALG <small style="color: white;"><%= @subdomain %></small></h1>
 					<h2 class="subtitle"><b>Crie</b> e <b>disponibilize</b> objetos de aprendizagem para o ensino de programação de computadores.</h2>
           <h2 class="subtitle"><b>Manipule</b>, <b>classifique</b> e <b>entenda</b> as relações entre as repostas de seus alunos.</h2>
@@ -145,7 +152,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-6 col-lg-offset-3">
-					<p class="copyright">Copyright © 2014 - <a href="http://alex.kutzke.com.br">Alex Kutzke</a> - <a href="http://www.inf.ufpr.br">UFPR</a></p>
+					<p class="copyright">Copyright © 2015 - <a href="http://alex.kutzke.com.br">Alex Kutzke</a> - <a href="http://www.inf.ufpr.br">UFPR</a></p>
 			</div>
 		</div>
 	</div>
