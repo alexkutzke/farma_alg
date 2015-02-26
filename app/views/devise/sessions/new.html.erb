@@ -1,5 +1,5 @@
 <div class="form-box" id="login-box">
-    <div class="header">FARMA-ALG <%= "(#{request.subdomain.split('.').first.upcase})" unless request.subdomain == "" %></div>
+    <div class="header">FARMA-ALG <%= @subdomain %></div>
 
       <%= form_for(resource, :as => resource_name, :url => session_path(resource_name),:class=>"form-signin") do |f| %>
         <div class="body bg-gray">

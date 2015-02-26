@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>FARMA-ALG <%= "(#{request.subdomain.split('.').first.upcase})" unless request.subdomain == "" %> | Dashboard</title>
+        <title>FARMA-ALG <%= @subdomain %> | Dashboard</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
         <%= stylesheet_link_tag    'dashboard/dashboard', :media => 'all' %>

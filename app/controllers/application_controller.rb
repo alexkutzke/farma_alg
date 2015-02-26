@@ -3,7 +3,13 @@ class ApplicationController < ActionController::Base
   respond_to :html,:json
   before_filter :authenticate_user!
   before_filter :get_messages
+  before_filter :get_subdomain
   layout :layout_to_resource
+
+  def get_subdomain
+    @subdomain = ""
+    @subdomain = @subdomain || request.subdomain == "farma-alg"
+  end
 
   def render_401
     render :file => "public/401.html", :status => :unauthorized
