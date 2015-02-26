@@ -2,7 +2,7 @@
 lock '3.2.1'
 
 set :copy_exclude, %w(.git/* .svn/* log/* tmp/* .gitignore)
-set :linked_dirs, %w{ bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads public/assets }
+set :linked_dirs, %w{ log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads public/assets }
 set :linked_files, %w{ config/mongoid.yml config/application.yml }
 
 set :scm, "git"
