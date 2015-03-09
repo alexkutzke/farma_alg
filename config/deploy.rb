@@ -45,35 +45,35 @@ namespace :deploy do
 #
 #  after "deploy:migrate", "deploy:apartment"
 
-  namespace :assets do
-
-    Rake::Task['deploy:assets:precompile'].clear_actions
-
-    desc 'Precompile assets locally and upload to servers'
-    task :precompile do
-      on roles(fetch(:assets_roles)) do
-        run_locally do
-          with rails_env: fetch(:rails_env) do
-            execute 'RAILS_ENV=production bundle exec rake assets:precompile'
-            execute 'rm -f /tmp/farma-alg-assets.tgz'
-            execute 'tar cvzf /tmp/farma-alg-assets.tgz ./public/assets'
-          end
-        end
-
-        within release_path do
-          with rails_env: fetch(:rails_env) do
-            #execute "rm -rf #{shared_path}/public/assets/*"
-            upload!('/tmp/farma-alg-assets.tgz', "#{shared_path}/")
-            execute "cd #{shared_path} && tar xvzf #{shared_path}/farma-alg-assets.tgz"
-            execute "rm -f #{shared_path}/farma-alg-assets.tgz"
-          end
-        end
-
-        #run_locally { execute 'rm -rf public/assets' }
-      end
-    end
-
-  end
+  # namespace :assets do
+  #
+  #   Rake::Task['deploy:assets:precompile'].clear_actions
+  #
+  #   desc 'Precompile assets locally and upload to servers'
+  #   task :precompile do
+  #     on roles(fetch(:assets_roles)) do
+  #       run_locally do
+  #         with rails_env: fetch(:rails_env) do
+  #           execute 'RAILS_ENV=production bundle exec rake assets:precompile'
+  #           execute 'rm -f /tmp/farma-alg-assets.tgz'
+  #           execute 'tar cvzf /tmp/farma-alg-assets.tgz ./public/assets'
+  #         end
+  #       end
+  #
+  #       within release_path do
+  #         with rails_env: fetch(:rails_env) do
+  #           #execute "rm -rf #{shared_path}/public/assets/*"
+  #           upload!('/tmp/farma-alg-assets.tgz', "#{shared_path}/")
+  #           execute "cd #{shared_path} && tar xvzf #{shared_path}/farma-alg-assets.tgz"
+  #           execute "rm -f #{shared_path}/farma-alg-assets.tgz"
+  #         end
+  #       end
+  #
+  #       #run_locally { execute 'rm -rf public/assets' }
+  #     end
+  #   end
+  #
+  # end
 
 end
 

@@ -13,6 +13,7 @@ module SimilarityMachine
   # Define um valor real de 0 à 1 para a similaridade
   # entre duas respostas a e b
   def self.similarity(a,b)
+
     tmp = Time.now.to_i
 
     File.open("/tmp/#{tmp}-#{a.id}-response.#{a.lang}", 'w') {|f| f.write(a.response) }
@@ -115,19 +116,22 @@ module SimilarityMachine
 
   def self.create_connection(a,b)
     c = nil
-    result = similarity(a,b)
-    c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
 
-    if result['final_similarity'] > 0.4
-      c.code_similarity = result['code_similarity']
-      c.both_compile_errors = result['both_compile_errors']
-      c.compile_errors_similarity = result['compile_errors_similarity']
-      c.both_error = result['both_error']
-      c.same_question = result['same_question']
-      c.test_case_similarity = result['test_case_similarity']
-      c.test_case_similarity_final = result['test_case_similarity_final']
-      c.weight = result['final_similarity']
-      c.save!
+    if a.user_id != b.user_id or (a.user_id == b.user_id and a.try_number == b.try_number + 1)
+      result = similarity(a,b)
+      c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
+
+      if result['final_similarity'] > 0.4
+        c.code_similarity = result['code_similarity']
+        c.both_compile_errors = result['both_compile_errors']
+        c.compile_errors_similarity = result['compile_errors_similarity']
+        c.both_error = result['both_error']
+        c.same_question = result['same_question']
+        c.test_case_similarity = result['test_case_similarity']
+        c.test_case_similarity_final = result['test_case_similarity_final']
+        c.weight = result['final_similarity']
+        c.save!
+      end
     end
     c
   end
