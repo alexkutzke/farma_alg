@@ -49,8 +49,8 @@ class ExercisesController < ApplicationController
   def sort
     size = params[:ids].size
     params[:ids].each_with_index do |id, index|
-      intro = @lo.exercises.find(id)
-      intro.update_attribute(:position, index) if intro
+      ex = @lo.exercises.find(id)
+      ex.update_attribute(:position, size-index) if ex
     end
     render nothing: true
   end

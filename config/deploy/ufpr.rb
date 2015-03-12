@@ -2,7 +2,7 @@ set :application, 'farma-alg-ufpr'
 set :deploy_to, "/home/alex/deploy/farma-alg-ufpr"
 
 # server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
-server '192.241.202.98', user: 'alex', roles: %w{web app db worker}
+server '127.0.0.1', user: 'alex', roles: %w{web app db worker}
 
 # Custom SSH Options
 # ==================
@@ -18,7 +18,7 @@ server '192.241.202.98', user: 'alex', roles: %w{web app db worker}
 #  }
 
 set :ssh_options, {
-  port: 2358
+  port: 65000
 }
 
 # And/or per server (overrides global)

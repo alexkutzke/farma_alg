@@ -16,7 +16,7 @@ class Newapi::ConnectionsController < ApplicationController
 			end
 		end
 
-		@connection = SimilarityMachine::create_connection(a,b)
+		@connection = SimilarityMachine::create_connection(a,b,true)
 		@connection.weight = 1.0
     @connection.confirmed = true
 		@connection.save!

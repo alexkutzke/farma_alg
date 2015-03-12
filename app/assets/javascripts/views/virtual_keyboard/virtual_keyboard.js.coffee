@@ -11,6 +11,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
       @remove()
 
   onRender: ->
+    $(@options.parent).find('.answer_btn').hide()
     @input = $($(@el).find('.keyboard-input').first())
     @input.attr('value', @options.currentResp)
     #@draggable()
@@ -77,6 +78,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
     switch value
       when 'cancel'
         #$(@el).modal('hide')
+        $(@options.parent).find('.answer_btn').show()
         $(@el).remove()
         @remove()
       when 'clean'
@@ -92,6 +94,7 @@ class Carrie.Views.VirtualKeyBoard extends Backbone.Marionette.ItemView
 
   send: ->
     #$(@el).modal('hide')
+    $(@options.parent).find('.answer_btn').show()
     $(@el).remove()
     val = @code.getValue()
 

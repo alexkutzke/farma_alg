@@ -80,7 +80,7 @@
                                                                 <div class="checkbox">
                                                                     <label class="">
                                                                         <input id="question_ids_" name="question_ids[]" value="<%= q.id %>" type="checkbox" style="position: absolute; opacity: 0;" form="<%= form_id %>">
-                                                                        <%= q.title %>
+                                                                        <%= q.title %> <small><%= "(#{q.exercise.lo.name} - #{q.exercise.title})" %></small>
                                                                     </label>
                                                                 </div>
                                                             <% end %>

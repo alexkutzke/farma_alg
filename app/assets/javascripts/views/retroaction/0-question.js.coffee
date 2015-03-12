@@ -25,6 +25,7 @@ class Carrie.Views.Retroaction.Question extends Backbone.Marionette.ItemView
     ev.preventDefault()
     keyboard = new Carrie.Views.VirtualKeyBoard
       currentResp: @view.resp()
+      parent: @el
       callback: (val) =>
         @sendAnswer(val)
 

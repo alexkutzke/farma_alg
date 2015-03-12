@@ -46,6 +46,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
       currentResp: @view.resp()
       lang: @view.lang()
       languages: @model.get('languages')
+      parent: @el
       callback: (val,lang) =>
         @sendAnswer(val,lang)
 
@@ -64,6 +65,7 @@ class Carrie.Published.Views.Question extends Backbone.Marionette.ItemView
       question: @model
       response: resp
       for_test: false
+      parent: @el
       team_id: @options.team_id
 
 

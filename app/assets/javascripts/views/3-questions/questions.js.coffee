@@ -54,6 +54,7 @@ class Carrie.Views.Question extends Backbone.Marionette.CompositeView
     ev.preventDefault()
     keyboard = new Carrie.Views.VirtualKeyBoard
       languages: @model.get('languages')
+      parent: @el
       currentResp: @view.resp()
       callback: (val,lang) =>
         @sendAnswer(val,lang)

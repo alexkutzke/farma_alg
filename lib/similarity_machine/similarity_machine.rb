@@ -114,10 +114,10 @@ module SimilarityMachine
     result
   end
 
-  def self.create_connection(a,b)
+  def self.create_connection(a,b,manual = false)
     c = nil
 
-    if a.user_id != b.user_id or (a.user_id == b.user_id and a.try_number == b.try_number + 1)
+    if manual || a.user_id != b.user_id or (a.user_id == b.user_id and a.try_number == b.try_number + 1)
       result = similarity(a,b)
       c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
 
@@ -130,6 +130,7 @@ module SimilarityMachine
         c.test_case_similarity = result['test_case_similarity']
         c.test_case_similarity_final = result['test_case_similarity_final']
         c.weight = result['final_similarity']
+
         c.save!
       end
     end

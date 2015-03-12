@@ -35,16 +35,39 @@ class Carrie.Published.Views.LoPaginator extends Backbone.Marionette.ItemView
     @showPage()
 
   nextPage: (ev) ->
-    ev.preventDefault()
+    #ev.preventDefault()
     if @page+1 < @length
       @page += 1
-      @showPage()
+      #@showPage()
+    url = @model.get('url_page')
+
+    #if (@team)
+    #   url = "/published/teams/#{@team_id}/los/#{@model.get('id')}"
+    #   bread = "#{@team.get('name')} /"
+    #else
+    #   url = "/published/los/#{@model.get('id')}"
+    if @page != 0
+      url += "/pages/#{@page+1}"
+
+    window.location.href = url
 
   prevPage: (ev) ->
-    ev.preventDefault()
+    #ev.preventDefault()
     if @page > 0
       @page -= 1
-      @showPage()
+      #@showPage()
+    url = @model.get('url_page')
+
+    #if (@team)
+    #   url = "/published/teams/#{@team_id}/los/#{@model.get('id')}"
+    #   bread = "#{@team.get('name')} /"
+    #else
+    #   url = "/published/los/#{@model.get('id')}"
+    if @page != 0
+      url += "/pages/#{@page+1}"
+
+    window.location.href = url
+
 
   modelType: ->
     $(@el).find('select#page-select option:selected').data('type')
@@ -79,6 +102,8 @@ class Carrie.Published.Views.LoPaginator extends Backbone.Marionette.ItemView
     #   url = "/published/los/#{@model.get('id')}"
     if @page != 0
       url += "/pages/#{@page+1}"
+
+    @url = url
 
     Backbone.history.navigate(url, false)
 
