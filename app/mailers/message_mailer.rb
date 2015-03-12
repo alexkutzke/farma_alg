@@ -1,5 +1,5 @@
 class MessageMailer < ActionMailer::Base
-  #default :from => "farma.alg@gmail.com"
+  default :from => "nao-responda-farma-alg@c3sl.ufpr.br"
 
   def message_received(message, user)
     @message = message

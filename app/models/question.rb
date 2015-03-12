@@ -14,7 +14,7 @@ class Question
 
   attr_accessible :id, :title, :content, :available, :languages
 
-  validates_presence_of :title, :content 
+  validates_presence_of :title, :content
   validates :available, :inclusion => {:in => [true, false]}
 
   belongs_to :exercise

@@ -6,6 +6,7 @@ class ExercisesController < ApplicationController
 
   def index
     @exercises = @lo.exercises.order_by(:position => :asc)
+    @exercises = @lo.exercises.order_by(:position => :desc)
   end
 
   def create
