@@ -102,4 +102,11 @@ Carrie::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.use_jailkit = true
+  
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'urquell.c3sl.ufpr.br',
+    domain:               'c3sl.ufpr.br',
+    openssl_verify_mode:  'none' }
+  end
 end
