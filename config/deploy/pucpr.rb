@@ -3,6 +3,7 @@ set :deploy_to, "/home/alex/deploy/farma-alg-pucpr"
 
 # server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 server '127.0.0.1', user: 'alex', roles: %w{web app db worker}
+set :stage, :production
 
 # Custom SSH Options
 # ==================
