@@ -5,7 +5,7 @@ set :copy_exclude, %w(.git/* .svn/* log/* tmp/* .gitignore)
 set :linked_dirs, %w{ log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads public/assets }
 set :linked_files, %w{ config/mongoid.yml config/application.yml }
 
-set :scm, "git"
+set :scm, :git_copy
 set :repo_url, 'git@github.com:alexkutzke/farma_alg.git'
 set :repository, 'git@github.com:alexkutzke/farma_alg.git'
 #set :local_repository, "#{user}@173.246.40.9:/home/#{user}/repos/#{application}.git"

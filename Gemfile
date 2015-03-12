@@ -58,6 +58,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'growl'
   gem 'faker'
+  gem 'capistrano-git-copy', require: false
 end
 
 group :assets do
