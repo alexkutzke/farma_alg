@@ -11,7 +11,9 @@ Carrie.Helpers.Notifications.error = (message)  ->
   #this.alert('error', message)
 
 Carrie.Helpers.Notifications.success = (message) ->
-  this.alert('success', message)
+  #this.alert('success', message)
+  this.alert('error', 'Ocorreu um erro. A página será recarregada.')
+  window.location.reload(false)
 
 Handlebars.registerHelper 'notify_error', (msg) ->
   msg = Handlebars.Utils.escapeExpression(msg)
