@@ -61,9 +61,6 @@ module Judge
   def self.exec_file(filename, lang, timeout, input_file, output_file)
 
     if Rails.env == "production"
-      if Rails.application.config.use_jailkit
-	       FileUtils.cp(filename,"/home/jail"+filename)
-      end
       if lang == "rb"
         filename = "ruby " + filename
       end
@@ -167,6 +164,9 @@ module Judge
 
   def self.test(lang,filename,test_cases,id)
     correct = Hash.new
+    if Rails.application.config.use_jailkit
+       FileUtils.cp(filename,"/home/jail"+filename)
+    end
     test_cases.each do |t|
       correct[t.id] = Array.new
       correct[t.id][3] = Array.new
