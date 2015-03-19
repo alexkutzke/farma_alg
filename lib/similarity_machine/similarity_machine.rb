@@ -98,7 +98,7 @@ module SimilarityMachine
       end
     end
 
-    final_similarity = (0.3*code_similarity + 0.7*(both_compile_errors * compile_errors_similarity) + 0.7*(1.0 - both_compile_errors) * (same_question*test_case_similarity_final/4.0)) /2.0
+    final_similarity = (0.3*code_similarity + 0.7*(both_compile_errors * compile_errors_similarity) + 0.7*(1.0 - both_compile_errors) * (same_question*test_case_similarity_final/4.0))
     #puts "final_similarity: " + final_similarity.to_s
 
     result['code_similarity'] = code_similarity
@@ -117,7 +117,7 @@ module SimilarityMachine
   def self.create_connection(a,b,manual = false)
     c = nil
 
-    if manual || a.user_id != b.user_id or (a.user_id == b.user_id and a.try_number == b.try_number + 1)
+    if manual or (a.user_id != b.user_id or (a.user_id == b.user_id and a.try_number == b.try_number + 1))
       result = similarity(a,b)
       c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
 
