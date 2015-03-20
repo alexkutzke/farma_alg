@@ -1,9 +1,11 @@
 Olá, <%= @user.name %>!<br>
 <br>
 Você recebeu uma mensagem no Farma-Alg.<br>
-Para visualizá-la, clique no link abaixo ou acesse o Farma-Alg.<br>
-<br>
-<%= link_to dashboard_message_url(@message,only_path: false), dashboard_message_path(@message,only_path: false) %><br>
+Para visualizá-la de maneira completa, acesse o Farma-Alg.<br>
+<br><br>
+Mensagem de <%= @message.user.name %><br>
+Assunto: <%= @message.subject %><br><br>
+<%= @message.content %>
 <br>
 []'s.<br>
 Equipe Farma-Alg.

@@ -26,7 +26,7 @@ class Reply
     user_ids.uniq!
 
     User.find(user_ids).each do |u|
-      MessageMailer.reply_received(self.message,u).deliver
+      MessageMailer.reply_received(self,self.message,u).deliver
     end
   end
 end

@@ -1,9 +1,12 @@
 Olá, <%= @user.name %>!<br>
 <br>
 Você recebeu um comentário em uma mensagem no Farma-Alg.<br>
-Para visualizá-lo, clique no link abaixo ou acesse o Farma-Alg.<br>
+Para visualizá-lo de maneira completa, acesse o Farma-Alg.<br>
 <br>
-<%= link_to dashboard_message_url(@message,only_path: false), dashboard_message_path(@message,only_path: false) %><br>
+Comentário de <%= @reply.user.name %> para a mensagem <%= @message.subject %>
+<br><br>
+<%= raw @reply.content %>
+
 <br>
 []'s.<br>
 Equipe Farma-Alg.
