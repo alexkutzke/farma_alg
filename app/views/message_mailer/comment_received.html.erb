@@ -3,7 +3,7 @@ Olá, <%= @user.name %>!<br>
 Você recebeu um comentário em uma resposta no Farma-Alg.<br>
 Para visualizá-lo de maneira completa, acesse o Farma-Alg.<br>
 <br>
-Comentário de <%= @comment.user.name %> para sua tentativa #<%= @answer.try_number %> na questão <%= @question.name %>
+Comentário de <%= @comment.user.name %> para sua tentativa #<%= @answer.try_number %> na questão <%= @question.title %>
 <br><br>
 <%= raw @comment.text %>
 
