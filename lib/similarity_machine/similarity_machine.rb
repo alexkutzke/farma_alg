@@ -37,7 +37,9 @@ module SimilarityMachine
       compile_errors_similarity = string_similarity(a.compile_errors,b.compile_errors)
     end
 
-    both_error = (not a.correct) && (not b.correct) ? 1 : 0
+    both_error = (not a.correct) and (not b.correct) ? 1 : 0
+
+    both_correct = a.correct and b.correct ? 1 : 0
 
     same_question = a.question_id == b.question_id ? 1 : 0
 
@@ -98,7 +100,15 @@ module SimilarityMachine
       end
     end
 
-    final_similarity = (0.3*code_similarity + 0.7*(both_compile_errors * compile_errors_similarity) + 0.7*(1.0 - both_compile_errors) * (same_question*test_case_similarity_final/4.0))
+    if both_correct == 1
+      final_similarity = code_similarity
+    else
+      if same_question == 0
+        final_similarity = code_similarity
+      else
+        final_similarity = (0.4*code_similarity + 0.6*(both_compile_errors * compile_errors_similarity) + 0.6*(1.0 - both_compile_errors) * (same_question*test_case_similarity_final/4.0))
+      end
+    end
     #puts "final_similarity: " + final_similarity.to_s
 
     result['code_similarity'] = code_similarity
@@ -234,6 +244,29 @@ module SimilarityMachine
     end
   end
 
+  def self.rebuild_connections
+    Connection.delete_all
+
+    per_batch = 1000
+    t = Answer.count
+    i = 1
+    puts "Criando conexoes"
+
+    answers = Answer.all
+    0.step(answers.count, per_batch) do |offset|
+      answers.limit(per_batch).skip(offset).each do |a|
+        print i.to_s + "/" + t.to_s
+        puts
+        puts a.id
+
+        a.make_inner_connections
+        a.make_outer_connections
+
+        i = 1 + i
+      end
+    end
+  end
+
   def self.get_similarity(a,b)
     result = self.similarity(a,b)
     c = Connection.find_or_initialize_by(target_answer_id:b.id, answer_id:a.id)
@@ -242,5 +275,17 @@ module SimilarityMachine
       result['final_similarity'] = c.weight
     end
     result
+  end
+
+  def self.wrong_wrong_count_connections
+    i=0
+
+    Connection.all.no_timeout.each do |c|
+      b = Answer.find(c.target_answer_id)
+      if c.answer.correct and b.correct
+        i+=1
+      end
+    end
+    i
   end
 end

@@ -24,6 +24,7 @@ var selectedEdge=null;
 var firstNode=null;
 var secondNode=null;
 var running=true;
+var new_links = [];
 
 function makeLink(){
   var params="?";
@@ -62,6 +63,7 @@ var nodeSize = 50; // Tamanho em pixels dos vértices
 var defs;
 var pattern;
 var nodes = []
+var links2 = []
 
 // ----------------------------------------------
 // Node draw function
@@ -344,8 +346,8 @@ function defaultBeforeSend(item)
 // Graph manipulation functions
 function getAnswerSuccess(data)
 {
-  console.log(data);
-  console.log("carregado!");
+//  console.log(data);
+//  console.log("carregado!");
 
   if(nodes.indexOf(data.id) == -1)
   {
@@ -357,14 +359,14 @@ function getAnswerSuccess(data)
 
 function getLinksSuccess(data)
 {
-  console.log(data);
-  console.log("carregado!");
+//  console.log(data);
+//  console.log("carregado!");
 
   for(i=0;i<data.length;i++)
   {
     if(nodes.indexOf(data[i].target_answer_id) != -1)
       //if(data[i].weight > 0.7)
-        graph.addLink(data[i].answer_id, data[i].target_answer_id, {id: data[i].id, weight : data[i].weight});
+      links2.push(graph.addLink(data[i].answer_id, data[i].target_answer_id, {id: data[i].id, weight : data[i].weight}));
   }
 }
 
@@ -385,6 +387,28 @@ function  removeEdges(data){
   });
 }
 
+function link_thres(thres_par)
+{
+  //var thres = parseFloat($("#thres2").val());
+  var thres = thres_par;
+
+  new_links = [];
+
+  var i;
+  for(i=0;i<links2.length;i++)
+  {
+    graph.removeLink(links2[i]);
+    if(parseFloat(links2[i].data.weight) >= thres_par)
+      links2[i] = graph.addLink(links2[i].fromId,links2[i].toId,links2[i].data);
+  }
+
+  //graph.forEachLink(function(link){
+    //if(parseFloat(link.data.weight) < thres)
+    //  graph.removeLink(link);
+  //});
+
+}
+
 function addAnswer(id)
 {
   getAnswer(id,defaultBeforeSend,getAnswerSuccess);
@@ -393,7 +417,7 @@ function addAnswer(id)
 function addEdgeSuccess(data)
 {
   $("#add-edge").click();
-  graph.addLink(data.answer_id, data.target_answer_id, {id: data.id, weight : data.weight});
+  links2.push(graph.addLink(data.answer_id, data.target_answer_id, {id: data.id, weight : data.weight}));
 }
 
 function addEdge(node1_id,node2_id)
@@ -419,7 +443,7 @@ function addGroupLinks(data){
   {
     if(nodes.indexOf(data[i].target_answer_id) != -1)
       //if(data[i].weight > 0.7)
-        graph.addLink(data[i].answer_id, data[i].target_answer_id, {id: data[i].id, weight : data[i].weight});
+      links2.push(graph.addLink(data[i].answer_id, data[i].target_answer_id, {id: data[i].id, weight : data[i].weight}));
   }
   bootbox.hideAll();
 }
@@ -429,7 +453,7 @@ function addGroupNodes(data){
   var ids;
   ids = [];
 
-  console.log(data);
+  //console.log(data);
 
   for(i=0;i<data.length;i++){
     graph.addNode(data[i].id,data[i]);
@@ -487,6 +511,7 @@ $(document).ready(function(){
   resizeApp();
   draw();
 
+  $("#thres2").val("0.0");
   //$("#answer-info").height(0);
   //$("#answer-info").hide(0);
 
@@ -656,4 +681,10 @@ $(document).ready(function(){
     mouse_x = e.pageX;
     mouse_y = e.pageY;
   });
+
+  $( "#slider" ).slider({orientation: "vertical", value: 40.0});
+  $( "#slider" ).on( "slidechange", function( event, ui ) { link_thres(ui.value/100.0)} );
+  $( "#slider" ).on( "slide", function( event, ui ) { $("#slider_value").html(ui.value + "%")} );
+  $("#slider_value").html("40%");
+
 });

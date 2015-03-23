@@ -20,7 +20,7 @@ class Dashboard::AnswersController < ApplicationController
     if params.has_key?(:message_id)
       m = Message.find(params[:message_id])
 
-      if m.target_user_ids.include?(current_user.id.to_s) and m.answer_ids.include?(params[:id])
+      if m.target_user_ids.include?(current_user.id) and m.answer_ids.include?(params[:id])
         can = true
 
         @answer.filter_names = true

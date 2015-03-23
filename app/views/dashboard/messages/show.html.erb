@@ -91,8 +91,8 @@
               <%= label_tag "Respostas recomendadas" %><br />
               <ul id="answers">
                   <% unless @message.answer_ids.nil? %>
+                    <% i = 1 %>
                     <% @message.answer_ids.each do |answer_id| %>
-                      <% i = 1 %>
                       <% a = Answer.find(answer_id) %>
                       <li data-id="answer_id-<%=answer_id%>">
                         <% if current_user.prof? %>

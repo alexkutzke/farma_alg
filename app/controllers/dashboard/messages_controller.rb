@@ -32,7 +32,7 @@ class Dashboard::MessagesController < ApplicationController
   def index
     @messages = User.find(current_user.id).messages.desc(:updated_at)
 
-    @messages_to_me = Message.any_of(:target_user_ids => current_user.id.to_s).desc(:updated_at)
+    @messages_to_me = Message.where(:target_user_ids => current_user.id).desc(:updated_at)
   end
 
   def show
@@ -73,6 +73,7 @@ class Dashboard::MessagesController < ApplicationController
     @message = Message.new(params[:message])
 
     @message.user_id = current_user.id
+    @message.target_user_ids = []
 
     unless params[:message].nil?
       if params[:message].has_key?(:user_ids)

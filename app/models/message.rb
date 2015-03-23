@@ -30,7 +30,7 @@ class Message
   end
 
   def send_mail
-    user_ids = self.user_ids
+    user_ids = self.target_user_ids
 
     User.find(user_ids).each do |u|
       MessageMailer.message_received(self,u).deliver
