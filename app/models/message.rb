@@ -26,7 +26,7 @@ class Message
   end
 
   def can_post?(user)
-    (self.user_id == user.id) or (self.target_user_ids.include?(user.id))
+    (self.user_id == user.id) or (self.target_user_ids.include?(user.id)) or (self.user_ids.include?(user.id.to_s))
   end
 
   def send_mail

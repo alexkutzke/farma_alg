@@ -401,7 +401,7 @@ class Answer
 
           # passed by another answer
           if t[2] != answer.id
-            if t[1] < weight*atag[1]
+            if (t[1] < weight*atag[1]) and (weight*atag[1] > 0.5)
               t[1] = weight*atag[1]
               changed = true
               puts "Answer(#{answer.id}).aat.#{tag.name} -> (substituted) Answer(#{neigh_id}).aat"
@@ -409,7 +409,7 @@ class Answer
           # passed by this answers
           else
             # update if any change
-            if t[1] != atag[1] * weight
+            if (t[1] != atag[1] * weight) and (weight*atag[1] > 0.5)
               t[1] = atag[1] * weight
               changed = true
               puts "Answer(#{answer.id}).aat.#{tag.name} -> (updated) Answer(#{neigh_id}).aat"
@@ -418,9 +418,11 @@ class Answer
         # neigh does not have this tag
         else
           unless neigh.rejected_tags.include?(tag.id.to_s)
-            naat.push [tag.id,weight*atag[1],answer.id]
-            changed = true
-            puts "Answer(#{answer.id}).aat.#{tag.name} -> (new) Answer(#{neigh_id}).aat"
+            if weight*atag[1] > 0.5
+              naat.push [tag.id,weight*atag[1],answer.id]
+              changed = true
+              puts "Answer(#{answer.id}).aat.#{tag.name} -> (new) Answer(#{neigh_id}).aat"
+            end
           end
         end
       end
