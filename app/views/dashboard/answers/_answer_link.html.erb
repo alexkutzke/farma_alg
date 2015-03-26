@@ -11,6 +11,11 @@
     <% unless c.nil? %>
       <span class='label label-default connection-btn' style='cursor:pointer;' data-id="<%= c.id %>"> <i class='fa fa-link'></i></span>
     <% end %>
+    <% if answer.comments.count > 0 %>
+      <%= link_to panel_team_user_lo_question_answer_path(answer.team_id,answer.user_id,answer.lo_id,answer.question_id,answer.id) do %>
+        <span class='label label-default' style='cursor:pointer;'> <i class='fa fa-comment'></i></span>
+      <% end %>
+    <% end %>
     <br><small><i class="fa fa-clock-o"></i> há <%= time_ago_in_words answer.created_at %></small>
 
   </h4>

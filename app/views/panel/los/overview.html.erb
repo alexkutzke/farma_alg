@@ -35,9 +35,9 @@
       <th colspan="<%= ex.questions.length %>">
       <span class='icon'>
       <% if ex.available %>
-        <i rel="tooltip" data-original-title="Exercício Publicado" class='left icon-certificate icon-green'></i> 
+        <i rel="tooltip" data-original-title="Exercício Publicado" class='left icon-certificate icon-green'></i>
       <% else %>
-        <i rel="tooltip" data-original-title="Exercício não Publicado" class='left icon-certificate icon-red'></i> 
+        <i rel="tooltip" data-original-title="Exercício não Publicado" class='left icon-certificate icon-red'></i>
       <% end %>
       </span>
         Exercício <%= ex.title %>
@@ -96,6 +96,9 @@
           <% if a[0].nil? %>
             <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Questão ainda não respondida pelo aluno" class="label label-default">Não respondida</span>
           <% else %>
+          <% if a[2] > 0 %>
+            <span class='label label-warning' style='cursor:pointer;'> <i class='fa fa-comment'></i></span>
+          <% end %>
             <% if a[0].correct %>
                 <%= link_to panel_team_user_lo_question_path(@team,u,@lo,q) do %>
                   <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta correta!" class="label label-success">OK</span>
@@ -105,9 +108,10 @@
                   <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta incorreta!" class="label label-danger">ERRO</span>
                 <% end %><small class="date-info"> <%= a[1] %> tentativa(s)</small>
             <% end %>
+
           <% end %>
           <%= render_progress(u.progress_question(@team.id.to_s,q.id.to_s),"% concluído","margin: 10px auto;width:100px;") %>
-          
+
         </td>
       <% end %>
     <% end %>
