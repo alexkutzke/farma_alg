@@ -6,12 +6,12 @@ class Message
   field :subject
   field :content
   field :new_flag_user_id, type: Boolean, default: false
-  field :target_user_ids, type: Array
-  field :user_ids, type: Array
-  field :new_flag_user_ids, type: Array
-  field :team_ids, type: Array
-  field :answer_ids, type: Array
-  field :question_ids, type: Array
+  field :target_user_ids, type: Array, default: []
+  field :user_ids, type: Array, default: []
+  field :new_flag_user_ids, type: Array, default: []
+  field :team_ids, type: Array, default: []
+  field :answer_ids, type: Array, default: []
+  field :question_ids, type: Array, default: []
 
   validates_presence_of :target_user_ids, :message => "Pelo menos um destinatário precisa ser informado"
   validates_presence_of :subject,:message => "A mensagem precisa ter um assunto"

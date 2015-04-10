@@ -498,15 +498,17 @@ class Answer
   def make_inner_connections
     per_batch = 1000
 
-    inner_neigh = Answer.where(:question_id => self.question_id)
+    inner_neigh = Answer.where(:question_id => self.question_id, :team_id => self.team_id).shuffle[0..99]
 
-    0.step(inner_neigh.count, per_batch) do |offset|
-      inner_neigh.limit(per_batch).skip(offset).each do |a|
+inner_neigh.each do |a|
+    #0.step(inner_neigh.count, per_batch) do |offset|
+     # inner_neigh.limit(per_batch).skip(offset).each do |a|
         if self.id != a.id
           SimilarityMachine::create_connection(self,a)
         end
-      end
-    end
+      #end
+   # end
+end
 
     true
   end
@@ -514,15 +516,17 @@ class Answer
   def make_outer_connections
     per_batch = 1000
 
-    outer_neigh = Answer.where(:question_id.ne => self.question_id, :team_id => self.team_id)
+    outer_neigh = Answer.where(:question_id.ne => self.question_id, :team_id => self.team_id).shuffle[0..99]
 
-    0.step(outer_neigh.count, per_batch) do |offset|
-      outer_neigh.limit(per_batch).skip(offset).each do |a|
+outer_neigh.each do |a|
+    #0.step(outer_neigh.count, per_batch) do |offset|
+     # outer_neigh.limit(per_batch).skip(offset).each do |a|
         if self.id != a.id
           SimilarityMachine::create_connection(self,a)
         end
-      end
-    end
+     # end
+    #end
+end
 
     true
   end

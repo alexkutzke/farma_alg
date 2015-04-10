@@ -32,13 +32,15 @@ class Dashboard::MessagesController < ApplicationController
   def index
     @messages = User.find(current_user.id).messages.desc(:updated_at)
 
-    @messages_to_me = Message.any_of({:target_user_ids => current_user.id}, {:user_ids => current_user.id.to_s}).desc(:updated_at)
+	@messages_to_me = Message.any_of({:target_user_ids => current_user.id}, {:user_ids => current_user.id.to_s}).desc(:updated_at)
+
+#    @messages_to_me = Message.where(:target_user_ids => current_user.id).desc(:updated_at)
   end
 
   def show
     @message = Message.find(params[:id])
     Log.log_message_view(current_user.id,@message.id)
-    @message.new_flag_user_ids.delete(current_user.id.to_s)
+    @message.new_flag_user_ids.delete(current_user.id)
     if current_user.id == @message.user.id
       @message.new_flag_user_id = false
     end

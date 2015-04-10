@@ -28,8 +28,10 @@ module Recommender
           avg = 0.0
           question_rank = []
           questions.each do |q|
-            as1 = Answer.where(user_id:u1.to_s,question_id:q.to_s,correct: false).pluck(:id)
-            as2 = Answer.where(user_id:u2.to_s,question_id:q.to_s,correct: false).pluck(:id)
+            #as1 = Answer.where(user_id:u1.to_s,question_id:q.to_s,correct: false).pluck(:id).shuffle[0..3]
+            #as2 = Answer.where(user_id:u2.to_s,question_id:q.to_s,correct: false).pluck(:id).shuffle[0..3]
+            as1 = get_users_last_answers([u1.to_s],q.to_s)
+            as2 = get_users_last_answers([u2.to_s],q.to_s)
 
             if as1.count > 0 and as2.count > 0
               as1.each do |a1|
@@ -146,8 +148,9 @@ module Recommender
   end
 
   def self.find_most_relevant_answers(user_ids,question_id)
-    as = Answer.in(:user_id => user_ids).where(question_id: question_id, correct: false).pluck(:id)
-
+    #as = Answer.in(:user_id => user_ids).where(question_id: question_id, correct: false).pluck(:id)
+    #as = Answer.in(:user_id => user_ids).where(question_id: question_id, correct: false).pluck(:id).shuffle[0..30]
+    as = get_users_last_answers(user_ids,question_id)
     avgs = []
     if as.count > 1
       as.each do |a1|
@@ -174,6 +177,7 @@ module Recommender
     end
 
     avgs.sort!{|x,y| y[1] <=> x[1]}
+
   end
 
   def self.build_team_recommendations(team_id,thres)
@@ -192,19 +196,23 @@ module Recommender
         connected_components.each do |cc|
           puts "\t - " + cc.first.count.to_s + " users"
           n = 0
-          cc[1].each do |question|
-            a = self.find_most_relevant_answers(cc.first,question[0])
-            answer_ids = []
-            answer_scores = []
-            a.each do |i|
-              answer_ids << i[0]
-              answer_scores << i[1]
-            end
+          unless cc[1].nil?
+            cc[1].each do |question|
+              a = self.find_most_relevant_answers(cc.first,question[0])
+              answer_ids = []
+              answer_scores = []
+              unless a.nil?
+                a.each do |i|
+                  answer_ids << i[0]
+                  answer_scores << i[1]
+                end
 
-            n += 1
-            recommendation << {:team_id => team_id, :user_ids => cc.first, :answer_ids => answer_ids,:answer_scores => answer_scores, :question_id => question[0], :question_references => question[1], :question_score => question[2]}
+                n += 1
+                recommendation << {:team_id => team_id, :user_ids => cc.first, :answer_ids => answer_ids,:answer_scores => answer_scores, :question_id => question[0], :question_references => question[1], :question_score => question[2]}
+              end
+            end
+            puts "\t\t - " + n.to_s + " recommendations"
           end
-          puts "\t\t - " + n.to_s + " recommendations"
         end
       end
 
@@ -231,10 +239,10 @@ module Recommender
     recommendations
   end
 
-  def self.create_recommendations(thres)
+def self.create_recommendations(thres)
     user_ids = User.all.pluck(:id)
 
-    Recommendation.delete_all
+    all = Recommendation.all.entries
     #Recommendation.delete_active
 
     user_ids.each do |user_id|
@@ -247,28 +255,39 @@ module Recommender
           Recommendation.create(:type => "resposta_para_grupo", :item => recom, :user_id => user_id)
         end
 
+        puts "---------------------- 1"
+
         user_with_no_answers_ids = []
         users_by_wrong_answers = []
         questions_by_wrong_answers = []
-        team_user_ids = Team.find(team_id.to_s).user_ids
+        team_user_ids = Team.find(team_id).user_ids
         team_user_ids.each do |user_id2|
           if Answer.where(user_id: user_id2.to_s,team_id: team_id.to_s).empty?
             user_with_no_answers_ids << user_id2.to_s
           end
-
-          users_by_wrong_answers = []
-          Answer.where(user_id: team_user_ids ,team_id: team_id.to_s, correct: false).sort{|x,y| y[:user_id] <=> x[:user_id]}.chunk{|n| n[:user_id]}.each do |q,a|
-            users_by_wrong_answers << [q,a.count]
-          end
-
-          questions_by_wrong_answers = []
-          Answer.where(team_id: team_id.to_s, correct: false).sort{|x,y| y[:question_id] <=> x[:question_id]}.chunk{|n| n[:question_id]}.each do |q,a|
-            questions_by_wrong_answers << [q,a.count]
-          end
-
-          users_by_wrong_answers.sort!{|x,y| y[1] <=> x[1]}
         end
 
+        puts "---------------------- 2"
+
+        users_by_wrong_answers = []
+        Answer.in(user_id: team_user_ids).where(team_id: team_id, correct: false).asc(:user_id).chunk{|n| n[:user_id]}.each do |q,a|
+          users_by_wrong_answers << [q,a.count]
+        end
+        p users_by_wrong_answers
+
+        puts "---------------------- 3"
+
+        questions_by_wrong_answers = []
+        Answer.where(team_id: team_id.to_s, correct: false).sort{|x,y| y[:question_id] <=> x[:question_id]}.chunk{|n| n[:question_id]}.each do |q,a|
+          questions_by_wrong_answers << [q,a.count]
+        end
+
+
+        puts "---------------------- 4"
+        users_by_wrong_answers.sort!{|x,y| y[1] <=> x[1]}
+
+
+        puts "---------------------- 5"
         unless users_by_wrong_answers.empty?
           users_ids_by_wrong_answers = []
           users_wrong_answers_count = []
@@ -279,6 +298,7 @@ module Recommender
           Recommendation.create(:type => "alunos_com_mais_incorretas", :item => {:user_ids => users_ids_by_wrong_answers[0..3], :count => users_wrong_answers_count[0..3], :team_id => team_id.to_s}, :user_id => user_id.to_s)
         end
 
+        puts "---------------------- 6"
         unless questions_by_wrong_answers.empty?
           questions_ids_by_wrong_answers = []
           questions_wrong_answers_count = []
@@ -287,22 +307,27 @@ module Recommender
             questions_wrong_answers_count << u[1]
           end
 
+          puts "---------------------- 7"
           as = []
           questions_ids_by_wrong_answers.each do |question_id|
             as << self.find_most_relevant_answers(team_user_ids,question_id)
           end
 
+          puts "---------------------- 8"
           questions_ids_by_wrong_answers[0..3].each_index do |i|
             answer_ids = []
             answer_scores = []
-            as[i].each do |x|
-              answer_ids << x[0]
-              answer_scores << x[1]
+            unless as[i].nil?
+              as[i].each do |x|
+                answer_ids << x[0]
+                answer_scores << x[1]
+              end
             end
             Recommendation.create(:type => "questao_com_mais_incorretas", :item => {:message_team_id => team_id.to_s, :answer_ids => answer_ids, :question_id => questions_ids_by_wrong_answers[i], :count => questions_wrong_answers_count[i], :team_id => team_id.to_s}, :user_id => user_id.to_s)
           end
         end
 
+        puts "---------------------- 9"
         unless user_with_no_answers_ids.empty?
           Recommendation.create(:type => "alunos_sem_resposta", :item => {:user_ids => user_with_no_answers_ids, :team_id => team_id.to_s}, :user_id => user_id.to_s)
         end
@@ -310,6 +335,11 @@ module Recommender
 
       end
     end
+
+    all.each do |r|
+      r.delete
+    end
+
     true
   end
 
@@ -339,4 +369,31 @@ module Recommender
     end
     true
   end
+
+  def self.get_users_last_answers(user_ids,question_id)
+    result = []
+    answers = Answer.in(:user_id => user_ids).where(question_id: question_id, correct: false)
+    answers.only(:id,:user_id).asc(:user_id).chunk{|a| a[:user_id]}.each do |user,a|
+      n = a.count
+      if n > 1
+        if n == 1
+          result << a[0].id
+        elsif n == 2
+          result += [a[0], a[1]].map{|x| x.id}
+        elsif n == 3
+          result += [a[0], a[1], a[2]].map{|x| x.id}
+        else
+          result += [a[0], a[(n/2).to_i], a.last].map{|x| x.id}
+        end
+      end
+    end
+    unless answers.nil?
+      if answers.count > 0
+        result += answers.pluck(:id).shuffle[1..10]
+        result.uniq!
+      end
+    end
+    result
+  end
 end
+

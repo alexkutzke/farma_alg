@@ -47,6 +47,7 @@ module SimilarityMachine
     if same_question
       # test case similarity
       test_case_similarity = Hash.new
+	test_case_similarity_final = 0.0
       unless a.results.nil? || b.results.nil?
         a.results.each do |id,result_a|
           test_case_similarity[id] = Hash.new
@@ -141,7 +142,54 @@ module SimilarityMachine
         c.test_case_similarity_final = result['test_case_similarity_final']
         c.weight = result['final_similarity']
 
-        c.save!
+remove_a = false
+        remove_b = false
+        if a.connections.count == 10
+          remove_a = true
+        end
+
+        if b.connections.count == 10
+          remove_b = true
+        end
+
+        ok_a = true
+        ok_b = true
+        if remove_a or remove_b
+          if remove_a
+            remove_a = false
+            c_a = a.connections.desc(:weight).last
+            if c.weight <= c_a.weight
+              ok_a = false
+            else
+              remove_a = true
+            end
+          end
+
+          if remove_b
+            remove_b = false
+            c_b = b.connections.desc(:weight).last
+            if c.weight <= c_b.weight
+              ok_b = false
+            else
+              remove_b = true
+            end
+          end
+
+          if ok_a and ok_b
+            if remove_a
+              c_a.remove
+            end
+
+            if remove_b
+              c_b.remove
+            end
+
+            c.save!
+          end
+        else
+          c.save!
+        end
+
       end
     end
     c

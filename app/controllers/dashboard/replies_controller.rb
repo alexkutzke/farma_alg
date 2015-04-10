@@ -31,7 +31,11 @@ class Dashboard::RepliesController < ApplicationController
 
     respond_to do |format|
       if @reply.save
-        @message.new_flag_user_ids = @message.target_user_ids
+        if @message.target_user_ids.nil? or @message.target_user_ids.empty?
+          @message.new_flag_user_ids = @message.user_ids
+        else
+          @message.new_flag_user_ids = @message.target_user_ids
+        end
         @message.save!
         format.html { redirect_to dashboard_message_path(@message), notice: 'Mensagem criada com sucesso.' }
         format.json { render json: @reply, status: :created, location: @message }
@@ -53,3 +57,4 @@ class Dashboard::RepliesController < ApplicationController
   end
 
 end
+

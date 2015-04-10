@@ -23,7 +23,7 @@ class DashboardController < ApplicationController
 		@last_messages = current_user.last_messages_to_me(4)
 
     if current_user.prof?
-			@recommendations = Recommendation.all_from(current_user.id.to_s).shuffle.first(10)
+			@recommendations = Recommendation.all_from(current_user.id.to_s)#.shuffle.first(10)
 
 			num_students = 0
 			num_students_correct_answers = 0
@@ -132,7 +132,7 @@ class DashboardController < ApplicationController
   def graph_search
 		@as = Answer.search(params,current_user).entries
 		@total = @as.count
-		@as = @as.first(50)
+		#@as = @as.first(50)
 		@params =params
 
 		Log.log_search_graph(current_user.id,params)

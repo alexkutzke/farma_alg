@@ -40,13 +40,20 @@ class Connection
     b = Answer.find(self.target_answer_id)
 
 
-    a.schedule_process_propagate(6)
-    b.schedule_process_propagate(6)
+    a.schedule_process_propagate
+    b.schedule_process_propagate
 
     #Answer.propagate_properties_to_neigh(a,b.id)
     #Answer.propagate_properties_to_neigh(b,a.id)  
 
   	Connection.set_callback("save", :after, :dup)
   end
+
+  def remove
+    c2 = Connection.find_or_initialize_by(target_answer_id:self.answer_id, answer_id:self.target_answer_id)
+    c2.delete
+    self.delete
+  end
+
 
 end
