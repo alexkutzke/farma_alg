@@ -183,6 +183,9 @@ module Recommender
   def self.build_team_recommendations(team_id,thres)
     result = []
 
+    puts "Answers: " + Answer.where(team_id:team_id).count.to_s
+    puts "Connections: " + Connection.count.to_s
+
     ms = self.match_students(team_id.to_s,thres)
 
     n_thres = thres
@@ -194,7 +197,9 @@ module Recommender
       puts "\tConnected Components: " + connected_components.count.to_s
       unless connected_components.empty?
         connected_components.each do |cc|
-          puts "\t - " + cc.first.count.to_s + " users"
+          if cc.first.count > 1
+            puts "\t - " + cc.first.count.to_s + " users"
+          end
           n = 0
           unless cc[1].nil?
             cc[1].each do |question|
@@ -211,7 +216,10 @@ module Recommender
                 recommendation << {:team_id => team_id, :user_ids => cc.first, :answer_ids => answer_ids,:answer_scores => answer_scores, :question_id => question[0], :question_references => question[1], :question_score => question[2]}
               end
             end
-            puts "\t\t - " + n.to_s + " recommendations"
+
+            if cc.first.count > 1
+              puts "\t\t - " + n.to_s + " recommendations"
+            end
           end
         end
       end
@@ -250,87 +258,88 @@ def self.create_recommendations(thres)
       team_ids = Team.where(owner_id:user_id.to_s).pluck(:id)
 
       team_ids.each do |team_id|
+        puts "Threshold: #{thres}"
         recoms = self.build_team_recommendations(team_id.to_s,thres)
-        recoms.each do |recom|
-          Recommendation.create(:type => "resposta_para_grupo", :item => recom, :user_id => user_id)
-        end
-
-        puts "---------------------- 1"
-
-        user_with_no_answers_ids = []
-        users_by_wrong_answers = []
-        questions_by_wrong_answers = []
-        team_user_ids = Team.find(team_id).user_ids
-        team_user_ids.each do |user_id2|
-          if Answer.where(user_id: user_id2.to_s,team_id: team_id.to_s).empty?
-            user_with_no_answers_ids << user_id2.to_s
-          end
-        end
-
-        puts "---------------------- 2"
-
-        users_by_wrong_answers = []
-        Answer.in(user_id: team_user_ids).where(team_id: team_id, correct: false).asc(:user_id).chunk{|n| n[:user_id]}.each do |q,a|
-          users_by_wrong_answers << [q,a.count]
-        end
-        p users_by_wrong_answers
-
-        puts "---------------------- 3"
-
-        questions_by_wrong_answers = []
-        Answer.where(team_id: team_id.to_s, correct: false).sort{|x,y| y[:question_id] <=> x[:question_id]}.chunk{|n| n[:question_id]}.each do |q,a|
-          questions_by_wrong_answers << [q,a.count]
-        end
-
-
-        puts "---------------------- 4"
-        users_by_wrong_answers.sort!{|x,y| y[1] <=> x[1]}
-
-
-        puts "---------------------- 5"
-        unless users_by_wrong_answers.empty?
-          users_ids_by_wrong_answers = []
-          users_wrong_answers_count = []
-          users_by_wrong_answers.each do |u|
-            users_ids_by_wrong_answers << u[0]
-            users_wrong_answers_count << u[1]
-          end
-          Recommendation.create(:type => "alunos_com_mais_incorretas", :item => {:user_ids => users_ids_by_wrong_answers[0..3], :count => users_wrong_answers_count[0..3], :team_id => team_id.to_s}, :user_id => user_id.to_s)
-        end
-
-        puts "---------------------- 6"
-        unless questions_by_wrong_answers.empty?
-          questions_ids_by_wrong_answers = []
-          questions_wrong_answers_count = []
-          questions_by_wrong_answers.each do |u|
-            questions_ids_by_wrong_answers << u[0]
-            questions_wrong_answers_count << u[1]
-          end
-
-          puts "---------------------- 7"
-          as = []
-          questions_ids_by_wrong_answers.each do |question_id|
-            as << self.find_most_relevant_answers(team_user_ids,question_id)
-          end
-
-          puts "---------------------- 8"
-          questions_ids_by_wrong_answers[0..3].each_index do |i|
-            answer_ids = []
-            answer_scores = []
-            unless as[i].nil?
-              as[i].each do |x|
-                answer_ids << x[0]
-                answer_scores << x[1]
-              end
-            end
-            Recommendation.create(:type => "questao_com_mais_incorretas", :item => {:message_team_id => team_id.to_s, :answer_ids => answer_ids, :question_id => questions_ids_by_wrong_answers[i], :count => questions_wrong_answers_count[i], :team_id => team_id.to_s}, :user_id => user_id.to_s)
-          end
-        end
-
-        puts "---------------------- 9"
-        unless user_with_no_answers_ids.empty?
-          Recommendation.create(:type => "alunos_sem_resposta", :item => {:user_ids => user_with_no_answers_ids, :team_id => team_id.to_s}, :user_id => user_id.to_s)
-        end
+        # recoms.each do |recom|
+        #   Recommendation.create(:type => "resposta_para_grupo", :item => recom, :user_id => user_id)
+        # end
+        #
+        # puts "---------------------- 1"
+        #
+        # user_with_no_answers_ids = []
+        # users_by_wrong_answers = []
+        # questions_by_wrong_answers = []
+        # team_user_ids = Team.find(team_id).user_ids
+        # team_user_ids.each do |user_id2|
+        #   if Answer.where(user_id: user_id2.to_s,team_id: team_id.to_s).empty?
+        #     user_with_no_answers_ids << user_id2.to_s
+        #   end
+        # end
+        #
+        # puts "---------------------- 2"
+        #
+        # users_by_wrong_answers = []
+        # Answer.in(user_id: team_user_ids).where(team_id: team_id, correct: false).asc(:user_id).chunk{|n| n[:user_id]}.each do |q,a|
+        #   users_by_wrong_answers << [q,a.count]
+        # end
+        # p users_by_wrong_answers
+        #
+        # puts "---------------------- 3"
+        #
+        # questions_by_wrong_answers = []
+        # Answer.where(team_id: team_id.to_s, correct: false).sort{|x,y| y[:question_id] <=> x[:question_id]}.chunk{|n| n[:question_id]}.each do |q,a|
+        #   questions_by_wrong_answers << [q,a.count]
+        # end
+        #
+        #
+        # puts "---------------------- 4"
+        # users_by_wrong_answers.sort!{|x,y| y[1] <=> x[1]}
+        #
+        #
+        # puts "---------------------- 5"
+        # unless users_by_wrong_answers.empty?
+        #   users_ids_by_wrong_answers = []
+        #   users_wrong_answers_count = []
+        #   users_by_wrong_answers.each do |u|
+        #     users_ids_by_wrong_answers << u[0]
+        #     users_wrong_answers_count << u[1]
+        #   end
+        #   Recommendation.create(:type => "alunos_com_mais_incorretas", :item => {:user_ids => users_ids_by_wrong_answers[0..3], :count => users_wrong_answers_count[0..3], :team_id => team_id.to_s}, :user_id => user_id.to_s)
+        # end
+        #
+        # puts "---------------------- 6"
+        # unless questions_by_wrong_answers.empty?
+        #   questions_ids_by_wrong_answers = []
+        #   questions_wrong_answers_count = []
+        #   questions_by_wrong_answers.each do |u|
+        #     questions_ids_by_wrong_answers << u[0]
+        #     questions_wrong_answers_count << u[1]
+        #   end
+        #
+        #   puts "---------------------- 7"
+        #   as = []
+        #   questions_ids_by_wrong_answers.each do |question_id|
+        #     as << self.find_most_relevant_answers(team_user_ids,question_id)
+        #   end
+        #
+        #   puts "---------------------- 8"
+        #   questions_ids_by_wrong_answers[0..3].each_index do |i|
+        #     answer_ids = []
+        #     answer_scores = []
+        #     unless as[i].nil?
+        #       as[i].each do |x|
+        #         answer_ids << x[0]
+        #         answer_scores << x[1]
+        #       end
+        #     end
+        #     Recommendation.create(:type => "questao_com_mais_incorretas", :item => {:message_team_id => team_id.to_s, :answer_ids => answer_ids, :question_id => questions_ids_by_wrong_answers[i], :count => questions_wrong_answers_count[i], :team_id => team_id.to_s}, :user_id => user_id.to_s)
+        #   end
+        #end
+        #
+        # puts "---------------------- 9"
+        # unless user_with_no_answers_ids.empty?
+        #   Recommendation.create(:type => "alunos_sem_resposta", :item => {:user_ids => user_with_no_answers_ids, :team_id => team_id.to_s}, :user_id => user_id.to_s)
+        # end
 
 
       end
@@ -395,5 +404,21 @@ def self.create_recommendations(thres)
     end
     result
   end
-end
 
+  def self.exp(thres,n_answers=100)
+    puts "Atribuindo LOs para Team"
+    t = Team.last
+    t.los = Lo.all
+    t.save!
+
+    puts "Carregando respostas"
+    as = Answer.all.asc(:created_at).entries
+    puts "Apagando respostas"
+    for i in n_answers..as.count-1 do
+      as[i].destroy
+    end
+
+    puts "Criando recomendações"
+    create_recommendations(thres)
+  end
+end

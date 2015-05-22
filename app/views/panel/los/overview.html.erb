@@ -2,7 +2,66 @@
   <script type="text/javascript">
     $(".stats_popover").popover({html:true});
   </script>
+
+  <%= javascript_include_tag 'dashboard/resizeApp' %>
+  <%= javascript_include_tag 'difflib' %>
+  <%= javascript_include_tag 'diffview' %>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $("body").on("click",".answer-btn",function(){
+    var message_id = $(this).data("message-id");
+    $.ajax({
+      url: "/dashboard/answers/show",
+      data: {
+        id: $(this).data("id")
+      },
+      type: "get"    
+    });
+  });
+
+  $("body").on("click",".connection-btn",function(){
+    $.ajax({
+        url: "/dashboard/connections/show",
+        type: "get",
+        data: {id:$(this).data("id")},
+        success: function(){
+          //console.log("OK");
+        }
+    });
+  });
+
+});
+
+
+  function diffUsingJS(div_id,label1,txt1,label2,txt2){
+    // get the baseText and newText values from the two textboxes, and split them into lines
+    base = difflib.stringAsLines(txt1);//$("baseText").value);
+    newtxt = difflib.stringAsLines(txt2);//$("newText").value);
+
+    //create a SequenceMatcher instance that diffs the two sets of lines
+    sm = new difflib.SequenceMatcher(base, newtxt);
+
+    // get the opcodes from the SequenceMatcher instance
+    // opcodes is a list of 3-tuples describing what changes should be made to the base text
+    // in order to yield the new text
+    opcodes = sm.get_opcodes();
+    diffoutputdiv = $("#"+div_id);
+    while(diffoutputdiv.firstChild)
+      diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+
+    //console.log opcodes
+
+    $(diffoutputdiv).append(diffview.buildView({baseTextLines: base, newTextLines: newtxt, opcodes: opcodes, baseTextName: label1, newTextName: label2, contextSize: 0, viewType: 0 }))
+  }
+
+
+  </script>
 <% end %>
+
+<div id="answer-show">
+
+</div>
 
   <!-- Content Header (Page header) -->
   <section class="content-header">
@@ -108,6 +167,7 @@
                   <span rel="tooltip" data-toggle="tooltip" data-placement="top" title data-original-title="Resposta incorreta!" class="label label-danger">ERRO</span>
                 <% end %><small class="date-info"> <%= a[1] %> tentativa(s)</small>
             <% end %>
+<span class='label label-default answer-btn' style='cursor:pointer;' data-id="<%= a[0].id %>"> <i class='fa fa-eye'></i></span>
           <% end %>
           <%= render_progress(u.progress_question(@team.id.to_s,q.id.to_s),"% concluído","margin: 10px auto;width:100px;") %>
           

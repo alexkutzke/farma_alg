@@ -75,7 +75,7 @@ module GraphDataGenerator
     final = {}
     method = "daily"
     Answer.where(team_id:team_id)
-                    .asc("created_at")
+                    .asc("created_at").limit(2000)
                     .chunk{|n| n.created_at.strftime(self.date_string(method))}
                     .each do |q,a|
                       final.merge! Date.strptime(q, self.date_string(method)).to_time.to_i.to_s => a.count

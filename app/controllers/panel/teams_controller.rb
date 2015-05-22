@@ -40,6 +40,7 @@ class Panel::TeamsController < ApplicationController
     @recent_activity_data = GraphDataGenerator::team_recent_activity(@team.id)
     @team_lo_tries = GraphDataGenerator::team_lo_tries(@team.id)
 
-    @answers = Answer.where(team_id:@team.id).desc('created_at')[0..9]
+    @answers = Answer.where(team_id:@team.id).desc(:id).limit(10)
+    # @answers = []
 	end
 end

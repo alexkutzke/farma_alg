@@ -44,7 +44,7 @@ class DashboardController < ApplicationController
       @boxes << {:color => "bg-red", :value => num_students_wrong_answers, :title => "Número de respostas incorretas", :has_link? => false, :icon => "fa fa-times"}
       @boxes << {:color => "bg-green", :value => num_students_correct_answers, :title => "Número de respostas corretas", :has_link? => false, :icon => "fa fa-check"}
 
-			@last_answers = Answer.in(team_id: team_ids).desc(:created_at)[0..4]
+			@last_answers = Answer.in(team_id: team_ids).desc(:created_at).limit(10)
 			@last_comments = Comment.in(team_id: team_ids).desc('created_at')[0..4]
 		else
 			@last_answers = Answer.where(user_id: current_user.id).desc(:created_at)[0..4]

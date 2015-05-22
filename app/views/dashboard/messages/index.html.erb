@@ -80,7 +80,7 @@
                         </td>
                         <td><%= truncate(m.content) %></td>
                         <td>
-                          <%= m.updated_at.strftime("%d/%m/%Y às %H:%M:%S") %>
+                          <%= m.created_at.strftime("%d/%m/%Y às %H:%M:%S") %>
                         </td>
                         <td>
                           <div class="btn-group">
@@ -141,7 +141,7 @@
                         </td>
                         <td><%= truncate(m.content) %></td>
                         <td>
-                          <%= m.updated_at.strftime("%d/%m/%Y às %H:%M:%S") %>
+                          <%= m.created_at.strftime("%d/%m/%Y às %H:%M:%S") %>
                         </td>
                         <td>
                             <%= link_to dashboard_message_path(m) do %>

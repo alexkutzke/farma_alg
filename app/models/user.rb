@@ -185,7 +185,12 @@ class User
 
 
 	def progress_question(team_id,question_id)
+	correct = Answer.where(user_id: self.id, question_id:question_id, correct: true).count > 0 ? true : false
+if correct
+return 1
+else
 	  Progress.find_or_initialize_by(team_id:team_id,user_id:self.id,question_id:question_id).value
+end
 	end
 
 	def progress_lo(team_id,lo_id)

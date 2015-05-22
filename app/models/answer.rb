@@ -322,9 +322,21 @@ class Answer
 
   def self.propagate_properties_to_neigh(answer,neigh_id)
     changed = false
+	begin	
+    neigh = Answer.find(neigh_id)
+rescue
+	puts "==================================================================== >>>>>> " + neigh_id.to_s
+return false
+end
+	begin
+    connections = neigh.connections
+    weight = connections[connections.index{|x| x.target_answer_id.to_s == answer.id.to_s}].weight
+	rescue
+	Connection.where(answer_id:answer.id, target_answer_id:neigh_id).first.dup
     neigh = Answer.find(neigh_id)
     connections = neigh.connections
     weight = connections[connections.index{|x| x.target_answer_id.to_s == answer.id.to_s}].weight
+	end
     naat = neigh.automatically_assigned_tags
 
 

@@ -30,9 +30,9 @@ class Dashboard::MessagesController < ApplicationController
   end
 
   def index
-    @messages = User.find(current_user.id).messages.desc(:updated_at)
+    @messages = User.find(current_user.id).messages.desc(:created_at)
 
-	@messages_to_me = Message.any_of({:target_user_ids => current_user.id}, {:user_ids => current_user.id.to_s}).desc(:updated_at)
+	@messages_to_me = Message.any_of({:target_user_ids => current_user.id}, {:user_ids => current_user.id.to_s}).desc(:created_at)
 
 #    @messages_to_me = Message.where(:target_user_ids => current_user.id).desc(:updated_at)
   end
