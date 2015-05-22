@@ -1,7 +1,1 @@
-# TODO
-  ok Página Inicial
-  ok Fale conosco
-  ok Sobre
-  Send Email When Receive a comment
-  CronTab
-  Ao criar questão ou dica inserir no final da lista
+FARMA-ALG
