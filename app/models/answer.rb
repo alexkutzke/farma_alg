@@ -611,7 +611,7 @@ private
 
     if user.prof?
       if params.has_key?(:tag_ids)
-        as = as.entries.keep_if { |a| not (a.automatically_assigned_tags.collect{|x| x[0].to_s} & params[:tag_ids]).empty? }
+        as = as.limit(50).entries.keep_if { |a| not (a.automatically_assigned_tags.collect{|x| x[0].to_s} & params[:tag_ids]).empty? }
       end
     end
 
