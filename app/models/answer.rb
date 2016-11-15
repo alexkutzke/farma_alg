@@ -1,4 +1,6 @@
 require 'math_evaluate'
+
+# Realiza a verificacao de respostas
 require 'judge'
 
 include ActionView::Helpers::TextHelper
@@ -9,6 +11,8 @@ class Answer
   include Mongoid::Timestamps
   include Mongoid::Search
   include MathEvaluate
+
+  # Realiza a verificacao de respostas
   include Judge
 
 
@@ -63,8 +67,7 @@ class Answer
   before_create :verify_response,:store_datas
   after_create :register_last_answer,:updateStats,:schedule_process_connections,:update_progress
 
-
-
+	# aplica as tags primarias para a resposta. Tags primarias são as mais simples, como os erros identificados pelo judge.
   def apply_primary_tags
     unless self.primary_applied
       primary_tags = Tag.apply_primary(self)
@@ -78,6 +81,7 @@ class Answer
     true
   end
 
+	# Atualiza o progresso de respostas para uma questao
   def update_progress
     p = Progress.find_or_initialize_by(team_id:self.team_id,user_id:self.user_id,question_id:self.question_id)
     x = self.calc_progress
@@ -87,6 +91,7 @@ class Answer
     p.save!
   end
 
+	# calcula o progresso de resposta para uma questao
   def calc_progress
     p = 0.25
     unless self.compile_errors.nil?
@@ -110,6 +115,7 @@ class Answer
     p
   end
 
+	# Retorna o conjunto de respostas similares
   def similar_answers
     sa = []
     self.connections.each do |c|
@@ -119,6 +125,7 @@ class Answer
     sa
   end
 
+	# Retorna a componente conexa a qual a respota pertence (do grafo de respostas)
   def connected_component
     sa = []
     queue = []
@@ -144,14 +151,17 @@ class Answer
     sa
   end
 
+	# Herdado do FARMA.
   def lo
     @_lo ||= Lo.new(super) rescue nil
   end
 
+	# Herdado do FARMA.
   def exercise
     @_exercise ||= Exercise.new(super) rescue nil
   end
 
+	# Herdado do FARMA.
   def exercise_as_json
     exercises = super_exercise
     %w(position available lo_id updated_at created_at).each {|e| exercises.delete(e)}
@@ -177,10 +187,12 @@ class Answer
     exercises
   end
 
+	# Herdado do FARMA.
   def question
     @_question ||= Question.new(super) rescue nil
   end
 
+	# Herdado do FARMA.
   def question_as_json(user_id)
     question = super_question
     %w(position available lo_id updated_at test_cases exercise_id correct_answer).each {|e| question.delete(e)}
@@ -193,10 +205,12 @@ class Answer
     question
   end
 
+	# Herdado do FARMA.
   def team
     @_team ||= Team.new(super) rescue nil
   end
 
+	# Herdado do FARMA.
   # Need store all information for retroaction
   def store_datas
     question = Question.find(self.question_id)
@@ -207,21 +221,29 @@ class Answer
 	true
   end
 
+	# Executa uma resposta.
+	# Faz todo o calculo, atraves do judge, de correcao.
   def exec
     question = Question.find(self.question_id)
     tmp = Time.now.to_i
 
+		# Compila a resposta
     compile_result = Judge::compile(self.lang,self.response,tmp)
 
+		# Verifica se houve erro de compilacao
     if compile_result[0] != 0
       self.compile_errors = compile_result[1]
       self.correct = false
     else
 
+			# Se compilou, executa os casos de teste.
       correct = Judge::test(lang,compile_result[1],question.test_cases,tmp)
 
       self.results = Hash.new
       self.correct = true
+			# para cada caso de teste salva os dados retornados
+			# os dados retornados estarao na variavel 'r'
+			# cada caso de teste tem seus dados armazenados no hash 'results'
       correct.each do |id,r|
 
         self.results[id] = Hash.new
@@ -243,6 +265,7 @@ class Answer
         self.results[id][:output] = r[1][2]
         self.results[id][:id] = id
 
+				# cada erro possui um numero de identificacao
         if r[0] == 3
           self.correct = false
           self.results[id][:error] = true
@@ -261,6 +284,7 @@ class Answer
           self.results[id][:exec_error] = true
         end
 
+				# se o numero de tentativas for suficiente para mostrar dicas, salva a dica na resposta do caso de teste.
         if Answer.where(user_id: self.user_id, question_id: self.question_id, correct: false, compile_errors: nil).count >= question.test_cases.find(id).tip_limit-1 || self.correct
           self.results[id][:tip] = question.test_cases.find(id).tip
         end
@@ -271,6 +295,7 @@ class Answer
     true
   end
 
+	# retorna quais tags a resposta ainda *nao* tem.
   def available_tags
     available_tags = []
     Tag.all.each do |t|
@@ -285,11 +310,13 @@ class Answer
     available_tags - tags
   end
 
+	# apenas chama o procedimento de execucao da resposta.
   def verify_response
 
     self.exec
   end
 
+	# atualiza as estatisticas da respostas (nao eh mais utilizado, mas funciona).
   def updateStats
     global_stat = Statistic.find_or_create_by(:question_id => self.question_id, :team_id => nil)
 
@@ -302,6 +329,9 @@ class Answer
     team_stat.save!
   end
 
+	# retorna as 'n' repostas anteriores que o mesmo usuario deu para a mesma questao.
+	# sendo que cada item do array possui uma copia da resposta anterior.
+	# por favor, melhorar isso =P
   def previous(n)
     previous_answers = Answer.where(user_id: self.user_id, team_id: self.team_id, question_id: self.question_id).desc(:created_at).lte(created_at: self.created_at)[0..n]
 
@@ -320,14 +350,16 @@ class Answer
     previous_answers
   end
 
+	# propaga as tags de uma resposta para um dado vizinho.
+	# Ver algoritmo em: http://www.laclo.org/papers/index.php/laclo/article/viewFile/361/343
   def self.propagate_properties_to_neigh(answer,neigh_id)
     changed = false
 	begin	
     neigh = Answer.find(neigh_id)
-rescue
-	puts "==================================================================== >>>>>> " + neigh_id.to_s
-return false
-end
+	rescue
+		puts "==================================================================== >>>>>> " + neigh_id.to_s
+		return false
+	end
 	begin
     connections = neigh.connections
     weight = connections[connections.index{|x| x.target_answer_id.to_s == answer.id.to_s}].weight
@@ -461,6 +493,9 @@ end
     changed
   end
 
+	
+	# propaga as tags de uma resposta.
+	# Ver algoritmo em: http://www.laclo.org/papers/index.php/laclo/article/viewFile/361/343
   def propagate_properties
     queue = []
     visited = []
@@ -489,6 +524,10 @@ end
     true
   end
 
+	# a ProcessQueue eh uma fila para jobs em background.
+	# deve ser executado em paralelo a aplicacao.
+	# essa funcao registra os 3 processos a serem executados para uma nova respostas.
+	# sao eles: aplicar as tags primarias; criar as arestas para as respostas da mesma questao; e criar arestas para todas as respostas.
   def schedule_process_connections
     ProcessQueue.create(:type => "apply_primary_tags",
                         :priority => 1,
@@ -501,12 +540,14 @@ end
                         :params => [self.id])
   end
 
+	# registra o processo para propagar as tags.
   def schedule_process_propagate(p = 3)
     ProcessQueue.create(:type => "propagate_properties",
                         :priority => p,
                         :params => [self.id])
   end
 
+	# cria arestas para respostas para a mesma questao.
   def make_inner_connections
     per_batch = 1000
 
@@ -525,6 +566,7 @@ end
     true
   end
 
+	# cria arestas para todas as questoes.
   def make_outer_connections
     per_batch = 1000
 
@@ -543,6 +585,7 @@ end
     true
   end
 
+	# retorna quais sao as respostas mais significativas de um mesmo aluno, dado uma resposta inicial.
   def best_matches(n,user)
     best = []
     connections = []
@@ -567,6 +610,7 @@ end
 
 private
 
+	# registra qual foi a ultima tentativa do aluno para uma dada questao.
   def register_last_answer
     unless self.for_test || self.team_id.nil?
       la = LastAnswer.find_or_create_by(:user_id => self.user_id.to_s, :question_id => self.question_id.to_s)
@@ -606,6 +650,7 @@ private
     #end
   end
 
+	# na sequencia temos varias funcoes utilizadas para busca
   def self.search_aat(params,user)
     as = Answer.search_without_tags(params,user)
 
@@ -760,6 +805,7 @@ private
     as
   end
 
+	# re-executa uma resposta (caso algo tenha sido mudado, por exemplo, alteracoes nos casos de teste).
   def self.re_run(user_ids)
     user_ids.each do |u|
       p User.find(u).name
@@ -778,6 +824,7 @@ private
     end
   end
 
+	# cria um vetor para montar a timeline de repsostas.
   def self.make_timeline(as)
     timeline_items = []
 
