@@ -189,7 +189,7 @@ GEM
       rails (>= 3.1.0)
     method_source (0.8.2)
     mime-types (1.25.1)
-    mini_portile (0.5.3)
+    mini_portile2 (2.4.0)
     mongoid (3.1.6)
       activemodel (~> 3.2)
       moped (~> 1.4)
@@ -205,8 +205,8 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
-    nokogiri (1.6.0)
-      mini_portile (~> 0.5.0)
+    nokogiri (1.10.4)
+      mini_portile2 (~> 2.4.0)
     origin (1.1.0)
     orm_adapter (0.5.0)
     paperclip (4.2.0)
@@ -361,7 +361,7 @@ DEPENDENCIES
   mongoid
   mongoid-paperclip
   mongoid_search
-  nokogiri (= 1.6.0)
+  nokogiri (= 1.10.4)
   pry-rails
   rabl (= 0.8.6)
   rails (= 3.2.19)

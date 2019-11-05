@@ -46,7 +46,7 @@ gem 'font-awesome-sass-rails'
 gem 'handlebars_assets'
 gem 'marionette-rails', '1.1.0'
 
-gem 'nokogiri', '1.6.0'
+gem 'nokogiri', '1.10.4'
 
 group :development, :test do
   gem 'awesome_print'
