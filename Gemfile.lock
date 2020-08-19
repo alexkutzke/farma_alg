@@ -200,7 +200,7 @@ GEM
     mongoid_search (0.3.2)
       fast-stemmer (~> 1.0.0)
       mongoid (>= 3.0.0)
-    moped (1.5.2)
+    moped (1.5.3)
     multi_json (1.10.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
